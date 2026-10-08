@@ -1,0 +1,9 @@
+# Per-task ceiling for the competition-wide 12-hour budget.
+# On the 129-task public development set, 4 minutes/task is 8h36m of agent time,
+# leaving about 3h24m of the 12h ceiling for sandbox setup/overhead. The hidden split
+# may differ; treat the public task count as a planning proxy, not a guarantee.
+evaluation:
+  timeout_seconds: 180
+  max_tool_calls: 35
+  max_time_minutes: 4
+  max_turns: 60
