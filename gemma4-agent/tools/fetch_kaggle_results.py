@@ -192,10 +192,11 @@ def write_summary(
             "score", "publicscore", "resolutionrate", "resolution_rate"
         }), "")
         lines.extend(["| Rank | Team / user | Score |", "|---:|---|---:|"])
-        for rank, row in enumerate(top10, start=1):
+        for position, row in enumerate(top10, start=1):
+            rank = pick(row, "Rank", "rank") or str(position)
             name = row.get(team_key, "") if team_key else ""
             score = row.get(score_key, "") if score_key else ""
-            lines.append(f"| {rank} | {_cell(name)} | {_cell(score)} |")
+            lines.append(f"| {_cell(rank)} | {_cell(name)} | {_cell(score)} |")
     else:
         lines.append("_No leaderboard rows were returned._")
 
