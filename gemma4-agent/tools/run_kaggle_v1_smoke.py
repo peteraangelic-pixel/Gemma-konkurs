@@ -30,6 +30,15 @@ MODEL_SOURCE = "google/gemma-4/Other/gemma-4-31b-it-qat-w4a16-ct/2"
 MODEL_ID = "gemma-4-31b-it-qat-w4a16-ct"
 TASK_ID = "fastapi_15588"
 MACHINE_SHAPE = "NvidiaL4"
+# The competition wheelhouse contains CPython 3.12 wheels. Kaggle's default
+# notebook image moved to Python 3.13 in October 2026, so pin this private smoke
+# kernel to the known Python 3.12 / CUDA 12.8 image used by the public starter.
+DOCKER_IMAGE = (
+    "gcr.io/kaggle-private-byod/python@sha256:"
+    "37c64f7dd9c54116ecd1bcc88817c5469b88387388fade02bfa8bf3fc647d461"
+)
+DOCKER_IMAGE_PINNING_TYPE = "original"
+PYTHON_RUNTIME_VERSION = "3.12"
 
 
 def write_json(path: Path, value: object) -> None:
@@ -158,9 +167,19 @@ print(f'Public task selected: {task.instance_id} ({task.repo})')
     setup_cell = r'''import glob
 import importlib
 import os
+import platform
 import subprocess
 import sys
 from pathlib import Path
+
+# The attached competition wheelhouse contains CPython 3.12 binaries. Fail
+# early with a clear message if Kaggle ignores the pinned notebook image.
+if sys.version_info[:2] != (3, 12):
+    raise RuntimeError(
+        f'Expected pinned Python 3.12 runtime; received {platform.python_version()} '
+        f'from {sys.executable}.'
+    )
+print(f'Pinned Kaggle Python runtime: {platform.python_version()}')
 
 # Offline vLLM setup used by the competition's public starter notebook.
 os.environ['LITELLM_LOCAL_MODEL_COST_MAP'] = 'True'
@@ -435,6 +454,9 @@ def main() -> int:
         "task_id": TASK_ID,
         "model": MODEL_ID,
         "machine_shape": MACHINE_SHAPE,
+        "docker_image": DOCKER_IMAGE,
+        "docker_image_pinning_type": DOCKER_IMAGE_PINNING_TYPE,
+        "python_runtime_expected": PYTHON_RUNTIME_VERSION,
         "private_notebook": True,
         "internet_enabled": False,
         "competition_submission_created": False,
@@ -473,6 +495,8 @@ def main() -> int:
                 "enable_tpu": False,
                 "enable_internet": False,
                 "machine_shape": MACHINE_SHAPE,
+                "docker_image": DOCKER_IMAGE,
+                "docker_image_pinning_type": DOCKER_IMAGE_PINNING_TYPE,
                 "dataset_sources": [WHEELHOUSE],
                 "competition_sources": [COMPETITION],
                 "kernel_sources": [],
