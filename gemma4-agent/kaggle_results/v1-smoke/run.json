@@ -1,6 +1,6 @@
 {
-  "created_utc": "2026-10-09T19:48:23+00:00",
-  "status": "error",
+  "created_utc": "2026-10-09T20:03:32+00:00",
+  "status": "complete",
   "submission_sha256": "af4fbb0170a8e191a81881fabb1fa18856e0bff71975499248243cc99a66c3f6",
   "task_id": "fastapi_15588",
   "model": "gemma-4-31b-it-qat-w4a16-ct",
@@ -14,11 +14,18 @@
   "gpu_quota_used": null,
   "gpu_quota_usage_status": "unconfirmed",
   "kaggle_running_status_observed": true,
-  "updated_utc": "2026-10-09T19:50:43+00:00",
-  "kernel_ref": "lauresowe3d/gemma-v1-smoke-af4fbb01-20261009-194823",
-  "kernel_url": "https://www.kaggle.com/code/lauresowe3d/gemma-v1-smoke-af4fbb01-20261009-194823",
+  "updated_utc": "2026-10-09T20:18:04+00:00",
+  "kernel_ref": "lauresowe3d/gemma-v1-smoke-af4fbb01-20261009-200332",
+  "kernel_url": "https://www.kaggle.com/code/lauresowe3d/gemma-v1-smoke-af4fbb01-20261009-200332",
   "push_exit_code": 0,
   "gpu_requested": true,
-  "kaggle_status": "KernelWorkerStatus.ERROR",
-  "error": "Kaggle notebook ended without a successful run."
+  "kaggle_status": "KernelWorkerStatus.COMPLETE",
+  "result": {
+    "resolved": false,
+    "test_exit_code": 1,
+    "patch_chars": 1672,
+    "tool_calls": 22,
+    "duration_seconds": 251.28853871199988,
+    "task_id": "fastapi_15588"
+  }
 }
