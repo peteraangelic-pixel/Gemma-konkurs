@@ -19,33 +19,18 @@ from typing import Any
 
 COMPLETED_STATUSES = {"COMPLETE", "COMPLETED", "SUCCESS", "SUCCEEDED"}
 TERMINAL_STATUSES = COMPLETED_STATUSES | {"ERROR", "FAILED", "FAILURE", "CANCELED", "CANCELLED"}
-DIAGNOSTIC_MARKERS = (
-    "traceback",
-    "error",
-    "exception",
-    "failure",
-    "cuda",
-    "out of memory",
-    "oom",
-    "timed out",
-    "timeout",
-    "killed",
-    "module not found",
-    "importerror",
-    "worker error",
-    "kernelworkerstatus",
-    "permission denied",
-    "exit code",
-    "segmentation fault",
-    "failed",
-    "could not",
-    "no matching distribution",
-    "not a supported wheel",
-    "not compatible",
-    "requires-python",
-    "subprocess-exited-with-error",
-    "invalid wheel",
+DIAGNOSTIC_RE = re.compile(
+    r"\btraceback\b|\b\w*error\s*:|\bexception\s*:|\bwarning\s*:|"
+    r"\bfailed\b|\btimed?\s+out\b|\btimeout\b|\bout of memory\b|"
+    r"\boom\b|\bcuda\b|\bkilled\b|\bmodule not found\b|"
+    r"\bimporterror\b|\bworker error\b|\bpermission denied\b|"
+    r"\bexit code\b|\bsegmentation fault\b|\bcould not\b|"
+    r"\bno matching distribution\b|\bnot a supported wheel\b|"
+    r"\bnot compatible\b|\brequires-python\b|"
+    r"\bsubprocess-exited-with-error\b|\binvalid wheel\b",
+    re.IGNORECASE,
 )
+TIMEOUT_TASK_RE = re.compile(r"\bTask\s+([A-Za-z0-9_.-]+)\s+agent timed out\b", re.IGNORECASE)
 STATUS_RE = re.compile(r"has status\s+[\"']([^\"']+)[\"']", re.IGNORECASE)
 WORKER_STATUS_RE = re.compile(r"KernelWorkerStatus\.([A-Z_]+)", re.IGNORECASE)
 GENERIC_STATUS_RE = re.compile(
@@ -93,14 +78,43 @@ def parse_status(text: str) -> tuple[str | None, str | None]:
     return None, None
 
 
-def diagnostic_lines(log_text: str, limit: int = 32) -> list[str]:
-    matches: list[str] = []
-    for line in log_text.splitlines():
-        cleaned = " ".join(line.split())
-        lowered = cleaned.casefold()
-        if cleaned and any(marker in lowered for marker in DIAGNOSTIC_MARKERS):
-            matches.append(cleaned[:500])
-    return matches[-limit:]
+def decoded_log_lines(log_text: str) -> list[str]:
+    """Unwrap Kaggle CLI's JSON log records into the actual stdout/stderr text."""
+    messages: list[str] = []
+    for physical_line in log_text.splitlines():
+        candidate = physical_line.strip()
+        if candidate.startswith(","):
+            candidate = candidate[1:].lstrip()
+        try:
+            record = json.loads(candidate)
+        except json.JSONDecodeError:
+            record = None
+        if isinstance(record, dict) and isinstance(record.get("data"), str):
+            stream = str(record.get("stream_name") or "log").strip().lower()
+            for message in record["data"].splitlines():
+                cleaned = " ".join(message.split())
+                if cleaned:
+                    messages.append(f"[{stream}] {cleaned}")
+        else:
+            cleaned = " ".join(physical_line.split())
+            if cleaned:
+                messages.append(cleaned)
+    return messages
+
+
+def diagnostic_lines(log_text: str, limit: int = 48) -> tuple[list[str], int, list[str], int]:
+    messages = decoded_log_lines(log_text)
+    matches = [message[:500] for message in messages if DIAGNOSTIC_RE.search(message)]
+    # Deduplicate repeated stream records while preserving their original order.
+    unique_matches = list(dict.fromkeys(matches))
+    timeout_tasks = sorted(
+        {
+            match.group(1)
+            for message in messages
+            if (match := TIMEOUT_TASK_RE.search(message)) is not None
+        }
+    )
+    return unique_matches[-limit:], len(matches), timeout_tasks, len(messages)
 
 
 def task_summary(row: dict[str, Any]) -> dict[str, Any]:
@@ -136,9 +150,18 @@ def markdown_report(snapshot: dict[str, Any]) -> str:
     log = snapshot.get("log_fetch", {})
     if log.get("status") == "ok":
         lines.append(
-            f"Fetched {log.get('line_count', 0)} log lines; "
-            f"{log.get('diagnostic_line_count', 0)} matched diagnostic markers."
+            f"Fetched {log.get('line_count', 0)} raw log lines; decoded "
+            f"{log.get('decoded_message_count', 0)} messages and found "
+            f"{log.get('diagnostic_line_count', 0)} diagnostic lines."
         )
+        timed_out = log.get("timed_out_tasks", [])
+        if timed_out:
+            lines.extend([
+                "",
+                f"Agent timeout warnings appeared for {len(timed_out)} task(s): "
+                + ", ".join(f"`{task}`" for task in timed_out)
+                + ".",
+            ])
         excerpts = log.get("diagnostics", [])
         if excerpts:
             lines.append("")
@@ -238,16 +261,14 @@ def main() -> int:
     if log_stdout:
         log_path.write_text(log_stdout, encoding="utf-8", errors="replace")
     if log_code == 0 and log_error is None:
-        matches = diagnostic_lines(log_stdout)
+        diagnostics, diagnostic_count, timeout_tasks, message_count = diagnostic_lines(log_stdout)
         snapshot["log_fetch"] = {
             "status": "ok",
             "line_count": len(log_stdout.splitlines()),
-            "diagnostic_line_count": sum(
-                1
-                for line in log_stdout.splitlines()
-                if any(marker in " ".join(line.split()).casefold() for marker in DIAGNOSTIC_MARKERS)
-            ),
-            "diagnostics": matches,
+            "decoded_message_count": message_count,
+            "diagnostic_line_count": diagnostic_count,
+            "timed_out_tasks": timeout_tasks,
+            "diagnostics": diagnostics,
             "raw_log_artifact_path": str(log_path) if log_path.is_file() else None,
         }
     else:
