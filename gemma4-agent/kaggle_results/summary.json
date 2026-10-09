@@ -1,8 +1,8 @@
 {
-  "fetched_utc": "2026-10-09T17:23:07+00:00",
+  "fetched_utc": "2026-10-09T18:25:57+00:00",
   "competition": "gemma-4-developer-agent",
   "team_filter": null,
-  "leaderboard_rows": 2184,
+  "leaderboard_rows": 2192,
   "submission_rows": 1,
   "our_leaderboard_rows": [],
   "top10": [
@@ -10,9 +10,9 @@
       "Rank": "1",
       "TeamId": "16948405",
       "TeamName": "Yurnero",
-      "LastSubmissionDate": "2026-10-07 09:05:37",
+      "LastSubmissionDate": "2026-10-08 06:34:21",
       "Score": "0.24",
-      "SubmissionCount": "7",
+      "SubmissionCount": "8",
       "TeamMemberUserNames": "samson8"
     },
     {
