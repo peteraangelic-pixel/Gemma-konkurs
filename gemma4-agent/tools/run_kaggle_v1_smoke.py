@@ -232,8 +232,7 @@ print('Offline wheelhouse installation complete.')
 import torch
 import yaml
 from pathlib import Path
-from adk_submission import VllmConfig, VllmServer, discover_adapters
-from swegemma.config import ALLOWED_ADAPTER_EXTENSIONS
+from adk_submission import VllmConfig, VllmServer
 
 litellm.drop_params = True
 TARGET_MODEL_NAME = 'gemma-4-31b-it-qat-w4a16-ct'
@@ -261,8 +260,11 @@ for config_path in AGENT_DIR.rglob('*.yaml'):
         declared_models.add(config['model'])
 assert declared_models == {TARGET_MODEL_NAME}, f'Expected only {TARGET_MODEL_NAME}; found {sorted(declared_models)}'
 declared_model = TARGET_MODEL_NAME
-adapters = discover_adapters(str(AGENT_DIR), adapter_extensions=ALLOWED_ADAPTER_EXTENSIONS)
-assert not adapters, 'This V1 smoke run is configured without LoRA adapters.'
+# The exact V1 archive has no adapters/ directory. Avoid optional adapter
+# discovery here; the installed submission helper can report a non-empty
+# manifest even when this stage is explicitly no-LoRA.
+assert not (AGENT_DIR / 'adapters').exists(), 'No-LoRA V1 archive unexpectedly contains adapters/.'
+adapters = []
 
 vllm_cfg = VllmConfig(
     model=str(MODEL_PATH),
