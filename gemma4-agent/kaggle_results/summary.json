@@ -1,0 +1,112 @@
+{
+  "fetched_utc": "2026-10-09T11:12:26+00:00",
+  "competition": "gemma-4-developer-agent",
+  "team_filter": null,
+  "leaderboard_rows": 2172,
+  "submission_rows": 1,
+  "our_leaderboard_rows": [],
+  "top10": [
+    {
+      "Rank": "1",
+      "TeamId": "16948405",
+      "TeamName": "Yurnero",
+      "LastSubmissionDate": "2026-10-07 09:05:37",
+      "Score": "0.24",
+      "SubmissionCount": "7",
+      "TeamMemberUserNames": "samson8"
+    },
+    {
+      "Rank": "2",
+      "TeamId": "17019455",
+      "TeamName": "Yike Xu",
+      "LastSubmissionDate": "2026-10-07 02:06:25",
+      "Score": "0.24",
+      "SubmissionCount": "6",
+      "TeamMemberUserNames": "weiyun22021"
+    },
+    {
+      "Rank": "3",
+      "TeamId": "17015790",
+      "TeamName": "Francis Joseph",
+      "LastSubmissionDate": "2026-10-07 17:39:44",
+      "Score": "0.22",
+      "SubmissionCount": "6",
+      "TeamMemberUserNames": "francisjosephdev"
+    },
+    {
+      "Rank": "4",
+      "TeamId": "16949307",
+      "TeamName": "Mizero Lucky Gall",
+      "LastSubmissionDate": "2026-10-07 14:17:10",
+      "Score": "0.20",
+      "SubmissionCount": "9",
+      "TeamMemberUserNames": "mizeroluckygall"
+    },
+    {
+      "Rank": "5",
+      "TeamId": "16953434",
+      "TeamName": "islet",
+      "LastSubmissionDate": "2026-10-07 00:46:16",
+      "Score": "0.20",
+      "SubmissionCount": "6",
+      "TeamMemberUserNames": "kojimar"
+    },
+    {
+      "Rank": "6",
+      "TeamId": "16954250",
+      "TeamName": "Kawchar Husain",
+      "LastSubmissionDate": "2026-10-07 09:07:26",
+      "Score": "0.20",
+      "SubmissionCount": "7",
+      "TeamMemberUserNames": "kawchar85,raininbox"
+    },
+    {
+      "Rank": "7",
+      "TeamId": "16950280",
+      "TeamName": "songhahaha66",
+      "LastSubmissionDate": "2026-10-07 14:24:22",
+      "Score": "0.20",
+      "SubmissionCount": "10",
+      "TeamMemberUserNames": "songhahaha66"
+    },
+    {
+      "Rank": "8",
+      "TeamId": "17013442",
+      "TeamName": "Hıdır BozkurtT",
+      "LastSubmissionDate": "2026-10-07 16:49:35",
+      "Score": "0.20",
+      "SubmissionCount": "4",
+      "TeamMemberUserNames": "hdrbozkurtt"
+    },
+    {
+      "Rank": "9",
+      "TeamId": "17019135",
+      "TeamName": "Lakshya Mewara0025",
+      "LastSubmissionDate": "2026-10-07 17:40:02",
+      "Score": "0.20",
+      "SubmissionCount": "5",
+      "TeamMemberUserNames": "lakshyamewara0025"
+    },
+    {
+      "Rank": "10",
+      "TeamId": "16969197",
+      "TeamName": "Shan Yang",
+      "LastSubmissionDate": "2026-10-07 00:00:35",
+      "Score": "0.18",
+      "SubmissionCount": "11",
+      "TeamMemberUserNames": "shanyangmie"
+    }
+  ],
+  "latest_submissions": [
+    {
+      "ref": "56974591",
+      "fileName": "submission.zip",
+      "date": "2026-10-08 21:54:34.333000",
+      "description": "V1",
+      "status": "SubmissionStatus.PENDING",
+      "publicScore": "",
+      "privateScore": ""
+    }
+  ],
+  "problems": []
+}
