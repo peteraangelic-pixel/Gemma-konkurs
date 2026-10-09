@@ -79,6 +79,13 @@ jobs:
             --competition gemma-4-developer-agent \
             --outdir gemma4-agent/kaggle_results
 
+      - name: Inspect official starter notebook metadata (no execution)
+        if: steps.kaggle-auth.outcome == 'success'
+        continue-on-error: true
+        run: |
+          python gemma4-agent/tools/inspect_kaggle_starter.py \
+            --output gemma4-agent/kaggle_results/starter_kernel_metadata.json
+
       - name: Show summary
         if: always()
         run: |
