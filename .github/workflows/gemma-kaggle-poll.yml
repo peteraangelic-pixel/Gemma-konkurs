@@ -1,0 +1,114 @@
+name: Gemma Kaggle status poll
+
+on:
+  push:
+    branches:
+      - arena/6d081d52-gemma-konkurs
+    paths:
+      - gemma4-agent/kaggle_results/poll.trigger
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gemma-kaggle-poll-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  poll:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout session branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Kaggle CLI
+        run: python -m pip install --disable-pip-version-check --quiet kaggle
+
+      - name: Configure Kaggle credentials
+        id: kaggle-auth
+        continue-on-error: true
+        env:
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+        run: |
+          set -euo pipefail
+          OUT=gemma4-agent/kaggle_results
+          mkdir -p "$OUT" "$HOME/.kaggle"
+          {
+            echo "## Poll diagnostics"
+            echo
+            echo "run_id: ${{ github.run_id }}"
+            echo "run_attempt: ${{ github.run_attempt }}"
+            echo "event: ${{ github.event_name }}"
+            echo "ref: ${{ github.ref_name }}"
+            echo "utc: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            if [ -n "$KAGGLE_API_TOKEN" ]; then
+              echo "KAGGLE_API_TOKEN present: yes (value not recorded)"
+            else
+              echo "KAGGLE_API_TOKEN present: no"
+            fi
+          } > "$OUT/poll_diagnostics.md"
+
+          if [ -z "$KAGGLE_API_TOKEN" ]; then
+            echo >> "$OUT/poll_diagnostics.md"
+            echo "Add a repository Actions secret named KAGGLE_API_TOKEN (or an org secret authorized for this repo)." >> "$OUT/poll_diagnostics.md"
+            exit 1
+          fi
+
+          printf '%s' "$KAGGLE_API_TOKEN" | tr -d '\r\n' > "$HOME/.kaggle/access_token"
+          chmod 600 "$HOME/.kaggle/access_token"
+          echo >> "$OUT/poll_diagnostics.md"
+          echo "Kaggle CLI access-token file configured; token value was not logged." >> "$OUT/poll_diagnostics.md"
+
+      - name: Fetch submissions and public leaderboard
+        if: steps.kaggle-auth.outcome == 'success'
+        id: fetch-results
+        continue-on-error: true
+        env:
+          KAGGLE_TEAM: ${{ vars.KAGGLE_TEAM }}
+        run: |
+          python gemma4-agent/tools/fetch_kaggle_results.py \
+            --competition gemma-4-developer-agent \
+            --outdir gemma4-agent/kaggle_results
+
+      - name: Show summary
+        if: always()
+        run: |
+          if [ -f gemma4-agent/kaggle_results/summary.md ]; then
+            cat gemma4-agent/kaggle_results/summary.md
+          elif [ -f gemma4-agent/kaggle_results/poll_diagnostics.md ]; then
+            cat gemma4-agent/kaggle_results/poll_diagnostics.md
+          else
+            echo "No Kaggle result files were produced."
+          fi
+
+      - name: Upload poll artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gemma-kaggle-poll-${{ github.run_id }}
+          path: gemma4-agent/kaggle_results/
+          if-no-files-found: warn
+
+      - name: Commit poll results to this branch
+        if: always()
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git pull --rebase --autostash origin "$GITHUB_REF_NAME" || true
+          if [ -n "$(git status --porcelain gemma4-agent/kaggle_results)" ]; then
+            git add gemma4-agent/kaggle_results
+            git commit -m "chore(gemma): poll Kaggle status [skip ci]"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          else
+            echo "No result changes to commit."
+          fi

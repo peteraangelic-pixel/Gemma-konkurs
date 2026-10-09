@@ -25,6 +25,14 @@ python gemma4-agent/build_submission.py
 
 Archiwum zapisuje się jako `gemma4-agent/submission.zip`. Packer sprawdza, że root ZIP-a zawiera `agent.yaml` bez dodatkowego katalogu opakowującego, że ścieżki `!include` pozostają w katalogu submission, że wszystkie pliki mają dozwolone rozszerzenia i że każdy agent deklaruje właściwy model. Gdy PyYAML jest dostępny, sprawdza też składnię wszystkich YAML-i; budowanie ZIP-a poza tym nie wymaga zależności.
 
+## Odczyt statusu Kaggle przez GitHub Actions
+
+Workflow `../.github/workflows/gemma-kaggle-poll.yml` wykonuje wyłącznie odczyt: listuje statusy naszych submissionów i pobiera publiczną tabelę leaderboardu konkursu `gemma-4-developer-agent`. Wyniki zapisuje w `gemma4-agent/kaggle_results/` (`summary.md`, `summary.json`, CSV) i commit-uje z powrotem na gałąź sesji. **Nie przesyła nowego ZIP-a ani nie zużywa dziennego limitu submissionów.**
+
+Workflow wymaga sekretu Actions `KAGGLE_API_TOKEN` przypisanego do repozytorium `Gemma-konkurs` albo sekretu organizacji udostępnionego temu repozytorium. Aby uruchomić go na gałęzi sesji, zmień i wypchnij `gemma4-agent/kaggle_results/poll.trigger`; taki push jest wyzwalaczem. Wartość klucza nigdy nie trafia do plików wynikowych. Opcjonalna zmienna repozytorium Actions `KAGGLE_TEAM` (dokładna nazwa zespołu/użytkownika z tabeli) pozwala wskazać nasz wiersz leaderboardu.
+
+To konkurs naprawy oprogramowania, nie turniej gier: Kaggle może udostępnić statusy, publiczny score i leaderboard, ale nie ma tu „ostatnich 7 meczów” ani replayów agentów przeciwników do pobrania. Top-10 wyników można odczytać; cudze prywatne ZIP-y, prompty i strategie nie są częścią publicznego leaderboardu. Pełne porównanie wariantów agenta wymagałoby ewaluacji tych wariantów na tym samym zestawie tasków w środowisku z Gemmą na 4×L4; standardowy runner GitHub Actions nie zapewnia takiego GPU.
+
 ## Weryfikacja względem specyfikacji
 
 Sprawdziłem `HARNESS_README.md` oraz `sample_submission/` dostępne w GitHub `origin/main` pod commitem `813b3d072b909918a6cee72060b0cc85c1874cf8` (m.in. blob `HARNESS_README.md` `1b068740db714b8766e8f9c880fd8f03a53de161`) i porównałem je ze stroną konkursu. Zastosowane kontrakty:
