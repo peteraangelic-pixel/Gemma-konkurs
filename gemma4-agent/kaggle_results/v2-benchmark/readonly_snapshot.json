@@ -1,0 +1,356 @@
+{
+  "collected_utc": "2026-10-09T23:46:47+00:00",
+  "mode": "read_only",
+  "status": "COMPLETE",
+  "log_fetch": {
+    "status": "ok",
+    "line_count": 735,
+    "diagnostic_line_count": 112,
+    "diagnostics": [
+      ",{\"stream_name\":\"stdout\",\"time\":5016.97358511,\"data\":\"{\\\"tasks_completed_or_failed\\\": 18, \\\"resolved_count\\\": 6, \\\"score_estimate\\\": 0.3333333333333333, \\\"score_ci95_wilson\\\": [0.1627855436366286, 0.5625093065574964]}\\n\"}",
+      ",{\"stream_name\":\"stderr\",\"time\":5324.169529597,\"data\":\"WARNING:swegemma.harness.agent_runner:Task fastapi_14186 agent timed out.\\n\"}",
+      ",{\"stream_name\":\"stderr\",\"time\":5324.169570469,\"data\":\"WARNING:swegemma.harness.agent_runner:Task fastapi_14186 agent timed out.\\n\"}",
+      ",{\"stream_name\":\"stdout\",\"time\":5324.489021202,\"data\":\"{\\\"tasks_completed_or_failed\\\": 19, \\\"resolved_count\\\": 6, \\\"score_estimate\\\": 0.3157894736842105, \\\"score_ci95_wilson\\\": [0.15364171004428598, 0.5398998982493537]}\\n\"}",
+      ",{\"stream_name\":\"stdout\",\"time\":5444.585207552,\"data\":\"{\\\"tasks_completed_or_failed\\\": 20, \\\"resolved_count\\\": 7, \\\"score_estimate\\\": 0.35, \\\"score_ci95_wilson\\\": [0.18118954786794464, 0.5671494897805354]}\\n\"}",
+      ",{\"stream_name\":\"stderr\",\"time\":5750.861402073,\"data\":\"WARNING:swegemma.harness.agent_runner:Task fastapi_14459 agent timed out.\\n\"}",
+      ",{\"stream_name\":\"stderr\",\"time\":5750.861440554,\"data\":\"WARNING:swegemma.harness.agent_runner:Task fastapi_14459 agent timed out.\\n\"}",
+      ",{\"stream_name\":\"stdout\",\"time\":5754.550951079,\"data\":\"{\\\"tasks_completed_or_failed\\\": 21, \\\"resolved_count\\\": 7, \\\"score_estimate\\\": 0.3333333333333333, \\\"score_ci95_wilson\\\": [0.17194536432683688, 0.5462692434278971]}\\n\"}",
+      ",{\"stream_name\":\"stderr\",\"time\":6055.931657816,\"data\":\"WARNING:swegemma.harness.agent_runner:Task requests_6757 agent timed out.\\n\"}",
+      ",{\"stream_name\":\"stderr\",\"time\":6055.931696458,\"data\":\"WARNING:swegemma.harness.agent_runner:Task requests_6757 agent timed out.\\n\"}",
+      ",{\"stream_name\":\"stdout\",\"time\":6056.159466538,\"data\":\"{\\\"tasks_completed_or_failed\\\": 22, \\\"resolved_count\\\": 7, \\\"score_estimate\\\": 0.3181818181818182, \\\"score_ci95_wilson\\\": [0.1636038735469248, 0.5268177721716065]}\\n\"}",
+      ",{\"stream_name\":\"stdout\",\"time\":6269.642095156,\"data\":\"{\\\"tasks_completed_or_failed\\\": 23, \\\"resolved_count\\\": 7, \\\"score_estimate\\\": 0.30434782608695654, \\\"score_ci95_wilson\\\": [0.15603828020972454, 0.5086612906057261]}\\n\"}",
+      ",{\"stream_name\":\"stderr\",\"time\":6574.434469145,\"data\":\"WARNING:swegemma.harness.agent_runner:Task rich_2725 agent timed out.\\n\"}",
+      ",{\"stream_name\":\"stderr\",\"time\":6574.434508933,\"data\":\"WARNING:swegemma.harness.agent_runner:Task rich_2725 agent timed out.\\n\"}",
+      ",{\"stream_name\":\"stdout\",\"time\":6577.101551473,\"data\":\"{\\\"tasks_completed_or_failed\\\": 24, \\\"resolved_count\\\": 8, \\\"score_estimate\\\": 0.3333333333333333, \\\"score_ci95_wilson\\\": [0.17971978688379642, 0.5329404050591954]}\\n\"}",
+      ",{\"stream_name\":\"stderr\",\"time\":6878.800842329,\"data\":\"WARNING:swegemma.harness.agent_runner:Task requests_7309 agent timed out.\\n\"}",
+      ",{\"stream_name\":\"stderr\",\"time\":6878.800872869,\"data\":\"WARNING:swegemma.harness.agent_runner:Task requests_7309 agent timed out.\\n\"}",
+      ",{\"stream_name\":\"stdout\",\"time\":6881.434215429,\"data\":\"{\\\"tasks_completed_or_failed\\\": 25, \\\"resolved_count\\\": 8, \\\"score_estimate\\\": 0.32, \\\"score_ci95_wilson\\\": [0.17204987516891146, 0.5159008626542329]}\\n\"}",
+      ",{\"stream_name\":\"stderr\",\"time\":7192.941075499,\"data\":\"WARNING:swegemma.harness.agent_runner:Task fastapi_14482 agent timed out.\\n\"}",
+      ",{\"stream_name\":\"stderr\",\"time\":7192.941117865,\"data\":\"WARNING:swegemma.harness.agent_runner:Task fastapi_14482 agent timed out.\\n\"}",
+      ",{\"stream_name\":\"stdout\",\"time\":7196.490032518,\"data\":\"{\\\"tasks_completed_or_failed\\\": 26, \\\"resolved_count\\\": 8, \\\"score_estimate\\\": 0.3076923076923077, \\\"score_ci95_wilson\\\": [0.16501120939792674, 0.49988611514231246]}\\n\"}",
+      ",{\"stream_name\":\"stderr\",\"time\":7511.335399405,\"data\":\"WARNING:swegemma.harness.agent_runner:Task fastapi_15745 agent timed out.\\n\"}",
+      ",{\"stream_name\":\"stderr\",\"time\":7511.335436241,\"data\":\"WARNING:swegemma.harness.agent_runner:Task fastapi_15745 agent timed out.\\n\"}",
+      ",{\"stream_name\":\"stdout\",\"time\":7511.679281477,\"data\":\"{\\\"tasks_completed_or_failed\\\": 27, \\\"resolved_count\\\": 8, \\\"score_estimate\\\": 0.2962962962962963, \\\"score_ci95_wilson\\\": [0.15852853317647564, 0.4848103338083759]}\\n\"}",
+      ",{\"stream_name\":\"stderr\",\"time\":7823.308954228,\"data\":\"WARNING:swegemma.harness.agent_runner:Task fastapi_14458 agent timed out.\\n\"}",
+      ",{\"stream_name\":\"stderr\",\"time\":7823.308989415,\"data\":\"WARNING:swegemma.harness.agent_runner:Task fastapi_14458 agent timed out.\\n\"}",
+      ",{\"stream_name\":\"stdout\",\"time\":7826.826941108,\"data\":\"{\\\"tasks_completed_or_failed\\\": 28, \\\"resolved_count\\\": 9, \\\"score_estimate\\\": 0.32142857142857145, \\\"score_ci95_wilson\\\": [0.1793304754342074, 0.5066149544436882]}\\n\"}",
+      ",{\"stream_name\":\"stdout\",\"time\":8013.408762153,\"data\":\"{\\\"tasks_completed_or_failed\\\": 29, \\\"resolved_count\\\": 10, \\\"score_estimate\\\": 0.3448275862068966, \\\"score_ci95_wilson\\\": [0.19940508749190486, 0.52655223492844]}\\n\"}",
+      ",{\"stream_name\":\"stderr\",\"time\":8313.881937638,\"data\":\"WARNING:swegemma.harness.agent_runner:Task httpx_3672 agent timed out.\\n\"}",
+      ",{\"stream_name\":\"stderr\",\"time\":8313.881971012,\"data\":\"WARNING:swegemma.harness.agent_runner:Task httpx_3672 agent timed out.\\n\"}",
+      ",{\"stream_name\":\"stdout\",\"time\":8315.904343913,\"data\":\"{\\\"tasks_completed_or_failed\\\": 30, \\\"resolved_count\\\": 10, \\\"score_estimate\\\": 0.3333333333333333, \\\"score_ci95_wilson\\\": [0.19230295526846194, 0.5122027418616973]}\\n\"}",
+      ",{\"stream_name\":\"stdout\",\"time\":8315.904373792,\"data\":\" \\\"tasks_completed_or_failed\\\": 30,\\n\"}"
+    ],
+    "raw_log_artifact_path": "/home/runner/work/_temp/gemma-v2-readonly/kernel.log"
+  },
+  "output_fetch": {
+    "status": "ok",
+    "result_file_found": true
+  },
+  "kernel_ref": "lauresowe3d/gemma-agent-benchmark-853fe984-20261009-204128",
+  "kernel_url": "https://www.kaggle.com/code/lauresowe3d/gemma-agent-benchmark-853fe984-20261009-204128",
+  "submission_sha256": "853fe9845c879465d2df55d00d052f3adde9f466b36dffeef5785f0a75eaa000",
+  "run_status_at_last_poll": "KernelWorkerStatus.RUNNING",
+  "kaggle_status_raw": "KernelWorkerStatus.COMPLETE",
+  "status_probe": {
+    "exit_code": 0,
+    "error_type": null
+  },
+  "benchmark_result": {
+    "task_count_requested": 30,
+    "task_count_selected": 30,
+    "tasks_completed_or_failed": 30,
+    "resolved_count": 10,
+    "score_estimate": 0.3333333333333333,
+    "score_ci95_wilson": [
+      0.19230295526846194,
+      0.5122027418616973
+    ],
+    "per_task_max_time_minutes": 5.0,
+    "mean_task_duration_seconds": 259.2653103824666,
+    "total_task_duration_seconds": 7777.959311473999,
+    "benchmark_wall_seconds": 7779.604047871001,
+    "model": "gemma-4-31b-it-qat-w4a16-ct",
+    "visible_gpu_count": 4,
+    "sample_seed": 20261009,
+    "repo_counts": {
+      "psf/requests": 3,
+      "Textualize/rich": 10,
+      "fastapi/fastapi": 16,
+      "encode/httpx": 1
+    },
+    "task_ids": [
+      "requests_6644",
+      "rich_3934",
+      "fastapi_14851",
+      "rich_3718",
+      "fastapi_14266",
+      "fastapi_14487",
+      "fastapi_14953",
+      "rich_3518",
+      "fastapi_14297",
+      "rich_3894",
+      "fastapi_14303",
+      "rich_3052",
+      "rich_3043",
+      "rich_3105",
+      "fastapi_14873",
+      "fastapi_15030",
+      "fastapi_15588",
+      "rich_3006",
+      "fastapi_14186",
+      "rich_3882",
+      "fastapi_14459",
+      "requests_6757",
+      "fastapi_14262",
+      "rich_2725",
+      "requests_7309",
+      "fastapi_14482",
+      "fastapi_15745",
+      "fastapi_14458",
+      "fastapi_14077",
+      "httpx_3672"
+    ],
+    "tasks": [
+      {
+        "task_id": "requests_6644",
+        "repo": "psf/requests",
+        "resolved": true,
+        "test_exit_code": 0,
+        "tool_calls": 27,
+        "duration_seconds": 304.36439942899995
+      },
+      {
+        "task_id": "rich_3934",
+        "repo": "Textualize/rich",
+        "resolved": false,
+        "test_exit_code": 1,
+        "tool_calls": 8,
+        "duration_seconds": 307.5923556550001
+      },
+      {
+        "task_id": "fastapi_14851",
+        "repo": "fastapi/fastapi",
+        "resolved": true,
+        "test_exit_code": 0,
+        "tool_calls": 34,
+        "duration_seconds": 180.56443539700012
+      },
+      {
+        "task_id": "rich_3718",
+        "repo": "Textualize/rich",
+        "resolved": false,
+        "test_exit_code": 1,
+        "tool_calls": 27,
+        "duration_seconds": 253.665198724
+      },
+      {
+        "task_id": "fastapi_14266",
+        "repo": "fastapi/fastapi",
+        "resolved": false,
+        "test_exit_code": 2,
+        "tool_calls": 35,
+        "duration_seconds": 153.6781177979999
+      },
+      {
+        "task_id": "fastapi_14487",
+        "repo": "fastapi/fastapi",
+        "resolved": false,
+        "test_exit_code": -1,
+        "tool_calls": 20,
+        "duration_seconds": 304.65723060999994
+      },
+      {
+        "task_id": "fastapi_14953",
+        "repo": "fastapi/fastapi",
+        "resolved": false,
+        "test_exit_code": 2,
+        "tool_calls": 18,
+        "duration_seconds": 89.89849597200009
+      },
+      {
+        "task_id": "rich_3518",
+        "repo": "Textualize/rich",
+        "resolved": true,
+        "test_exit_code": 0,
+        "tool_calls": 35,
+        "duration_seconds": 304.8795614779997
+      },
+      {
+        "task_id": "fastapi_14297",
+        "repo": "fastapi/fastapi",
+        "resolved": false,
+        "test_exit_code": 2,
+        "tool_calls": 30,
+        "duration_seconds": 308.18774411100003
+      },
+      {
+        "task_id": "rich_3894",
+        "repo": "Textualize/rich",
+        "resolved": true,
+        "test_exit_code": 0,
+        "tool_calls": 13,
+        "duration_seconds": 291.35639366999976
+      },
+      {
+        "task_id": "fastapi_14303",
+        "repo": "fastapi/fastapi",
+        "resolved": false,
+        "test_exit_code": 2,
+        "tool_calls": 14,
+        "duration_seconds": 129.62722014599967
+      },
+      {
+        "task_id": "rich_3052",
+        "repo": "Textualize/rich",
+        "resolved": false,
+        "test_exit_code": 1,
+        "tool_calls": 17,
+        "duration_seconds": 302.2078642669999
+      },
+      {
+        "task_id": "rich_3043",
+        "repo": "Textualize/rich",
+        "resolved": true,
+        "test_exit_code": 0,
+        "tool_calls": 18,
+        "duration_seconds": 304.82185025100034
+      },
+      {
+        "task_id": "rich_3105",
+        "repo": "Textualize/rich",
+        "resolved": false,
+        "test_exit_code": -1,
+        "tool_calls": 17,
+        "duration_seconds": 302.4336784090001
+      },
+      {
+        "task_id": "fastapi_14873",
+        "repo": "fastapi/fastapi",
+        "resolved": false,
+        "test_exit_code": 1,
+        "tool_calls": 26,
+        "duration_seconds": 309.2465475509998
+      },
+      {
+        "task_id": "fastapi_15030",
+        "repo": "fastapi/fastapi",
+        "resolved": false,
+        "test_exit_code": 2,
+        "tool_calls": 19,
+        "duration_seconds": 308.8610654209997
+      },
+      {
+        "task_id": "fastapi_15588",
+        "repo": "fastapi/fastapi",
+        "resolved": false,
+        "test_exit_code": 1,
+        "tool_calls": 15,
+        "duration_seconds": 183.73719348899976
+      },
+      {
+        "task_id": "rich_3006",
+        "repo": "Textualize/rich",
+        "resolved": true,
+        "test_exit_code": 0,
+        "tool_calls": 20,
+        "duration_seconds": 139.644950549
+      },
+      {
+        "task_id": "fastapi_14186",
+        "repo": "fastapi/fastapi",
+        "resolved": false,
+        "test_exit_code": -1,
+        "tool_calls": 10,
+        "duration_seconds": 307.5125082300001
+      },
+      {
+        "task_id": "rich_3882",
+        "repo": "Textualize/rich",
+        "resolved": true,
+        "test_exit_code": 0,
+        "tool_calls": 16,
+        "duration_seconds": 120.0658547890007
+      },
+      {
+        "task_id": "fastapi_14459",
+        "repo": "fastapi/fastapi",
+        "resolved": false,
+        "test_exit_code": 2,
+        "tool_calls": 17,
+        "duration_seconds": 309.8674684689995
+      },
+      {
+        "task_id": "requests_6757",
+        "repo": "psf/requests",
+        "resolved": false,
+        "test_exit_code": -1,
+        "tool_calls": 14,
+        "duration_seconds": 301.60744965899994
+      },
+      {
+        "task_id": "fastapi_14262",
+        "repo": "fastapi/fastapi",
+        "resolved": false,
+        "test_exit_code": 2,
+        "tool_calls": 32,
+        "duration_seconds": 213.3857996379993
+      },
+      {
+        "task_id": "rich_2725",
+        "repo": "Textualize/rich",
+        "resolved": true,
+        "test_exit_code": 0,
+        "tool_calls": 31,
+        "duration_seconds": 307.42669221400047
+      },
+      {
+        "task_id": "requests_7309",
+        "repo": "psf/requests",
+        "resolved": false,
+        "test_exit_code": 1,
+        "tool_calls": 33,
+        "duration_seconds": 304.30462726299993
+      },
+      {
+        "task_id": "fastapi_14482",
+        "repo": "fastapi/fastapi",
+        "resolved": false,
+        "test_exit_code": 2,
+        "tool_calls": 25,
+        "duration_seconds": 314.958535193
+      },
+      {
+        "task_id": "fastapi_15745",
+        "repo": "fastapi/fastapi",
+        "resolved": false,
+        "test_exit_code": -1,
+        "tool_calls": 21,
+        "duration_seconds": 315.18540547799967
+      },
+      {
+        "task_id": "fastapi_14458",
+        "repo": "fastapi/fastapi",
+        "resolved": true,
+        "test_exit_code": 0,
+        "tool_calls": 20,
+        "duration_seconds": 315.0523379799997
+      },
+      {
+        "task_id": "fastapi_14077",
+        "repo": "fastapi/fastapi",
+        "resolved": true,
+        "test_exit_code": 0,
+        "tool_calls": 21,
+        "duration_seconds": 186.48596721600097
+      },
+      {
+        "task_id": "httpx_3672",
+        "repo": "encode/httpx",
+        "resolved": false,
+        "test_exit_code": 2,
+        "tool_calls": 7,
+        "duration_seconds": 302.6823624179997
+      }
+    ]
+  }
+}
