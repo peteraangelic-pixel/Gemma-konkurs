@@ -1,6 +1,7 @@
 name: Gemma V1 smoke notebook logs
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - arena/6d081d52-gemma-konkurs
@@ -52,6 +53,12 @@ jobs:
           python gemma4-agent/tools/fetch_kaggle_kernel_log.py \
             --run-json gemma4-agent/kaggle_results/v1-smoke/run.json \
             --output-dir "$RUNNER_TEMP/gemma-v1-kernel-logs"
+
+      - name: Expose concise failure diagnostics as check annotations
+        if: always()
+        run: |
+          python gemma4-agent/tools/summarize_kaggle_kernel_log.py \
+            "$RUNNER_TEMP/gemma-v1-kernel-logs/kernel.log"
 
       - name: Upload private notebook logs as a temporary artifact
         if: always()
