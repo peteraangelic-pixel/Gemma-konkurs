@@ -1,1 +1,1 @@
-read-only snapshot for existing V2 kernel; no push, restart, stop, or competition submission
+read-only parser refresh 2026-10-09T23:49:09Z; existing V2 kernel only; do not push, restart, stop, or submit
