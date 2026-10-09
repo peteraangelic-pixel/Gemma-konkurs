@@ -1,0 +1,29 @@
+{
+  "retrieved_utc": "2026-10-09T17:14:49+00:00",
+  "kernel_ref": "ryanholbrook/getting-started-gemma-4-developer-agent",
+  "notebook_executed": false,
+  "gpu_quota_used": false,
+  "status": "ok",
+  "metadata": {
+    "id": "ryanholbrook/getting-started-gemma-4-developer-agent",
+    "title": "Getting Started - Gemma 4 Developer Agent",
+    "code_file": "getting-started-gemma-4-developer-agent.ipynb",
+    "language": "python",
+    "kernel_type": "notebook",
+    "is_private": false,
+    "enable_gpu": true,
+    "enable_tpu": false,
+    "enable_internet": false,
+    "machine_shape": "NvidiaL4",
+    "dataset_sources": [
+      "metric/gemma-4-developer-agent-wheelhouse"
+    ],
+    "competition_sources": [
+      "gemma-4-developer-agent"
+    ],
+    "kernel_sources": [],
+    "model_sources": [
+      "google/gemma-4/Other/gemma-4-31b-it-qat-w4a16-ct/2"
+    ]
+  }
+}

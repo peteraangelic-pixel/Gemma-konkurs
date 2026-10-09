@@ -1,6 +1,6 @@
 # Kaggle status — gemma-4-developer-agent
 
-_Fetched 2026-10-09T12:28:51+00:00._
+_Fetched 2026-10-09T17:14:49+00:00._
 
 This is a read-only poll: it does not upload or submit an agent.
 
@@ -23,7 +23,7 @@ This is a read-only poll: it does not upload or submit an agent.
 | 7 | songhahaha66 | 0.20 |
 | 8 | Hıdır BozkurtT | 0.20 |
 | 9 | Lakshya Mewara0025 | 0.20 |
-| 10 | Shan Yang | 0.18 |
+| 10 | John Wegis | 0.20 |
 
 ## Public competition notebooks by top-10 members
 

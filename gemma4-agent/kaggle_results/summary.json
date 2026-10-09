@@ -1,8 +1,8 @@
 {
-  "fetched_utc": "2026-10-09T12:28:51+00:00",
+  "fetched_utc": "2026-10-09T17:14:49+00:00",
   "competition": "gemma-4-developer-agent",
   "team_filter": null,
-  "leaderboard_rows": 2173,
+  "leaderboard_rows": 2184,
   "submission_rows": 1,
   "our_leaderboard_rows": [],
   "top10": [
@@ -89,12 +89,12 @@
     },
     {
       "Rank": "10",
-      "TeamId": "16969197",
-      "TeamName": "Shan Yang",
-      "LastSubmissionDate": "2026-10-07 00:00:35",
-      "Score": "0.18",
-      "SubmissionCount": "11",
-      "TeamMemberUserNames": "shanyangmie"
+      "TeamId": "16969391",
+      "TeamName": "John Wegis",
+      "LastSubmissionDate": "2026-10-08 00:03:13",
+      "Score": "0.20",
+      "SubmissionCount": "7",
+      "TeamMemberUserNames": "johnwegis"
     }
   ],
   "public_kernels_found": 2,
