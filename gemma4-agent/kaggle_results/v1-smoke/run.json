@@ -8,12 +8,22 @@
   "private_notebook": true,
   "internet_enabled": false,
   "competition_submission_created": false,
-  "gpu_quota_used": false,
+  "gpu_quota_used": null,
   "updated_utc": "2026-10-09T18:17:11+00:00",
   "kernel_ref": "lauresowe3d/gemma-v1-smoke-af4fbb01-20261009-181621",
   "kernel_url": "https://www.kaggle.com/code/lauresowe3d/gemma-v1-smoke-af4fbb01-20261009-181621",
   "push_exit_code": 0,
   "gpu_requested": true,
   "kaggle_status": "KernelWorkerStatus.ERROR",
-  "error": "Kaggle notebook ended without a successful run."
+  "error": "Kaggle notebook ended without a successful run.",
+  "gpu_quota_usage_status": "unconfirmed; the runner never observed RUNNING",
+  "kaggle_running_status_observed": false,
+  "notebook_code_started": true,
+  "diagnosis": {
+    "failure_stage": "first notebook setup cell; before V1 archive extraction, ADK configuration loading, or Gemma startup",
+    "actual_python_runtime": "3.13 (from /usr/lib/python3.13/subprocess.py in the kernel traceback)",
+    "wheelhouse_incompatible_file": "apache_tvm_ffi-0.1.13.post3-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl",
+    "pip_error": "The CPython 3.12 wheel is not a supported wheel on this Python 3.13 platform.",
+    "classification": "Kaggle smoke runtime / competition wheelhouse mismatch; this run did not test the V1 loader."
+  }
 }

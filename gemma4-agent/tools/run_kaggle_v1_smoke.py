@@ -460,7 +460,9 @@ def main() -> int:
         "private_notebook": True,
         "internet_enabled": False,
         "competition_submission_created": False,
-        "gpu_quota_used": False,
+        "gpu_quota_used": None,
+        "gpu_quota_usage_status": "unconfirmed",
+        "kaggle_running_status_observed": False,
     }
     update_state(outdir, state)
 
@@ -508,7 +510,7 @@ def main() -> int:
             with notebook_path.open(encoding="utf-8") as handle:
                 json.load(handle)  # Validate notebook JSON before upload.
 
-            state.update({"status": "pushing", "gpu_quota_used": False})
+            state.update({"status": "pushing", "gpu_quota_used": None})
             update_state(outdir, state)
             try:
                 pushed = kaggle_cli(
@@ -523,7 +525,7 @@ def main() -> int:
             except (OSError, subprocess.TimeoutExpired) as exc:
                 # Do not push a second version: the server may have accepted the first request.
                 state["push_warning"] = f"Kaggle push response was inconclusive ({type(exc).__name__}); checking status."
-            state.update({"status": "queued_or_starting", "gpu_requested": True, "gpu_quota_used": False})
+            state.update({"status": "queued_or_starting", "gpu_requested": True, "gpu_quota_used": None})
             update_state(outdir, state)
 
         deadline = time.monotonic() + max(1, args.max_wait_minutes) * 60
@@ -547,7 +549,7 @@ def main() -> int:
                 final_status = normalized_status(raw_status)
                 state["kaggle_status"] = raw_status or "unparsed"
                 if final_status == "COMPLETE":
-                    state.update({"status": "complete", "gpu_quota_used": True})
+                    state.update({"status": "complete", "gpu_quota_used": None})
                     update_state(outdir, state)
                     try:
                         smoke_result = download_results(kernel_ref, outdir)
@@ -576,7 +578,8 @@ def main() -> int:
                     return 5
                 state["status"] = final_status.lower()
                 if final_status == "RUNNING":
-                    state["gpu_quota_used"] = True
+                    state["kaggle_running_status_observed"] = True
+                    state["gpu_quota_used"] = None
                 update_state(outdir, state)
             time.sleep(max(5, args.poll_interval_seconds))
 
