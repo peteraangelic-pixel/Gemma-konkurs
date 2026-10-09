@@ -1,0 +1,80 @@
+name: Gemma V1 one-task Kaggle smoke
+
+on:
+  push:
+    branches:
+      - arena/6d081d52-gemma-konkurs
+    paths:
+      - gemma4-agent/kaggle_smoke/launch.trigger
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gemma-v1-smoke-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: Checkout session branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Kaggle CLI
+        run: python -m pip install --disable-pip-version-check --quiet kaggle
+
+      - name: Configure Kaggle credentials
+        env:
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "$KAGGLE_API_TOKEN" ]; then
+            echo "Repository Actions secret KAGGLE_API_TOKEN is missing."
+            exit 1
+          fi
+          mkdir -p "$HOME/.kaggle"
+          printf '%s' "$KAGGLE_API_TOKEN" | tr -d '\r\n' > "$HOME/.kaggle/access_token"
+          chmod 600 "$HOME/.kaggle/access_token"
+          echo "Kaggle CLI configured; token value was not logged."
+
+      - name: Run private one-task V1 smoke test on competition L4x4
+        id: smoke
+        run: |
+          python gemma4-agent/tools/run_kaggle_v1_smoke.py \
+            --submission gemma4-agent/submission.zip \
+            --outdir gemma4-agent/kaggle_results/v1-smoke \
+            --max-wait-minutes 100 \
+            --poll-interval-seconds 45
+
+      - name: Upload smoke-test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gemma-v1-smoke-${{ github.run_id }}
+          path: gemma4-agent/kaggle_results/v1-smoke/
+          if-no-files-found: warn
+
+      - name: Commit smoke-test results to this branch
+        if: always()
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git pull --rebase --autostash origin "$GITHUB_REF_NAME" || true
+          if [ -n "$(git status --porcelain gemma4-agent/kaggle_results/v1-smoke)" ]; then
+            git add gemma4-agent/kaggle_results/v1-smoke
+            git commit -m "chore(gemma): record V1 Kaggle smoke result [skip ci]"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          else
+            echo "No smoke-test result files were produced."
+          fi

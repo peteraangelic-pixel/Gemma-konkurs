@@ -1,0 +1,568 @@
+#!/usr/bin/env python3
+"""Launch a private, one-public-task V1 smoke evaluation on Kaggle L4x4.
+
+This script is intended for the dedicated GitHub Actions workflow. It uses the
+Kaggle CLI's existing ~/.kaggle/access_token file, creates a private notebook
+attached to the official competition inputs, and never calls the competition
+submission endpoint. The notebook evaluates exactly one public task.
+"""
+from __future__ import annotations
+
+import argparse
+import base64
+import csv
+import hashlib
+import io
+import json
+from datetime import datetime, timezone
+from pathlib import Path
+import re
+import subprocess
+import sys
+import tempfile
+import time
+from typing import Any
+
+COMPETITION = "gemma-4-developer-agent"
+WHEELHOUSE = "metric/gemma-4-developer-agent-wheelhouse"
+MODEL_SOURCE = "google/gemma-4/Other/gemma-4-31b-it-qat-w4a16-ct/2"
+MODEL_ID = "gemma-4-31b-it-qat-w4a16-ct"
+TASK_ID = "fastapi_15588"
+MACHINE_SHAPE = "NvidiaL4"
+
+
+def write_json(path: Path, value: object) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(value, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+
+def kaggle_cli(args: list[str], timeout: int = 300) -> subprocess.CompletedProcess[str]:
+    """Run Kaggle CLI while keeping all raw authenticated output out of logs."""
+    return subprocess.run(
+        [sys.executable, "-m", "kaggle", *args],
+        capture_output=True,
+        text=True,
+        timeout=timeout,
+        check=False,
+    )
+
+
+def _owner_from_csv(text: str) -> str | None:
+    text = text.removeprefix("\ufeff").strip()
+    if not text:
+        return None
+    for row in csv.DictReader(io.StringIO(text)):
+        lowered = {str(key).strip().lower(): str(value or "").strip() for key, value in row.items()}
+        for key in ("ref", "kernelref", "datasetref", "dataset_ref"):
+            value = lowered.get(key, "")
+            if "/" in value:
+                owner = value.split("/", 1)[0]
+                if re.fullmatch(r"[a-z0-9-]+", owner):
+                    return owner
+    return None
+
+
+def discover_owner() -> str:
+    """Derive the authenticated Kaggle account slug without printing API output."""
+    commands = (
+        ["kernels", "list", "--mine", "--format", "csv", "--page-size", "100"],
+        ["datasets", "list", "--mine", "--format", "csv", "--page-size", "100"],
+    )
+    for command in commands:
+        try:
+            result = kaggle_cli(command, timeout=90)
+        except (OSError, subprocess.TimeoutExpired):
+            continue
+        if result.returncode == 0:
+            owner = _owner_from_csv(result.stdout)
+            if owner:
+                return owner
+    raise RuntimeError(
+        "Could not infer the Kaggle account slug from owned notebooks or datasets. "
+        "No GPU run was started; provide the Kaggle username if this account has no owned artifacts."
+    )
+
+
+def _markdown_cell(source: str) -> dict[str, Any]:
+    return {
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": source.splitlines(keepends=True),
+    }
+
+
+def _code_cell(source: str) -> dict[str, Any]:
+    return {
+        "cell_type": "code",
+        "execution_count": None,
+        "metadata": {},
+        "outputs": [],
+        "source": source.splitlines(keepends=True),
+    }
+
+
+def build_notebook(submission_zip: bytes, submission_sha256: str) -> dict[str, Any]:
+    encoded_zip = json.dumps(base64.b64encode(submission_zip).decode("ascii"))
+    extract_cell = r'''import base64
+import hashlib
+import io
+import json
+import shutil
+import zipfile
+from pathlib import Path, PurePosixPath
+from swegemma.models import load_tasks
+
+DATA_DIR = Path('/kaggle/input/competitions/gemma-4-developer-agent')
+WORKING_DIR = Path('/kaggle/working')
+WORKING_DIR.mkdir(parents=True, exist_ok=True)
+TASKS_PATH = DATA_DIR / 'tasks.jsonl'
+AGENT_DIR = WORKING_DIR / 'v1_submission'
+
+SUBMISSION_ZIP_B64 = __SUBMISSION_B64__
+EXPECTED_SUBMISSION_SHA256 = '__SUBMISSION_SHA256__'
+submission_bytes = base64.b64decode(SUBMISSION_ZIP_B64, validate=True)
+actual_sha256 = hashlib.sha256(submission_bytes).hexdigest()
+assert actual_sha256 == EXPECTED_SUBMISSION_SHA256, 'Embedded V1 archive hash mismatch.'
+
+if AGENT_DIR.exists():
+    shutil.rmtree(AGENT_DIR)
+AGENT_DIR.mkdir(parents=True)
+with zipfile.ZipFile(io.BytesIO(submission_bytes)) as archive:
+    entries = archive.infolist()
+    total_size = sum(entry.file_size for entry in entries)
+    assert total_size <= 3 * 1024**3, 'V1 archive exceeds the competition size limit.'
+    for entry in entries:
+        member = PurePosixPath(entry.filename)
+        assert not member.is_absolute() and '..' not in member.parts, f'Unsafe archive path: {entry.filename}'
+    archive.extractall(AGENT_DIR)
+assert (AGENT_DIR / 'agent.yaml').is_file(), 'V1 archive missing root agent.yaml.'
+
+# Match one of the official starter's public FastAPI tasks. This is local
+# development-set evaluation, not an official hidden-test score or submission.
+tasks = load_tasks(TASKS_PATH)
+task = next((item for item in tasks if item.instance_id == 'fastapi_15588'), None)
+assert task is not None, 'Expected public task fastapi_15588 is missing.'
+print(f'V1 archive SHA-256: {actual_sha256}')
+print(f'Public task selected: {task.instance_id} ({task.repo})')
+'''.replace("__SUBMISSION_B64__", encoded_zip).replace(
+        "__SUBMISSION_SHA256__", submission_sha256
+    )
+
+    setup_cell = r'''import glob
+import importlib
+import os
+import subprocess
+import sys
+from pathlib import Path
+
+# Offline vLLM setup used by the competition's public starter notebook.
+os.environ['LITELLM_LOCAL_MODEL_COST_MAP'] = 'True'
+os.environ['TRANSFORMERS_NO_TF'] = '1'
+os.environ['VLLM_WORKER_MULTIPROC_METHOD'] = 'spawn'
+os.environ['VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS'] = '1'
+os.environ['VLLM_ENGINE_READY_TIMEOUT_S'] = '1200'
+os.environ['VLLM_NO_USAGE_STATS'] = '1'
+os.environ['OTEL_SDK_DISABLED'] = 'true'
+os.environ['PYTORCH_CUDA_ALLOC_CONF'] = 'expandable_segments:True'
+
+WHEELHOUSE_DIR = Path('/kaggle/input/datasets/metric/gemma-4-developer-agent-wheelhouse')
+assert WHEELHOUSE_DIR.is_dir(), f'Wheelhouse not mounted: {WHEELHOUSE_DIR}'
+
+for pth_pattern in (
+    '/usr/local/lib/python*/dist-packages/*cutlass*.pth',
+    '/usr/local/lib/python*/site-packages/*cutlass*.pth',
+):
+    for pth in glob.glob(pth_pattern):
+        try:
+            os.unlink(pth)
+        except OSError:
+            pass
+
+tmp_whl = Path('/tmp/wheelhouse')
+tmp_whl.mkdir(parents=True, exist_ok=True)
+for wheel in WHEELHOUSE_DIR.glob('*.whl'):
+    if 'cutlass' in wheel.name.lower():
+        continue
+    target_name = (
+        wheel.name.replace('cu128', '+cu128')
+        if ('cu128' in wheel.name and '+' not in wheel.name)
+        else wheel.name
+    )
+    target = tmp_whl / target_name
+    if not target.exists():
+        os.symlink(wheel, target)
+
+wheels = sorted(str(wheel) for wheel in tmp_whl.glob('*.whl'))
+print(f'Installing {len(wheels)} offline wheels from competition wheelhouse...')
+subprocess.run(
+    [sys.executable, '-m', 'pip', 'install', '-q', '--no-deps', '--force-reinstall', *wheels],
+    check=True,
+)
+importlib.invalidate_caches()
+print('Offline wheelhouse installation complete.')
+'''
+
+    model_cell = r'''import litellm
+import torch
+from pathlib import Path
+from adk_submission import VllmConfig, VllmServer, discover_adapters
+from swegemma.config import ALLOWED_ADAPTER_EXTENSIONS
+from swegemma.models.discovery import validate_single_declared_model
+
+litellm.drop_params = True
+TARGET_MODEL_NAME = 'gemma-4-31b-it-qat-w4a16-ct'
+MODEL_PATH = Path('/kaggle/input/models/google/gemma-4/other/gemma-4-31b-it-qat-w4a16-ct/2')
+assert MODEL_PATH.is_dir(), f'Gemma model input not mounted: {MODEL_PATH}'
+
+gpu_count = torch.cuda.device_count() if torch.cuda.is_available() else 0
+gpu_names = [torch.cuda.get_device_name(i) for i in range(gpu_count)]
+print(f'Visible GPUs ({gpu_count}): {gpu_names}')
+assert gpu_count == 4, f'Expected the competition L4x4 machine; got {gpu_count} visible GPUs.'
+assert all('L4' in name.upper() for name in gpu_names), f'Expected L4 GPUs, got {gpu_names}'
+
+declared_model = validate_single_declared_model(AGENT_DIR)
+adapters = discover_adapters(str(AGENT_DIR), adapter_extensions=ALLOWED_ADAPTER_EXTENSIONS)
+assert not adapters, 'This V1 smoke run is configured without LoRA adapters.'
+
+vllm_cfg = VllmConfig(
+    model=str(MODEL_PATH),
+    port=8000,
+    host='127.0.0.1',
+    tool_call_parser='gemma4',
+    reasoning_parser='gemma4',
+    max_model_len=32768,
+    dtype='bfloat16' if torch.cuda.is_bf16_supported() else 'auto',
+    gpu_memory_utilization=0.90,
+    enable_auto_tool_choice=True,
+    enable_lora=False,
+    tensor_parallel_size=4,
+    startup_timeout=60 * 20,
+)
+server_instance = VllmServer(vllm_cfg, adapter_manifest=adapters)
+server_instance.start()
+print(f'vLLM server started on {server_instance.base_url} (tensor parallelism=4).')
+models = server_instance.create_model_registry(
+    aliases=[declared_model, TARGET_MODEL_NAME],
+    model_prefix='openai/',
+    api_key='EMPTY',
+)
+'''
+
+    eval_cell = r'''import asyncio
+import concurrent.futures
+import json
+import yaml
+from google.adk.agents.context_cache_config import ContextCacheConfig
+from google.adk.apps._configs import EventsCompactionConfig
+from swegemma.config import EvalConfig, build_submission_limits
+from swegemma.evaluate import Evaluator
+
+
+def run_sync(coro_or_fn, *args, **kwargs):
+    fn = (lambda: coro_or_fn(*args, **kwargs)) if callable(coro_or_fn) else (lambda: coro_or_fn)
+    try:
+        loop = asyncio.get_running_loop()
+    except RuntimeError:
+        loop = None
+    if loop is not None and loop.is_running():
+        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
+            return pool.submit(lambda: asyncio.run(fn())).result()
+    return asyncio.run(fn())
+
+raw_eval_cfg = yaml.safe_load((AGENT_DIR / 'eval_config.yaml').read_text(encoding='utf-8'))
+eval_section = raw_eval_cfg.get('evaluation', raw_eval_cfg)
+timeout_seconds = int(eval_section.get('timeout_seconds', 300))
+max_tool_calls = int(eval_section.get('max_tool_calls', 100))
+max_time_minutes = float(eval_section.get('max_time_minutes', 60.0))
+turns_raw = eval_section.get('max_turns', eval_section.get('max_llm_calls'))
+max_turns = int(turns_raw) if turns_raw is not None else None
+
+limits, gen_constraints = build_submission_limits()
+eval_config = EvalConfig(
+    tasks_path=TASKS_PATH,
+    snapshots_dir=DATA_DIR / 'snapshots',
+    results_dir=WORKING_DIR / 'v1_smoke_results',
+    submission_dir=AGENT_DIR,
+    models=models,
+    sandbox='subprocess',
+    timeout_seconds=timeout_seconds,
+    max_time_minutes=max_time_minutes,
+    max_tool_calls=max_tool_calls,
+    max_turns=max_turns,
+    limits=limits,
+    generation_constraints=gen_constraints,
+    adapter_manifest=adapters,
+    context_cache_config=ContextCacheConfig(min_tokens=2048, ttl_seconds=1800, cache_intervals=10),
+    events_compaction_config=EventsCompactionConfig(
+        compaction_interval=15,
+        overlap_size=2,
+        token_threshold=14336,
+        event_retention_size=5,
+    ),
+    graph_dir=DATA_DIR / 'graphs',
+    embeddings_dir=DATA_DIR / 'embeddings',
+    wheels_dir=DATA_DIR / 'wheels',
+    verbose=False,
+)
+
+evaluator = Evaluator(eval_config)
+result = run_sync(evaluator.evaluate_task, task=task, task_index=1, total_tasks=1)
+patch = result.agent_patch or ''
+test_exit_code = result.test_exit_code
+summary = {
+    'task_id': task.instance_id,
+    'repo': task.repo,
+    'resolved': bool(result.resolved),
+    'test_exit_code': None if test_exit_code is None else int(test_exit_code),
+    'patch_chars': len(patch),
+    'tool_calls': result.tool_calls,
+    'duration_seconds': float(result.duration_seconds),
+    'per_task_max_time_minutes': max_time_minutes,
+    'model': 'gemma-4-31b-it-qat-w4a16-ct',
+    'visible_gpu_count': torch.cuda.device_count(),
+    'submission_sha256': actual_sha256,
+    'official_submission': False,
+    'score_scope': 'one public development task only; not a leaderboard score',
+}
+(WORKING_DIR / 'v1_smoke_result.json').write_text(
+    json.dumps(summary, indent=2, ensure_ascii=False) + '\n', encoding='utf-8'
+)
+(WORKING_DIR / 'v1_smoke_patch.diff').write_text(patch, encoding='utf-8')
+print(json.dumps(summary, indent=2, ensure_ascii=False))
+'''
+
+    cells = [
+        _markdown_cell(
+            "# Private V1 one-task smoke test\n\n"
+            "Runs the current V1 archive through the official local evaluator on one public development task. "
+            "This notebook is private, has internet disabled, and does not submit to the competition or produce an official score."
+        ),
+        _code_cell(setup_cell),
+        _code_cell(extract_cell),
+        _code_cell(model_cell),
+        _code_cell(eval_cell),
+    ]
+    return {
+        "cells": cells,
+        "metadata": {
+            "kernelspec": {"display_name": "Python 3", "language": "python", "name": "python3"},
+            "language_info": {"name": "python"},
+        },
+        "nbformat": 4,
+        "nbformat_minor": 5,
+    }
+
+
+def parse_kernel_status(text: str) -> str | None:
+    match = re.search(r'has status\s+["\']([^"\']+)["\']', text, flags=re.IGNORECASE)
+    if match:
+        return match.group(1)
+    return None
+
+
+def normalized_status(status: str | None) -> str:
+    if not status:
+        return "UNKNOWN"
+    value = status.rsplit(".", 1)[-1].strip().upper()
+    if value in {"COMPLETE", "COMPLETED", "SUCCESS", "SUCCEEDED"}:
+        return "COMPLETE"
+    if value in {"ERROR", "FAILED", "FAILURE"}:
+        return "ERROR"
+    if value in {"CANCELLED", "CANCELED"}:
+        return "CANCELED"
+    if value in {"QUEUED", "PENDING", "RUNNING", "CREATED", "INITIALIZING"}:
+        return value
+    return value
+
+
+def update_state(outdir: Path, state: dict[str, Any]) -> None:
+    state["updated_utc"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    write_json(outdir / "run.json", state)
+    print(
+        f"Kaggle V1 smoke: status={state.get('status')} "
+        f"kernel={state.get('kernel_ref', 'not-created')}"
+    )
+
+
+def download_results(kernel_ref: str, outdir: Path) -> dict[str, Any]:
+    with tempfile.TemporaryDirectory(prefix="gemma-v1-smoke-output-") as temporary:
+        output = kaggle_cli(
+            ["kernels", "output", kernel_ref, "--path", temporary, "--force"],
+            timeout=300,
+        )
+        if output.returncode != 0:
+            raise RuntimeError(f"Could not download Kaggle kernel output (exit code {output.returncode}).")
+        folder = Path(temporary)
+        result_files = list(folder.rglob("v1_smoke_result.json"))
+        if not result_files:
+            raise RuntimeError("Kernel completed but produced no v1_smoke_result.json output.")
+        raw_result = json.loads(result_files[0].read_text(encoding="utf-8"))
+        write_json(outdir / "v1_smoke_result.json", raw_result)
+        patch_files = list(folder.rglob("v1_smoke_patch.diff"))
+        if patch_files:
+            (outdir / "v1_smoke_patch.diff").write_text(
+                patch_files[0].read_text(encoding="utf-8"), encoding="utf-8"
+            )
+        return raw_result
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--submission", type=Path, required=True)
+    parser.add_argument("--outdir", type=Path, required=True)
+    parser.add_argument("--max-wait-minutes", type=int, default=100)
+    parser.add_argument("--poll-interval-seconds", type=int, default=45)
+    args = parser.parse_args()
+
+    outdir = args.outdir
+    outdir.mkdir(parents=True, exist_ok=True)
+    submission_path = args.submission
+    if not submission_path.is_file():
+        raise SystemExit(f"Submission archive not found: {submission_path}")
+    submission_bytes = submission_path.read_bytes()
+    submission_sha256 = hashlib.sha256(submission_bytes).hexdigest()
+    state: dict[str, Any] = {
+        "created_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "status": "preparing",
+        "submission_sha256": submission_sha256,
+        "task_id": TASK_ID,
+        "model": MODEL_ID,
+        "machine_shape": MACHINE_SHAPE,
+        "private_notebook": True,
+        "internet_enabled": False,
+        "competition_submission_created": False,
+        "gpu_quota_used": False,
+    }
+    update_state(outdir, state)
+
+    try:
+        owner = discover_owner()
+        run_tag = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
+        slug = f"gemma-v1-smoke-{submission_sha256[:8]}-{run_tag}"
+        title = f"Gemma V1 Smoke {submission_sha256[:8]} {run_tag}"
+        kernel_ref = f"{owner}/{slug}"
+        state.update(
+            {
+                "status": "prepared",
+                "kernel_ref": kernel_ref,
+                "kernel_url": f"https://www.kaggle.com/code/{kernel_ref}",
+            }
+        )
+        update_state(outdir, state)
+
+        with tempfile.TemporaryDirectory(prefix="gemma-v1-smoke-kernel-") as temporary:
+            kernel_dir = Path(temporary)
+            notebook = build_notebook(submission_bytes, submission_sha256)
+            notebook_path = kernel_dir / "v1-smoke.ipynb"
+            notebook_path.write_text(json.dumps(notebook, ensure_ascii=False), encoding="utf-8")
+            metadata = {
+                "id": kernel_ref,
+                "title": title,
+                "code_file": notebook_path.name,
+                "language": "python",
+                "kernel_type": "notebook",
+                "is_private": True,
+                "enable_gpu": True,
+                "enable_tpu": False,
+                "enable_internet": False,
+                "machine_shape": MACHINE_SHAPE,
+                "dataset_sources": [WHEELHOUSE],
+                "competition_sources": [COMPETITION],
+                "kernel_sources": [],
+                "model_sources": [MODEL_SOURCE],
+            }
+            (kernel_dir / "kernel-metadata.json").write_text(
+                json.dumps(metadata, indent=2) + "\n", encoding="utf-8"
+            )
+            with notebook_path.open(encoding="utf-8") as handle:
+                json.load(handle)  # Validate notebook JSON before upload.
+
+            state.update({"status": "pushing", "gpu_quota_used": False})
+            update_state(outdir, state)
+            try:
+                pushed = kaggle_cli(
+                    ["kernels", "push", "--path", str(kernel_dir), "--timeout", "3600"],
+                    timeout=300,
+                )
+                state["push_exit_code"] = pushed.returncode
+                if pushed.returncode != 0:
+                    state["push_warning"] = (
+                        f"Kaggle CLI returned exit code {pushed.returncode}; checking whether the run was created."
+                    )
+            except (OSError, subprocess.TimeoutExpired) as exc:
+                # Do not push a second version: the server may have accepted the first request.
+                state["push_warning"] = f"Kaggle push response was inconclusive ({type(exc).__name__}); checking status."
+            state.update({"status": "queued_or_starting", "gpu_requested": True, "gpu_quota_used": False})
+            update_state(outdir, state)
+
+        deadline = time.monotonic() + max(1, args.max_wait_minutes) * 60
+        final_status = "UNKNOWN"
+        consecutive_api_errors = 0
+        while time.monotonic() < deadline:
+            try:
+                status_result = kaggle_cli(["kernels", "status", kernel_ref], timeout=90)
+            except (OSError, subprocess.TimeoutExpired):
+                status_result = None
+            if status_result is None or status_result.returncode != 0:
+                consecutive_api_errors += 1
+                state["status_api_errors"] = consecutive_api_errors
+                if consecutive_api_errors >= 5:
+                    state.update({"status": "status_poll_failed", "error": "Five consecutive Kaggle status API calls failed."})
+                    update_state(outdir, state)
+                    return 3
+            else:
+                consecutive_api_errors = 0
+                raw_status = parse_kernel_status(status_result.stdout + "\n" + status_result.stderr)
+                final_status = normalized_status(raw_status)
+                state["kaggle_status"] = raw_status or "unparsed"
+                if final_status == "COMPLETE":
+                    state.update({"status": "complete", "gpu_quota_used": True})
+                    update_state(outdir, state)
+                    try:
+                        smoke_result = download_results(kernel_ref, outdir)
+                    except (OSError, RuntimeError, json.JSONDecodeError) as exc:
+                        state.update({"status": "output_download_failed", "error": f"{type(exc).__name__}: {exc}"})
+                        update_state(outdir, state)
+                        return 4
+                    state.update(
+                        {
+                            "status": "complete",
+                            "result": {
+                                "resolved": smoke_result.get("resolved"),
+                                "test_exit_code": smoke_result.get("test_exit_code"),
+                                "patch_chars": smoke_result.get("patch_chars"),
+                                "tool_calls": smoke_result.get("tool_calls"),
+                                "duration_seconds": smoke_result.get("duration_seconds"),
+                                "task_id": smoke_result.get("task_id"),
+                            },
+                        }
+                    )
+                    update_state(outdir, state)
+                    return 0
+                if final_status in {"ERROR", "CANCELED"}:
+                    state.update({"status": final_status.lower(), "error": "Kaggle notebook ended without a successful run."})
+                    update_state(outdir, state)
+                    return 5
+                state["status"] = final_status.lower()
+                if final_status == "RUNNING":
+                    state["gpu_quota_used"] = True
+                update_state(outdir, state)
+            time.sleep(max(5, args.poll_interval_seconds))
+
+        state.update(
+            {
+                "status": "wait_timeout",
+                "last_kaggle_status": final_status,
+                "error": "Notebook was not complete before the monitoring window ended; it may still be queued or running on Kaggle.",
+            }
+        )
+        update_state(outdir, state)
+        return 6
+    except RuntimeError as exc:
+        state.update({"status": "preflight_failed", "error": str(exc)})
+        update_state(outdir, state)
+        return 7
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
