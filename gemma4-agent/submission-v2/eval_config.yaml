@@ -1,0 +1,9 @@
+# Five minutes is a per-task ceiling, not the competition-wide 12-hour budget.
+# At 129 tasks, the absolute ceiling is 10h45 of agent time, leaving 1h15 for
+# startup and evaluator overhead. The task count in the hidden split may differ;
+# the prompt therefore paces easy tasks to finish early and preserves budget.
+evaluation:
+  timeout_seconds: 180
+  max_tool_calls: 35
+  max_time_minutes: 5
+  max_turns: 60

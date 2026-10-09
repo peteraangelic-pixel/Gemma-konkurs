@@ -1,0 +1,107 @@
+name: Gemma V2 stratified Kaggle benchmark
+
+on:
+  push:
+    branches:
+      - arena/6d081d52-gemma-konkurs
+    paths:
+      - gemma4-agent/kaggle_smoke/v2-benchmark.trigger
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gemma-v2-benchmark-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Checkout session branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Kaggle CLI
+        run: python -m pip install --disable-pip-version-check --quiet kaggle
+
+      - name: Configure Kaggle credentials
+        env:
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "$KAGGLE_API_TOKEN" ]; then
+            echo "Repository Actions secret KAGGLE_API_TOKEN is missing."
+            exit 1
+          fi
+          mkdir -p "$HOME/.kaggle"
+          printf '%s' "$KAGGLE_API_TOKEN" | tr -d '\r\n' > "$HOME/.kaggle/access_token"
+          chmod 600 "$HOME/.kaggle/access_token"
+          echo "Kaggle CLI configured; token value was not logged."
+
+      - name: Run private 30-task V2 benchmark on competition L4x4
+        env:
+          KAGGLE_USERNAME: lauresowe3d
+        run: |
+          python gemma4-agent/tools/run_kaggle_v1_smoke.py \
+            --submission gemma4-agent/submission-v2.zip \
+            --outdir gemma4-agent/kaggle_results/v2-benchmark \
+            --task-count 30 \
+            --task-id fastapi_15588 \
+            --seed 20261009 \
+            --max-wait-minutes 240 \
+            --poll-interval-seconds 60
+
+      - name: Fetch Kaggle notebook log after failure (read-only)
+        if: failure()
+        continue-on-error: true
+        run: |
+          if [ -s gemma4-agent/kaggle_results/v2-benchmark/run.json ]; then
+            python gemma4-agent/tools/fetch_kaggle_kernel_log.py \
+              --run-json gemma4-agent/kaggle_results/v2-benchmark/run.json \
+              --output-dir "$RUNNER_TEMP/gemma-v2-kernel-logs"
+            python gemma4-agent/tools/summarize_kaggle_kernel_log.py \
+              "$RUNNER_TEMP/gemma-v2-kernel-logs/kernel.log"
+          else
+            echo "No Kaggle kernel reference was recorded; no log fetch attempted."
+          fi
+
+      - name: Upload benchmark results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gemma-v2-benchmark-${{ github.run_id }}
+          path: gemma4-agent/kaggle_results/v2-benchmark/
+          if-no-files-found: warn
+
+      - name: Upload Kaggle failure log
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gemma-v2-kernel-log-${{ github.run_id }}
+          path: ${{ runner.temp }}/gemma-v2-kernel-logs/
+          if-no-files-found: warn
+          retention-days: 3
+
+      - name: Commit benchmark results to this branch
+        if: always()
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git pull --rebase --autostash origin "$GITHUB_REF_NAME" || true
+          if [ -n "$(git status --porcelain gemma4-agent/kaggle_results/v2-benchmark)" ]; then
+            git add gemma4-agent/kaggle_results/v2-benchmark
+            git commit -m "chore(gemma): record V2 public benchmark [skip ci]"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          else
+            echo "No benchmark result files were produced."
+          fi

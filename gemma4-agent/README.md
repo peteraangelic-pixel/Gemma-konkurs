@@ -25,6 +25,22 @@ python gemma4-agent/build_submission.py
 
 Archiwum zapisuje się jako `gemma4-agent/submission.zip`. Packer sprawdza, że root ZIP-a zawiera `agent.yaml` bez dodatkowego katalogu opakowującego, że ścieżki `!include` pozostają w katalogu submission, że wszystkie pliki mają dozwolone rozszerzenia i że każdy agent deklaruje właściwy model. Gdy PyYAML jest dostępny, sprawdza też składnię wszystkich YAML-i; budowanie ZIP-a poza tym nie wymaga zależności.
 
+## Kandydat V2 — zachowujemy V1 jako baseline
+
+Źródła V2 są oddzielone w `submission-v2/`, a artefakt testowy to `submission-v2.zip`. Dotychczasowy `submission.zip` pozostaje nietkniętym V1; nic tutaj nie składa oficjalnego submission. V2 utrzymuje ten sam `gemma-4-31b-it-qat-w4a16-ct`, bez treningu i bez LoRA, oraz testuje trzy powiązane usprawnienia: krótszą, bardziej egzekwowalną politykę budżetu (kontrola co ok. 8 wywołań, zakończenie eksploracji przed ostatnią ćwiartką czasu), wyłączenie przenoszenia myśli do kontekstu i mniejszy limit generacji, a także 5-minutowy **limit per-task**.
+
+Budowanie V2 bez nadpisywania baseline:
+
+```bash
+python gemma4-agent/build_submission.py \
+  --source-dir gemma4-agent/submission-v2 \
+  --output gemma4-agent/submission-v2.zip
+```
+
+Pięć minut × 129 zadań publicznych to maksymalnie 10 h 45 min pracy agenta, czyli ok. 1 h 15 min rezerwy z globalnych 12 godzin na start i narzut. Liczba zadań ukrytego splitu może się różnić, więc tego limitu nie należy dalej zwiększać bez pomiarów.
+
+Workflow `.github/workflows/gemma-kaggle-v2-benchmark.yml` uruchamia prywatny notebook na Kaggle L4x4 i ocenia deterministyczną próbę 30 zadań, warstwowaną proporcjonalnie według repozytorium (oczekiwane 16 FastAPI, 10 Rich, 3 Requests i 1 HTTPX), z ziarnem `20261009`; próba zawiera również dotychczasowe zadanie `fastapi_15588`. Limit to 5 min/zadanie, więc maksymalny czas pracy agentów w tej próbie wynosi 2 h 30 min; monitoring Kaggle kończy się po 4 h. Notebook nie tworzy konkursowego submission ani official score i nie pobiera 22-GB datasetu do GitHuba — korzysta z wejść zamontowanych przez Kaggle. Wynik zawiera oszacowanie odsetka rozwiązanych zadań i 95% przedział Wilsona. To screening, nie wiarygodny ranking: dla odniesienia zapisany publiczny top 10 ma score 0.20–0.24, a do mocniejszego porównania potrzebny będzie pełny publiczny split.
+
 ## Odczyt statusu Kaggle przez GitHub Actions
 
 Workflow `../.github/workflows/gemma-kaggle-poll.yml` wykonuje wyłącznie odczyt: listuje statusy naszych submissionów i pobiera publiczną tabelę leaderboardu konkursu `gemma-4-developer-agent`. Wyniki zapisuje w `gemma4-agent/kaggle_results/` (`summary.md`, `summary.json`, CSV) i commit-uje z powrotem na gałąź sesji. **Nie przesyła nowego ZIP-a ani nie zużywa dziennego limitu submissionów.**

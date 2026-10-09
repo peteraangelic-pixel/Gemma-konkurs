@@ -11,7 +11,7 @@ import sys
 import zipfile
 
 BASE_DIR = Path(__file__).resolve().parent
-SUBMISSION_DIR = BASE_DIR / "submission"
+DEFAULT_SUBMISSION_DIR = BASE_DIR / "submission"
 DEFAULT_OUTPUT = BASE_DIR / "submission.zip"
 MODEL_ID = "gemma-4-31b-it-qat-w4a16-ct"
 ALLOWED_SUFFIXES = {".yaml", ".yml", ".md", ".txt", ".py", ".json", ".safetensors"}
@@ -51,30 +51,30 @@ def read_utf8(path: Path) -> str:
         fail(f"Could not read UTF-8 file {path}: {exc}")
 
 
-def validate_skill(skill_dir: Path) -> None:
+def validate_skill(skill_dir: Path, submission_dir: Path) -> None:
     skill_md = skill_dir / "SKILL.md"
     text = read_utf8(skill_md)
     if not text.startswith("---\n"):
-        fail(f"Missing YAML frontmatter in {skill_md.relative_to(SUBMISSION_DIR)}")
+        fail(f"Missing YAML frontmatter in {skill_md.relative_to(submission_dir)}")
     frontmatter, separator, _ = text[4:].partition("\n---")
     if not separator:
-        fail(f"Unclosed YAML frontmatter in {skill_md.relative_to(SUBMISSION_DIR)}")
+        fail(f"Unclosed YAML frontmatter in {skill_md.relative_to(submission_dir)}")
     name_match = re.search(r"(?m)^name:\s*([a-z0-9-]+)\s*$", frontmatter)
     description_match = re.search(r"(?m)^description:\s*(\S.*)$", frontmatter)
     if name_match is None:
-        fail(f"Missing or invalid skill name in {skill_md.relative_to(SUBMISSION_DIR)}")
+        fail(f"Missing or invalid skill name in {skill_md.relative_to(submission_dir)}")
     if name_match.group(1) != skill_dir.name:
         fail(
             f"Skill directory {skill_dir.name!r} must match frontmatter name "
             f"{name_match.group(1)!r}."
         )
     if description_match is None or len(description_match.group(1)) > 1024:
-        fail(f"Missing/invalid skill description in {skill_md.relative_to(SUBMISSION_DIR)}")
+        fail(f"Missing/invalid skill description in {skill_md.relative_to(submission_dir)}")
     if len(name_match.group(1)) > 64:
-        fail(f"Skill name exceeds 64 characters in {skill_md.relative_to(SUBMISSION_DIR)}")
+        fail(f"Skill name exceeds 64 characters in {skill_md.relative_to(submission_dir)}")
 
 
-def optional_yaml_syntax_check(yaml_files: list[Path]) -> bool:
+def optional_yaml_syntax_check(yaml_files: list[Path], submission_dir: Path) -> bool:
     """Parse YAML if PyYAML is installed, accepting the competition's !include tag."""
     try:
         import yaml  # type: ignore[import-not-found]
@@ -93,27 +93,28 @@ def optional_yaml_syntax_check(yaml_files: list[Path]) -> bool:
         try:
             yaml.load(read_utf8(path), Loader=IncludeLoader)
         except Exception as exc:  # PyYAML exposes several parse exception types.
-            fail(f"Invalid YAML syntax in {path.relative_to(SUBMISSION_DIR)}: {exc}")
+            fail(f"Invalid YAML syntax in {path.relative_to(submission_dir)}: {exc}")
     return True
 
 
-def validate_tree() -> list[Path]:
-    if not SUBMISSION_DIR.is_dir():
-        fail(f"Missing submission source directory: {SUBMISSION_DIR}")
+def validate_tree(submission_dir: Path) -> list[Path]:
+    submission_dir = submission_dir.resolve()
+    if not submission_dir.is_dir():
+        fail(f"Missing submission source directory: {submission_dir}")
 
-    paths = sorted(SUBMISSION_DIR.rglob("*"))
+    paths = sorted(submission_dir.rglob("*"))
     for path in paths:
         if path.is_symlink():
-            fail(f"Symlinks are not allowed in a submission: {path.relative_to(SUBMISSION_DIR)}")
+            fail(f"Symlinks are not allowed in a submission: {path.relative_to(submission_dir)}")
         if not path.is_file():
             continue
-        relative = path.relative_to(SUBMISSION_DIR)
+        relative = path.relative_to(submission_dir)
         if path.suffix.lower() not in ALLOWED_SUFFIXES:
             fail(f"Unsupported submission file extension: {relative}")
         if relative.is_absolute() or ".." in relative.parts:
             fail(f"Unsafe submission path: {relative}")
 
-    actual_files = {path.relative_to(SUBMISSION_DIR).as_posix() for path in paths if path.is_file()}
+    actual_files = {path.relative_to(submission_dir).as_posix() for path in paths if path.is_file()}
     missing = sorted(REQUIRED_FILES - actual_files)
     if missing:
         fail("Missing required MVP files: " + ", ".join(missing))
@@ -124,23 +125,23 @@ def validate_tree() -> list[Path]:
         for include_path in re.findall(r"!include\s+([^\s#]+)", text):
             candidate = (config.parent / include_path).resolve()
             try:
-                candidate.relative_to(SUBMISSION_DIR.resolve())
+                candidate.relative_to(submission_dir)
             except ValueError:
-                fail(f"!include escapes submission root in {config.relative_to(SUBMISSION_DIR)}")
+                fail(f"!include escapes submission root in {config.relative_to(submission_dir)}")
             if not candidate.is_file():
                 fail(
                     f"Missing !include target {include_path!r} in "
-                    f"{config.relative_to(SUBMISSION_DIR)}"
+                    f"{config.relative_to(submission_dir)}"
                 )
 
-    eval_config = read_utf8(SUBMISSION_DIR / "eval_config.yaml")
+    eval_config = read_utf8(submission_dir / "eval_config.yaml")
     if re.search(r"(?m)^evaluation:\s*$", eval_config) is None:
         fail("eval_config.yaml must use the official top-level evaluation: mapping.")
     for key in ("timeout_seconds", "max_tool_calls", "max_time_minutes", "max_turns"):
         if re.search(r"(?m)^  " + re.escape(key) + r":\s*\d+(?:\.\d+)?\s*$", eval_config) is None:
             fail(f"eval_config.yaml is missing a numeric evaluation.{key} value.")
 
-    root_config_path = SUBMISSION_DIR / "agent.yaml"
+    root_config_path = submission_dir / "agent.yaml"
     root_config = read_utf8(root_config_path)
     if re.search(r"(?m)^model:\s*['\"]?" + re.escape(MODEL_ID) + r"['\"]?\s*$", root_config) is None:
         fail(f"Root agent must use the required model {MODEL_ID!r}.")
@@ -154,16 +155,16 @@ def validate_tree() -> list[Path]:
     if re.search(r"(?m)^\s*skip_summarization:\s*true\s*$", root_config) is None:
         fail("Root AgentTool must set skip_summarization: true.")
 
-    analyzer_config = read_utf8(SUBMISSION_DIR / "sub_agents/analyzer.yaml")
+    analyzer_config = read_utf8(submission_dir / "sub_agents/analyzer.yaml")
     if re.search(r"(?m)^model:\s*['\"]?" + re.escape(MODEL_ID) + r"['\"]?\s*$", analyzer_config) is None:
         fail("Analyzer must use the same required base model as the root agent.")
     if re.search(r"(?m)^\s*-\s*(edit_file|write_file|submit_patch|run_command)\s*$", analyzer_config):
         fail("Analyzer is intended to be read-only; it must not have write/shell tools.")
 
     for skill_name in ("targeted-tests", "patch-validation"):
-        validate_skill(SUBMISSION_DIR / "skills" / skill_name)
+        validate_skill(submission_dir / "skills" / skill_name, submission_dir)
 
-    yaml_ok = optional_yaml_syntax_check(config_files)
+    yaml_ok = optional_yaml_syntax_check(config_files, submission_dir)
     if yaml_ok:
         print("YAML syntax: parsed successfully with PyYAML (custom !include tag accepted).")
     else:
@@ -171,11 +172,11 @@ def validate_tree() -> list[Path]:
     return [path for path in paths if path.is_file()]
 
 
-def build_zip(output: Path, files: list[Path]) -> None:
+def build_zip(output: Path, files: list[Path], submission_dir: Path) -> None:
     output.parent.mkdir(parents=True, exist_ok=True)
     with zipfile.ZipFile(output, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
         for path in files:
-            archive.write(path, arcname=path.relative_to(SUBMISSION_DIR).as_posix())
+            archive.write(path, arcname=path.relative_to(submission_dir).as_posix())
 
     with zipfile.ZipFile(output, "r") as archive:
         names = archive.namelist()
@@ -193,17 +194,26 @@ def build_zip(output: Path, files: list[Path]) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
+        "--source-dir",
+        type=Path,
+        default=DEFAULT_SUBMISSION_DIR,
+        help=f"submission source tree (default: {DEFAULT_SUBMISSION_DIR})",
+    )
+    parser.add_argument(
         "--output",
         type=Path,
         default=DEFAULT_OUTPUT,
         help=f"output archive path (default: {DEFAULT_OUTPUT})",
     )
     args = parser.parse_args()
+    submission_dir = (
+        args.source_dir if args.source_dir.is_absolute() else (Path.cwd() / args.source_dir).resolve()
+    )
     output = args.output if args.output.is_absolute() else (Path.cwd() / args.output).resolve()
 
     try:
-        files = validate_tree()
-        build_zip(output, files)
+        files = validate_tree(submission_dir)
+        build_zip(output, files, submission_dir)
     except (ValueError, OSError, zipfile.BadZipFile) as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 1

@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Launch a private, one-public-task V1 smoke evaluation on Kaggle L4x4.
+"""Launch a private Kaggle evaluation of a candidate ZIP on public tasks.
 
-This script is intended for the dedicated GitHub Actions workflow. It uses the
-Kaggle CLI's existing ~/.kaggle/access_token file, creates a private notebook
-attached to the official competition inputs, and never calls the competition
-submission endpoint. The notebook evaluates exactly one public task.
+The dedicated GitHub Actions workflow uses the Kaggle CLI's existing
+~/.kaggle/access_token file to create a private notebook attached to the
+competition inputs. The notebook supports a fixed smoke task or a deterministic,
+repo-stratified public sample; it never calls the competition submission API.
 """
 from __future__ import annotations
 
@@ -117,12 +117,23 @@ def _code_cell(source: str) -> dict[str, Any]:
     }
 
 
-def build_notebook(submission_zip: bytes, submission_sha256: str) -> dict[str, Any]:
+def build_notebook(
+    submission_zip: bytes,
+    submission_sha256: str,
+    task_count: int = 1,
+    seed: int = 20261009,
+    task_id: str = TASK_ID,
+) -> dict[str, Any]:
     encoded_zip = json.dumps(base64.b64encode(submission_zip).decode("ascii"))
+    encoded_selection = json.dumps(
+        json.dumps({"task_count": task_count, "seed": seed, "task_id": task_id})
+    )
     extract_cell = r'''import base64
 import hashlib
 import io
 import json
+import math
+import random
 import shutil
 import zipfile
 from pathlib import Path, PurePosixPath
@@ -132,13 +143,14 @@ DATA_DIR = Path('/kaggle/input/competitions/gemma-4-developer-agent')
 WORKING_DIR = Path('/kaggle/working')
 WORKING_DIR.mkdir(parents=True, exist_ok=True)
 TASKS_PATH = DATA_DIR / 'tasks.jsonl'
-AGENT_DIR = WORKING_DIR / 'v1_submission'
+AGENT_DIR = WORKING_DIR / 'candidate_submission'
+TASK_SELECTION = json.loads(__TASK_SELECTION_JSON__)
 
 SUBMISSION_ZIP_B64 = __SUBMISSION_B64__
 EXPECTED_SUBMISSION_SHA256 = '__SUBMISSION_SHA256__'
 submission_bytes = base64.b64decode(SUBMISSION_ZIP_B64, validate=True)
 actual_sha256 = hashlib.sha256(submission_bytes).hexdigest()
-assert actual_sha256 == EXPECTED_SUBMISSION_SHA256, 'Embedded V1 archive hash mismatch.'
+assert actual_sha256 == EXPECTED_SUBMISSION_SHA256, 'Embedded submission archive hash mismatch.'
 
 if AGENT_DIR.exists():
     shutil.rmtree(AGENT_DIR)
@@ -146,23 +158,70 @@ AGENT_DIR.mkdir(parents=True)
 with zipfile.ZipFile(io.BytesIO(submission_bytes)) as archive:
     entries = archive.infolist()
     total_size = sum(entry.file_size for entry in entries)
-    assert total_size <= 3 * 1024**3, 'V1 archive exceeds the competition size limit.'
+    assert total_size <= 3 * 1024**3, 'Submission archive exceeds the competition size limit.'
     for entry in entries:
         member = PurePosixPath(entry.filename)
         assert not member.is_absolute() and '..' not in member.parts, f'Unsafe archive path: {entry.filename}'
     archive.extractall(AGENT_DIR)
-assert (AGENT_DIR / 'agent.yaml').is_file(), 'V1 archive missing root agent.yaml.'
+assert (AGENT_DIR / 'agent.yaml').is_file(), 'Submission archive missing root agent.yaml.'
 
-# Match one of the official starter's public FastAPI tasks. This is local
-# development-set evaluation, not an official hidden-test score or submission.
-tasks = load_tasks(TASKS_PATH)
-task = next((item for item in tasks if item.instance_id == 'fastapi_15588'), None)
-assert task is not None, 'Expected public task fastapi_15588 is missing.'
-print(f'V1 archive SHA-256: {actual_sha256}')
-print(f'Public task selected: {task.instance_id} ({task.repo})')
-'''.replace("__SUBMISSION_B64__", encoded_zip).replace(
-        "__SUBMISSION_SHA256__", submission_sha256
-    )
+all_tasks = load_tasks(TASKS_PATH)
+assert all_tasks, 'Competition task list is empty.'
+task_by_id = {item.instance_id: item for item in all_tasks}
+requested_count = max(1, min(int(TASK_SELECTION['task_count']), len(all_tasks)))
+fixed_task = task_by_id.get(TASK_SELECTION['task_id'])
+assert fixed_task is not None, f"Reference public task {TASK_SELECTION['task_id']} is missing."
+if requested_count == 1:
+    selected_tasks = [fixed_task]
+else:
+    grouped = {}
+    for item in all_tasks:
+        grouped.setdefault(item.repo, []).append(item)
+    candidate_groups = {
+        repo: [item for item in group if item.instance_id != fixed_task.instance_id]
+        for repo, group in grouped.items()
+    }
+    candidate_groups = {repo: group for repo, group in candidate_groups.items() if group}
+    remaining_count = requested_count - 1
+    candidate_total = sum(len(group) for group in candidate_groups.values())
+    exact_quotas = {
+        repo: remaining_count * len(group) / candidate_total
+        for repo, group in candidate_groups.items()
+    }
+    quotas = {repo: math.floor(value) for repo, value in exact_quotas.items()}
+    if remaining_count >= len(candidate_groups):
+        for repo in candidate_groups:
+            if quotas[repo] == 0:
+                quotas[repo] = 1
+    while sum(quotas.values()) < remaining_count:
+        repo = max(
+            (key for key in candidate_groups if quotas[key] < len(candidate_groups[key])),
+            key=lambda key: exact_quotas[key] - quotas[key],
+        )
+        quotas[repo] += 1
+    while sum(quotas.values()) > remaining_count:
+        candidates = [key for key in candidate_groups if quotas[key] > 1]
+        repo = min(candidates, key=lambda key: exact_quotas[key] - quotas[key])
+        quotas[repo] -= 1
+    rng = random.Random(int(TASK_SELECTION['seed']))
+    selected_tasks = [fixed_task]
+    for repo in sorted(candidate_groups):
+        candidates = sorted(candidate_groups[repo], key=lambda item: item.instance_id)
+        rng.shuffle(candidates)
+        selected_tasks.extend(candidates[:quotas[repo]])
+    assert len(selected_tasks) == requested_count, f'Stratified selector chose {len(selected_tasks)}, expected {requested_count}.'
+    rng.shuffle(selected_tasks)
+
+repo_counts = {}
+for item in selected_tasks:
+    repo_counts[item.repo] = repo_counts.get(item.repo, 0) + 1
+print(f'Submission SHA-256: {actual_sha256}')
+print(f'Public development tasks available: {len(all_tasks)}')
+print(f'Seeded stratified sample ({len(selected_tasks)} tasks, seed={TASK_SELECTION["seed"]}): {repo_counts}')
+print('Selected task IDs: ' + ', '.join(item.instance_id for item in selected_tasks))
+'''.replace("__TASK_SELECTION_JSON__", encoded_selection).replace(
+        "__SUBMISSION_B64__", encoded_zip
+    ).replace("__SUBMISSION_SHA256__", submission_sha256)
 
     setup_cell = r'''import glob
 import importlib
@@ -245,9 +304,9 @@ print(f'Visible GPUs ({gpu_count}): {gpu_names}')
 assert gpu_count == 4, f'Expected the competition L4x4 machine; got {gpu_count} visible GPUs.'
 assert all('L4' in name.upper() for name in gpu_names), f'Expected L4 GPUs, got {gpu_names}'
 
-# The current smoke failed while importing the starter's optional
-# swegemma.models.discovery helper. Read model IDs from the declarative YAML
-# configs here; the official Evaluator still loads and validates the submission.
+# Avoid an optional swegemma.models.discovery helper that is absent from the
+# current wheelhouse. Read model IDs from declarative YAML; the official
+# Evaluator still loads and validates the submission.
 class _IncludeLoader(yaml.SafeLoader):
     pass
 
@@ -293,6 +352,8 @@ models = server_instance.create_model_registry(
     eval_cell = r'''import asyncio
 import concurrent.futures
 import json
+import math
+import time
 import yaml
 from google.adk.agents.context_cache_config import ContextCacheConfig
 from google.adk.apps._configs import EventsCompactionConfig
@@ -311,6 +372,16 @@ def run_sync(coro_or_fn, *args, **kwargs):
             return pool.submit(lambda: asyncio.run(fn())).result()
     return asyncio.run(fn())
 
+
+def wilson_interval(successes, trials, z=1.96):
+    if not trials:
+        return [0.0, 1.0]
+    p = successes / trials
+    denominator = 1 + z * z / trials
+    center = (p + z * z / (2 * trials)) / denominator
+    margin = z * math.sqrt((p * (1 - p) + z * z / (4 * trials)) / trials) / denominator
+    return [max(0.0, center - margin), min(1.0, center + margin)]
+
 raw_eval_cfg = yaml.safe_load((AGENT_DIR / 'eval_config.yaml').read_text(encoding='utf-8'))
 eval_section = raw_eval_cfg.get('evaluation', raw_eval_cfg)
 timeout_seconds = int(eval_section.get('timeout_seconds', 300))
@@ -323,7 +394,7 @@ limits, gen_constraints = build_submission_limits()
 eval_config = EvalConfig(
     tasks_path=TASKS_PATH,
     snapshots_dir=DATA_DIR / 'snapshots',
-    results_dir=WORKING_DIR / 'v1_smoke_results',
+    results_dir=WORKING_DIR / 'candidate_eval_results',
     submission_dir=AGENT_DIR,
     models=models,
     sandbox='subprocess',
@@ -348,35 +419,81 @@ eval_config = EvalConfig(
 )
 
 evaluator = Evaluator(eval_config)
-result = run_sync(evaluator.evaluate_task, task=task, task_index=1, total_tasks=1)
-patch = result.agent_patch or ''
-test_exit_code = result.test_exit_code
-summary = {
-    'task_id': task.instance_id,
-    'repo': task.repo,
-    'resolved': bool(result.resolved),
-    'test_exit_code': None if test_exit_code is None else int(test_exit_code),
-    'patch_chars': len(patch),
-    'tool_calls': result.tool_calls,
-    'duration_seconds': float(result.duration_seconds),
-    'per_task_max_time_minutes': max_time_minutes,
-    'model': 'gemma-4-31b-it-qat-w4a16-ct',
-    'visible_gpu_count': torch.cuda.device_count(),
-    'submission_sha256': actual_sha256,
-    'official_submission': False,
-    'score_scope': 'one public development task only; not a leaderboard score',
-}
-(WORKING_DIR / 'v1_smoke_result.json').write_text(
-    json.dumps(summary, indent=2, ensure_ascii=False) + '\n', encoding='utf-8'
-)
-(WORKING_DIR / 'v1_smoke_patch.diff').write_text(patch, encoding='utf-8')
-print(json.dumps(summary, indent=2, ensure_ascii=False))
+per_task_results = []
+patches = []
+benchmark_started = time.monotonic()
+result_path = WORKING_DIR / 'agent_benchmark_result.json'
+patch_path = WORKING_DIR / 'agent_benchmark_patches.txt'
+
+
+def persist_results():
+    trials = len(per_task_results)
+    resolved_count = sum(bool(row.get('resolved')) for row in per_task_results)
+    durations = [row['duration_seconds'] for row in per_task_results if row.get('duration_seconds') is not None]
+    score = resolved_count / trials if trials else 0.0
+    summary = {
+        'task_count_requested': int(TASK_SELECTION['task_count']),
+        'task_count_selected': len(selected_tasks),
+        'tasks_completed_or_failed': trials,
+        'resolved_count': resolved_count,
+        'score_estimate': score,
+        'score_ci95_wilson': wilson_interval(resolved_count, trials),
+        'per_task_max_time_minutes': max_time_minutes,
+        'mean_task_duration_seconds': sum(durations) / len(durations) if durations else None,
+        'total_task_duration_seconds': sum(durations),
+        'benchmark_wall_seconds': time.monotonic() - benchmark_started,
+        'model': 'gemma-4-31b-it-qat-w4a16-ct',
+        'visible_gpu_count': torch.cuda.device_count(),
+        'submission_sha256': actual_sha256,
+        'sample_seed': int(TASK_SELECTION['seed']),
+        'repo_counts': repo_counts,
+        'task_ids': [item.instance_id for item in selected_tasks],
+        'tasks': per_task_results,
+        'official_submission': False,
+        'score_scope': 'seeded stratified public development sample; not a leaderboard score',
+    }
+    result_path.write_text(json.dumps(summary, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+    patch_path.write_text('\n\n'.join(patches), encoding='utf-8')
+    return summary
+
+
+for task_index, task in enumerate(selected_tasks, start=1):
+    print(f'Benchmark task {task_index}/{len(selected_tasks)}: {task.instance_id} ({task.repo})')
+    try:
+        result = run_sync(evaluator.evaluate_task, task=task, task_index=task_index, total_tasks=len(selected_tasks))
+        patch = result.agent_patch or ''
+        exit_code = result.test_exit_code
+        row = {
+            'task_id': task.instance_id,
+            'repo': task.repo,
+            'resolved': bool(result.resolved),
+            'test_exit_code': None if exit_code is None else int(exit_code),
+            'patch_chars': len(patch),
+            'tool_calls': int(result.tool_calls or 0),
+            'duration_seconds': float(result.duration_seconds),
+        }
+        if patch:
+            patches.append(f"===== {task.instance_id} | resolved={row['resolved']} | {len(patch)} chars =====\n{patch}")
+    except Exception as exc:
+        row = {
+            'task_id': task.instance_id,
+            'repo': task.repo,
+            'resolved': False,
+            'error': f'{type(exc).__name__}: {str(exc)[:500]}',
+            'duration_seconds': None,
+        }
+    per_task_results.append(row)
+    summary = persist_results()
+    print(json.dumps({key: summary[key] for key in ('tasks_completed_or_failed', 'resolved_count', 'score_estimate', 'score_ci95_wilson')}))
+
+final_summary = persist_results()
+print(json.dumps(final_summary, indent=2, ensure_ascii=False))
 '''
 
     cells = [
         _markdown_cell(
-            "# Private V1 one-task smoke test\n\n"
-            "Runs the current V1 archive through the official local evaluator on one public development task. "
+            "# Private Gemma agent benchmark\n\n"
+            "Runs the exact candidate ZIP through the competition evaluator on a deterministic, stratified sample of public development tasks. "
             "This notebook is private, has internet disabled, and does not submit to the competition or produce an official score."
         ),
         _code_cell(setup_cell),
@@ -421,13 +538,13 @@ def update_state(outdir: Path, state: dict[str, Any]) -> None:
     state["updated_utc"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
     write_json(outdir / "run.json", state)
     print(
-        f"Kaggle V1 smoke: status={state.get('status')} "
+        f"Kaggle private benchmark: status={state.get('status')} "
         f"kernel={state.get('kernel_ref', 'not-created')}"
     )
 
 
 def download_results(kernel_ref: str, outdir: Path) -> dict[str, Any]:
-    with tempfile.TemporaryDirectory(prefix="gemma-v1-smoke-output-") as temporary:
+    with tempfile.TemporaryDirectory(prefix="gemma-agent-benchmark-output-") as temporary:
         output = kaggle_cli(
             ["kernels", "output", kernel_ref, "--path", temporary, "--force"],
             timeout=300,
@@ -435,14 +552,14 @@ def download_results(kernel_ref: str, outdir: Path) -> dict[str, Any]:
         if output.returncode != 0:
             raise RuntimeError(f"Could not download Kaggle kernel output (exit code {output.returncode}).")
         folder = Path(temporary)
-        result_files = list(folder.rglob("v1_smoke_result.json"))
+        result_files = list(folder.rglob("agent_benchmark_result.json"))
         if not result_files:
-            raise RuntimeError("Kernel completed but produced no v1_smoke_result.json output.")
+            raise RuntimeError("Kernel completed but produced no agent_benchmark_result.json output.")
         raw_result = json.loads(result_files[0].read_text(encoding="utf-8"))
-        write_json(outdir / "v1_smoke_result.json", raw_result)
-        patch_files = list(folder.rglob("v1_smoke_patch.diff"))
+        write_json(outdir / "agent_benchmark_result.json", raw_result)
+        patch_files = list(folder.rglob("agent_benchmark_patches.txt"))
         if patch_files:
-            (outdir / "v1_smoke_patch.diff").write_text(
+            (outdir / "agent_benchmark_patches.txt").write_text(
                 patch_files[0].read_text(encoding="utf-8"), encoding="utf-8"
             )
         return raw_result
@@ -452,9 +569,18 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--submission", type=Path, required=True)
     parser.add_argument("--outdir", type=Path, required=True)
-    parser.add_argument("--max-wait-minutes", type=int, default=100)
+    parser.add_argument("--task-count", type=int, default=1, help="public tasks: 1 selects --task-id; >1 is stratified by repository")
+    parser.add_argument("--task-id", default=TASK_ID, help="fixed public task used when --task-count=1 and reserved in larger samples")
+    parser.add_argument("--seed", type=int, default=20261009, help="deterministic sample seed")
+    parser.add_argument("--max-wait-minutes", type=int, default=300)
     parser.add_argument("--poll-interval-seconds", type=int, default=45)
     args = parser.parse_args()
+    if args.task_count < 1:
+        parser.error("--task-count must be at least 1")
+    if args.max_wait_minutes < 1:
+        parser.error("--max-wait-minutes must be at least 1")
+    # Kaggle's CLI --timeout controls kernel runtime, not merely HTTP response wait.
+    kernel_timeout_seconds = args.max_wait_minutes * 60 + 300
 
     outdir = args.outdir
     outdir.mkdir(parents=True, exist_ok=True)
@@ -467,7 +593,10 @@ def main() -> int:
         "created_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "status": "preparing",
         "submission_sha256": submission_sha256,
-        "task_id": TASK_ID,
+        "fixed_task_id": args.task_id,
+        "task_count_requested": args.task_count,
+        "sample_seed": args.seed,
+        "kernel_timeout_seconds": kernel_timeout_seconds,
         "model": MODEL_ID,
         "machine_shape": MACHINE_SHAPE,
         "docker_image": DOCKER_IMAGE,
@@ -485,8 +614,8 @@ def main() -> int:
     try:
         owner = discover_owner()
         run_tag = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
-        slug = f"gemma-v1-smoke-{submission_sha256[:8]}-{run_tag}"
-        title = f"Gemma V1 Smoke {submission_sha256[:8]} {run_tag}"
+        slug = f"gemma-agent-benchmark-{submission_sha256[:8]}-{run_tag}"
+        title = f"Gemma Agent Benchmark {submission_sha256[:8]} {run_tag}"
         kernel_ref = f"{owner}/{slug}"
         state.update(
             {
@@ -497,10 +626,16 @@ def main() -> int:
         )
         update_state(outdir, state)
 
-        with tempfile.TemporaryDirectory(prefix="gemma-v1-smoke-kernel-") as temporary:
+        with tempfile.TemporaryDirectory(prefix="gemma-agent-benchmark-kernel-") as temporary:
             kernel_dir = Path(temporary)
-            notebook = build_notebook(submission_bytes, submission_sha256)
-            notebook_path = kernel_dir / "v1-smoke.ipynb"
+            notebook = build_notebook(
+                submission_bytes,
+                submission_sha256,
+                task_count=args.task_count,
+                seed=args.seed,
+                task_id=args.task_id,
+            )
+            notebook_path = kernel_dir / "agent-benchmark.ipynb"
             notebook_path.write_text(json.dumps(notebook, ensure_ascii=False), encoding="utf-8")
             metadata = {
                 "id": kernel_ref,
@@ -530,7 +665,7 @@ def main() -> int:
             update_state(outdir, state)
             try:
                 pushed = kaggle_cli(
-                    ["kernels", "push", "--path", str(kernel_dir), "--timeout", "3600"],
+                    ["kernels", "push", "--path", str(kernel_dir), "--timeout", str(kernel_timeout_seconds)],
                     timeout=300,
                 )
                 state["push_exit_code"] = pushed.returncode
@@ -577,12 +712,13 @@ def main() -> int:
                         {
                             "status": "complete",
                             "result": {
-                                "resolved": smoke_result.get("resolved"),
-                                "test_exit_code": smoke_result.get("test_exit_code"),
-                                "patch_chars": smoke_result.get("patch_chars"),
-                                "tool_calls": smoke_result.get("tool_calls"),
-                                "duration_seconds": smoke_result.get("duration_seconds"),
-                                "task_id": smoke_result.get("task_id"),
+                                "tasks_completed_or_failed": smoke_result.get("tasks_completed_or_failed"),
+                                "task_count_selected": smoke_result.get("task_count_selected"),
+                                "resolved_count": smoke_result.get("resolved_count"),
+                                "score_estimate": smoke_result.get("score_estimate"),
+                                "score_ci95_wilson": smoke_result.get("score_ci95_wilson"),
+                                "benchmark_wall_seconds": smoke_result.get("benchmark_wall_seconds"),
+                                "task_ids": smoke_result.get("task_ids"),
                             },
                         }
                     )
