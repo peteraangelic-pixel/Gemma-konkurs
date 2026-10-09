@@ -49,6 +49,8 @@ jobs:
 
       - name: Run private one-task V1 smoke test on competition L4x4
         id: smoke
+        env:
+          KAGGLE_USERNAME: lauresowe3d
         run: |
           python gemma4-agent/tools/run_kaggle_v1_smoke.py \
             --submission gemma4-agent/submission.zip \

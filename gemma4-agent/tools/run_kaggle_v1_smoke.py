@@ -14,6 +14,7 @@ import csv
 import hashlib
 import io
 import json
+import os
 from datetime import datetime, timezone
 from pathlib import Path
 import re
@@ -63,7 +64,13 @@ def _owner_from_csv(text: str) -> str | None:
 
 
 def discover_owner() -> str:
-    """Derive the authenticated Kaggle account slug without printing API output."""
+    """Use the supplied public Kaggle slug, or infer it from an owned artifact."""
+    configured_owner = os.environ.get("KAGGLE_USERNAME", "").strip().lower()
+    if configured_owner:
+        if not re.fullmatch(r"[a-z0-9-]+", configured_owner):
+            raise RuntimeError("KAGGLE_USERNAME must be the public Kaggle profile slug, not a URL.")
+        return configured_owner
+
     commands = (
         ["kernels", "list", "--mine", "--format", "csv", "--page-size", "100"],
         ["datasets", "list", "--mine", "--format", "csv", "--page-size", "100"],
