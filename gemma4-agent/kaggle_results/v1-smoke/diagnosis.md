@@ -18,6 +18,6 @@ The pinned image worked: the Python 3.12 preflight, wheel installation, V1 ZIP e
 ModuleNotFoundError: No module named 'swegemma.models.discovery'
 ```
 
-This was an import used by the smoke runner to validate the declared model before vLLM startup; the official Evaluator and V1 agent configuration were not reached. The runner has now been changed to read the model declarations from the ZIP's YAML files and leave official submission validation to the Evaluator. That code change has only been checked statically; it has not been run on Kaggle.
+This was an import used by the smoke runner to validate the declared model before vLLM startup; the official Evaluator and V1 agent configuration were not reached. A read-only inspection of the current Kaggle wheelhouse found `swegemma-0.2.11-py3-none-any.whl`, which does not contain `swegemma/models/discovery.py`; the imported starter helper is stale for this wheel. The runner has now been changed to read model declarations from the ZIP's YAML files and leave official submission validation to the Evaluator. That code change has only been checked statically; it has not been run on Kaggle.
 
 Neither attempt produced an official competition submission or an official score. The V1 archive remains unchanged. GPU quota use is **unconfirmed** for both attempts; Kaggle reported `RUNNING` during the second, but this runner does not query quota billing.

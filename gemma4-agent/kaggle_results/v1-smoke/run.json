@@ -27,6 +27,8 @@
     "error": "ModuleNotFoundError: No module named swegemma.models.discovery",
     "classification": "smoke-runner helper import mismatch; this attempt did not test the V1 loader",
     "v1_archive_extracted": true,
-    "v1_agent_configuration_loaded": false
+    "v1_agent_configuration_loaded": false,
+    "wheelhouse_swegemma_version": "0.2.11",
+    "wheelhouse_models_discovery_module_present": false
   }
 }
