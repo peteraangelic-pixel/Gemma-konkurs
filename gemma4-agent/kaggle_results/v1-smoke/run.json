@@ -1,6 +1,6 @@
 {
-  "created_utc": "2026-10-09T17:21:29+00:00",
-  "status": "preflight_failed",
+  "created_utc": "2026-10-09T18:16:21+00:00",
+  "status": "error",
   "submission_sha256": "af4fbb0170a8e191a81881fabb1fa18856e0bff71975499248243cc99a66c3f6",
   "task_id": "fastapi_15588",
   "model": "gemma-4-31b-it-qat-w4a16-ct",
@@ -9,6 +9,11 @@
   "internet_enabled": false,
   "competition_submission_created": false,
   "gpu_quota_used": false,
-  "updated_utc": "2026-10-09T17:21:31+00:00",
-  "error": "Could not infer the Kaggle account slug from owned notebooks or datasets. No GPU run was started; provide the Kaggle username if this account has no owned artifacts."
+  "updated_utc": "2026-10-09T18:17:11+00:00",
+  "kernel_ref": "lauresowe3d/gemma-v1-smoke-af4fbb01-20261009-181621",
+  "kernel_url": "https://www.kaggle.com/code/lauresowe3d/gemma-v1-smoke-af4fbb01-20261009-181621",
+  "push_exit_code": 0,
+  "gpu_requested": true,
+  "kaggle_status": "KernelWorkerStatus.ERROR",
+  "error": "Kaggle notebook ended without a successful run."
 }
