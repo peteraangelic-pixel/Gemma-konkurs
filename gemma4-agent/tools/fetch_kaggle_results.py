@@ -128,11 +128,65 @@ def _write_top10_csv(path: Path, rows: list[dict[str, str]]) -> None:
         writer.writerows(rows)
 
 
+def leader_public_kernels(
+    outdir: Path,
+    competition: str,
+    leaders: list[dict[str, str]],
+) -> tuple[list[dict[str, str]], list[str]]:
+    """List public competition notebooks authored by the top teams' members.
+
+    Kaggle exposes public notebook metadata through its CLI. These are optional
+    public artefacts, not necessarily the exact code submitted for scoring.
+    """
+    candidates: list[tuple[str, str, str]] = []
+    for rank, row in enumerate(top_rows(leaders, 10), start=1):
+        team = pick(row, "TeamName", "teamName", "Team_Name", "Team")
+        members = pick(row, "TeamMemberUserNames", "teamMemberUserNames", "UserName")
+        for member in members.split(","):
+            member = member.strip()
+            if member:
+                candidates.append((str(rank), team, member))
+
+    found: list[dict[str, str]] = []
+    warnings: list[str] = []
+    seen: set[tuple[str, str]] = set()
+    for rank, team, member in candidates:
+        key = (rank, member.casefold())
+        if key in seen:
+            continue
+        seen.add(key)
+        code, stdout, stderr = kaggle([
+            "kernels", "list", "--competition", competition, "--user", member,
+            "--format", "csv", "--page-size", "100", "--sort-by", "voteCount",
+        ], timeout=45)
+        if code != 0:
+            warnings.append(
+                f"public notebook query failed for leaderboard member {member}: "
+                f"{_safe_error(stdout, stderr)}"
+            )
+            continue
+        for kernel in csv_rows(stdout):
+            kernel["leader_rank"] = rank
+            kernel["leader_team"] = team
+            kernel["matched_member"] = member
+            found.append(kernel)
+
+    extra = {key for row in found for key in row}
+    preferred = ["leader_rank", "leader_team", "matched_member", "ref", "title", "author", "lastRunTime", "totalVotes"]
+    fieldnames = [key for key in preferred if key in extra] + sorted(extra - set(preferred))
+    with (outdir / "leader_public_kernels.csv").open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames or preferred, extrasaction="ignore")
+        writer.writeheader()
+        writer.writerows(found)
+    return found, warnings
+
+
 def write_summary(
     outdir: Path,
     competition: str,
     submissions: list[dict[str, str]],
     leaderboard: list[dict[str, str]],
+    public_kernels: list[dict[str, str]],
     team: str,
     problems: list[str],
 ) -> None:
@@ -153,6 +207,8 @@ def write_summary(
         "submission_rows": len(submissions),
         "our_leaderboard_rows": our_rows,
         "top10": top10,
+        "public_kernels_found": len(public_kernels),
+        "top10_members_public_kernels": public_kernels[:30],
         "latest_submissions": submissions[:10],
         "problems": problems,
     }
@@ -200,6 +256,20 @@ def write_summary(
     else:
         lines.append("_No leaderboard rows were returned._")
 
+    lines.extend(["", "## Public competition notebooks by top-10 members", ""])
+    if public_kernels:
+        lines.extend(["| Leader rank | Team | Member | Notebook | Votes | Last run | Ref |", "|---:|---|---|---|---:|---|---|"])
+        for row in public_kernels[:30]:
+            values = [pick(row, key) for key in (
+                "leader_rank", "leader_team", "matched_member", "title",
+                "totalVotes", "lastRunTime",
+            )]
+            values.append(pick(row, "ref", "kernelRef"))
+            lines.append("| " + " | ".join(_cell(value) for value in values) + " |")
+    else:
+        lines.append("_No public competition notebooks were returned for the top-10 members._")
+    lines.append("These are voluntarily public notebooks, not proof of the private submission source.")
+
     if team:
         lines.extend(["", f"## Matched row for `{_cell(team)}`", ""])
         if our_rows:
@@ -238,10 +308,16 @@ def main() -> int:
     args = parser.parse_args()
     outdir = args.outdir
     outdir.mkdir(parents=True, exist_ok=True)
+    for name in (
+        "submissions.csv", "leaderboard.csv", "leaderboard_top10.csv",
+        "leader_public_kernels.csv", "summary.json", "summary.md",
+    ):
+        (outdir / name).unlink(missing_ok=True)
 
     problems: list[str] = []
     submissions: list[dict[str, str]] = []
     leaderboard: list[dict[str, str]] = []
+    public_kernels: list[dict[str, str]] = []
 
     if not has_credentials():
         problems.append("No Kaggle credentials found in this Actions run.")
@@ -260,10 +336,9 @@ def main() -> int:
         if error:
             problems.append(error)
 
-        if leaderboard:
-            (outdir / "leaderboard.csv").touch(exist_ok=True)
-
-    write_summary(outdir, args.competition, submissions, leaderboard, args.team, problems)
+    public_kernels, kernel_warnings = leader_public_kernels(outdir, args.competition, leaderboard)
+    problems.extend(kernel_warnings)
+    write_summary(outdir, args.competition, submissions, leaderboard, public_kernels, args.team, problems)
     print(f"Wrote read-only Kaggle poll results to {outdir}")
     return 1 if problems else 0
 

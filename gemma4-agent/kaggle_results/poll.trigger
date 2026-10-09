@@ -1,1 +1,1 @@
-First read-only Gemma Kaggle status poll.
+Poll public competition notebooks by current top-10 leaderboard members.
