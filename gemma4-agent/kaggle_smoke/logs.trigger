@@ -1,1 +1,1 @@
-Fetch logs for the latest pinned-image smoke kernel; read-only only, no notebook run or GPU request
+Read-only: fetch logs and inspect current swegemma wheel for the second private smoke; no notebook run or GPU request

@@ -54,6 +54,13 @@ jobs:
             --run-json gemma4-agent/kaggle_results/v1-smoke/run.json \
             --output-dir "$RUNNER_TEMP/gemma-v1-kernel-logs"
 
+      - name: Inspect current competition wheelhouse (read-only, no kernel run)
+        if: always()
+        continue-on-error: true
+        run: |
+          python gemma4-agent/tools/inspect_kaggle_wheelhouse.py \
+            --output-dir "$RUNNER_TEMP/gemma-v1-kernel-logs"
+
       - name: Expose concise failure diagnostics as check annotations
         if: always()
         run: |

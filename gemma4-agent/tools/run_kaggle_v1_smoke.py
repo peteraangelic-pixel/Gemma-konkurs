@@ -230,10 +230,10 @@ print('Offline wheelhouse installation complete.')
 
     model_cell = r'''import litellm
 import torch
+import yaml
 from pathlib import Path
 from adk_submission import VllmConfig, VllmServer, discover_adapters
 from swegemma.config import ALLOWED_ADAPTER_EXTENSIONS
-from swegemma.models.discovery import validate_single_declared_model
 
 litellm.drop_params = True
 TARGET_MODEL_NAME = 'gemma-4-31b-it-qat-w4a16-ct'
@@ -246,7 +246,21 @@ print(f'Visible GPUs ({gpu_count}): {gpu_names}')
 assert gpu_count == 4, f'Expected the competition L4x4 machine; got {gpu_count} visible GPUs.'
 assert all('L4' in name.upper() for name in gpu_names), f'Expected L4 GPUs, got {gpu_names}'
 
-declared_model = validate_single_declared_model(AGENT_DIR)
+# The current smoke failed while importing the starter's optional
+# swegemma.models.discovery helper. Read model IDs from the declarative YAML
+# configs here; the official Evaluator still loads and validates the submission.
+class _IncludeLoader(yaml.SafeLoader):
+    pass
+
+_IncludeLoader.add_constructor('!include', lambda loader, node: loader.construct_scalar(node))
+
+declared_models = set()
+for config_path in AGENT_DIR.rglob('*.yaml'):
+    config = yaml.load(config_path.read_text(encoding='utf-8'), Loader=_IncludeLoader)
+    if isinstance(config, dict) and isinstance(config.get('model'), str):
+        declared_models.add(config['model'])
+assert declared_models == {TARGET_MODEL_NAME}, f'Expected only {TARGET_MODEL_NAME}; found {sorted(declared_models)}'
+declared_model = TARGET_MODEL_NAME
 adapters = discover_adapters(str(AGENT_DIR), adapter_extensions=ALLOWED_ADAPTER_EXTENSIONS)
 assert not adapters, 'This V1 smoke run is configured without LoRA adapters.'
 

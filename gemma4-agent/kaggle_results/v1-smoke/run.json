@@ -20,5 +20,13 @@
   "push_exit_code": 0,
   "gpu_requested": true,
   "kaggle_status": "KernelWorkerStatus.ERROR",
-  "error": "Kaggle notebook ended without a successful run."
+  "error": "Kaggle notebook ended without a successful run.",
+  "diagnosis": {
+    "failure_stage": "smoke runner model setup cell, after wheel installation and V1 ZIP extraction/task selection but before vLLM startup, official Evaluator, or V1 ADK configuration loading",
+    "actual_python_runtime": "3.12 (the pinned runtime guard passed)",
+    "error": "ModuleNotFoundError: No module named swegemma.models.discovery",
+    "classification": "smoke-runner helper import mismatch; this attempt did not test the V1 loader",
+    "v1_archive_extracted": true,
+    "v1_agent_configuration_loaded": false
+  }
 }
