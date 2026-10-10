@@ -1,0 +1,15 @@
+{
+  "competition": "gemma-4-developer-agent",
+  "filename": "submission-v4.zip",
+  "message": "V4",
+  "sha256_expected": "3543c4f66521d8db95e04940140a4b360bd36a988622bff691ad9a16bd3c4c48",
+  "status": "submission_inconclusive",
+  "official_submission_requested": true,
+  "sha256_actual": "3543c4f66521d8db95e04940140a4b360bd36a988622bff691ad9a16bd3c4c48",
+  "cli_exit_code": 1,
+  "cli_error_category": "unclassified",
+  "submission_created": "unknown",
+  "post_submit_history_check": "No matching V4 row was visible in the immediate post-submit history query.",
+  "retry_warning": "Do not retry until a later read-only Kaggle submissions check confirms the V4 ZIP is absent.",
+  "checked_utc": "2026-10-10T14:29:04+00:00"
+}
