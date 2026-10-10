@@ -1,1 +1,1 @@
-read-only check of petersharps submission history after V4 CLI response was inconclusive; no upload or submission; kernel petersharps/gemma-agent-benchmark-3543c4f6-20261010-120912; UTC=2026-10-10T14:30Z
+read-only check after guarded V4 submission retry returned CLI exit 1; no upload or submission; verify whether submission-v4.zip is present; UTC=2026-10-10T14:34Z
