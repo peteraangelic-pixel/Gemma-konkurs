@@ -1,0 +1,331 @@
+{
+  "task_count_requested": 30,
+  "task_count_selected": 30,
+  "tasks_completed_or_failed": 30,
+  "resolved_count": 11,
+  "score_estimate": 0.36666666666666664,
+  "score_ci95_wilson": [
+    0.2187370220401768,
+    0.5448675356639505
+  ],
+  "per_task_max_time_minutes": 5.25,
+  "mean_task_duration_seconds": 233.81989784969994,
+  "total_task_duration_seconds": 7014.5969354909985,
+  "benchmark_wall_seconds": 7016.205788283,
+  "model": "gemma-4-31b-it-qat-w4a16-ct",
+  "visible_gpu_count": 4,
+  "submission_sha256": "3543c4f66521d8db95e04940140a4b360bd36a988622bff691ad9a16bd3c4c48",
+  "sample_seed": 20261009,
+  "repo_counts": {
+    "psf/requests": 3,
+    "Textualize/rich": 10,
+    "fastapi/fastapi": 16,
+    "encode/httpx": 1
+  },
+  "task_ids": [
+    "requests_6644",
+    "rich_3934",
+    "fastapi_14851",
+    "rich_3718",
+    "fastapi_14266",
+    "fastapi_14487",
+    "fastapi_14953",
+    "rich_3518",
+    "fastapi_14297",
+    "rich_3894",
+    "fastapi_14303",
+    "rich_3052",
+    "rich_3043",
+    "rich_3105",
+    "fastapi_14873",
+    "fastapi_15030",
+    "fastapi_15588",
+    "rich_3006",
+    "fastapi_14186",
+    "rich_3882",
+    "fastapi_14459",
+    "requests_6757",
+    "fastapi_14262",
+    "rich_2725",
+    "requests_7309",
+    "fastapi_14482",
+    "fastapi_15745",
+    "fastapi_14458",
+    "fastapi_14077",
+    "httpx_3672"
+  ],
+  "tasks": [
+    {
+      "task_id": "requests_6644",
+      "repo": "psf/requests",
+      "resolved": true,
+      "test_exit_code": 0,
+      "patch_chars": 1393,
+      "tool_calls": 13,
+      "duration_seconds": 117.83139839299997
+    },
+    {
+      "task_id": "rich_3934",
+      "repo": "Textualize/rich",
+      "resolved": false,
+      "test_exit_code": 1,
+      "patch_chars": 1013,
+      "tool_calls": 24,
+      "duration_seconds": 321.97147379699993
+    },
+    {
+      "task_id": "fastapi_14851",
+      "repo": "fastapi/fastapi",
+      "resolved": true,
+      "test_exit_code": 0,
+      "patch_chars": 0,
+      "tool_calls": 31,
+      "duration_seconds": 165.92594609999992
+    },
+    {
+      "task_id": "rich_3718",
+      "repo": "Textualize/rich",
+      "resolved": true,
+      "test_exit_code": 0,
+      "patch_chars": 2219,
+      "tool_calls": 12,
+      "duration_seconds": 162.253048068
+    },
+    {
+      "task_id": "fastapi_14266",
+      "repo": "fastapi/fastapi",
+      "resolved": false,
+      "test_exit_code": 2,
+      "patch_chars": 1296,
+      "tool_calls": 35,
+      "duration_seconds": 239.1381871179999
+    },
+    {
+      "task_id": "fastapi_14487",
+      "repo": "fastapi/fastapi",
+      "resolved": false,
+      "test_exit_code": 1,
+      "patch_chars": 4468,
+      "tool_calls": 32,
+      "duration_seconds": 150.83036685599996
+    },
+    {
+      "task_id": "fastapi_14953",
+      "repo": "fastapi/fastapi",
+      "resolved": false,
+      "test_exit_code": 2,
+      "patch_chars": 560,
+      "tool_calls": 20,
+      "duration_seconds": 323.1320193020001
+    },
+    {
+      "task_id": "rich_3518",
+      "repo": "Textualize/rich",
+      "resolved": true,
+      "test_exit_code": 0,
+      "patch_chars": 1725,
+      "tool_calls": 33,
+      "duration_seconds": 214.28305508599988
+    },
+    {
+      "task_id": "fastapi_14297",
+      "repo": "fastapi/fastapi",
+      "resolved": false,
+      "test_exit_code": 2,
+      "patch_chars": 1897,
+      "tool_calls": 11,
+      "duration_seconds": 196.74565649999977
+    },
+    {
+      "task_id": "rich_3894",
+      "repo": "Textualize/rich",
+      "resolved": true,
+      "test_exit_code": 0,
+      "patch_chars": 1130,
+      "tool_calls": 10,
+      "duration_seconds": 199.92599343099982
+    },
+    {
+      "task_id": "fastapi_14303",
+      "repo": "fastapi/fastapi",
+      "resolved": false,
+      "test_exit_code": 2,
+      "patch_chars": 1597,
+      "tool_calls": 13,
+      "duration_seconds": 127.60891912900024
+    },
+    {
+      "task_id": "rich_3052",
+      "repo": "Textualize/rich",
+      "resolved": false,
+      "test_exit_code": 1,
+      "patch_chars": 3435,
+      "tool_calls": 13,
+      "duration_seconds": 174.41310868799974
+    },
+    {
+      "task_id": "rich_3043",
+      "repo": "Textualize/rich",
+      "resolved": true,
+      "test_exit_code": 0,
+      "patch_chars": 449,
+      "tool_calls": 22,
+      "duration_seconds": 319.68289048299994
+    },
+    {
+      "task_id": "rich_3105",
+      "repo": "Textualize/rich",
+      "resolved": false,
+      "test_exit_code": -1,
+      "patch_chars": 0,
+      "tool_calls": 19,
+      "duration_seconds": 316.87349292299996
+    },
+    {
+      "task_id": "fastapi_14873",
+      "repo": "fastapi/fastapi",
+      "resolved": true,
+      "test_exit_code": 0,
+      "patch_chars": 1681,
+      "tool_calls": 32,
+      "duration_seconds": 295.2355712059998
+    },
+    {
+      "task_id": "fastapi_15030",
+      "repo": "fastapi/fastapi",
+      "resolved": false,
+      "test_exit_code": -1,
+      "patch_chars": 0,
+      "tool_calls": 8,
+      "duration_seconds": 319.96500565299993
+    },
+    {
+      "task_id": "fastapi_15588",
+      "repo": "fastapi/fastapi",
+      "resolved": false,
+      "test_exit_code": 1,
+      "patch_chars": 1388,
+      "tool_calls": 10,
+      "duration_seconds": 169.5547833569999
+    },
+    {
+      "task_id": "rich_3006",
+      "repo": "Textualize/rich",
+      "resolved": true,
+      "test_exit_code": 0,
+      "patch_chars": 1809,
+      "tool_calls": 15,
+      "duration_seconds": 66.80736443099977
+    },
+    {
+      "task_id": "fastapi_14186",
+      "repo": "fastapi/fastapi",
+      "resolved": false,
+      "test_exit_code": -1,
+      "patch_chars": 0,
+      "tool_calls": 7,
+      "duration_seconds": 318.79413846199986
+    },
+    {
+      "task_id": "rich_3882",
+      "repo": "Textualize/rich",
+      "resolved": true,
+      "test_exit_code": 0,
+      "patch_chars": 503,
+      "tool_calls": 10,
+      "duration_seconds": 93.38876117499967
+    },
+    {
+      "task_id": "fastapi_14459",
+      "repo": "fastapi/fastapi",
+      "resolved": false,
+      "test_exit_code": 2,
+      "patch_chars": 1845,
+      "tool_calls": 15,
+      "duration_seconds": 322.89444594499946
+    },
+    {
+      "task_id": "requests_6757",
+      "repo": "psf/requests",
+      "resolved": false,
+      "test_exit_code": -1,
+      "patch_chars": 0,
+      "tool_calls": 13,
+      "duration_seconds": 316.63447360600003
+    },
+    {
+      "task_id": "fastapi_14262",
+      "repo": "fastapi/fastapi",
+      "resolved": false,
+      "test_exit_code": 2,
+      "patch_chars": 816,
+      "tool_calls": 35,
+      "duration_seconds": 300.3055722879999
+    },
+    {
+      "task_id": "rich_2725",
+      "repo": "Textualize/rich",
+      "resolved": false,
+      "test_exit_code": 1,
+      "patch_chars": 5654,
+      "tool_calls": 20,
+      "duration_seconds": 321.15554554900064
+    },
+    {
+      "task_id": "requests_7309",
+      "repo": "psf/requests",
+      "resolved": false,
+      "test_exit_code": 1,
+      "patch_chars": 692,
+      "tool_calls": 18,
+      "duration_seconds": 124.39280698899984
+    },
+    {
+      "task_id": "fastapi_14482",
+      "repo": "fastapi/fastapi",
+      "resolved": false,
+      "test_exit_code": 2,
+      "patch_chars": 764,
+      "tool_calls": 15,
+      "duration_seconds": 322.39520601499953
+    },
+    {
+      "task_id": "fastapi_15745",
+      "repo": "fastapi/fastapi",
+      "resolved": false,
+      "test_exit_code": -1,
+      "patch_chars": 0,
+      "tool_calls": 35,
+      "duration_seconds": 320.1802529030001
+    },
+    {
+      "task_id": "fastapi_14458",
+      "repo": "fastapi/fastapi",
+      "resolved": true,
+      "test_exit_code": 0,
+      "patch_chars": 1361,
+      "tool_calls": 14,
+      "duration_seconds": 283.6048012700003
+    },
+    {
+      "task_id": "fastapi_14077",
+      "repo": "fastapi/fastapi",
+      "resolved": true,
+      "test_exit_code": 0,
+      "patch_chars": 1917,
+      "tool_calls": 18,
+      "duration_seconds": 91.1459014080001
+    },
+    {
+      "task_id": "httpx_3672",
+      "repo": "encode/httpx",
+      "resolved": false,
+      "test_exit_code": 2,
+      "patch_chars": 2157,
+      "tool_calls": 22,
+      "duration_seconds": 317.5267493600004
+    }
+  ],
+  "official_submission": false,
+  "score_scope": "seeded stratified public development sample; not a leaderboard score"
+}
