@@ -3,13 +3,22 @@
   "filename": "submission-v2.zip",
   "message": "V2",
   "sha256_expected": "853fe9845c879465d2df55d00d052f3adde9f466b36dffeef5785f0a75eaa000",
-  "status": "submission_inconclusive",
+  "status": "not_visible_in_latest_history",
   "official_submission_requested": true,
   "sha256_actual": "853fe9845c879465d2df55d00d052f3adde9f466b36dffeef5785f0a75eaa000",
   "cli_exit_code": 1,
   "cli_error_category": "unclassified",
-  "submission_created": "unknown",
-  "post_submit_history_check": "No matching V2 row was visible in the immediate post-submit history query.",
-  "retry_warning": "Do not retry until a later read-only Kaggle submissions check confirms the V2 ZIP is absent.",
-  "checked_utc": "2026-10-10T00:40:58+00:00"
+  "submission_created": "not_confirmed",
+  "post_submit_history_check": "No V2 row was visible in the immediate post-submit query or the subsequent read-only submissions poll.",
+  "retry_warning": "No further retry made. The V2 CLI submit returned exit 1 with an unclassified error; diagnose before any additional official submission.",
+  "checked_utc": "2026-10-10T00:40:58+00:00",
+  "latest_readonly_history_check": {
+    "run_id": 38010125056,
+    "checked_utc": "2026-10-10T00:41:43+00:00",
+    "v2_filename_present": false,
+    "latest_submission_ref": "56974591",
+    "latest_submission_filename": "submission.zip",
+    "latest_submission_message": "V1",
+    "source": "gemma4-agent/kaggle_results/submissions.csv"
+  }
 }
