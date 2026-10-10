@@ -3,10 +3,13 @@
   "filename": "submission-v2.zip",
   "message": "V2",
   "sha256_expected": "853fe9845c879465d2df55d00d052f3adde9f466b36dffeef5785f0a75eaa000",
-  "status": "submission_failed",
+  "status": "submission_inconclusive",
   "official_submission_requested": true,
   "sha256_actual": "853fe9845c879465d2df55d00d052f3adde9f466b36dffeef5785f0a75eaa000",
-  "submission_created": false,
   "cli_exit_code": 1,
-  "checked_utc": "2026-10-10T00:36:24+00:00"
+  "cli_error_category": "unclassified",
+  "submission_created": "unknown",
+  "post_submit_history_check": "No matching V2 row was visible in the immediate post-submit history query.",
+  "retry_warning": "Do not retry until a later read-only Kaggle submissions check confirms the V2 ZIP is absent.",
+  "checked_utc": "2026-10-10T00:40:58+00:00"
 }
