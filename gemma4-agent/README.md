@@ -41,6 +41,22 @@ Pięć minut × 129 zadań publicznych to maksymalnie 10 h 45 min pracy agenta, 
 
 Workflow `.github/workflows/gemma-kaggle-v2-benchmark.yml` uruchamia prywatny notebook na Kaggle L4x4 i ocenia deterministyczną próbę 30 zadań, warstwowaną proporcjonalnie według repozytorium (oczekiwane 16 FastAPI, 10 Rich, 3 Requests i 1 HTTPX), z ziarnem `20261009`; próba zawiera również dotychczasowe zadanie `fastapi_15588`. Limit to 5 min/zadanie, więc maksymalny czas pracy agentów w tej próbie wynosi 2 h 30 min; monitoring Kaggle kończy się po 4 h. Notebook nie tworzy konkursowego submission ani official score i nie pobiera 22-GB datasetu do GitHuba — korzysta z wejść zamontowanych przez Kaggle. Wynik zawiera oszacowanie odsetka rozwiązanych zadań i 95% przedział Wilsona. To screening, nie wiarygodny ranking: dla odniesienia zapisany publiczny top 10 ma score 0.20–0.24, a do mocniejszego porównania potrzebny będzie pełny publiczny split.
 
+## Kandydat V3 — time-boxed, test-first (hipoteza; bez submission)
+
+Źródła V3 są odizolowane w `submission-v3/`, a zbudowany ZIP to `submission-v3.zip`; V1 i V2 pozostają nietknięte. V3 zachowuje ten sam Gemma 4 31B QAT, `top_k: 40`, ustawienia samplingu, read-only analyzer i brak treningu/LoRA. Zmienia wyłącznie politykę budżetu/pętli testów oraz limit per-task z 5:00 na **5:15**: usuwa miękki cel 8–12/16 wywołań, każe wcześniej przejść od eksploracji do pierwszej poprawki i po nieudanym teście odczytać dokładny błąd oraz zrobić jedną wąską korektę, jeśli budżet pozwala.
+
+Hipoteza opiera się na wyniku V2: 10/30 zadań rozwiązano; w 15 nierozwiązanych wynik testów był niezerowy (6 kodów 1, 9 kodów 2), 5 miało kod `-1`, a log zawiera 17 unikalnych timeoutów agenta. Nie dowodzi to, że zmiana promptu naprawi te zadania, ale sugeruje, że warto lepiej wykorzystać budżet na odczyt błędu i korektę zamiast sztywnego miękkiego limitu wywołań. Przy 129 zadaniach sufit 5:15 × 129 wynosi 11h17m15s, zostawiając 42m45s z globalnych 12 h na setup i narzut; liczba ukrytych zadań może być inna. Nie zwiększać limitu w pełnym konkursie, jeśli aktualna liczba zadań nie mieści się w tym budżecie.
+
+Budowanie bez nadpisywania V1/V2:
+
+```bash
+python gemma4-agent/build_submission.py \
+  --source-dir gemma4-agent/submission-v3 \
+  --output gemma4-agent/submission-v3.zip
+```
+
+SHA-256 ZIP-a: `975336cbd2e3ec53739706cd497971264fd2e9e0a5f5c8eb33745658ac71e1e3`. Przeszedł strukturalną walidację packera oraz parserowy test składni YAML z PyYAML 6.0.3 zainstalowanym wyłącznie tymczasowo w `/tmp`. **V3 nie został uruchomiony na GPU ani przesłany do Kaggle.** Najpierw potrzebny jest prywatny screening i Twoja decyzja przed oficjalnym slotem.
+
 ## Odczyt statusu Kaggle przez GitHub Actions
 
 Workflow `../.github/workflows/gemma-kaggle-poll.yml` wykonuje wyłącznie odczyt: listuje statusy naszych submissionów i pobiera publiczną tabelę leaderboardu konkursu `gemma-4-developer-agent`. Wyniki zapisuje w `gemma4-agent/kaggle_results/` (`summary.md`, `summary.json`, CSV) i commit-uje z powrotem na gałąź sesji. **Nie przesyła nowego ZIP-a ani nie zużywa dziennego limitu submissionów.**

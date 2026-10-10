@@ -1,0 +1,9 @@
+# V3 hypothesis: spend a small additional per-task reserve on evidence-led test repair.
+# For 129 tasks, 5m15s × 129 = 11h17m15s, leaving 42m45s within the global 12h
+# for evaluator startup and overhead. The hidden task count may differ, so verify
+# this budget before any full competition run.
+evaluation:
+  timeout_seconds: 180
+  max_tool_calls: 35
+  max_time_minutes: 5.25
+  max_turns: 60
