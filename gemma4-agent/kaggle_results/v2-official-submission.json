@@ -1,0 +1,12 @@
+{
+  "competition": "gemma-4-developer-agent",
+  "filename": "submission-v2.zip",
+  "message": "V2",
+  "sha256_expected": "853fe9845c879465d2df55d00d052f3adde9f466b36dffeef5785f0a75eaa000",
+  "status": "submission_failed",
+  "official_submission_requested": true,
+  "sha256_actual": "853fe9845c879465d2df55d00d052f3adde9f466b36dffeef5785f0a75eaa000",
+  "submission_created": false,
+  "cli_exit_code": 1,
+  "checked_utc": "2026-10-10T00:36:24+00:00"
+}
