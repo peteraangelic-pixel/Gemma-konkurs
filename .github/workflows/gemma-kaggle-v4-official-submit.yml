@@ -47,12 +47,19 @@ jobs:
           chmod 600 "$HOME/.kaggle/access_token"
           echo "Kaggle CLI configured; token value was not logged."
 
+      - name: Prepare V4 archive with Kaggle's required filename
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v4-upload"
+          cp gemma4-agent/submission-v4.zip "$RUNNER_TEMP/v4-upload/submission.zip"
+          echo "V4 archive staged as submission.zip; the repository's V1 submission.zip was not modified."
+
       - name: Submit verified V4 once if the daily slot is available
         env:
           KAGGLE_USERNAME: petersharps
         run: |
           python gemma4-agent/tools/submit_kaggle_v4_once.py \
-            --archive gemma4-agent/submission-v4.zip \
+            --archive "$RUNNER_TEMP/v4-upload/submission.zip" \
             --result-json gemma4-agent/kaggle_results/v4-official-submission.json
 
       - name: Show submission receipt

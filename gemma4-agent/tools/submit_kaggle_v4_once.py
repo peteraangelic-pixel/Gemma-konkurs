@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Submit the verified V4 ZIP once, with a Kaggle history/daily-slot guard.
+"""Submit the verified V4 ZIP as Kaggle's required canonical submission.zip, with guards.
 
 Authentication is provided by the GitHub Actions runner's standard Kaggle CLI
 credential file. This script never reads, prints, or writes the API token.
@@ -19,7 +19,7 @@ from typing import Any
 
 COMPETITION = "gemma-4-developer-agent"
 EXPECTED_SHA256 = "3543c4f66521d8db95e04940140a4b360bd36a988622bff691ad9a16bd3c4c48"
-EXPECTED_FILENAME = "submission-v4.zip"
+EXPECTED_FILENAME = "submission.zip"
 SUBMISSION_MESSAGE = "V4"
 
 
@@ -92,9 +92,12 @@ def submission_ref(row: dict[str, str]) -> dict[str, Any]:
 
 
 def matching_v4(rows: list[dict[str, str]]) -> list[dict[str, str]]:
+    # Other versions must also use Kaggle's canonical submission.zip filename;
+    # distinguish this version by its submission message, not filename alone.
     return [
         row for row in rows
         if field(row, "fileName", "filename", "file").casefold() == EXPECTED_FILENAME.casefold()
+        and field(row, "description", "message").casefold() == SUBMISSION_MESSAGE.casefold()
     ]
 
 
@@ -237,12 +240,9 @@ def main() -> int:
         record.update({"status": "preflight_failed", "submission_created": False, "error": query_error})
         return finish(args.result_json, record, 3)
 
-    # Never send the same V4 file twice, including after a workflow retry where
-    # the upload may have succeeded but the original runner lost its response.
-    prior_v4 = [
-        row for row in rows
-        if field(row, "fileName", "filename", "file").casefold() == EXPECTED_FILENAME.casefold()
-    ]
+    # Never send the same V4 message/file twice, including after a workflow
+    # retry where the upload may have succeeded but the runner lost its response.
+    prior_v4 = matching_v4(rows)
     if prior_v4:
         record.update(
             {
