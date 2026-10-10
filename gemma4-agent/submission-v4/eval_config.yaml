@@ -1,0 +1,9 @@
+# V4 keeps V3's 5m15s ceiling so this iteration isolates prompt-level recovery guidance.
+# For 129 tasks, 5m15s × 129 = 11h17m15s, leaving 42m45s within the global 12h
+# for evaluator startup and overhead. The hidden task count may differ; verify
+# the full budget before any competition run.
+evaluation:
+  timeout_seconds: 180
+  max_tool_calls: 35
+  max_time_minutes: 5.25
+  max_turns: 60
