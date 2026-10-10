@@ -1,9 +1,9 @@
 {
-  "fetched_utc": "2026-10-10T00:41:43+00:00",
+  "fetched_utc": "2026-10-10T11:47:59+00:00",
   "competition": "gemma-4-developer-agent",
   "team_filter": null,
-  "leaderboard_rows": 2228,
-  "submission_rows": 1,
+  "leaderboard_rows": 2285,
+  "submission_rows": 0,
   "our_leaderboard_rows": [],
   "top10": [
     {
@@ -19,27 +19,27 @@
       "Rank": "2",
       "TeamId": "17019455",
       "TeamName": "Yike Xu",
-      "LastSubmissionDate": "2026-10-07 02:06:25",
+      "LastSubmissionDate": "2026-10-08 06:07:23",
       "Score": "0.24",
-      "SubmissionCount": "6",
+      "SubmissionCount": "7",
       "TeamMemberUserNames": "weiyun22021"
     },
     {
       "Rank": "3",
       "TeamId": "17015790",
       "TeamName": "Francis Joseph",
-      "LastSubmissionDate": "2026-10-07 17:39:44",
+      "LastSubmissionDate": "2026-10-08 10:12:23",
       "Score": "0.22",
-      "SubmissionCount": "6",
+      "SubmissionCount": "7",
       "TeamMemberUserNames": "francisjosephdev"
     },
     {
       "Rank": "4",
       "TeamId": "16949307",
       "TeamName": "Mizero Lucky Gall",
-      "LastSubmissionDate": "2026-10-07 14:17:10",
+      "LastSubmissionDate": "2026-10-08 06:39:08",
       "Score": "0.20",
-      "SubmissionCount": "9",
+      "SubmissionCount": "10",
       "TeamMemberUserNames": "mizeroluckygall"
     },
     {
@@ -64,9 +64,9 @@
       "Rank": "7",
       "TeamId": "16950280",
       "TeamName": "songhahaha66",
-      "LastSubmissionDate": "2026-10-07 14:24:22",
+      "LastSubmissionDate": "2026-10-08 13:23:25",
       "Score": "0.20",
-      "SubmissionCount": "10",
+      "SubmissionCount": "11",
       "TeamMemberUserNames": "songhahaha66"
     },
     {
@@ -82,9 +82,9 @@
       "Rank": "9",
       "TeamId": "17019135",
       "TeamName": "Lakshya Mewara0025",
-      "LastSubmissionDate": "2026-10-07 17:40:02",
+      "LastSubmissionDate": "2026-10-08 09:04:32",
       "Score": "0.20",
-      "SubmissionCount": "5",
+      "SubmissionCount": "6",
       "TeamMemberUserNames": "lakshyamewara0025"
     },
     {
@@ -120,16 +120,6 @@
       "matched_member": "mizeroluckygall"
     }
   ],
-  "latest_submissions": [
-    {
-      "ref": "56974591",
-      "fileName": "submission.zip",
-      "date": "2026-10-08 21:54:34.333000",
-      "description": "V1",
-      "status": "SubmissionStatus.PENDING",
-      "publicScore": "",
-      "privateScore": ""
-    }
-  ],
+  "latest_submissions": [],
   "problems": []
 }

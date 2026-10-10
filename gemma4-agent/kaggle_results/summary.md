@@ -1,14 +1,12 @@
 # Kaggle status — gemma-4-developer-agent
 
-_Fetched 2026-10-10T00:41:43+00:00._
+_Fetched 2026-10-10T11:47:59+00:00._
 
 This is a read-only poll: it does not upload or submit an agent.
 
 ## Our latest submissions
 
-| File | Status | Score | Submitted |
-|---|---|---:|---|
-| `submission.zip` | SubmissionStatus.PENDING |  | 2026-10-08 21:54:34.333000 |
+_No submission rows were returned._
 
 ## Public leaderboard — top 10
 
