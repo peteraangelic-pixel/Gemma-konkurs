@@ -28,7 +28,7 @@ def write_json(path: Path, value: dict[str, Any]) -> None:
     path.write_text(json.dumps(value, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
-def kaggle(args: list[str], timeout: int = 180) -> tuple[int | None, str, str | None]:
+def kaggle(args: list[str], timeout: int = 180) -> tuple[int | None, str, str, str | None]:
     try:
         completed = subprocess.run(
             [sys.executable, "-m", "kaggle", *args],
@@ -38,14 +38,14 @@ def kaggle(args: list[str], timeout: int = 180) -> tuple[int | None, str, str | 
             check=False,
         )
     except subprocess.TimeoutExpired:
-        return None, "", "timeout"
+        return None, "", "", "timeout"
     except OSError as exc:
-        return None, "", type(exc).__name__
-    return completed.returncode, completed.stdout, None
+        return None, "", "", type(exc).__name__
+    return completed.returncode, completed.stdout, completed.stderr, None
 
 
 def submissions() -> tuple[list[dict[str, str]] | None, str | None]:
-    code, stdout, error = kaggle(
+    code, stdout, _, error = kaggle(
         [
             "competitions",
             "submissions",
@@ -91,6 +91,37 @@ def submission_ref(row: dict[str, str]) -> dict[str, Any]:
     }
 
 
+def matching_v2(rows: list[dict[str, str]]) -> list[dict[str, str]]:
+    return [
+        row for row in rows
+        if field(row, "fileName", "filename", "file").casefold() == EXPECTED_FILENAME.casefold()
+    ]
+
+
+def latest_submission(rows: list[dict[str, str]]) -> dict[str, str]:
+    return max(
+        rows,
+        key=lambda row: parse_utc_date(field(row, "date", "submitted", "submissionDate"))
+        or datetime.min.replace(tzinfo=timezone.utc),
+    )
+
+
+def classify_cli_error(*outputs: str) -> str:
+    """Return a coarse, non-sensitive category; never persist raw CLI output."""
+    text = "\n".join(outputs).casefold()
+    categories = (
+        ("daily_submission_limit", ("daily limit", "one submission per day", "24 hour", "24-hour", "too many submissions")),
+        ("authentication_or_permission", ("unauthorized", "forbidden", "permission denied", "not authorized", "401", "403", "invalid token")),
+        ("competition_access_or_rules", ("accept the competition rules", "not joined", "competition is closed", "not accepting submissions", "competition not found", "404")),
+        ("network_or_service", ("timed out", "timeout", "connection error", "connection reset", "502", "503", "504", "internal server error")),
+        ("upload_or_archive", ("file too large", "upload failed", "invalid zip", "archive", "no such file")),
+    )
+    for category, markers in categories:
+        if any(marker in text for marker in markers):
+            return category
+    return "unclassified" if text.strip() else "no_diagnostic_text"
+
+
 def parse_utc_date(value: str) -> datetime | None:
     if not value:
         return None
@@ -108,6 +139,71 @@ def finish(path: Path, record: dict[str, Any], exit_code: int = 0) -> int:
     write_json(path, record)
     print(json.dumps(record, indent=2, ensure_ascii=False))
     return exit_code
+
+
+def reconcile_submission(
+    record: dict[str, Any],
+    code: int | None,
+    submit_error: str | None,
+    stdout: str,
+    stderr: str,
+) -> int:
+    """Check Kaggle history after every attempt without exposing raw CLI output."""
+    if code is not None:
+        record["cli_exit_code"] = code
+    if submit_error:
+        record["error_type"] = submit_error
+    if code != 0 or submit_error:
+        record["cli_error_category"] = classify_cli_error(stdout, stderr)
+
+    after_rows, after_error = submissions()
+    if after_rows is None:
+        record.update(
+            {
+                "status": "submission_inconclusive",
+                "submission_created": "unknown",
+                "post_submit_query_error": after_error,
+                "retry_warning": "Do not retry until a read-only Kaggle submissions check confirms the V2 status.",
+            }
+        )
+        return finish_code_for_attempt(code, submit_error)
+
+    matches = matching_v2(after_rows)
+    if matches:
+        record.update(
+            {
+                "status": "submitted" if code == 0 and not submit_error else "submitted_despite_cli_error",
+                "submission_created": True,
+                "submission": submission_ref(latest_submission(matches)),
+                "retry_warning": "Do not resubmit this ZIP; use the recorded submission ref/status.",
+            }
+        )
+        return 0
+
+    if code == 0 and not submit_error:
+        record.update(
+            {
+                "status": "submitted_unconfirmed",
+                "submission_created": "accepted_by_cli",
+                "post_submit_history_check": "Kaggle CLI accepted the upload, but no V2 row is visible yet.",
+                "retry_warning": "Do not resubmit this ZIP; check Kaggle history/status first.",
+            }
+        )
+        return 0
+
+    record.update(
+        {
+            "status": "submission_inconclusive",
+            "submission_created": "unknown",
+            "post_submit_history_check": "No matching V2 row was visible in the immediate post-submit history query.",
+            "retry_warning": "Do not retry until a later read-only Kaggle submissions check confirms the V2 ZIP is absent.",
+        }
+    )
+    return finish_code_for_attempt(code, submit_error)
+
+
+def finish_code_for_attempt(code: int | None, submit_error: str | None) -> int:
+    return 5 if submit_error else 6 if code != 0 else 0
 
 
 def main() -> int:
@@ -201,9 +297,8 @@ def main() -> int:
         return finish(args.result_json, record)
 
     # The file has been hash-checked and both duplicate/daily-slot checks passed.
-    # CLI output is captured rather than echoed; only a confirmed submission row
-    # is written to the result record. No automatic retry is attempted.
-    code, _, submit_error = kaggle(
+    # Never print or persist raw CLI output. Always query history after the attempt.
+    code, stdout, stderr, submit_error = kaggle(
         [
             "competitions",
             "submit",
@@ -216,48 +311,8 @@ def main() -> int:
         ],
         timeout=600,
     )
-    if submit_error:
-        record.update(
-            {
-                "status": "submission_inconclusive",
-                "submission_created": "unknown",
-                "error_type": submit_error,
-                "retry_warning": "Do not retry until Kaggle submission history is checked.",
-            }
-        )
-        return finish(args.result_json, record, 5)
-    if code != 0:
-        record.update(
-            {
-                "status": "submission_failed",
-                "submission_created": False,
-                "cli_exit_code": code,
-            }
-        )
-        return finish(args.result_json, record, 6)
-
-    record["cli_exit_code"] = code
-    record["status"] = "submitted_unconfirmed"
-    record["submission_created"] = "accepted_by_cli"
-    after_rows, after_error = submissions()
-    if after_rows is not None:
-        matching = [
-            row for row in after_rows
-            if field(row, "fileName", "filename", "file").casefold() == EXPECTED_FILENAME.casefold()
-        ]
-        if matching:
-            latest = max(
-                matching,
-                key=lambda row: parse_utc_date(field(row, "date", "submitted", "submissionDate"))
-                or datetime.min.replace(tzinfo=timezone.utc),
-            )
-            record.update({"status": "submitted", "submission": submission_ref(latest)})
-        else:
-            record["post_submit_query"] = "Accepted by Kaggle CLI; V2 row not yet visible in submissions list."
-    else:
-        record["post_submit_query_error"] = after_error
-    record["retry_warning"] = "Do not resubmit this ZIP; use the recorded submissions list/status."
-    return finish(args.result_json, record)
+    exit_code = reconcile_submission(record, code, submit_error, stdout, stderr)
+    return finish(args.result_json, record, exit_code)
 
 
 if __name__ == "__main__":
