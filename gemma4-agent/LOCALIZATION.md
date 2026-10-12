@@ -63,6 +63,27 @@ identyfikatora (7/129 ma zero kotwic, 38/129 to sam tytuł ≤200 znaków — `h
 wszystkich 129 zadaniach). Dlatego kolejny krok to reguła „idź za importami pliku testowego", która
 dla takich zadań wskazuje moduł-sąsiada (np. `test_router_events.py` → `fastapi/routing.py`).
 
+## Test przenoszenia (held-out) — czy to nie jest overfit do 4 repozytoriów?
+
+Ukryty zbiór to prywatne repozytoria, więc procedura nie może być „pod fastapi/rich". Dlatego
+zbudowałem proxy-zadania z **repozytoriów spoza zbioru deweloperskiego**: każde zadanie to prawdziwy
+zmergowany pull request, tekst issue to **sam tytuł PR** (taki sam kształt jak w zbiorze publicznym),
+a celem jest plik źródłowy `.py`, który ten PR zmienił (`tools/locate_holdout.py`, mierzy dokładnie
+ten kod, który jedzie w `locator.py`).
+
+| repozytorium (spoza zbioru) | zadania | top-1 | top-5 | top-10 |
+| --- | --- | --- | --- | --- |
+| encode/starlette | 40 | 37.5 % | 62.5 % | 70.0 % |
+| pallets/click | 40 | 57.5 % | 87.5 % | 95.0 % |
+| tiangolo/typer | 14 | 28.6 % | 71.4 % | 78.6 % |
+| **razem** | **94** | **44.7 %** | **74.5 %** | **81.9 %** |
+
+Wynik na repozytoriach, których procedura nigdy nie widziała, jest **równy lub lepszy** od wyniku
+w zbiorze deweloperskim (68.8 % top-5) — czyli ranking nie jest dopasowany do czterech repo z V1–V4.
+To jest dokładnie ten test, którego brakowało przy 0.03: „czy to, co poprawiamy, przenosi się na
+repozytoria, których nie znamy". Nadal nie jest to gwarancja wyniku: pozostaje jakość edycji,
+budżet 5.25 min i weryfikacja.
+
 ## Uczciwe ramy
 
 - Oficjalny wynik ukryty (0.03) i widoczny (11/30) **nie są tym samym rozkładem**: 4 publiczne

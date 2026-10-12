@@ -1,0 +1,1505 @@
+{
+  "summary": {
+    "repos": [
+      "encode/starlette",
+      "pallets/click",
+      "tiangolo/typer"
+    ],
+    "tasks_scored": 94,
+    "aggregate_hit_rates": {
+      "top1": 0.4468,
+      "top5": 0.7447,
+      "top10": 0.8191
+    },
+    "note": "issue text = PR title only; target = source .py changed by the merge; repos are outside the dev set, so this measures transfer, not tuning.",
+    "per_repo": {
+      "encode/starlette": {
+        "tasks": 40,
+        "hit_rates": {
+          "top1": 0.375,
+          "top5": 0.625,
+          "top10": 0.7
+        }
+      },
+      "pallets/click": {
+        "tasks": 40,
+        "hit_rates": {
+          "top1": 0.575,
+          "top5": 0.875,
+          "top10": 0.95
+        }
+      },
+      "tiangolo/typer": {
+        "tasks": 14,
+        "hit_rates": {
+          "top1": 0.2857,
+          "top5": 0.7143,
+          "top10": 0.7857
+        }
+      }
+    }
+  },
+  "details": {
+    "encode/starlette": {
+      "tasks": 40,
+      "hit_rates": {
+        "top1": 0.375,
+        "top5": 0.625,
+        "top10": 0.7
+      },
+      "rows": [
+        {
+          "title": "Merge pull request #881 from florimondmanca/fix-cors",
+          "gold": [
+            "starlette/middleware/cors.py"
+          ],
+          "top5": [
+            "starlette/middleware/cors.py",
+            "starlette/responses.py",
+            "tests/middleware/test_cors.py",
+            "starlette/testclient.py",
+            "starlette/applications.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Merge pull request #880 from vgerak/master",
+          "gold": [
+            "starlette/middleware/cors.py"
+          ],
+          "top5": [
+            "starlette/testclient.py",
+            "starlette/requests.py",
+            "starlette/responses.py",
+            "starlette/routing.py",
+            "tests/test_requests.py"
+          ]
+        },
+        {
+          "title": "Merge pull request #867 from aviramha/master",
+          "gold": [
+            "starlette/requests.py"
+          ],
+          "top5": [
+            "starlette/testclient.py",
+            "starlette/requests.py",
+            "starlette/responses.py",
+            "starlette/routing.py",
+            "tests/test_requests.py"
+          ],
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Merge pull request #674 from dmontagu/run_in_threadpool-type-hint",
+          "gold": [
+            "starlette/concurrency.py"
+          ],
+          "top5": [
+            "starlette/concurrency.py",
+            "starlette/routing.py",
+            "starlette/testclient.py",
+            "starlette/responses.py",
+            "starlette/exceptions.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Merge pull request #673 from dmontagu/patch-6",
+          "gold": [
+            "starlette/datastructures.py"
+          ],
+          "top5": [
+            "starlette/schemas.py",
+            "starlette/requests.py",
+            "starlette/middleware/cors.py",
+            "starlette/responses.py",
+            "starlette/testclient.py"
+          ]
+        },
+        {
+          "title": "Merge pull request #653 from dmontagu/large-body-perf",
+          "gold": [
+            "starlette/datastructures.py",
+            "starlette/requests.py",
+            "starlette/testclient.py"
+          ],
+          "top5": [
+            "starlette/requests.py",
+            "starlette/middleware/base.py",
+            "starlette/responses.py",
+            "starlette/status.py",
+            "starlette/testclient.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Merge pull request #629 from jlaine/send-push-promise",
+          "gold": [
+            "starlette/requests.py",
+            "starlette/routing.py"
+          ],
+          "top5": [
+            "starlette/graphql.py",
+            "starlette/routing.py",
+            "starlette/testclient.py",
+            "starlette/responses.py",
+            "starlette/middleware/cors.py"
+          ],
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Merge pull request #618 from encode/app-state",
+          "gold": [
+            "starlette/applications.py",
+            "starlette/datastructures.py",
+            "starlette/middleware/errors.py",
+            "starlette/requests.py"
+          ],
+          "top5": [
+            "starlette/requests.py",
+            "starlette/websockets.py",
+            "starlette/responses.py",
+            "tests/test_requests.py",
+            "starlette/testclient.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Merge pull request #601 from abersheeran/master",
+          "gold": [
+            "starlette/middleware/errors.py"
+          ],
+          "top5": [
+            "starlette/testclient.py",
+            "starlette/requests.py",
+            "starlette/responses.py",
+            "starlette/routing.py",
+            "tests/test_requests.py"
+          ]
+        },
+        {
+          "title": "Merge pull request #597 from taoufik07/patch-8",
+          "gold": [
+            "starlette/middleware/sessions.py"
+          ],
+          "top5": [
+            "starlette/schemas.py",
+            "starlette/requests.py",
+            "starlette/middleware/cors.py",
+            "starlette/responses.py",
+            "starlette/testclient.py"
+          ]
+        },
+        {
+          "title": "Merge pull request #541 from keakon/master",
+          "gold": [
+            "starlette/middleware/wsgi.py",
+            "starlette/routing.py",
+            "starlette/staticfiles.py"
+          ],
+          "top5": [
+            "starlette/testclient.py",
+            "starlette/requests.py",
+            "starlette/responses.py",
+            "starlette/routing.py",
+            "tests/test_requests.py"
+          ],
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Merge pull request #488 from florimondmanca/fix/startup-error-handling",
+          "gold": [
+            "starlette/routing.py",
+            "starlette/testclient.py"
+          ],
+          "top5": [
+            "starlette/routing.py",
+            "starlette/testclient.py",
+            "starlette/responses.py",
+            "tests/middleware/test_lifespan.py",
+            "tests/test_testclient.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Merge branch 'master' of https://github.com/encode/starlette",
+          "gold": [
+            "starlette/formparsers.py"
+          ],
+          "top5": [
+            "setup.py",
+            "starlette/responses.py",
+            "starlette/middleware/httpsredirect.py",
+            "starlette/testclient.py",
+            "starlette/graphql.py"
+          ]
+        },
+        {
+          "title": "Merge pull request #589 from ciscorn/fix-multipart-encoding",
+          "gold": [
+            "starlette/formparsers.py"
+          ],
+          "top5": [
+            "tests/test_formparsers.py",
+            "starlette/requests.py",
+            "starlette/responses.py",
+            "setup.py",
+            "starlette/testclient.py"
+          ],
+          "hit10": true
+        },
+        {
+          "title": "Merge pull request #562 from jaceksnet/multipart-encoding-fix",
+          "gold": [
+            "starlette/formparsers.py"
+          ],
+          "top5": [
+            "tests/test_formparsers.py",
+            "starlette/requests.py",
+            "starlette/responses.py",
+            "setup.py",
+            "starlette/testclient.py"
+          ],
+          "hit10": true
+        },
+        {
+          "title": "Merge pull request #582 from haizaar/master",
+          "gold": [
+            "starlette/datastructures.py"
+          ],
+          "top5": [
+            "starlette/testclient.py",
+            "starlette/requests.py",
+            "starlette/responses.py",
+            "starlette/routing.py",
+            "tests/test_requests.py"
+          ]
+        },
+        {
+          "title": "Merge pull request #535 from dmontagu/patch-1",
+          "gold": [
+            "starlette/staticfiles.py"
+          ],
+          "top5": [
+            "starlette/schemas.py",
+            "starlette/requests.py",
+            "starlette/middleware/cors.py",
+            "starlette/responses.py",
+            "starlette/testclient.py"
+          ]
+        },
+        {
+          "title": "Merge pull request #576 from blueyed/fix-mypy",
+          "gold": [
+            "starlette/testclient.py"
+          ],
+          "top5": [
+            "starlette/testclient.py",
+            "starlette/requests.py",
+            "starlette/responses.py",
+            "starlette/routing.py",
+            "tests/test_requests.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Merge pull request #572 from encode/tweak-exception-debug-html",
+          "gold": [
+            "starlette/middleware/errors.py"
+          ],
+          "top5": [
+            "starlette/middleware/errors.py",
+            "starlette/responses.py",
+            "starlette/applications.py",
+            "starlette/testclient.py",
+            "starlette/exceptions.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Merge pull request #568 from encode/url-manipulation",
+          "gold": [
+            "starlette/datastructures.py"
+          ],
+          "top5": [
+            "starlette/datastructures.py",
+            "starlette/requests.py",
+            "starlette/testclient.py",
+            "starlette/responses.py",
+            "starlette/routing.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Merge pull request #563 from tiangolo/redirect-with-308",
+          "gold": [
+            "starlette/middleware/httpsredirect.py",
+            "starlette/responses.py"
+          ],
+          "top5": [
+            "starlette/middleware/httpsredirect.py",
+            "starlette/responses.py",
+            "starlette/testclient.py",
+            "tests/middleware/test_https_redirect.py",
+            "starlette/applications.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Merge pull request #557 from encode/request-state-and-scope",
+          "gold": [
+            "starlette/middleware/base.py",
+            "starlette/requests.py"
+          ],
+          "top5": [
+            "starlette/websockets.py",
+            "starlette/requests.py",
+            "starlette/responses.py",
+            "tests/test_requests.py",
+            "starlette/testclient.py"
+          ],
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Merge branch 'persistent-state' of https://github.com/didip/starlette into didip-persistent-state",
+          "gold": [
+            "starlette/requests.py"
+          ],
+          "top5": [
+            "starlette/websockets.py",
+            "starlette/requests.py",
+            "starlette/responses.py",
+            "setup.py",
+            "starlette/testclient.py"
+          ],
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Merge pull request #556 from sirex/json-none",
+          "gold": [
+            "starlette/responses.py"
+          ],
+          "top5": [
+            "starlette/requests.py",
+            "starlette/testclient.py",
+            "starlette/responses.py",
+            "starlette/websockets.py",
+            "tests/test_requests.py"
+          ],
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Merge pull request #544 from marcosschroh/feature/improve-debug-middleware",
+          "gold": [
+            "starlette/middleware/errors.py"
+          ],
+          "top5": [
+            "starlette/middleware/errors.py",
+            "starlette/routing.py",
+            "starlette/applications.py",
+            "starlette/endpoints.py",
+            "starlette/exceptions.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Merge pull request #513 from blueyed/unused-cookie",
+          "gold": [
+            "starlette/middleware/cors.py"
+          ],
+          "top5": [
+            "starlette/responses.py",
+            "starlette/__init__.py",
+            "starlette/requests.py",
+            "tests/test_responses.py",
+            "starlette/middleware/sessions.py"
+          ],
+          "hit10": true
+        },
+        {
+          "title": "Merge pull request #455 from uranusjr/add-py-typed",
+          "gold": [
+            "setup.py"
+          ],
+          "top5": [
+            "setup.py",
+            "starlette/requests.py",
+            "starlette/testclient.py",
+            "starlette/responses.py",
+            "starlette/routing.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Fix CORS allowed origins",
+          "gold": [
+            "starlette/middleware/cors.py"
+          ],
+          "top5": [
+            "starlette/middleware/cors.py",
+            "starlette/responses.py",
+            "tests/middleware/test_cors.py",
+            "starlette/testclient.py",
+            "starlette/endpoints.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Version 0.10.4",
+          "gold": [
+            "starlette/__init__.py"
+          ],
+          "top5": []
+        },
+        {
+          "title": "Merge branch 'master' of https://github.com/encode/starlette",
+          "gold": [
+            "starlette/convertors.py",
+            "starlette/formparsers.py",
+            "starlette/responses.py",
+            "starlette/routing.py",
+            "starlette/staticfiles.py"
+          ],
+          "top5": [
+            "setup.py",
+            "starlette/responses.py",
+            "starlette/middleware/httpsredirect.py",
+            "starlette/testclient.py",
+            "tests/middleware/test_https_redirect.py"
+          ],
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Merge branch 'master' of https://github.com/encode/starlette",
+          "gold": [
+            "setup.py"
+          ],
+          "top5": [
+            "setup.py",
+            "starlette/responses.py",
+            "starlette/middleware/httpsredirect.py",
+            "starlette/testclient.py",
+            "tests/middleware/test_https_redirect.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Merge branch 'master' of https://github.com/encode/starlette",
+          "gold": [
+            "starlette/applications.py",
+            "starlette/datastructures.py",
+            "starlette/routing.py",
+            "starlette/testclient.py"
+          ],
+          "top5": [
+            "setup.py",
+            "starlette/responses.py",
+            "starlette/middleware/httpsredirect.py",
+            "starlette/testclient.py",
+            "tests/middleware/test_https_redirect.py"
+          ],
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Merge branch 'master' of https://github.com/encode/starlette",
+          "gold": [
+            "starlette/middleware/wsgi.py"
+          ],
+          "top5": [
+            "setup.py",
+            "starlette/responses.py",
+            "starlette/middleware/httpsredirect.py",
+            "starlette/testclient.py",
+            "tests/middleware/test_https_redirect.py"
+          ]
+        },
+        {
+          "title": "Merge branch 'master' of https://github.com/encode/starlette",
+          "gold": [
+            "starlette/applications.py",
+            "starlette/testclient.py"
+          ],
+          "top5": [
+            "setup.py",
+            "starlette/responses.py",
+            "starlette/middleware/httpsredirect.py",
+            "starlette/testclient.py",
+            "tests/middleware/test_https_redirect.py"
+          ],
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Merge branch 'master' into mkdocs",
+          "gold": [
+            "starlette/__init__.py",
+            "starlette/app.py",
+            "starlette/routing.py",
+            "starlette/testclient.py"
+          ],
+          "top5": []
+        },
+        {
+          "title": "Merge branch 'master' of https://github.com/encode/starlette",
+          "gold": [
+            "starlette/response.py"
+          ],
+          "top5": [
+            "setup.py",
+            "starlette/datastructures.py",
+            "starlette/testclient.py",
+            "starlette/response.py",
+            "starlette/request.py"
+          ],
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Merge pull request #31 from encode/debug-middleware-improvements",
+          "gold": [
+            "starlette/debug.py"
+          ],
+          "top5": [
+            "starlette/debug.py",
+            "tests/test_debug.py",
+            "starlette/__init__.py",
+            "starlette/testclient.py",
+            "starlette/request.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Merge pull request #28 from gbozee/master",
+          "gold": [
+            "setup.py"
+          ],
+          "top5": [
+            "starlette/request.py",
+            "starlette/testclient.py",
+            "starlette/__init__.py",
+            "tests/test_request.py",
+            "starlette/decorators.py"
+          ]
+        },
+        {
+          "title": "Merge pull request #29 from encode/debug-middleware",
+          "gold": [
+            "starlette/debug.py"
+          ],
+          "top5": [
+            "starlette/testclient.py",
+            "starlette/request.py",
+            "starlette/__init__.py",
+            "tests/test_request.py",
+            "starlette/response.py"
+          ]
+        },
+        {
+          "title": "Merge pull request #26 from encode/raise-disconnect-exception-on-early-disconnect",
+          "gold": [
+            "starlette/__init__.py",
+            "starlette/request.py"
+          ],
+          "top5": [
+            "starlette/request.py",
+            "starlette/__init__.py",
+            "starlette/testclient.py",
+            "tests/test_request.py",
+            "starlette/datastructures.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        }
+      ]
+    },
+    "pallets/click": {
+      "tasks": 40,
+      "hit_rates": {
+        "top1": 0.575,
+        "top5": 0.875,
+        "top10": 0.95
+      },
+      "rows": [
+        {
+          "title": "Add `Parameter.spec` and deprecate `human_readable_name`",
+          "gold": [
+            "src/click/core.py"
+          ],
+          "top5": [
+            "src/click/core.py",
+            "src/click/_compat.py",
+            "src/click/_winconsole.py",
+            "src/click/types.py",
+            "tests/test_options.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Deprecate parameter names that are: not a Python identifier, or a Python Keyword, or not lower-cased",
+          "gold": [
+            "src/click/core.py"
+          ],
+          "top5": [
+            "src/click/core.py",
+            "src/click/decorators.py",
+            "src/click/types.py",
+            "tests/test_options.py",
+            "src/click/exceptions.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Merge stable into main",
+          "gold": [
+            "src/click/core.py",
+            "src/click/types.py",
+            "src/click/utils.py"
+          ],
+          "top5": [
+            "src/click/core.py",
+            "tests/test_utils/test__detect_program_name.py",
+            "tests/test_options.py",
+            "src/click/testing.py",
+            "examples/termui/termui.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Always list all positional arguments",
+          "gold": [
+            "src/click/core.py"
+          ],
+          "top5": [
+            "src/click/core.py",
+            "src/click/parser.py",
+            "src/click/decorators.py",
+            "tests/test_arguments.py",
+            "src/click/formatting.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Fix short help abbreviation",
+          "gold": [
+            "src/click/utils.py"
+          ],
+          "top5": [
+            "src/click/core.py",
+            "src/click/utils.py",
+            "src/click/parser.py",
+            "tests/test_utils/test_make_default_short_help.py",
+            "tests/test_commands.py"
+          ],
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Move common `help` argument from `Option` and `Argument` to `Parameter`",
+          "gold": [
+            "src/click/core.py"
+          ],
+          "top5": [
+            "src/click/exceptions.py",
+            "src/click/core.py",
+            "src/click/decorators.py",
+            "src/click/types.py",
+            "src/click/shell_completion.py"
+          ],
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Make `click.Path` generic on `path_type`",
+          "gold": [
+            "src/click/types.py"
+          ],
+          "top5": [
+            "src/click/types.py",
+            "src/click/core.py",
+            "tests/test_types/test_Path.py",
+            "tests/test_shell_completion.py",
+            "tests/test_termui.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Stable",
+          "gold": [
+            "src/click/_utils.py",
+            "src/click/_winconsole.py",
+            "src/click/core.py",
+            "src/click/termui.py"
+          ],
+          "top5": [
+            "tests/typing/typing_version_option.py",
+            "tests/typing/typing_confirmation_option.py",
+            "tests/typing/typing_options.py",
+            "tests/typing/typing_aliased_group.py",
+            "tests/test_commands.py"
+          ],
+          "hit10": true
+        },
+        {
+          "title": "Add `Option.get_help_spec` to extract the help's left part of an hidden option",
+          "gold": [
+            "src/click/core.py"
+          ],
+          "top5": [
+            "src/click/decorators.py",
+            "src/click/parser.py",
+            "src/click/core.py",
+            "src/click/exceptions.py",
+            "src/click/utils.py"
+          ],
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Fix race condition on `KeyboardInterrupt` in `Command.main()`",
+          "gold": [
+            "src/click/core.py"
+          ],
+          "top5": [
+            "src/click/core.py",
+            "tests/test_utils/test_echo_via_pager.py",
+            "src/click/_termui_impl.py",
+            "src/click/termui.py",
+            "src/click/_winconsole.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Remove unused bindings and constants from `_winconsole`",
+          "gold": [
+            "src/click/_winconsole.py"
+          ],
+          "top5": [
+            "src/click/_compat.py",
+            "src/click/_winconsole.py",
+            "examples/naval/naval.py",
+            "examples/colors/colors.py",
+            "src/click/utils.py"
+          ],
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Fix `copy`, `deepcopy` and `pickle` of `Sentinel` members",
+          "gold": [
+            "src/click/_utils.py"
+          ],
+          "top5": [
+            "src/click/_utils.py",
+            "examples/imagepipe/imagepipe.py",
+            "src/click/testing.py",
+            "examples/repo/repo.py",
+            "tests/test_options.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Add FAQ entry about `edit()` returning immediately",
+          "gold": [
+            "src/click/termui.py"
+          ],
+          "top5": [
+            "src/click/_termui_impl.py",
+            "src/click/termui.py",
+            "examples/termui/termui.py",
+            "tests/test_termui.py",
+            "tests/typing/typing_edit.py"
+          ],
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Add support of `pathlib.Path` to `edit`",
+          "gold": [
+            "src/click/_termui_impl.py",
+            "src/click/termui.py"
+          ],
+          "top5": [
+            "src/click/_termui_impl.py",
+            "tests/test_termui.py",
+            "tests/test_utils/test_open_file.py",
+            "src/click/types.py",
+            "src/click/termui.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Forward all user's parameters set in `PAGER` and improve flag detection",
+          "gold": [
+            "src/click/_termui_impl.py"
+          ],
+          "top5": [
+            "src/click/termui.py",
+            "src/click/_termui_impl.py",
+            "examples/termui/termui.py",
+            "tests/test_utils/test_echo_via_pager.py",
+            "tests/test_termui.py"
+          ],
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Resolve the pager command once, in `_pager_contextmanager`",
+          "gold": [
+            "src/click/_termui_impl.py"
+          ],
+          "top5": [
+            "src/click/_termui_impl.py",
+            "tests/test_termui.py",
+            "src/click/termui.py",
+            "examples/termui/termui.py",
+            "tests/test_utils/test_echo_via_pager.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Refactor pager stream handling",
+          "gold": [
+            "src/click/_compat.py",
+            "src/click/_termui_impl.py"
+          ],
+          "top5": [
+            "src/click/_termui_impl.py",
+            "src/click/termui.py",
+            "examples/termui/termui.py",
+            "tests/test_termui.py",
+            "src/click/utils.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Fix error reporting on Windows when an error is raised in the pager",
+          "gold": [
+            "src/click/_termui_impl.py"
+          ],
+          "top5": [
+            "src/click/_termui_impl.py",
+            "src/click/termui.py",
+            "examples/termui/termui.py",
+            "tests/test_termui.py",
+            "src/click/_compat.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Settles progress bar on its final position",
+          "gold": [
+            "src/click/_termui_impl.py"
+          ],
+          "top5": [
+            "src/click/_termui_impl.py",
+            "examples/termui/termui.py",
+            "tests/test_termui.py",
+            "src/click/termui.py",
+            "tests/test_compat.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Changed `tempfile.NamedTemporaryFile` mode to `w`",
+          "gold": [
+            "src/click/_termui_impl.py"
+          ],
+          "top5": [
+            "src/click/testing.py",
+            "src/click/_termui_impl.py",
+            "tests/test_types.py",
+            "tests/test_testing.py",
+            "tests/test_termui.py"
+          ],
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Sort help args to make them reproducible",
+          "gold": [
+            "src/click/core.py"
+          ],
+          "top5": [
+            "src/click/core.py",
+            "src/click/formatting.py",
+            "src/click/utils.py",
+            "src/click/exceptions.py",
+            "src/click/parser.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Pre-8.5.0 release changelog and doc fixes",
+          "gold": [
+            "src/click/_compat.py",
+            "src/click/core.py",
+            "src/click/shell_completion.py",
+            "src/click/termui.py",
+            "src/click/utils.py"
+          ],
+          "top5": [
+            "tests/test_context.py",
+            "src/click/decorators.py",
+            "src/click/_winconsole.py",
+            "src/click/testing.py",
+            "tests/test_commands.py"
+          ],
+          "hit10": true
+        },
+        {
+          "title": "`click.prompt` typing clarifications / improvements",
+          "gold": [
+            "src/click/termui.py",
+            "src/click/types.py"
+          ],
+          "top5": [
+            "src/click/termui.py",
+            "src/click/core.py",
+            "tests/test_utils/test_prompt.py",
+            "tests/test_termui.py",
+            "tests/test_testing.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Deprecate `isolated_filesystem` and document its limits",
+          "gold": [
+            "src/click/testing.py"
+          ],
+          "top5": [
+            "src/click/testing.py",
+            "tests/test_testing.py",
+            "tests/test_utils/test_open_file.py",
+            "tests/test_basic.py",
+            "tests/test_arguments.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Add built-in PowerShell shell completion support",
+          "gold": [
+            "src/click/shell_completion.py"
+          ],
+          "top5": [
+            "src/click/shell_completion.py",
+            "src/click/core.py",
+            "src/click/types.py",
+            "tests/test_shell_completion.py",
+            "examples/completion/completion.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Streamline option flag management",
+          "gold": [
+            "src/click/core.py"
+          ],
+          "top5": [
+            "src/click/types.py",
+            "src/click/core.py",
+            "src/click/parser.py",
+            "tests/test_options.py",
+            "tests/test_basic.py"
+          ],
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Fix parsing when a parameter is named `help`",
+          "gold": [
+            "src/click/core.py"
+          ],
+          "top5": [
+            "src/click/core.py",
+            "src/click/exceptions.py",
+            "src/click/decorators.py",
+            "src/click/parser.py",
+            "src/click/types.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Merge branch 'main' into fix-help-name-collision",
+          "gold": [
+            "src/click/_compat.py"
+          ],
+          "top5": [
+            "src/click/core.py",
+            "src/click/utils.py",
+            "tests/test_options.py",
+            "src/click/testing.py",
+            "tests/test_utils/test__detect_program_name.py"
+          ]
+        },
+        {
+          "title": "Strip all ANSI sequences",
+          "gold": [
+            "src/click/_compat.py"
+          ],
+          "top5": [
+            "src/click/testing.py",
+            "src/click/_compat.py",
+            "src/click/_termui_impl.py",
+            "src/click/_textwrap.py",
+            "tests/test_compat.py"
+          ],
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Validate `style()` color arguments",
+          "gold": [
+            "src/click/termui.py"
+          ],
+          "top5": [
+            "src/click/termui.py",
+            "examples/validation/validation.py",
+            "examples/colors/colors.py",
+            "src/click/core.py",
+            "examples/termui/termui.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Update documentation following Colorama removal",
+          "gold": [
+            "src/click/termui.py",
+            "src/click/utils.py"
+          ],
+          "top5": [
+            "src/click/utils.py",
+            "src/click/_textwrap.py",
+            "src/click/types.py",
+            "src/click/core.py",
+            "src/click/termui.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Add `@custom_version_option`, freeze `@version_option`",
+          "gold": [
+            "src/click/__init__.py",
+            "src/click/decorators.py"
+          ],
+          "top5": [
+            "tests/test_custom_classes.py",
+            "src/click/shell_completion.py",
+            "tests/test_options.py",
+            "tests/test_shell_completion.py",
+            "tests/test_basic.py"
+          ]
+        },
+        {
+          "title": "Do not trigger a `BytesWarning` under `python -bb`",
+          "gold": [
+            "src/click/types.py"
+          ],
+          "top5": [
+            "tests/test_arguments.py",
+            "tests/test_stream_lifecycle.py",
+            "src/click/_termui_impl.py",
+            "src/click/types.py",
+            "src/click/testing.py"
+          ],
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Strip ANSI from `confirm()` and `prompt()`",
+          "gold": [
+            "src/click/termui.py"
+          ],
+          "top5": [
+            "src/click/termui.py",
+            "tests/test_utils.py",
+            "src/click/core.py",
+            "src/click/testing.py",
+            "tests/test_termui.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Merge remote-tracking branch 'origin/main' into zhihua/powershell",
+          "gold": [
+            "src/click/core.py",
+            "src/click/decorators.py",
+            "src/click/shell_completion.py"
+          ],
+          "top5": [
+            "tests/test_utils.py",
+            "tests/test_shell_completion.py",
+            "src/click/core.py",
+            "tests/test_imports.py",
+            "tests/test_options.py"
+          ],
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Merge branch 'main' into fix-path-byteswarning",
+          "gold": [
+            "src/click/_compat.py",
+            "src/click/core.py",
+            "src/click/shell_completion.py",
+            "src/click/termui.py",
+            "src/click/utils.py"
+          ],
+          "top5": [
+            "src/click/core.py",
+            "tests/test_types.py",
+            "tests/test_utils.py",
+            "src/click/testing.py",
+            "tests/test_options.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Merge remote-tracking branch 'upstream/stable' into merge-stable-into-main",
+          "gold": [
+            "src/click/core.py",
+            "src/click/decorators.py",
+            "src/click/shell_completion.py"
+          ],
+          "top5": [
+            "tests/test_utils.py",
+            "src/click/core.py",
+            "tests/test_imports.py",
+            "tests/test_options.py",
+            "src/click/testing.py"
+          ],
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Optimize `split_arg_string` with `extend(...)` instead of a for loop system.",
+          "gold": [
+            "src/click/shell_completion.py"
+          ],
+          "top5": [
+            "src/click/shell_completion.py",
+            "src/click/parser.py",
+            "src/click/types.py",
+            "tests/test_parser.py",
+            "src/click/utils.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Fix `package_name` resolution when module differs from distribution name",
+          "gold": [
+            "src/click/decorators.py"
+          ],
+          "top5": [
+            "src/click/decorators.py",
+            "src/click/utils.py",
+            "tests/test_utils.py",
+            "src/click/_winconsole.py",
+            "src/click/_compat.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Fix double-bracketing of choices in synopsis",
+          "gold": [
+            "src/click/core.py"
+          ],
+          "top5": [
+            "tests/test_shell_completion.py",
+            "tests/test_termui.py",
+            "tests/test_options.py",
+            "src/click/types.py",
+            "src/click/termui.py"
+          ],
+          "hit10": true
+        }
+      ]
+    },
+    "tiangolo/typer": {
+      "tasks": 14,
+      "hit_rates": {
+        "top1": 0.2857,
+        "top5": 0.7143,
+        "top10": 0.7857
+      },
+      "rows": [
+        {
+          "title": ":memo: :sparkles: :bug: Add docs for CLI parameters with multiple values, with tests and bug fixes",
+          "gold": [
+            "typer/main.py"
+          ],
+          "top5": [
+            "tests/test_tutorial/test_commands/test_one_or_multiple/test_tutorial001.py",
+            "typer/testing.py",
+            "tests/test_tutorial/test_commands/test_one_or_multiple/test_tutorial002.py",
+            "typer/main.py",
+            "typer/completion.py"
+          ],
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": ":memo: Add docs for Callbacks and One or Multiple commands, with docs, tests, bug fixes.",
+          "gold": [
+            "typer/main.py"
+          ],
+          "top5": [
+            "tests/test_tutorial/test_commands/test_name/test_tutorial001.py",
+            "typer/testing.py",
+            "tests/test_tutorial/test_commands/test_index/test_tutorial002.py",
+            "tests/test_tutorial/test_commands/test_index/test_tutorial001.py",
+            "tests/test_tutorial/test_commands/test_options/test_tutorial001.py"
+          ],
+          "hit10": true
+        },
+        {
+          "title": ":sparkles: Add docs for subcommands, examples, tests, bug fixes",
+          "gold": [
+            "typer/__init__.py",
+            "typer/main.py"
+          ],
+          "top5": []
+        },
+        {
+          "title": ":fire: Remove unused code for argument param declarations",
+          "gold": [
+            "typer/main.py"
+          ],
+          "top5": [
+            "typer/main.py",
+            "typer/testing.py",
+            "typer/params.py",
+            "typer/models.py",
+            "typer/completion.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": ":memo: :sparkles: Add colors module and docs for printing and terminating, including tests.",
+          "gold": [
+            "typer/__init__.py",
+            "typer/colors.py"
+          ],
+          "top5": []
+        },
+        {
+          "title": ":recycle: :memo: Refactor docs' structure and add CLI option names",
+          "gold": [
+            "typer/params.py"
+          ],
+          "top5": [
+            "typer/params.py",
+            "typer/testing.py",
+            "typer/models.py",
+            "typer/__init__.py",
+            "tests/test_tutorial/test_options/test_tutorial002.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": ":memo: :sparkles: :heavy_check_mark: CLI parameters: docs, refactor/upgrade, tests.",
+          "gold": [
+            "typer/__init__.py",
+            "typer/main.py",
+            "typer/models.py"
+          ],
+          "top5": [
+            "typer/completion.py",
+            "typer/testing.py",
+            "typer/__init__.py",
+            "typer/main.py",
+            "tests/test_tutorial/test_first_steps/test_tutorial001.py"
+          ],
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": ":white_check_mark: Add tests for completion",
+          "gold": [
+            "typer/completion.py"
+          ],
+          "top5": [
+            "typer/completion.py",
+            "typer/main.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": ":memo: :sparkles: :bug: Commands: docs, examples, tests, and fix",
+          "gold": [
+            "typer/models.py"
+          ],
+          "top5": [
+            "typer/main.py"
+          ]
+        },
+        {
+          "title": ":sparkles: Add docs for CLI Options with tests",
+          "gold": [
+            "typer/completion.py",
+            "typer/main.py",
+            "typer/models.py"
+          ],
+          "top5": [
+            "typer/testing.py",
+            "typer/main.py",
+            "typer/__init__.py",
+            "typer/models.py",
+            "tests/test_tutorial/test_first_steps/test_tutorial001.py"
+          ],
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": ":fire: Clean exports from typer, remove unneeded Click components, add needed ones",
+          "gold": [
+            "typer/__init__.py"
+          ],
+          "top5": [
+            "typer/main.py",
+            "typer/testing.py",
+            "typer/models.py",
+            "typer/__init__.py",
+            "typer/completion.py"
+          ],
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": ":bug: Fix and document extracting help form docstring",
+          "gold": [
+            "typer/completion.py",
+            "typer/main.py"
+          ],
+          "top5": [
+            "tests/test_tutorial/test_first_steps/test_tutorial005.py",
+            "typer/testing.py",
+            "typer/main.py",
+            "typer/__init__.py",
+            "typer/models.py"
+          ],
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": ":white_check_mark: Fix testing, add tests",
+          "gold": [
+            "typer/testing.py"
+          ],
+          "top5": [
+            "typer/testing.py",
+            "tests/test_tutorial/test_first_steps/test_tutorial001.py",
+            "typer/__init__.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": ":sparkles: Add automatic completion options by default, if click-completion is installed",
+          "gold": [
+            "typer/completion.py",
+            "typer/main.py"
+          ],
+          "top5": [
+            "typer/models.py",
+            "typer/main.py",
+            "typer/params.py",
+            "typer/__init__.py",
+            "typer/testing.py"
+          ],
+          "hit5": true,
+          "hit10": true
+        }
+      ]
+    }
+  }
+}
