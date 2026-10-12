@@ -1,0 +1,80 @@
+{
+  "tasks_scored": 128,
+  "target": "fixable gold source file (.py, not docs/tests/scripts)",
+  "variants": {
+    "V_base": {
+      "exact_bonus": 0.0,
+      "test_penalty": 1.0,
+      "path_bonus": 1.5,
+      "defined_bonus": 2.5,
+      "exact_gate": false
+    },
+    "V_exact": {
+      "exact_bonus": 6.0,
+      "test_penalty": 1.0,
+      "path_bonus": 1.5,
+      "defined_bonus": 2.5,
+      "exact_gate": false
+    },
+    "V_exact_src": {
+      "exact_bonus": 6.0,
+      "test_penalty": 0.5,
+      "path_bonus": 1.5,
+      "defined_bonus": 2.5,
+      "exact_gate": false
+    },
+    "V_exact_src_def": {
+      "exact_bonus": 6.0,
+      "test_penalty": 0.5,
+      "path_bonus": 1.0,
+      "defined_bonus": 5.0,
+      "exact_gate": false
+    },
+    "V_gate_src": {
+      "exact_bonus": 6.0,
+      "test_penalty": 0.5,
+      "path_bonus": 1.5,
+      "defined_bonus": 2.5,
+      "exact_gate": true
+    },
+    "V_gate_src_def": {
+      "exact_bonus": 6.0,
+      "test_penalty": 0.5,
+      "path_bonus": 1.5,
+      "defined_bonus": 4.0,
+      "exact_gate": true
+    }
+  },
+  "hit_rates": {
+    "V_base": {
+      "top1": 0.2266,
+      "top5": 0.5469,
+      "top10": 0.6406
+    },
+    "V_exact": {
+      "top1": 0.2578,
+      "top5": 0.5703,
+      "top10": 0.6406
+    },
+    "V_exact_src": {
+      "top1": 0.3984,
+      "top5": 0.6406,
+      "top10": 0.7578
+    },
+    "V_exact_src_def": {
+      "top1": 0.3906,
+      "top5": 0.6719,
+      "top10": 0.7578
+    },
+    "V_gate_src": {
+      "top1": 0.3984,
+      "top5": 0.6406,
+      "top10": 0.7578
+    },
+    "V_gate_src_def": {
+      "top1": 0.3984,
+      "top5": 0.6641,
+      "top10": 0.7578
+    }
+  }
+}
