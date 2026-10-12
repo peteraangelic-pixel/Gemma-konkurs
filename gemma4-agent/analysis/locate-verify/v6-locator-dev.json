@@ -1,0 +1,10 @@
+{
+  "tasks": 128,
+  "hit_rates": {
+    "top1": 0.4766,
+    "top5": 0.7344,
+    "top10": 0.7969
+  },
+  "locator": "gemma4-agent/submission-v6/tools/locate.py",
+  "mode": "dev"
+}

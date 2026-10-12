@@ -1,0 +1,25 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/google/adk-python/refs/heads/main/src/google/adk/agents/config_schemas/AgentConfig.json
+# V6 = V5 with a measured locator-first localization step.
+# V5 was grep-first; the offline lab (LOCALIZATION.md) showed plain first-grep reaches the
+# fixable source file in ~15% of tasks at top-5, while the deterministic locator embedded in
+# prompts/system.md reaches ~73% on the same 129 dev tasks and ~77% on held-out repositories.
+# Everything else from V5 is unchanged: thinking on, 45 calls, always submit a patch, no
+# analyzer/skills/graph tools, no repository-specific hints.
+agent_class: LlmAgent
+name: gemma4_locator_repair
+model: gemma-4-31b-it-qat-w4a16-ct
+description: A time-budgeted software-repair agent that localizes an issue with a measured deterministic locator, makes a minimal source edit, and always submits a patch.
+instruction: !include prompts/system.md
+tools:
+  # Graph tools stay registered so an attempted call cannot break the ADK tool loop,
+  # but the instructions tell the agent not to use them (measured: no benefit).
+  - run_command
+  - read_file
+  - edit_file
+  - write_file
+  - get_status
+  - submit_patch
+  - get_code_neighbors
+  - search_similar_code
+  - get_code_subgraph
+generate_content_config: !include configs/sampling.yaml
