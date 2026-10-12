@@ -29,6 +29,83 @@ DEFAULT_TEMPLATE_REV = "c0256ba"
 DEFAULT_TEMPLATE_PATH = "gemma-agent-benchmark-3543c4f6-20261010-120912.ipynb"
 TASK_SELECTION = {"task_count": 30, "seed": 20261009, "task_id": "fastapi_15588"}
 
+# The review notebook must stay byte-compatible with what run_kaggle_v1_smoke.py pushes,
+# which now records per-task localization diagnostics: which files the agent patch touched,
+# the gold files of that task, and whether the patch touched a fixable gold file. Kaggle
+# never reports per-task failures, so this is the only end-to-end localization evidence.
+DIAGNOSTICS_HELPERS = """
+def _patch_paths(patch_text):
+    paths = []
+    for _line in patch_text.splitlines():
+        if _line.startswith('+++ '):
+            _raw = _line[4:].strip()
+            if _raw.startswith('b/'):
+                _raw = _raw[2:]
+            if _raw and _raw != '/dev/null':
+                paths.append(_raw.split('\\t')[0])
+    return sorted(set(paths))
+
+
+def _is_test_path(path):
+    return '_test' in path or path.startswith('tests/') or '/tests/' in path
+
+
+def _is_fixable_path(path):
+    return (path.endswith(('.py', '.pyi')) and not _is_test_path(path)
+            and not path.startswith(('docs/', 'docs_src/', 'scripts/')))
+
+
+GOLD_BY_TASK = {}
+try:
+    for _line in (DATA_DIR / 'tasks.jsonl').read_text(encoding='utf-8').splitlines():
+        if not _line.strip():
+            continue
+        _row = json.loads(_line)
+        _gold = _patch_paths(_row.get('patch') or '')
+        GOLD_BY_TASK[_row.get('instance_id')] = {
+            'all': _gold,
+            'fixable': [p for p in _gold if _is_fixable_path(p)],
+        }
+    print(f'Diagnostics: gold map loaded for {len(GOLD_BY_TASK)} published tasks')
+except Exception as _exc:
+    print(f'Diagnostics: gold map unavailable ({type(_exc).__name__}: {_exc})')
+
+
+"""
+
+DIAGNOSTICS_LOOP_ANCHOR = "for task_index, task in enumerate(selected_tasks, start=1):"
+DIAGNOSTICS_ROW_ANCHOR = """            'tool_calls': int(result.tool_calls or 0),
+            'duration_seconds': float(result.duration_seconds),
+        }"""
+DIAGNOSTICS_ROW_EXTRA = DIAGNOSTICS_ROW_ANCHOR + """
+        touched = _patch_paths(patch)
+        gold = GOLD_BY_TASK.get(task.instance_id, {})
+        gold_fixable = gold.get('fixable') or gold.get('all') or []
+        row['touched_files'] = touched[:12]
+        row['touched_tests'] = any(_is_test_path(item) for item in touched)
+        row['gold_fixable_files'] = gold_fixable[:12]
+        row['localized'] = bool(set(touched) & set(gold_fixable))"""
+DIAGNOSTICS_SUMMARY_ANCHOR = """        'tasks': per_task_results,
+        'official_submission': False,"""
+DIAGNOSTICS_SUMMARY_EXTRA = """        'tasks': per_task_results,
+        'localization_hits': sum(1 for item in per_task_results if item.get('localized')),
+        'tasks_with_empty_patch': sum(1 for item in per_task_results if item.get('patch_chars', 0) == 0),
+        'tasks_touching_tests': sum(1 for item in per_task_results if item.get('touched_tests')),
+        'official_submission': False,"""
+
+
+def apply_diagnostics(source: str) -> str:
+    """Add the same per-task localization diagnostics the runner injects at run time."""
+    if "GOLD_BY_TASK" in source:
+        return source
+    if DIAGNOSTICS_LOOP_ANCHOR not in source:
+        return source
+    source = source.replace(DIAGNOSTICS_LOOP_ANCHOR, DIAGNOSTICS_HELPERS + DIAGNOSTICS_LOOP_ANCHOR, 1)
+    source = source.replace(DIAGNOSTICS_ROW_ANCHOR, DIAGNOSTICS_ROW_EXTRA, 1)
+    source = source.replace(DIAGNOSTICS_SUMMARY_ANCHOR, DIAGNOSTICS_SUMMARY_EXTRA, 1)
+    return source
+
+
 
 def read_template(args: argparse.Namespace) -> str:
     if args.template is not None:
@@ -88,10 +165,12 @@ def main() -> int:
             "TASK_SELECTION = json.loads(" + json.dumps(json.dumps(TASK_SELECTION)) + ")",
             new_source,
         )
+        new_source = apply_diagnostics(new_source)
         replaced_zip |= count_zip == 1
         replaced_sha |= count_sha == 1
         replaced_selection |= count_selection == 1
-        if count_zip or count_sha or count_selection:
+        diagnostics_added = "GOLD_BY_TASK" in new_source and "GOLD_BY_TASK" not in source
+        if count_zip or count_sha or count_selection or diagnostics_added:
             cell["source"] = new_source.splitlines(keepends=True)
 
     if not (replaced_zip and replaced_sha and replaced_selection):

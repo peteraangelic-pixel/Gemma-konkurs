@@ -449,12 +449,53 @@ def persist_results():
         'repo_counts': repo_counts,
         'task_ids': [item.instance_id for item in selected_tasks],
         'tasks': per_task_results,
+        'localization_hits': sum(1 for item in per_task_results if item.get('localized')),
+        'tasks_with_empty_patch': sum(1 for item in per_task_results if item.get('patch_chars', 0) == 0),
+        'tasks_touching_tests': sum(1 for item in per_task_results if item.get('touched_tests')),
         'official_submission': False,
         'score_scope': 'seeded stratified public development sample; not a leaderboard score',
     }
     result_path.write_text(json.dumps(summary, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
     patch_path.write_text('\n\n'.join(patches), encoding='utf-8')
     return summary
+
+
+
+def _patch_paths(patch_text):
+    paths = []
+    for _line in patch_text.splitlines():
+        if _line.startswith('+++ '):
+            _raw = _line[4:].strip()
+            if _raw.startswith('b/'):
+                _raw = _raw[2:]
+            if _raw and _raw != '/dev/null':
+                paths.append(_raw.split('\t')[0])
+    return sorted(set(paths))
+
+
+def _is_test_path(path):
+    return '_test' in path or path.startswith('tests/') or '/tests/' in path
+
+
+def _is_fixable_path(path):
+    return (path.endswith(('.py', '.pyi')) and not _is_test_path(path)
+            and not path.startswith(('docs/', 'docs_src/', 'scripts/')))
+
+
+GOLD_BY_TASK = {}
+try:
+    for _line in (DATA_DIR / 'tasks.jsonl').read_text(encoding='utf-8').splitlines():
+        if not _line.strip():
+            continue
+        _row = json.loads(_line)
+        _gold = _patch_paths(_row.get('patch') or '')
+        GOLD_BY_TASK[_row.get('instance_id')] = {
+            'all': _gold,
+            'fixable': [p for p in _gold if _is_fixable_path(p)],
+        }
+    print(f'Diagnostics: gold map loaded for {len(GOLD_BY_TASK)} published tasks')
+except Exception as _exc:
+    print(f'Diagnostics: gold map unavailable ({type(_exc).__name__}: {_exc})')
 
 
 for task_index, task in enumerate(selected_tasks, start=1):
@@ -472,6 +513,13 @@ for task_index, task in enumerate(selected_tasks, start=1):
             'tool_calls': int(result.tool_calls or 0),
             'duration_seconds': float(result.duration_seconds),
         }
+        touched = _patch_paths(patch)
+        gold = GOLD_BY_TASK.get(task.instance_id, {})
+        gold_fixable = gold.get('fixable') or gold.get('all') or []
+        row['touched_files'] = touched[:12]
+        row['touched_tests'] = any(_is_test_path(item) for item in touched)
+        row['gold_fixable_files'] = gold_fixable[:12]
+        row['localized'] = bool(set(touched) & set(gold_fixable))
         if patch:
             patches.append(f"===== {task.instance_id} | resolved={row['resolved']} | {len(patch)} chars =====\n{patch}")
     except Exception as exc:
