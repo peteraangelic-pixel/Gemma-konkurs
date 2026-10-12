@@ -76,10 +76,12 @@ ten kod, który jedzie w `locator.py`).
 | encode/starlette | 40 | 37.5 % | 62.5 % | 70.0 % |
 | pallets/click | 40 | 57.5 % | 87.5 % | 95.0 % |
 | tiangolo/typer | 14 | 28.6 % | 71.4 % | 78.6 % |
-| **razem** | **94** | **44.7 %** | **74.5 %** | **81.9 %** |
+| pydantic/pydantic | 14 | 28.6 % | 50.0 % | 64.3 % |
+| **razem** | **108** | **42.6 %** | **71.3 %** | **79.6 %** |
 
-Wynik na repozytoriach, których procedura nigdy nie widziała, jest **równy lub lepszy** od wyniku
-w zbiorze deweloperskim (68.8 % top-5) — czyli ranking nie jest dopasowany do czterech repo z V1–V4.
+Na repozytoriach, których procedura nigdy nie widziała, wynik jest **równy lub lepszy** od wyniku
+w zbiorze deweloperskim (68.8 % top-5), z uczciwym rozrzutem: `pydantic` (duży, wielomodułowy) daje
+50 %, `click` 87.5 % — czyli ranking nie jest dopasowany do czterech repo z V1–V4.
 To jest dokładnie ten test, którego brakowało przy 0.03: „czy to, co poprawiamy, przenosi się na
 repozytoria, których nie znamy". Nadal nie jest to gwarancja wyniku: pozostaje jakość edycji,
 budżet 5.25 min i weryfikacja.

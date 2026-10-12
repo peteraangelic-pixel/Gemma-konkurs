@@ -43,9 +43,21 @@ def ensure_repo(repo: str) -> Path:
     return local
 
 
+def default_ref(repo_dir: Path) -> str:
+    """Walk the default branch, not the detached HEAD left by the previous iteration."""
+    for ref in ("origin/HEAD", "origin/main", "origin/master"):
+        try:
+            git(repo_dir, "rev-parse", "--verify", ref)
+            return ref
+        except subprocess.CalledProcessError:
+            continue
+    return "HEAD"
+
+
 def candidate_tasks(repo_dir: Path, limit: int) -> list[dict]:
     """Merged PRs that look like SWE tasks: a title and 1-5 changed source files."""
-    out = git(repo_dir, "log", "--merges", "-n", str(limit * 6), "--format=%H%x1f%P%x1f%s")
+    ref = default_ref(repo_dir)
+    out = git(repo_dir, "log", ref, "--merges", "-n", str(limit * 6), "--format=%H%x1f%P%x1f%s")
     tasks: list[dict] = []
     for line in out.splitlines():
         parts = line.split("\x1f")

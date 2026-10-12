@@ -3,13 +3,14 @@
     "repos": [
       "encode/starlette",
       "pallets/click",
-      "tiangolo/typer"
+      "tiangolo/typer",
+      "pydantic/pydantic"
     ],
-    "tasks_scored": 94,
+    "tasks_scored": 108,
     "aggregate_hit_rates": {
-      "top1": 0.4468,
-      "top5": 0.7447,
-      "top10": 0.8191
+      "top1": 0.4259,
+      "top5": 0.713,
+      "top10": 0.7963
     },
     "note": "issue text = PR title only; target = source .py changed by the merge; repos are outside the dev set, so this measures transfer, not tuning.",
     "per_repo": {
@@ -35,6 +36,14 @@
           "top1": 0.2857,
           "top5": 0.7143,
           "top10": 0.7857
+        }
+      },
+      "pydantic/pydantic": {
+        "tasks": 14,
+        "hit_rates": {
+          "top1": 0.2857,
+          "top5": 0.5,
+          "top10": 0.6429
         }
       }
     }
@@ -1497,6 +1506,228 @@
             "typer/testing.py"
           ],
           "hit5": true,
+          "hit10": true
+        }
+      ]
+    },
+    "pydantic/pydantic": {
+      "tasks": 14,
+      "hit_rates": {
+        "top1": 0.2857,
+        "top5": 0.5,
+        "top10": 0.6429
+      },
+      "rows": [
+        {
+          "title": "Merge pull request pydantic/pydantic-core#8 from samuelcolvin/config",
+          "gold": [
+            "demo.py",
+            "pydantic_core/__init__.py"
+          ],
+          "top5": [
+            "setup.py",
+            "pydantic_core/__init__.py",
+            "benchmarks/run.py",
+            "pydantic_core/_pydantic_core.pyi",
+            "demo.py"
+          ],
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Merge pull request pydantic/pydantic-core#6 from samuelcolvin/errors",
+          "gold": [
+            "demo.py"
+          ],
+          "top5": [
+            "benchmarks/run.py",
+            "pydantic_core/__init__.py",
+            "setup.py",
+            "pydantic_core/_pydantic_core.pyi",
+            "demo.py"
+          ],
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Merge pull request pydantic/pydantic-core#5 from samuelcolvin/rearranging-validators",
+          "gold": [
+            "demo.py"
+          ],
+          "top5": [
+            "setup.py",
+            "pydantic_core/__init__.py",
+            "benchmarks/run.py",
+            "pydantic_core/_pydantic_core.pyi",
+            "tests/test_main.py"
+          ]
+        },
+        {
+          "title": "Merge pull request pydantic/pydantic-core#1 from samuelcolvin/benchmarks",
+          "gold": [
+            "setup.py"
+          ],
+          "top5": [
+            "setup.py",
+            "pydantic_core/__init__.py",
+            "pydantic_core/_pydantic_core.pyi",
+            "tests/test_main.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Merge pull request #720 from samuelcolvin/remove-deprecated-code",
+          "gold": [
+            "pydantic/fields.py",
+            "pydantic/main.py"
+          ],
+          "top5": [
+            "benchmarks/run.py",
+            "pydantic/__init__.py",
+            "setup.py",
+            "pydantic/env_settings.py",
+            "tests/test_settings.py"
+          ],
+          "hit10": true
+        },
+        {
+          "title": "Merge pull request #719 from samuelcolvin/v1-prep",
+          "gold": [
+            "pydantic/version.py"
+          ],
+          "top5": [
+            "pydantic/fields.py",
+            "pydantic/__init__.py",
+            "setup.py",
+            "pydantic/env_settings.py",
+            "tests/test_settings.py"
+          ]
+        },
+        {
+          "title": "Merge pull request #663 from tiangolo/schema-extra",
+          "gold": [
+            "pydantic/main.py",
+            "pydantic/schema.py"
+          ],
+          "top5": [
+            "pydantic/main.py",
+            "pydantic/__init__.py",
+            "pydantic/schema.py",
+            "pydantic/fields.py",
+            "tests/test_main.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Merge pull request #706 from koxudaxi/support_forwardred_in_python36",
+          "gold": [
+            "pydantic/main.py",
+            "pydantic/utils.py"
+          ],
+          "top5": [
+            "tests/test_settings.py",
+            "pydantic/__init__.py"
+          ]
+        },
+        {
+          "title": "Merge remote-tracking branch 'upstream/master' into support_forwardred_in_python36",
+          "gold": [
+            "pydantic/dataclasses.py",
+            "pydantic/error_wrappers.py",
+            "pydantic/main.py"
+          ],
+          "top5": [
+            "pydantic/datetime_parse.py",
+            "pydantic/__init__.py",
+            "pydantic/class_validators.py",
+            "benchmarks/run.py",
+            "benchmarks/test_pydantic.py"
+          ]
+        },
+        {
+          "title": "Merge pull request #712 from MrMrRobat/__dict__-instead-of-__values__",
+          "gold": [
+            "pydantic/main.py"
+          ],
+          "top5": [
+            "pydantic/utils.py",
+            "pydantic/__init__.py",
+            "pydantic/env_settings.py",
+            "tests/test_settings.py",
+            "pydantic/main.py"
+          ],
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Merge branch 'master' into __dict__-instead-of-__values__",
+          "gold": [
+            "pydantic/dataclasses.py",
+            "pydantic/error_wrappers.py",
+            "pydantic/main.py"
+          ],
+          "top5": [
+            "pydantic/main.py",
+            "pydantic/__init__.py",
+            "pydantic/utils.py",
+            "pydantic/env_settings.py",
+            "pydantic/class_validators.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Merge pull request #676 from dmontagu/type-in-validation-error",
+          "gold": [
+            "pydantic/dataclasses.py",
+            "pydantic/error_wrappers.py",
+            "pydantic/main.py"
+          ],
+          "top5": [
+            "pydantic/error_wrappers.py",
+            "pydantic/__init__.py",
+            "pydantic/dataclasses.py",
+            "pydantic/schema.py",
+            "tests/test_types.py"
+          ],
+          "hit1": true,
+          "hit5": true,
+          "hit10": true
+        },
+        {
+          "title": "Merge branch 'master' into type-in-validation-error",
+          "gold": [
+            "pydantic/errors.py",
+            "pydantic/validators.py",
+            "pydantic/version.py"
+          ],
+          "top5": [
+            "pydantic/error_wrappers.py",
+            "pydantic/__init__.py",
+            "pydantic/datetime_parse.py",
+            "pydantic/schema.py",
+            "pydantic/class_validators.py"
+          ]
+        },
+        {
+          "title": "Merge pull request #5 from samuelcolvin/recursive-fields",
+          "gold": [
+            "pydantic/exceptions.py",
+            "pydantic/fields.py",
+            "pydantic/validators.py"
+          ],
+          "top5": [
+            "pydantic/main.py",
+            "pydantic/__init__.py",
+            "tests/test_main.py",
+            "tests/test_complex.py",
+            "setup.py"
+          ],
           "hit10": true
         }
       ]
