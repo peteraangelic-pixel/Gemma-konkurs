@@ -110,11 +110,17 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git pull --rebase --autostash origin "$GITHUB_REF_NAME" || true
-          if [ -n "$(git status --porcelain gemma4-agent/kaggle_results/v6-benchmark/run.json gemma4-agent/kaggle_results/v6-benchmark/agent_benchmark_result.json)" ]; then
-            git add gemma4-agent/kaggle_results/v6-benchmark/run.json gemma4-agent/kaggle_results/v6-benchmark/agent_benchmark_result.json
-            git commit -m "chore(gemma): record V6 public benchmark [skip ci]"
-            git push origin "HEAD:${GITHUB_REF_NAME}"
-          else
+          git fetch origin "$GITHUB_REF_NAME"
+          # Rebase-free (the V6.2 run failed here while other commits were landing on the
+          # branch): keep the worktree, move the branch pointer to the remote tip, then commit
+          # only the result files.
+          git reset --soft "origin/$GITHUB_REF_NAME"
+          git add gemma4-agent/kaggle_results/v6-benchmark/run.json                   gemma4-agent/kaggle_results/v6-benchmark/agent_benchmark_result.json                   gemma4-agent/kaggle_results/screening_history.md
+          if [ -z "$(git diff --cached --name-only)" ]; then
             echo "No benchmark result files were produced."
+            exit 0
           fi
+          python gemma4-agent/tools/compare_screenings.py || true
+          git add gemma4-agent/kaggle_results/screening_history.md || true
+          git commit -m "chore(gemma): record V6 public benchmark [skip ci]"
+          git push origin "HEAD:${GITHUB_REF_NAME}"

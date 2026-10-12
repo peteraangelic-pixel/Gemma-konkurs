@@ -1,0 +1,170 @@
+name: Gemma V6.2 fetch benchmark results
+
+# Downloads the output of the ALREADY FINISHED V6.2 benchmark kernel through the Kaggle API.
+# This runs no GPU work and creates no competition submission: `kaggle kernels output` only
+# transfers files the kernel produced. Needed because the V6.2 run completed its benchmark but
+# its commit step failed, so the results never reached the branch.
+#
+# Nothing runs until gemma4-agent/kaggle_smoke/v6-fetch-results.trigger is pushed.
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - arena/c4eeb067-gemma-konkurs
+    paths:
+      - gemma4-agent/kaggle_smoke/v6-fetch-results.trigger
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gemma-v62-fetch-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  # first 8 hex chars of the V6.2 archive SHA-256, which the benchmark kernel slug embeds
+  V62_SHA_PREFIX: 8c1ea5b7
+  V62_SHA_FULL: 8c1ea5b71a61b4d58a6b023596761abb9af37908af6d0ef441347353a2f860b8
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout session branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Kaggle CLI
+        run: python -m pip install --disable-pip-version-check --quiet kaggle
+
+      - name: Configure Kaggle credentials
+        env:
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "$KAGGLE_API_TOKEN" ]; then
+            echo "Repository Actions secret KAGGLE_API_TOKEN is missing."
+            exit 1
+          fi
+          mkdir -p "$HOME/.kaggle"
+          printf '%s' "$KAGGLE_API_TOKEN" | tr -d '\r\n' > "$HOME/.kaggle/access_token"
+          chmod 600 "$HOME/.kaggle/access_token"
+          echo "Kaggle CLI configured; token value was not logged."
+
+      - name: Locate the finished V6.2 benchmark kernel
+        id: locate
+        env:
+          KAGGLE_USERNAME: petersharps
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import csv, io, os, subprocess, sys
+          prefix = os.environ["V62_SHA_PREFIX"]
+          completed = subprocess.run(
+              [sys.executable, "-m", "kaggle", "kernels", "list", "--mine",
+               "--format", "csv", "--page-size", "100"],
+              capture_output=True, text=True, timeout=300, check=True)
+          rows = list(csv.DictReader(io.StringIO(completed.stdout)))
+          if not rows:
+              print("kaggle kernels list returned nothing:", completed.stdout[:500], completed.stderr[:500])
+              raise SystemExit(1)
+          for row in rows[:5]:
+              print("sample row:", {k: row[k] for k in list(row)[:4]})
+          matches = [r for r in rows if f"gemma-agent-benchmark-{prefix}" in (r.get("ref") or "")]
+          if not matches:
+              print("no kernel for prefix", prefix, "- newest benchmarks:")
+              for r in rows[:10]:
+                  print("   ", r.get("ref"), r.get("lastRunTime"))
+              raise SystemExit(1)
+          def sort_key(row):
+              return row.get("lastRunTime") or ""
+          matches.sort(key=sort_key)
+          chosen = matches[-1]
+          print("chosen kernel:", chosen.get("ref"), chosen.get("lastRunTime"), chosen.get("title"))
+          with open(os.environ["GITHUB_OUTPUT"], "a") as handle:
+              handle.write("kernel_ref=" + chosen["ref"] + "\n")
+          PY
+
+      - name: Download kernel output (read-only transfer, no GPU work)
+        env:
+          KAGGLE_USERNAME: petersharps
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/v62-out && mkdir -p /tmp/v62-out
+          python -m kaggle kernels output "${{ steps.locate.outputs.kernel_ref }}" \
+            --path /tmp/v62-out --force
+          echo "Downloaded files:"
+          find /tmp/v62-out -type f | head -30
+
+      - name: Extract the two result files and verify the archive hash
+        id: extract
+        run: |
+          set -euo pipefail
+          OUT=gemma4-agent/kaggle_results/v6-benchmark
+          mkdir -p "$OUT"
+          RESULT=$(find /tmp/v62-out -name agent_benchmark_result.json | head -1)
+          RUNJSON=$(find /tmp/v62-out -name run.json | head -1)
+          if [ -z "$RESULT" ] || [ -z "$RUNJSON" ]; then
+            echo "Kernel output does not contain both result files; listing everything:"
+            find /tmp/v62-out -type f | head -50
+            exit 1
+          fi
+          cp "$RESULT" "$OUT/agent_benchmark_result.json"
+          cp "$RUNJSON" "$OUT/run.json"
+          python - <<'PY'
+          import json, os
+          result = json.load(open('gemma4-agent/kaggle_results/v6-benchmark/agent_benchmark_result.json'))
+          run = json.load(open('gemma4-agent/kaggle_results/v6-benchmark/run.json'))
+          sha = result.get('submission_sha256') or run.get('submission_sha256')
+          expected = os.environ['V62_SHA_FULL']
+          print('submission_sha256:', sha)
+          print('resolved:', result.get('resolved_count'), '/', len(result.get('tasks') or []))
+          print('localization_hits:', result.get('localization_hits'))
+          print('tasks_with_empty_patch:', result.get('tasks_with_empty_patch'))
+          print('tasks_touching_tests:', result.get('tasks_touching_tests'))
+          if sha != expected:
+              raise SystemExit(f'Hash mismatch: kernel output is not the V6.2 archive ({sha} != {expected})')
+          for row in result.get('tasks') or []:
+              print(row.get('task_id'), row.get('resolved'), row.get('patch_chars'),
+                    (row.get('touched_files') or [])[:3])
+          PY
+
+      - name: Rewrite the screening comparison with the fetched results
+        run: python gemma4-agent/tools/compare_screenings.py
+
+      - name: Commit the fetched results to this branch
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin "$GITHUB_REF_NAME"
+          # Rebase-free: keep the worktree, move the branch pointer to the remote tip, then
+          # commit only the result files. The previous version used 'git pull --rebase --autostash'
+          # and failed while other commits were landing on the branch.
+          git reset --soft "origin/$GITHUB_REF_NAME"
+          git add gemma4-agent/kaggle_results/v6-benchmark/agent_benchmark_result.json \
+                  gemma4-agent/kaggle_results/v6-benchmark/run.json \
+                  gemma4-agent/kaggle_results/screening_history.md
+          if [ -z "$(git diff --cached --name-only)" ]; then
+            echo "Results already recorded on the branch; nothing to commit."
+            exit 0
+          fi
+          git commit -m "chore(gemma): record fetched V6.2 public benchmark [skip ci]"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
+
+      - name: Upload raw kernel output for inspection
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gemma-v62-kernel-output-${{ github.run_id }}
+          path: /tmp/v62-out
+          if-no-files-found: warn
+          retention-days: 3

@@ -1,30 +1,58 @@
 # Historia screeningów: co każdy wynik zmienił
 
-## Screeningi prywatne (te same 30 zadań i seed 20261009)
+Te same 30 zadań i seed 20261009 w każdym przebiegu. Kolumny diagnostyczne istnieją tylko
+dla przebiegów po dodaniu diagnostyki per zadanie (V6.1, V6.2).
 
-| kandydat | rozwiązane | puste patche | śmierci na zegarze (≥315 s) |
-| --- | --- | --- | --- |
-| V3 | 11/30 | 6/30 | 16/30 |
-| V4 | 11/30 | 6/30 | 12/30 |
-| V5 | 10/30 | 6/30 | 9/30 |
-| V6.1 | 6/30 | 7/30 | 17/30 |
+| kandydat | rozwiązane | puste drzewa (zero edycji) | śmierci na zegarze | zadania z plikami-śmieciami | w tym TYLKO śmieci | trafienia lokalizatora | średni czas |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| V3 | **11/30** | 6 | 16 | 0 | 0 | — | 261.3 s |
+| V4 | **11/30** | 6 | 12 | 0 | 0 | — | 233.8 s |
+| V5 | **10/30** | 6 | 9 | 0 | 0 | — | 232.7 s |
+| V6.1 | **6/30** | 7 | 17 | 9 | 7 | 15/30 | 275.4 s |
+| V6.2 | **6/30** | 7 | 17 | 9 | 7 | 15/30 | 275.4 s |
 
-- **V5 = 10/30**, CI95 [19.2 %, 51.2 %] — remis z V4 (11/30); mechanizm porażki: 6 pustych
-  diffów, 5 z nich zginęło na zegarze. Analiza: `kaggle_results/v5-benchmark/analysis.md`.
-- **V6.1 = 6/30** — regresja wprowadzona przez okablowanie lokalizatora (agent zapisywał
-  `issue.txt`/`locate.py` do `/workspace`, więc 9/30 diffów to śmieci, 7 bez żadnej edycji kodu;
-  śmierci na zegarze wzrosły do 17/30). Analiza: `kaggle_results/v6-1-benchmark/analysis.md`.
-- **V6.2** (w toku) usuwa **wszystkie** zapisy `write_file` (heredoc do `/tmp` + czytanie issue
-  ze stdin), dodaje obowiązkowy strażnik `git status --porcelain` przed submisją, obniża limit
-  wywołań 45 → 30 i ustawia twarde deadline'y edycji. Artefakt: `submission-v6.zip`,
-  SHA-256 `8c1ea5b71a61b4d58a6b023596761abb9af37908af6d0ef441347353a2f860b8`.
+## Zmiany statusu między kolejnymi kandydatami
 
-**Korekta ważnej hipotezy:** sama śmierć na zegarze (≥315 s) **nie** jest fatalna — V3 miał
-16/30 takich sesji i rozwiązał 11/30, bo harness ocenia diff **drzewa roboczego**, także gdy
-sesja padnie przed `submit_patch()`. Fatalna jest śmierć **bez użytecznej edycji na dysku**:
-V6.1 miał 7 takich zadań („patch" = pliki robocze) i rozwiązał 6/30. Dlatego reguła V6.2 to nie
-„mniej czytać", a „**edycja na dysku najpóźniej w 8. wywołaniu**, reszta jest opcjonalna".
+- V3 → V4: +0 (—), -0 (—)
+- V4 → V5: +1 (rich_2725), -2 (fastapi_14851, fastapi_14873)
+- V5 → V6.1: +0 (—), -4 (rich_3043, rich_3518, rich_3882, rich_3894)
+- V6.1 → V6.2: +0 (—), -0 (—)
 
-Wniosek metodologiczny: **publiczny screening 30 zadań nie przewidzi wyniku na ukrytym zbiorze**
-(przy 0.03 mieliśmy 10-11/30), ale z pełną diagnostyką per zadanie niezawodnie wskazuje
-mechanizmy porażek — czego Kaggle nie raportuje wcale.
+### V6.1: zadania z plikami-śmieciami w diffie
+
+- wszystkie: rich_3934, rich_3894, rich_3043, fastapi_14873, fastapi_15588, fastapi_14459, fastapi_14262, fastapi_14482, fastapi_15745
+- **bez żadnej edycji kodu: rich_3934, rich_3894, fastapi_14873, fastapi_15588, fastapi_14459, fastapi_14482, fastapi_15745**
+
+### V6.2: zadania z plikami-śmieciami w diffie
+
+- wszystkie: rich_3934, rich_3894, rich_3043, fastapi_14873, fastapi_15588, fastapi_14459, fastapi_14262, fastapi_14482, fastapi_15745
+- **bez żadnej edycji kodu: rich_3934, rich_3894, fastapi_14873, fastapi_15588, fastapi_14459, fastapi_14482, fastapi_15745**
+
+### V3: puste drzewa (6)
+
+- fastapi_14851, rich_3105, fastapi_14186, requests_6757, fastapi_14262, fastapi_15745
+
+### V4: puste drzewa (6)
+
+- fastapi_14851, rich_3105, fastapi_15030, fastapi_14186, requests_6757, fastapi_15745
+
+### V5: puste drzewa (6)
+
+- rich_3934, fastapi_14851, fastapi_14266, rich_3105, fastapi_14873, fastapi_15745
+
+### V6.1: puste drzewa (7)
+
+- fastapi_14851, fastapi_14266, rich_3518, rich_3105, fastapi_14186, rich_3882, requests_6757
+
+### V6.2: puste drzewa (7)
+
+- fastapi_14851, fastapi_14266, rich_3518, rich_3105, fastapi_14186, rich_3882, requests_6757
+
+## Reguły interpretacji (wyuczone na tych przebiegach)
+
+1. **Śmierć na zegarze nie przekreśla zadania** — oceniany jest diff drzewa roboczego, także gdy
+   sesja padnie przed `submit_patch()` (dowód: V3 miał 16/30 takich sesji i 11/30 rozwiązanych).
+2. **Przekreśla ją brak użytecznej edycji** — V5 (6 pustych drzew) i V6.1 (7 drzew bez edycji kodu,
+   bo diff wypełniły pliki robocze) to dwa różne objawy tej samej przyczyny.
+3. **Publiczny screening 30 zadań nie przewiduje ukrytego wyniku** (V3/V4/V5: 10–11/30 przy
+   oficjalnym 0.03), ale z diagnostyką per zadanie niezawodnie wskazuje mechanizmy porażek.
