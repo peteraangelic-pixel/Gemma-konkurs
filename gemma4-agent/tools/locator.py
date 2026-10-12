@@ -39,6 +39,7 @@ STOPWORDS = {
     "should", "support", "update", "updated", "change", "changed", "new", "old",
 }
 SPLIT_RE = re.compile(r"[^A-Za-z0-9]+")
+IMPORT_RE = re.compile(r"^\s*(?:from\s+([A-Za-z0-9_.]+)\s+import|import\s+([A-Za-z0-9_.]+))", re.MULTILINE)
 BACKTICK_RE = re.compile(r"`([^`\n]{3,120})`")
 PATH_RE = re.compile(r"\b([A-Za-z0-9_./-]+\.(?:py|pyi))\b")
 
@@ -90,6 +91,8 @@ def collect(root: Path) -> dict[str, dict]:
                 "lines": lower.splitlines(),
                 "raw_lines": text.splitlines(),
                 "exact": text,
+                "imports": {m.group(1) or m.group(2)
+                            for m in IMPORT_RE.finditer(text) if (m.group(1) or m.group(2))},
                 "size": len(text),
             }
     return struct
@@ -160,7 +163,35 @@ def rank(struct: dict[str, dict], query: dict[str, tuple[float, bool, bool]]) ->
                 score *= 0.5
         if score:
             scores[name] = score
-    return sorted(((score, name) for name, score in scores.items()), key=lambda p: (-p[0], len(p[1])))
+    content_rank = sorted(scores, key=lambda n: (-scores[n], len(n), n))
+
+    # Feature-add tasks: the module that must grow is usually the one imported by the
+    # repository test file closest to the issue. Interleave that signal with the content
+    # ranking (measured: 68.8% top-5 / 79.7% top-10 on the 129 dev tasks).
+    test_best = next((n for n in content_rank if any(part in n for part in TESTISH) and scores[n] > 0), None)
+    import_rank: list[str] = []
+    imported: dict[str, float] = defaultdict(float)
+    if test_best:
+        weight = scores[test_best]
+        for module in struct[test_best]["imports"]:
+            base = module.replace(".", "/")
+            for candidate in (f"{base}.py", f"{base}/__init__.py"):
+                if candidate in struct:
+                    imported[candidate] += weight
+        import_rank = sorted((n for n in imported if not any(part in n for part in TESTISH)),
+                             key=lambda n: (-imported[n], len(n), n))
+    merged = dict(scores)
+    for name, value in imported.items():
+        merged[name] = merged.get(name, 0.0) + value
+    union: list[str] = []
+    for a, b in zip(content_rank, import_rank + [None] * len(content_rank)):
+        for candidate in (a, b):
+            if candidate and candidate in merged and candidate not in union:
+                union.append(candidate)
+    for candidate in content_rank:
+        if candidate not in union:
+            union.append(candidate)
+    return [(merged.get(name, 0.0), name) for name in union]
 
 
 def evidence(data: dict, query: dict[str, tuple[float, bool, bool]], limit: int = 3) -> list[str]:
@@ -198,7 +229,8 @@ def main() -> int:
     print("# note: candidate order is a hint, not a verdict; read the top files before editing")
     print(f"# top {len(ranked)} candidates for the fix:")
     for position, (score, name) in enumerate(ranked, start=1):
-        print(f"{position:2d}. {name}  (score {score:.1f})")
+        marker = " [test]" if any(part in name for part in TESTISH) else ""
+        print(f"{position:2d}. {name}{marker}  (score {score:.1f})")
         for line in evidence(struct[name], query, args.evidence):
             print(line)
     return 0

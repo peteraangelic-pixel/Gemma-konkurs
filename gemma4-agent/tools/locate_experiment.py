@@ -15,6 +15,7 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import re
 import subprocess
 import sys
 from collections import Counter, defaultdict
@@ -40,8 +41,26 @@ def structures(corpus: dict[str, str]) -> dict[str, dict]:
             "defined": set(subtokens(" ".join(
                 __import__("re").findall(r"(?:def|class)\s+([A-Za-z_][A-Za-z0-9_]*)", text)))),
             "exact": text,
+            "imports": _imports(text),
         }
     return struct
+
+
+IMPORT_RE = re.compile(r"^\s*(?:from\s+([A-Za-z0-9_.]+)\s+import|import\s+([A-Za-z0-9_.]+))", re.MULTILINE)
+
+
+def _imports(text: str) -> set[str]:
+    found: set[str] = set()
+    for match in IMPORT_RE.finditer(text):
+        module = match.group(1) or match.group(2) or ""
+        if module:
+            found.add(module)
+    return found
+
+
+def module_to_paths(module: str) -> list[str]:
+    base = module.replace(".", "/")
+    return [f"{base}.py", f"{base}/__init__.py"]
 
 
 def df_table(struct: dict[str, dict]) -> Counter:
@@ -75,7 +94,8 @@ def query_terms(statement: str, anchors: list[str]) -> dict[str, tuple[float, bo
 
 
 def score_variant(struct, query, df, n_docs, doc_len, avg_len, *, exact_bonus, test_penalty,
-                  path_bonus, defined_bonus, exact_gate):
+                  path_bonus, defined_bonus, exact_gate, import_boost=0.0,
+                  union_boost=0.0, union_top1_only=0.0):
     k1, b = 1.2, 0.75
     exacts = {term for term, (_, is_exact) in query.items() if is_exact}
     scores = defaultdict(float)
@@ -101,12 +121,72 @@ def score_variant(struct, query, df, n_docs, doc_len, avg_len, *, exact_bonus, t
             score *= test_penalty
         if score:
             scores[name] = score
+    if import_boost:
+        scores = defaultdict(float, propagate_imports(struct, dict(scores), import_boost=import_boost))
+    if union_boost or union_top1_only:
+        # propagate only from the single best-matching test file, then interleave the two
+        # rankings so the shortlist keeps both the content and the import signal
+        content_rank = sorted(scores, key=lambda n: (-scores[n], len(n), n))
+        test_best = next((n for n in content_rank if any(part in n for part in TESTISH)), None)
+        source_only = {n: v for n, v in scores.items() if not any(part in n for part in TESTISH)}
+        imported = defaultdict(float)
+        if test_best:
+            imported = defaultdict(float, propagate_imports(
+                struct, {test_best: union_top1_only or scores[test_best] * union_boost},
+                import_boost=1.0 / max(1e-9, scores[test_best]) if union_top1_only == 0 else 1.0))
+        import_rank = sorted((n for n in imported if not any(part in n for part in TESTISH)),
+                             key=lambda n: (-imported[n], len(n), n))
+        merged = dict(source_only)
+        for name, value in imported.items():
+            if name in merged:
+                merged[name] += value
+        union_order = []
+        for a, b in zip(content_rank, import_rank + [None] * len(content_rank)):
+            for candidate in (a, b):
+                if candidate and candidate not in union_order and candidate in merged:
+                    union_order.append(candidate)
+        for candidate in content_rank:
+            if candidate not in union_order:
+                union_order.append(candidate)
+        scores = defaultdict(float, merged)
+        ranked_order = union_order
+    else:
+        ranked_order = None
     if exact_gate:
         gated = {n: s for n, s in scores.items()
                  if any(lit in struct[n]["exact"].lower() for lit in exacts)} if exacts else scores
         if gated:
             scores = gated
+    if ranked_order is not None:
+        return ranked_order
     return sorted(scores, key=lambda n: (-scores[n], len(n), n))
+
+
+def propagate_imports(struct, base_scores, *, import_boost: float, test_only: bool = True) -> dict[str, float]:
+    """Hidden tests import the module under test; repo tests are the visible proxy for that.
+
+    For each test file that scores well, push part of its score onto the modules it imports,
+    which is how a *source* file gets surfaced for feature-add tasks where the new module
+    does not exist yet at the base commit.
+    """
+    scores = dict(base_scores)
+    plain = lambda n: [p for p in struct if p == n]  # noqa: E731
+    index = {name: name for name in struct}
+    for name, data in struct.items():
+        is_test = any(part in name for part in TESTISH)
+        if test_only and not is_test:
+            continue
+        weight = base_scores.get(name, 0.0)
+        if weight <= 0:
+            continue
+        for module in data.get("imports", ()):  # type: ignore[attr-defined]
+            for candidate in module_to_paths(module):
+                if candidate in struct:
+                    scores[candidate] = scores.get(candidate, 0.0) + import_boost * weight
+                elif candidate.removesuffix("/__init__.py") in index:
+                    target = candidate.removesuffix("/__init__.py")
+                    scores[target] = scores.get(target, 0.0) + import_boost * weight
+    return scores
 
 
 VARIANTS = {
@@ -116,6 +196,16 @@ VARIANTS = {
     "V_exact_src_def": dict(exact_bonus=6.0, test_penalty=0.5, path_bonus=1.0, defined_bonus=5.0, exact_gate=False),
     "V_gate_src": dict(exact_bonus=6.0, test_penalty=0.5, path_bonus=1.5, defined_bonus=2.5, exact_gate=True),
     "V_gate_src_def": dict(exact_bonus=6.0, test_penalty=0.5, path_bonus=1.5, defined_bonus=4.0, exact_gate=True),
+    "V_import_light": dict(exact_bonus=6.0, test_penalty=0.5, path_bonus=1.0, defined_bonus=5.0,
+                           exact_gate=False, import_boost=0.05),
+    "V_union_light": dict(exact_bonus=6.0, test_penalty=0.5, path_bonus=1.0, defined_bonus=5.0,
+                          exact_gate=False, import_boost=0.0, union_boost=0.05),
+    "V_union_top1": dict(exact_bonus=6.0, test_penalty=0.5, path_bonus=1.0, defined_bonus=5.0,
+                         exact_gate=False, import_boost=0.0, union_boost=0.05, union_top1_only=0.3),
+    "V_import_mid": dict(exact_bonus=6.0, test_penalty=0.5, path_bonus=1.0, defined_bonus=5.0,
+                         exact_gate=False, import_boost=0.15),
+    "V_import_strong": dict(exact_bonus=6.0, test_penalty=0.5, path_bonus=1.0, defined_bonus=5.0,
+                            exact_gate=False, import_boost=0.4),
 }
 
 
@@ -129,6 +219,8 @@ def main() -> int:
     tasks = tasks_from_git(None, args.count)
     hits = {variant: {1: 0, 5: 0, 10: 0} for variant in VARIANTS}
     scored = 0
+    repo_scored: Counter = Counter()
+    per_repo_hits: dict[str, Counter] = {variant: Counter() for variant in VARIANTS}
     worktree = None
     current_repo = None
     per_variant_top1 = defaultdict(int)
@@ -154,11 +246,14 @@ def main() -> int:
         df = df_table(struct)
         query = query_terms(statement, anchors_from_statement(statement))
         scored += 1
+        repo_scored[repo] += 1
         for variant, kwargs in VARIANTS.items():
             ranked = score_variant(struct, query, df, n_docs, doc_len, avg_len, **kwargs)
             for k in (1, 5, 10):
                 if set(ranked[:k]) & set(targets):
                     hits[variant][k] += 1
+            if set(ranked[:5]) & set(targets):
+                per_repo_hits[variant][repo] += 1
             if ranked and ranked[0] in targets:
                 per_variant_top1[variant] += 1
         if index % 25 == 0:
@@ -166,6 +261,8 @@ def main() -> int:
 
     summary = {
         "tasks_scored": scored,
+        "per_repo_scored": dict(repo_scored),
+        "per_repo_top5": {v: dict(counts) for v, counts in per_repo_hits.items()},
         "target": "fixable gold source file (.py, not docs/tests/scripts)",
         "variants": VARIANTS,
         "hit_rates": {
