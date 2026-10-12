@@ -185,8 +185,14 @@ def validate_tree(submission_dir: Path) -> list[Path]:
              "tools/make_v6_prompt.py.")
     if prompt_text.count("## Locator script") != 1:
         fail("prompts/system.md must describe the locator exactly once.")
-    if "--issue-file /tmp/issue.txt" not in prompt_text:
-        fail("prompts/system.md must show the exact locator invocation the agent should run.")
+    for required in ("cat > /tmp/locate.py <<'LOCATE_PY'", "ISSUE_EOF",
+                     "python3 /tmp/locate.py --root . --top 8",
+                     "git status --porcelain",
+                     "Never use `write_file` or shell redirection for scratch material"):
+        if required not in prompt_text:
+            fail(f"prompts/system.md lost a V6.2 plumbing/hygiene instruction: {required!r}")
+    if "`issue.txt`" not in prompt_text:
+        fail("prompts/system.md must warn about bare scratch filenames landing in /workspace.")
     if len(prompt_text) > MAX_PROMPT_CHARS:
         fail(f"prompts/system.md is {len(prompt_text)} chars (> {MAX_PROMPT_CHARS}); "
              "keep the prompt lean so no step gets skipped.")

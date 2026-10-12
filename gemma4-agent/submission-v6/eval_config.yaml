@@ -1,17 +1,18 @@
-# V5 budget for the official run.
+# V6.2 budget. Measured on the V5 and V6.1 screenings: sessions die on the 315 s clock, not
+# on the call budget (V5: 9/30 tasks at the cap, V6.1: 17/30), and the harness's free
+# budget_warning fires with <=10 calls left (call 20 at this cap, call 35 at V5's 45), which is
+# the only pacing cue that costs no model call. 30 calls is the measured useful ceiling:
+# resolved sessions averaged 15 calls, and every session that ran past ~25 died with a worse diff.
 #
 # Measured facts this is built on (see DIAGNOSIS.md):
 # - The competition grants 12 hours for ALL tasks, *including* per-task sandbox setup
 #   (~30-60 s/task) and excluding patch validation. The scored split is ~120 tasks, so
 #   the safe envelope is 120 * (5.25 min + 0.5 min) = 11.5 h when every task hits the cap.
 # - Peers calibrated on the same Kaggle 4xL4 hardware report ~8.7 s per model call with
-#   thinking enabled, so ~45 tool calls is roughly the ceiling a 5.25-minute session can
-#   reach; the call cap is therefore a safety net, not the binding constraint.
-# - The harness injects an extra "budget_warning" field into tool results once 20 calls
-#   are used and <=10 remain, i.e. from call 35 with this cap. That is a free pacing cue
-#   that costs no model call (unlike get_status).
+#   thinking enabled, so even 30 calls is near the 5.25-minute ceiling: the tool cap is a
+#   pacing device, not a resource the session can actually exhaust.
 evaluation:
   timeout_seconds: 150
-  max_tool_calls: 45
-  max_turns: 80
+  max_tool_calls: 30
+  max_turns: 60
   max_time_minutes: 5.25

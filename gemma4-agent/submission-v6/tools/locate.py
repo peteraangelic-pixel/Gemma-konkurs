@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Rank the repository files a fix most likely touches. Stdlib only, no network.
 #
-# Usage: python3 /tmp/locate.py --root /workspace --issue-file /tmp/issue.txt --top 8
+# Usage: python3 /tmp/locate.py --root . --top 8 <<'ISSUE_EOF'  (issue text on stdin)
 #
 # Verified before shipping, on the exact script in this file:
 #   * 128 published dev tasks: fixable file in top-3 66.4%, top-5 73.4%, top-10 79.7%
@@ -141,11 +141,17 @@ def rank(struct, query):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--root", default="/workspace")
-    parser.add_argument("--issue-file", default=None)
+    parser.add_argument("--issue-file", default="-",
+                        help="path to the issue text, or - to read it from stdin")
     parser.add_argument("--issue", default=None)
     parser.add_argument("--top", type=int, default=8)
     args = parser.parse_args()
-    issue = args.issue or (open(args.issue_file, encoding="utf-8").read() if args.issue_file else "")
+    if args.issue:
+        issue = args.issue
+    elif args.issue_file == "-":
+        issue = sys.stdin.read()
+    else:
+        issue = open(args.issue_file, encoding="utf-8").read()
     if not issue.strip():
         print("locator: empty issue text", file=sys.stderr)
         return 2

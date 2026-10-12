@@ -2,8 +2,16 @@
 """Assemble gemma4-agent/submission-v6/prompts/system.md from the V5 prompt plus the
 measured locator script, so the embedded copy is byte-identical to tools/locate.py.
 
-The packer (build_submission_v6.py) re-checks that the built prompt still contains the
-script verbatim, which makes drift impossible.
+V6.2 design notes (all measured, see kaggle_results/v6-benchmark/analysis.md):
+* The V6.1 run regressed to 6/30 because the prompt asked the agent to `write_file`
+  /tmp/issue.txt and /tmp/locate.py; the agent wrote bare filenames, they landed in
+  /workspace, and the graded diff became 7.7 KB of script plus issue text. 9/30 tasks were
+  affected, 7 of them had no code edit at all, and clock deaths rose from 9/30 to 17/30.
+* V6.2 therefore never uses write_file: the script and the issue are delivered through a
+  single `run_command` with two heredocs that only ever write to /tmp, and a final hygiene
+  check deletes anything unexpected from /workspace before submit_patch().
+* tool_call cap drops 45 -> 30 so the harness's free budget_warning arrives at call 20
+  instead of 35 (measured sessions die on the 315 s clock, not on the call budget).
 
     python3 gemma4-agent/tools/make_v6_prompt.py
 """
@@ -21,34 +29,47 @@ OUT = V6_DIR / "prompts" / "system.md"
 
 LOCALIZE_STEP = """## Workflow
 1. **Extract the exact specification from the issue.** Write down every identifier (class, function, method, attribute, module), file or directory name, exception type, exact message string, CLI flag, config key, and quoted code fragment. Hidden tests usually assert exactly these names, messages and edge cases, so reuse them verbatim. Many issues are only a merged-PR title plus a link: then the title's words name the feature, and its most likely symbol is a snake_case rendering of those words (e.g. "Validate SSE fields" -> `sse.py`, `_check_...`, `ServerSentEvent`).
-2. **Localize with the locator first (three calls that replace five to ten greps).** This step is the single highest-value move in the session; the script below was verified on 128 published tasks (the fixable source file lands in the top 3 for 66% of them, in the top 5 for 73%) and on 188 tasks from repositories outside that set (65% and 72%), against ~15% for a plain first grep.
-   - `write_file` the raw issue text to `/tmp/issue.txt` (verbatim, in full).
-   - `write_file` the script from the "Locator script" section below to `/tmp/locate.py`, copied **exactly** as printed, character for character. Do not reimplement, shorten or "improve" it.
-   - `run_command`: `cd /workspace && python3 /tmp/locate.py --root . --issue-file /tmp/issue.txt --top 8`
-   - Read the ranked list and open the first two or three source candidates (that range covers about two thirds of cases, while the single top hit covers only about a half, so do not stop after one file when its evidence lines do not match the issue wording). Files marked `[test]` cannot be edited, they are context - but note the imports they pull in: the script interleaves those modules deliberately, because the module that must grow is usually the one the nearest test imports.
+2. **Localize with the locator: ONE `run_command`, then start editing.** This is the highest-value move in the session. The script below was verified on 128 published tasks (the fixable source file lands in the top 3 for 66% of them, in the top 5 for 73%) and on 188 tasks from repositories outside that set (65% and 72%), against ~15% for a plain first grep. Build the single command exactly like this:
+
+```
+cd /workspace && cat > /tmp/locate.py <<'LOCATE_PY'
+[the whole locator script from the section at the end of this prompt, copied character for character]
+LOCATE_PY
+python3 /tmp/locate.py --root . --top 8 <<'ISSUE_EOF'
+[the issue text, verbatim and complete]
+ISSUE_EOF
+```
+
+   - **Never use `write_file` or shell redirection for scratch material, and never let a bare filename like `locate.py`, `issue.txt` or `repro.py` be created in `/workspace`.** Measured on the previous run: bare filenames are resolved inside `/workspace`, so the graded diff became the 7.7 KB script plus the issue text instead of a fix - 9 of 30 sessions were destroyed that way and 7 of them produced no code change at all. Everything you create outside the fix belongs under `/tmp` with an absolute path, and `/tmp` never appears in the diff.
+   - Do not debug the locator. If that command fails, skip it and go straight to the fallback in step 3; a retry here costs a tenth of your session.
 3. **Fallback search (only if the locator could not run).** One combined shell call:
    `cd /workspace && grep -rn --include='*.py' -E "Name1|Name2|'exact message'" . | head -30; echo ---; grep -rni "distinctive phrase" . | head -20; echo ---; ls; echo ---; git log --oneline -5`"""
 
-READ_STEP = """4. **Read narrowly.** Read the definitions you will change, and when it exists the test file nearest to that module (it reveals the expected API shape and behaviours). Two to four `read_file` calls (or `sed -n 'A,Bp'` inside a shell call) are usually enough."""
+READ_STEP = """4. **Read narrowly.** Open the first one or two source candidates from the ranking, then edit - do not survey the repository. Measured recall of the locator: opening only the top hit covers 48% of tasks, the top two 52%, the top three 66%, so add the third candidate only when the first two show nothing related to the issue wording. Files marked `[test]` cannot be edited; they are context, but note the imports they pull in, because the script interleaves those modules deliberately - the module that must grow is usually the one the nearest test imports."""
 
 EDIT_STEP = """5. **Edit minimally and correctly.**"""
 
-VERIFY_STEP = """6. **Verify cheaply, once.** If a relevant test file exists, spend a single call on syntax plus the narrowest test target, always bounded:"""
+VERIFY_STEP = """6. **Verify cheaply, once, or not at all.** If you have a relevant test file and calls to spare, spend a single call on syntax plus the narrowest test target, always bounded:"""
 
-SUBMIT_STEP = """7. **Submit.** Call `submit_patch()` as your final action, then write two short sentences: what you changed and what remains uncertain. The session ends there."""
+SUBMIT_STEP = """7. **Hygiene check, then submit - the last thing you do.**
+   `cd /workspace && git status --porcelain`
+   The list must contain only the source files you intentionally changed. If it shows anything else (a scratch file, a log, a repro script, a `.txt`), delete those paths in the same call (`rm -f <paths>`), then call `submit_patch()`."""
 
 
 POST_EDITS = [
-    # Measured on the 30-task V5 screening (kaggle_results/v5-benchmark): 6/30 sessions
-    # produced no edit at all and 5 of those died on the wall clock; every resolved patch
-    # stayed under 1900 characters, while diffs over 2000 characters resolved 0/6 times.
+    # Measured on the 30-task V5 screening: 6/30 sessions produced no edit at all and 5 of
+    # those died on the wall clock; every resolved patch stayed under 1900 characters while
+    # diffs over 2000 characters resolved 0/6. Measured on the V6.1 screening: clock deaths
+    # rose to 17/30 because scratch files were written into /workspace.
     (
-        "- Pace by call count: the locator (step 2) costs three calls and replaces five to ten greps; after ~12 calls you should already have a candidate edit; after ~20 calls stop searching; after ~30 calls submit immediately with whatever you have.",
-        "- **Hard edit deadline.** The graded artifact is the diff in `/workspace`: the harness extracts it even when you never call `submit_patch()`, so the only guaranteed zero is a tree you never edited. By call 12 an edit must already exist on disk; by call 18 stop investigating and write the smallest plausible fix; by call 24 run at most one short check and submit. A session that dies on the clock with an empty tree scores zero no matter how good the analysis was.",
+        "- Pace by call count: after ~12 calls you should already have a candidate edit; after ~20 calls stop searching; after ~30 calls submit immediately with whatever you have.",
+        "- **Hard edit deadline.** The graded artifact is the diff in `/workspace`: the harness extracts it even when you never call `submit_patch()`, so the only guaranteed zero is a tree you never edited. The locator is one call; an edit must exist on disk by call 8; stop searching by call 14; submit by call 18. A session that dies on the clock with an empty tree scores zero no matter how good the analysis was.",
     ),
     (
         "   - Implement precisely what the issue describes: same names, same exception types, same message wording, all mentioned edge cases, sane types and return values, project code style. If the issue describes invalid input, reject it with the exception type named or implied.",
-        "   - Make the first edit as soon as you have a plausible target and refine it with further `edit_file` calls; do not batch a large rewrite into one risky step.\n   - Keep the diff small. Measured on these tasks: every resolved session produced a diff under 1900 characters (most under 1500), while every diff over 2000 characters failed. Fix the reported behaviour and nothing else.\n   - Implement precisely what the issue describes: same names, same exception types, same message wording, all mentioned edge cases, sane types and return values, project code style. If the issue describes invalid input, reject it with the exception type named or implied.",
+        "   - Make the first edit as soon as you have a plausible target and refine it with further `edit_file` calls; do not batch a large rewrite into one risky step.\
+   - Keep the diff small. Measured on these tasks: every resolved session produced a diff under 1900 characters (most under 1500), while every diff over 2000 characters failed. Fix the reported behaviour and nothing else.\
+   - Implement precisely what the issue describes: same names, same exception types, same message wording, all mentioned edge cases, sane types and return values, project code style. If the issue describes invalid input, reject it with the exception type named or implied.",
     ),
     (
         "   `cd /workspace && python -c \"import ast;ast.parse(open('pkg/mod.py').read())\" && timeout 90 python -m pytest tests/test_mod.py -q 2>&1 | tail -20`",
@@ -56,11 +77,12 @@ POST_EDITS = [
     ),
     (
         "   Never run bare `pytest`, a whole directory or a long suite. Pre-existing failures unrelated to your change are not your problem - never try to repair tests.",
-        "   Never run bare `pytest`, a whole directory or a long suite, and never retry a command that timed out: on measured runs a single runaway test command consumed half the session. Pre-existing failures unrelated to your change are not your problem - never try to repair tests. If you are past call 24, skip verification entirely and submit.",
+        "   Never run bare `pytest`, a whole directory or a long suite, and never retry a command that timed out: on measured runs a single runaway test command consumed half the session. Pre-existing failures unrelated to your change are not your problem - never try to repair tests. Past call 18, skip verification entirely and submit.",
     ),
     (
         "- If you cannot identify the defect with confidence, pick the most plausible location from your search results and implement the smallest change that matches the issue's wording, even untested. A partial or speculative fix costs nothing and can pass; an empty diff cannot.",
-        "- If you cannot identify the defect with confidence, pick the most plausible location from your search results and implement the smallest change that matches the issue's wording, even untested. A partial or speculative fix costs nothing and can pass; an empty diff cannot.\n- If by call 16 the tree still has no edit, stop reading and investigating: open the top locator candidate, make the smallest sensible change, and submit.",
+        "- If you cannot identify the defect with confidence, pick the most plausible location from your search results and implement the smallest change that matches the issue's wording, even untested. A partial or speculative fix costs nothing and can pass; an empty diff cannot.\
+- If by call 10 the tree still has no edit, stop reading and investigating: open the top locator candidate, make the smallest sensible change, and submit.",
     ),
 ]
 
@@ -80,8 +102,6 @@ def main() -> int:
         print("V6 prompt already assembled? Use the V5 prompt as the base.", file=sys.stderr)
         return 1
 
-    # Replace the V5 workflow header + step 2 with the locator-first workflow, and
-    # renumber the remaining steps.
     marker = "## Workflow\n1. **Extract the exact specification from the issue.**"
     start = prompt.index(marker)
     end = prompt.index("3. **Read narrowly.**")
@@ -95,17 +115,10 @@ def main() -> int:
         tail = tail.replace(old, new, 1)
 
     script_block = (
-        "\n\n## Locator script (write this to `/tmp/locate.py` exactly as printed)\n\n"
+        "\n\n## Locator script (copy this verbatim into the `LOCATE_PY` heredoc in step 2)\n\n"
         "```python\n" + script + "\n```\n"
     )
     prompt = prompt[:start] + LOCALIZE_STEP + "\n\n" + tail.rstrip("\n") + script_block
-
-    # Budget note: three calls here replace five to ten greps.
-    prompt = prompt.replace(
-        "- Pace by call count: after ~12 calls you should already have a candidate edit; after ~20 calls stop searching; after ~30 calls submit immediately with whatever you have.",
-        "- Pace by call count: the locator (step 2) costs three calls and replaces five to ten greps; after ~12 calls you should already have a candidate edit; after ~20 calls stop searching; after ~30 calls submit immediately with whatever you have.",
-    )
-
     prompt = apply_post_edits(prompt)
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
