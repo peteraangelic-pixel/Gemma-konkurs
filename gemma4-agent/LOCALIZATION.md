@@ -17,7 +17,7 @@ Ten plik jest **dowodem pomiarowym**, nie obietnicą wyniku. Powstał, bo:
 | --- | --- |
 | `tools/locate_benchmark.py` | benchmark offline: dla każdego z 129 zadań wyciąga kotwice z treści issue, rankuje pliki repo i liczy trafienia top-1/5/10 w plik ze złotego patcha |
 | `tools/locate_experiment.py` | pętla eksperymentów: jeden odczyt repo na zadanie, wiele wariantów scoringu w jednym przebiegu (~1 min na pełny zestaw) |
-| `tools/locator.py` | **wersja dla agenta** (tylko stdlib, bez sieci): agent zapisuje go do `/tmp`, uruchamia raz z treścią issue i dostaje ranking plików z liniami dowodowymi |
+| `submission-v6/tools/locate.py` | **wersja dla agenta** (tylko stdlib, bez sieci): jedzie w submissji i jest osadzona w prompcie; agent wpisuje ją heredocem do `/tmp` i uruchamia raz, dostając ranking plików z liniami dowodowymi (`tools/locator.py` to prototyp używany w pomiarach) |
 | `analysis/locate-benchmark/locate_result.json` | pełne wyniki per zadanie (wszystkie receptury) |
 | `analysis/locate-experiment/experiment_result.json` | porównanie 6 wariantów scoringu na 129 zadaniach |
 
@@ -43,6 +43,29 @@ więc mianownikiem we wszystkich tabelach jest **128**, nie 129.
 | R3 z guardem precyzji | 10.2 % | 29.7 % | 34.4 % |
 | **R4 subtokeny (BM25 + ścieżki + definicje + akronimy)** | 21.9 % | 53.9 % | 61.7 % |
 | **V_exact_src_def** (R4 + dokładny literał + kara na testy + waga definicji) | **39.1 %** | **67.2 %** | **75.8 %** |
+
+## Atestacja: skrypt, który faktycznie jedzie w submissji
+
+Receptura V_union (ranking treści przeplatany z importami najlepszego pliku testowego) jest tym,
+co znajduje się w `submission-v6/tools/locate.py` — czyli w pliku dołączonym do ZIP-a. `tools/locate_verify.py`
+ładuje **dokładnie ten plik** i mierzy go na obu zbiorach, a wynik zapisuje z SHA-256 mierzonego pliku,
+żeby dowód był samoopisujący (poprzednia recenzja słusznie wytknęła deklarację z innego artefaktu):
+
+| zbiór | zadania | top-1 | top-2 | top-3 | top-5 | top-10 |
+| --- | --- | --- | --- | --- | --- | --- |
+| zbiór deweloperski (publiczny) | 128 | 47.7 % | 51.6 % | 66.4 % | 73.4 % | 79.7 % |
+| held-out (starlette, click, typer, pydantic) | 188 | 44.7 % | 61.2 % | 65.4 % | 71.8 % | 80.9 % |
+
+Artefakt: `submission-v6/tools/locate.py`, SHA-256 `fe25b200fa52e10023538c4474bb3ea86bf6303182fcd765faf37e219d420a3d`
+(pomiar powtórzony po zmianach V6.2 — lokalizator czyta teraz issue ze stdin; logika rankingu bez zmian,
+liczby identyczne). Dowody: `analysis/locate-verify/v6-locator-dev.json` i `v6-locator-holdout.json`.
+
+Wniosek praktyczny dla promptu: **top-2 to jeszcze za mało** (51.6 % / 61.2 %), więc agent ma czytać
+**pierwszych 1–3 kandydatów** (top-3: 66.4 % / 65.4 %) — i to jest liczba wpisana w prompt.
+
+Uwaga o wcześniejszym przebiegu: tabela held-out „108 zadań / 71.3 % top-5" (`analysis/locate-holdout/`)
+mierzyła prototyp `tools/locator.py` na dwóch repozytoriach; zastępuje ją powyższa atestacja na
+188 zadaniach i pliku z submissji.
 
 Czyli sam `grep` trafia w naprawialny plik w ~15 % przypadków (top-5), a zmierzona procedura w ~67 %.
 To jest **4.3× więcej okazji na poprawny patch** przy zerowym koszcie GPU — 0.38 s na repozytorium
