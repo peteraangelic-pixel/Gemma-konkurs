@@ -38,6 +38,6 @@
     }
   },
   "locator": "gemma4-agent/submission-v6/tools/locate.py",
-  "locator_sha256": "b59a8f4d59b5cb5f6bd7a5138ed00cf88caa2a4fd729e63866f0291f30aa7b21",
+  "locator_sha256": "fe25b200fa52e10023538c4474bb3ea86bf6303182fcd765faf37e219d420a3d",
   "mode": "holdout"
 }
