@@ -188,7 +188,10 @@ def validate_tree(submission_dir: Path) -> list[Path]:
     for required in ("cat > /tmp/locate.py <<'LOCATE_PY'", "ISSUE_EOF",
                      "python3 /tmp/locate.py --root . --top 8",
                      "git status --porcelain",
-                     "Never use `write_file` or shell redirection for scratch material"):
+                     "Never use `write_file` or shell redirection for scratch material",
+                     "**`submit_patch()` is optional.**",
+                     "**Documentation is not a fix.**",
+                     "never end a session without a real edit on disk"):
         if required not in prompt_text:
             fail(f"prompts/system.md lost a V6.2 plumbing/hygiene instruction: {required!r}")
     if "`issue.txt`" not in prompt_text:
@@ -197,7 +200,9 @@ def validate_tree(submission_dir: Path) -> list[Path]:
         fail(f"prompts/system.md is {len(prompt_text)} chars (> {MAX_PROMPT_CHARS}); "
              "keep the prompt lean so no step gets skipped.")
     if "submit_patch" not in prompt_text:
-        fail("prompts/system.md lost the always-submit instruction.")
+        fail("prompts/system.md lost the submit instructions.")
+    if "as your final action" in prompt_text:
+        fail("prompts/system.md still carries the V5 tail that contradicts the optional-submit rule.")
 
     parsed = optional_yaml_parse(submission_dir / "agent.yaml")
     if parsed is not None and not isinstance(parsed, dict):

@@ -96,6 +96,31 @@ Każda z tych zmian jest tania do zmierzenia tylko na Kaggle, więc **kolejny pr
 uzgodnieniu listy** — dokładnie tak, jak prosił użytkownik: jedna wspólna wersja, jedno 2,5-godzinne
 uruchomienie.
 
+## 2c. V6.3 wdrożone zgodnie z recenzją (a)+(c); (b) i (d) odłożone
+
+Recenzja z `arena/6d081d52-gemma-konkurs` została przyjęta punkt po punkcie:
+
+| punkt recenzji | decyzja | co dokładnie zrobiono / dlaczego nie |
+| --- | --- | --- |
+| (a) `submit_patch()` tylko z zamierzoną edycją, nie z samym niepustym `git status` | **przyjęte** | prompt mówi teraz wprost, że **`submit_patch()` jest opcjonalne** (harness sam wyciąga diff drzewa, a wywołanie kończy sesję) i zakazuje submisji, gdy jedyna zmiana to plik roboczy albo markdown `docs/` przy zadaniu o zachowaniu. Stary ogon „call it as your final action" usunięty — packer failuje, gdy wróci |
+| (c) dokumentacja nie może **zastąpić** poprawki kodu | **przyjęte warunkowo** | reguła brzmi: przy zadaniu o zachowaniu `docs/**.md` to nie poprawka, ale **`docs_src/`, `examples/`, `tutorials/` to kod** (FastAPI importuje je w testach) — bez zakazu dla zadań jawnie dokumentacyjnych |
+| (b) `thinking_budget` 4096 → 2048 | **odłożone** | brak lokalnego pomiaru, ryzyko gorszej jakości edycji, a zmiana razem z (a) uniemożliwiłaby interpretację. Zaproponowane jako osobny eksperyment, gdy (a)/(c) będą rozstrzygnięte |
+| (d) `timeout 30` | **odłożone** | ogranicza czas testu, nie długiego wywołania modelu; zmierzone przypadki (`rich_3006`: 4 wywołania w 318 s) to opóźnienie modelu |
+| 17 śmierci na zegarze pozostaje osobnym celem | **przyjęte** | zapisane wprost w `GATES_V6_3.md`: V6.3 tego nie adresuje i nie twierdzimy inaczej |
+
+Artefakt: `submission-v6.zip`, SHA-256 `abf22bac2c67c639342f56e890fd77cb36c91811d07cf1c239c84ef28fa1216e`
+(budżet bez zmian: 5.25 min, 30 wywołań, `timeout 45`, `thinking_budget` 4096).
+
+**Bramki pre-registered** (ustalone przed przebiegiem, nieprzesuwalne po wyniku) są w
+`GATES_V6_3.md`: G1 zero plików-śmieci, G2 zero przedwczesnych submisji bez edycji, G3 zero diffów
+wyłącznie dokumentacyjnych; G4 (puste drzewa ≤ 4) i liczba rozwiązań są **raportowane osobno, bez
+progu zwycięstwa**. Tam też są zapisane **oczekiwania do obalenia**, w tym kontrola: `rich_3006`
+**ma nadal paść**, bo (b)/(d) są odłożone — jeśli zostanie rozwiązane, to szum, nie zasługa zmian.
+
+Dwa przebiegi przygotowane, **żaden trigger nie jest wypchnięty**:
+`gemma-kaggle-v63-miniscreen.yml` (4 zadania, ~1/7 kosztu GPU, runner dostał nową opcję
+`--task-ids`) i `gemma-kaggle-v63-benchmark.yml` (te same 30 zadań i seed).
+
 ## 3. Znane tryby porażki (i co zostało naprawione)
 
 1. **V5: puste drzewo** — 6/30 zadań bez żadnej edycji; reguła „zawsze `submit_patch()`" nie mogła

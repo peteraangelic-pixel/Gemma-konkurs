@@ -1,0 +1,129 @@
+# V6.3 mini-screen: re-runs ONLY the four diagnosed cases instead of the whole 30-task sample,
+# so the (a)+(c) fixes are checked for ~1/7 of the GPU time of a full screen:
+#   rich_3105, rich_3934  - V6.2 ended these sessions with an empty tree (premature submit)
+#   fastapi_14487         - V6.2 diff was documentation-only for a behaviour issue
+#   rich_3006             - control: a long-call clock death; the (b) fix is deliberately deferred,
+#                           so this task is expected to stay unresolved. If it resolves, that is
+#                           luck/noise, not evidence for the change.
+# Pre-registered gates and expectations: gemma4-agent/GATES_V6_3.md
+# Does not create an official submission. Nothing runs until
+# gemma4-agent/kaggle_smoke/v63-miniscreen.trigger is pushed.
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - arena/c4eeb067-gemma-konkurs
+    paths:
+      - gemma4-agent/kaggle_smoke/v63-miniscreen.trigger
+
+permissions:
+  contents: write
+
+concurrency:
+  group: v63-miniscreen.trigger-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Checkout session branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Kaggle CLI
+        run: python -m pip install --disable-pip-version-check --quiet kaggle
+
+      - name: Configure Kaggle credentials
+        env:
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "$KAGGLE_API_TOKEN" ]; then
+            echo "Repository Actions secret KAGGLE_API_TOKEN is missing."
+            exit 1
+          fi
+          mkdir -p "$HOME/.kaggle"
+          printf '%s' "$KAGGLE_API_TOKEN" | tr -d '\r\n' > "$HOME/.kaggle/access_token"
+          chmod 600 "$HOME/.kaggle/access_token"
+          echo "Kaggle CLI configured; token value was not logged."
+
+      - name: Run the V6.3 mini-screen (4 diagnosed tasks) on competition L4x4
+        env:
+          KAGGLE_USERNAME: petersharps
+        run: |
+          python gemma4-agent/tools/run_kaggle_v1_smoke.py \
+            --submission gemma4-agent/submission-v6.zip \
+            --outdir gemma4-agent/kaggle_results/v6-3-miniscreen \
+            --task-ids rich_3105,rich_3934,rich_3006,fastapi_14487 \
+            --task-id rich_3105 \
+            --seed 20261009 \
+            --max-wait-minutes 240 \
+            --poll-interval-seconds 60
+
+      - name: Fetch Kaggle notebook log after failure (read-only)
+        if: failure()
+        continue-on-error: true
+        run: |
+          if [ -s gemma4-agent/kaggle_results/v6-3-miniscreen/run.json ]; then
+            python gemma4-agent/tools/fetch_kaggle_kernel_log.py \
+              --run-json gemma4-agent/kaggle_results/v6-3-miniscreen/run.json \
+              --output-dir "$RUNNER_TEMP/gemma-v63-miniscreen-kernel-logs"
+            python gemma4-agent/tools/summarize_kaggle_kernel_log.py \
+              "$RUNNER_TEMP/gemma-v63-miniscreen-kernel-logs/kernel.log"
+          else
+            echo "No Kaggle kernel reference was recorded; no log fetch attempted."
+          fi
+
+      - name: Remove raw task patches before persistence
+        if: always()
+        run: rm -f gemma4-agent/kaggle_results/v6-3-miniscreen/agent_benchmark_patches.txt
+
+      - name: Upload V6 benchmark summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gemma-v63-miniscreen-${{ github.run_id }}
+          path: |
+            gemma4-agent/kaggle_results/v6-3-miniscreen/run.json
+            gemma4-agent/kaggle_results/v6-3-miniscreen/agent_benchmark_result.json
+          if-no-files-found: warn
+
+      - name: Upload Kaggle failure log
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gemma-v63-miniscreen-kernel-log-${{ github.run_id }}
+          path: ${{ runner.temp }}/gemma-v63-miniscreen-kernel-logs/
+          if-no-files-found: warn
+          retention-days: 3
+
+      - name: Commit V6 benchmark summary to this branch
+        if: always()
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin "$GITHUB_REF_NAME"
+          # Rebase-free (the V6.2 run failed here while other commits were landing on the
+          # branch): keep the worktree, move the branch pointer to the remote tip, then commit
+          # only the result files.
+          git reset --soft "origin/$GITHUB_REF_NAME"
+          git add gemma4-agent/kaggle_results/v6-3-miniscreen/run.json                   gemma4-agent/kaggle_results/v6-3-miniscreen/agent_benchmark_result.json                   gemma4-agent/kaggle_results/screening_history.md
+          if [ -z "$(git diff --cached --name-only)" ]; then
+            echo "No benchmark result files were produced."
+            exit 0
+          fi
+          python gemma4-agent/tools/compare_screenings.py || true
+          git add gemma4-agent/kaggle_results/screening_history.md || true
+          git commit -m "chore(gemma): record Run the V6.3 mini-screen (4 diagnosed tasks) [skip ci]"
+          git push origin "HEAD:${GITHUB_REF_NAME}"

@@ -18,6 +18,7 @@ V6.2 design notes (all measured, see kaggle_results/v6-benchmark/analysis.md):
 
 from __future__ import annotations
 
+import re
 import sys
 from pathlib import Path
 
@@ -47,13 +48,17 @@ ISSUE_EOF
 
 READ_STEP = """4. **Read narrowly.** Open the first one or two source candidates from the ranking, then edit - do not survey the repository. Measured recall of the locator: opening only the top hit covers 48% of tasks, the top two 52%, the top three 66%, so add the third candidate only when the first two show nothing related to the issue wording. Files marked `[test]` cannot be edited; they are context, but note the imports they pull in, because the script interleaves those modules deliberately - the module that must grow is usually the one the nearest test imports."""
 
-EDIT_STEP = """5. **Edit minimally and correctly.**"""
+EDIT_STEP = """5. **Edit minimally and correctly.**
+   - **Documentation is not a fix.** A markdown change under `docs/` can never change test outcomes. If the issue is about behaviour and the best candidate you have is such a file, open the source module it documents instead (or the next source candidate from the ranking). A docs edit may accompany the fix, never replace it. The only exception is an issue that is explicitly about the documentation itself.
+   - Files under `docs_src/`, `examples/` or `tutorials/` are executable code that some projects import in their tests (FastAPI does): editing those can fix behaviour, so treat them as source."""
 
 VERIFY_STEP = """6. **Verify cheaply, once, or not at all.** If you have a relevant test file and calls to spare, spend a single call on syntax plus the narrowest test target, always bounded:"""
 
-SUBMIT_STEP = """7. **Hygiene check, then submit - the last thing you do.**
-   `cd /workspace && git status --porcelain`
-   The list must contain only the source files you intentionally changed. If it shows anything else (a scratch file, a log, a repro script, a `.txt`), delete those paths in the same call (`rm -f <paths>`), then call `submit_patch()`."""
+SUBMIT_STEP = """7. **Final check, then decide whether to submit at all.**
+   `cd /workspace && git status --porcelain && git diff --stat`
+   - The list must contain only files you changed as part of the fix. Scratch files, logs, repro scripts and `.txt` notes are never part of a fix: delete them with `rm -f` in the same call and check again.
+   - **An edit that does not address the issue is not a fix.** If the only change is a scratch file, or a markdown file under `docs/` while the issue is about behaviour, do not submit - keep working. Measured: sessions that ended this way scored zero on tasks that were otherwise solvable.
+   - **`submit_patch()` is optional.** The harness extracts the working-tree diff itself (`git add -N . && git diff`), so your edits are captured even if you never call it; calling it early only ends your session. Call it once the fix is on disk and you are done (or out of time) - never before a real edit exists, and never just to be sure something was submitted."""
 
 
 POST_EDITS = [
@@ -61,6 +66,10 @@ POST_EDITS = [
     # those died on the wall clock; every resolved patch stayed under 1900 characters while
     # diffs over 2000 characters resolved 0/6. Measured on the V6.1 screening: clock deaths
     # rose to 17/30 because scratch files were written into /workspace.
+    (
+        "An **empty patch is a guaranteed zero**, while a plausible, minimal patch has a real chance of passing. Therefore: **never end a session without calling `submit_patch()`**.",
+        "An **empty patch is a guaranteed zero**, while a plausible, minimal patch has a real chance of passing. Therefore: **never end a session without a real edit on disk** - the harness captures the working-tree diff even if you never call `submit_patch()`, and it ends the session when you do call it. A session that runs out of time with an unrelated or empty diff scores zero just the same.",
+    ),
     (
         "- Pace by call count: after ~12 calls you should already have a candidate edit; after ~20 calls stop searching; after ~30 calls submit immediately with whatever you have.",
         "- **Hard edit deadline.** The graded artifact is the diff in `/workspace`: the harness extracts it even when you never call `submit_patch()`, so the only guaranteed zero is a tree you never edited. The locator is one call; an edit must exist on disk by call 8; stop searching by call 14; submit by call 18. A session that dies on the clock with an empty tree scores zero no matter how good the analysis was.",
@@ -82,7 +91,7 @@ POST_EDITS = [
     (
         "- If you cannot identify the defect with confidence, pick the most plausible location from your search results and implement the smallest change that matches the issue's wording, even untested. A partial or speculative fix costs nothing and can pass; an empty diff cannot.",
         "- If you cannot identify the defect with confidence, pick the most plausible location from your search results and implement the smallest change that matches the issue's wording, even untested. A partial or speculative fix costs nothing and can pass; an empty diff cannot.\
-- If by call 10 the tree still has no edit, stop reading and investigating: open the top locator candidate, make the smallest sensible change, and submit.",
+- If by call 10 the tree still has no edit, stop reading and investigating: open the top locator candidate and make the smallest sensible change - a wrong guess still beats submitting nothing.",
     ),
 ]
 
@@ -114,12 +123,28 @@ def main() -> int:
     ):
         tail = tail.replace(old, new, 1)
 
+    # Remove the V5 tail that contradicts the V6.3 "submit_patch is optional" rule.
+    prompt = prompt.replace(
+        "Call `submit_patch()` as your final action, then write two short sentences: what you changed "
+        "and what remains uncertain. The session ends there.",
+        " When you do finish, write two short sentences: what you changed and what remains uncertain.",
+        1,
+    )
+
     script_block = (
         "\n\n## Locator script (copy this verbatim into the `LOCATE_PY` heredoc in step 2)\n\n"
         "```python\n" + script + "\n```\n"
     )
     prompt = prompt[:start] + LOCALIZE_STEP + "\n\n" + tail.rstrip("\n") + script_block
     prompt = apply_post_edits(prompt)
+
+    # V6.3: the V5 tail "Call submit_patch() as your final action ... The session ends there."
+    # contradicts the new rule that submit_patch is optional; strip it robustly (it spans lines
+    # differently depending on how the V5 prompt was wrapped).
+    prompt = re.sub(r"\s*Call `submit_patch\(\)` as your final action.*?The session ends there\.",
+                    "", prompt, count=1, flags=re.S)
+    if "as your final action" in prompt:
+        raise SystemExit("failed to strip the contradictory V5 submit tail")
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(prompt + "\n", encoding="utf-8")

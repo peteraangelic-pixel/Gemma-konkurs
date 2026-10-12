@@ -123,10 +123,12 @@ def build_notebook(
     task_count: int = 1,
     seed: int = 20261009,
     task_id: str = TASK_ID,
+    task_ids: list[str] | None = None,
 ) -> dict[str, Any]:
     encoded_zip = json.dumps(base64.b64encode(submission_zip).decode("ascii"))
     encoded_selection = json.dumps(
-        json.dumps({"task_count": task_count, "seed": seed, "task_id": task_id})
+        json.dumps({"task_count": task_count, "seed": seed, "task_id": task_id,
+                    **({"task_ids": list(task_ids)} if task_ids else {})})
     )
     extract_cell = r'''import base64
 import hashlib
@@ -171,7 +173,14 @@ task_by_id = {item.instance_id: item for item in all_tasks}
 requested_count = max(1, min(int(TASK_SELECTION['task_count']), len(all_tasks)))
 fixed_task = task_by_id.get(TASK_SELECTION['task_id'])
 assert fixed_task is not None, f"Reference public task {TASK_SELECTION['task_id']} is missing."
-if requested_count == 1:
+explicit_ids = list(TASK_SELECTION.get('task_ids') or [])
+if explicit_ids:
+    # Mini-screen: the caller named the exact public tasks to re-run (diagnosed failures).
+    missing = [item for item in explicit_ids if item not in task_by_id]
+    assert not missing, f"Explicit task ids are not in the public set: {missing}"
+    selected_tasks = [task_by_id[item] for item in explicit_ids]
+    requested_count = len(selected_tasks)
+elif requested_count == 1:
     selected_tasks = [fixed_task]
 else:
     grouped = {}
@@ -619,10 +628,14 @@ def main() -> int:
     parser.add_argument("--outdir", type=Path, required=True)
     parser.add_argument("--task-count", type=int, default=1, help="public tasks: 1 selects --task-id; >1 is stratified by repository")
     parser.add_argument("--task-id", default=TASK_ID, help="fixed public task used when --task-count=1 and reserved in larger samples")
+    parser.add_argument("--task-ids", default="", help="comma-separated explicit public task ids (mini-screen of diagnosed cases); overrides the stratified sample")
     parser.add_argument("--seed", type=int, default=20261009, help="deterministic sample seed")
     parser.add_argument("--max-wait-minutes", type=int, default=300)
     parser.add_argument("--poll-interval-seconds", type=int, default=45)
     args = parser.parse_args()
+    explicit_task_ids = [item.strip() for item in (args.task_ids or "").split(",") if item.strip()]
+    if explicit_task_ids:
+        args.task_count = len(explicit_task_ids)
     if args.task_count < 1:
         parser.error("--task-count must be at least 1")
     if args.max_wait_minutes < 1:
@@ -682,6 +695,7 @@ def main() -> int:
                 task_count=args.task_count,
                 seed=args.seed,
                 task_id=args.task_id,
+                task_ids=explicit_task_ids or None,
             )
             notebook_path = kernel_dir / "agent-benchmark.ipynb"
             notebook_path.write_text(json.dumps(notebook, ensure_ascii=False), encoding="utf-8")
