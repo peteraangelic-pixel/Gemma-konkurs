@@ -104,37 +104,76 @@ jobs:
           echo "Downloaded files:"
           find /tmp/v62-out -type f | head -30
 
-      - name: Extract the two result files and verify the archive hash
-        id: extract
+      - name: Extract the result file, verify the archive hash, write an honest record
+        env:
+          KERNEL_REF: ${{ steps.locate.outputs.kernel_ref }}
         run: |
           set -euo pipefail
           OUT=gemma4-agent/kaggle_results/v6-benchmark
           mkdir -p "$OUT"
           RESULT=$(find /tmp/v62-out -name agent_benchmark_result.json | head -1)
-          RUNJSON=$(find /tmp/v62-out -name run.json | head -1)
-          if [ -z "$RESULT" ] || [ -z "$RUNJSON" ]; then
-            echo "Kernel output does not contain both result files; listing everything:"
+          if [ -z "$RESULT" ]; then
+            echo "Kernel output does not contain agent_benchmark_result.json; listing everything:"
             find /tmp/v62-out -type f | head -50
             exit 1
           fi
           cp "$RESULT" "$OUT/agent_benchmark_result.json"
-          cp "$RUNJSON" "$OUT/run.json"
+          # run.json is written by the workflow runner, not by the notebook, so the kernel
+          # output never contains it. Reconstruct a labelled record instead of guessing.
           python - <<'PY'
           import json, os
-          result = json.load(open('gemma4-agent/kaggle_results/v6-benchmark/agent_benchmark_result.json'))
-          run = json.load(open('gemma4-agent/kaggle_results/v6-benchmark/run.json'))
-          sha = result.get('submission_sha256') or run.get('submission_sha256')
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          out = Path('gemma4-agent/kaggle_results/v6-benchmark')
+          result = json.loads((out / 'agent_benchmark_result.json').read_text())
           expected = os.environ['V62_SHA_FULL']
+          sha = result.get('submission_sha256')
+          tasks = result.get('tasks') or []
           print('submission_sha256:', sha)
-          print('resolved:', result.get('resolved_count'), '/', len(result.get('tasks') or []))
+          print('resolved:', result.get('resolved_count'), '/', len(tasks))
           print('localization_hits:', result.get('localization_hits'))
           print('tasks_with_empty_patch:', result.get('tasks_with_empty_patch'))
           print('tasks_touching_tests:', result.get('tasks_touching_tests'))
           if sha != expected:
               raise SystemExit(f'Hash mismatch: kernel output is not the V6.2 archive ({sha} != {expected})')
-          for row in result.get('tasks') or []:
-              print(row.get('task_id'), row.get('resolved'), row.get('patch_chars'),
-                    (row.get('touched_files') or [])[:3])
+
+          lines = [f"{r.get('task_id'):22s} resolved={r.get('resolved')} patch={r.get('patch_chars')} "
+                   f"calls={r.get('tool_calls')} secs={int(r.get('duration_seconds') or 0)} "
+                   f"localized={r.get('localized')} tests={r.get('touched_tests')} "
+                   f"touched={(r.get('touched_files') or [])[:3]}"
+                   for r in tasks]
+          header = (f"V6.2 fetched from kernel {os.environ.get('KERNEL_REF')}\n"
+                    f"resolved={result.get('resolved_count')}/{len(tasks)} "
+                    f"localization_hits={result.get('localization_hits')} "
+                    f"empty_patches={result.get('tasks_with_empty_patch')}\n")
+          (out / 'fetch_summary.txt').write_text(header + '\n'.join(lines) + '\n')
+          print('\n'.join(lines))
+
+          record = {
+              'created_utc': result.get('benchmark_started_utc') or datetime.now(timezone.utc).isoformat(timespec='seconds'),
+              'status': 'complete',
+              'submission_sha256': sha,
+              'kernel_ref': os.environ.get('KERNEL_REF'),
+              'task_count_requested': len(tasks),
+              'sample_seed': result.get('sample_seed'),
+              'model': result.get('model'),
+              'private_notebook': True,
+              'internet_enabled': False,
+              'competition_submission_created': False,
+              'resolved_count': result.get('resolved_count'),
+              'localization_hits': result.get('localization_hits'),
+              'tasks_with_empty_patch': result.get('tasks_with_empty_patch'),
+              'run_json_source': 'reconstructed by gemma-kaggle-v62-fetch-results.yml from kernel '
+                                 'metadata and the kernel result; the original run.json was never '
+                                 'committed because the benchmark workflow commit step failed',
+              'result': {k: result.get(k) for k in
+                         ('resolved_count', 'score_estimate', 'score_ci95_wilson',
+                          'localization_hits', 'tasks_with_empty_patch', 'tasks_touching_tests',
+                          'mean_task_duration_seconds', 'total_task_duration_seconds',
+                          'sample_seed', 'task_ids')},
+          }
+          (out / 'run.json').write_text(json.dumps(record, indent=2) + '\n')
           PY
 
       - name: Rewrite the screening comparison with the fetched results
@@ -152,6 +191,7 @@ jobs:
           git reset --soft "origin/$GITHUB_REF_NAME"
           git add gemma4-agent/kaggle_results/v6-benchmark/agent_benchmark_result.json \
                   gemma4-agent/kaggle_results/v6-benchmark/run.json \
+                  gemma4-agent/kaggle_results/v6-benchmark/fetch_summary.txt \
                   gemma4-agent/kaggle_results/screening_history.md
           if [ -z "$(git diff --cached --name-only)" ]; then
             echo "Results already recorded on the branch; nothing to commit."
