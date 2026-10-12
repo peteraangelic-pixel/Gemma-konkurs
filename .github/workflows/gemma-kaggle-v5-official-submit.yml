@@ -1,0 +1,100 @@
+name: Official Kaggle V5 submission
+
+# Guarded, one-shot upload of the V5 archive. Nothing runs until
+# gemma4-agent/kaggle_smoke/v5-official-submit.trigger is pushed (or this workflow is
+# dispatched manually), so merging these files cannot consume the daily submission slot.
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - arena/c4eeb067-gemma-konkurs
+    paths:
+      - gemma4-agent/kaggle_smoke/v5-official-submit.trigger
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gemma-v5-official-submit-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  submit-v5:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout session branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Kaggle CLI
+        run: python -m pip install --disable-pip-version-check --quiet kaggle
+
+      - name: Configure Kaggle credentials
+        env:
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "$KAGGLE_API_TOKEN" ]; then
+            echo "Repository Actions secret KAGGLE_API_TOKEN is missing."
+            exit 1
+          fi
+          mkdir -p "$HOME/.kaggle"
+          printf '%s' "$KAGGLE_API_TOKEN" | tr -d '\r\n' > "$HOME/.kaggle/access_token"
+          chmod 600 "$HOME/.kaggle/access_token"
+          echo "Kaggle CLI configured; token value was not logged."
+
+      - name: Prepare V5 archive with Kaggle's required filename
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v5-upload"
+          cp gemma4-agent/submission-v5.zip "$RUNNER_TEMP/v5-upload/submission.zip"
+          echo "V5 archive staged as submission.zip; earlier version archives were not modified."
+
+      - name: Submit verified V5 once if the daily slot is available
+        env:
+          KAGGLE_USERNAME: petersharps
+        run: |
+          python gemma4-agent/tools/submit_kaggle_v5_once.py \
+            --archive "$RUNNER_TEMP/v5-upload/submission.zip" \
+            --result-json gemma4-agent/kaggle_results/v5-official-submission.json
+
+      - name: Show submission receipt
+        if: always()
+        run: |
+          if [ -f gemma4-agent/kaggle_results/v5-official-submission.json ]; then
+            cat gemma4-agent/kaggle_results/v5-official-submission.json
+          else
+            echo "No submission receipt was produced."
+          fi
+
+      - name: Upload submission receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gemma-v5-official-submission-${{ github.run_id }}
+          path: gemma4-agent/kaggle_results/v5-official-submission.json
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Commit submission receipt to this branch
+        if: always()
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git pull --rebase --autostash origin "$GITHUB_REF_NAME" || true
+          if [ -f gemma4-agent/kaggle_results/v5-official-submission.json ] && [ -n "$(git status --porcelain gemma4-agent/kaggle_results/v5-official-submission.json)" ]; then
+            git add gemma4-agent/kaggle_results/v5-official-submission.json
+            git commit -m "chore(gemma): record official V5 submission receipt [skip ci]"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          else
+            echo "No new submission receipt to commit."
+          fi

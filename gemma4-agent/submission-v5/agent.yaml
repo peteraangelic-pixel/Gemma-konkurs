@@ -1,0 +1,24 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/google/adk-python/refs/heads/main/src/google/adk/agents/config_schemas/AgentConfig.json
+# V5: single-agent, grep-first repair loop tuned to the measured 12h / ~120-task budget.
+# Deliberately removed versus V4: analyzer AgentTool (measured +1 task, costs a delegation
+# round trip), both skills (each costs a load + script call inside a ~5-minute session),
+# repository-specific layout hints (the scored split comes from private repositories),
+# and any instruction that discourages submitting an unverified but plausible patch.
+agent_class: LlmAgent
+name: gemma4_fast_repair
+model: gemma-4-31b-it-qat-w4a16-ct
+description: A time-budgeted software-repair agent that localizes an issue with one combined shell search, makes a minimal source edit, and always submits a patch.
+instruction: !include prompts/system.md
+tools:
+  # Graph tools stay registered so an attempted call cannot break the ADK tool loop,
+  # but the instructions tell the agent not to use them (measured: no benefit).
+  - run_command
+  - read_file
+  - edit_file
+  - write_file
+  - get_status
+  - submit_patch
+  - get_code_neighbors
+  - search_similar_code
+  - get_code_subgraph
+generate_content_config: !include configs/sampling.yaml

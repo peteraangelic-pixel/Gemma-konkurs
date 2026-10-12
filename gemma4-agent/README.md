@@ -61,6 +61,38 @@ python gemma4-agent/build_submission.py \
   --output gemma4-agent/submission-v4.zip
 ```
 
+## Kandydat V5 — przebudowa po diagnozie 0.03
+
+V4 jest jedyną ocenioną submissją (ref `57045226`, publicScore **0.03**). Pełna analiza przyczyn
+i dowodów jest w [`DIAGNOSIS.md`](DIAGNOSIS.md); w skrócie: dla ~120 zadań z **prywatnych**
+repozytoriów, w budżecie 12 h łącznie z setupem sandboxa, V4 grał z wyłączonymi streszczeniami
+myśli (peer-abacja: -12 pkt proc.), capem 35 wywołań (peer: 25 vs 50 wywołań = 36 vs 50/129),
+promptem zniechęcającym do edycji (20% pustych patchy = pewne zera) i 5-8 turami na sesję
+zużytymi na `get_status`, skills, subagenta i walidację.
+
+V5 jest zbudowany w izolowanym `submission-v5/` i pakowany `build_submission_v5.py` (zamknięty
+zestaw 4 plików, guard na model, rejestr narzędzi, kopertę budżetu 12 h i włączone streszczenia
+myśli):
+
+```bash
+python gemma4-agent/build_submission_v5.py
+# artefakt: gemma4-agent/submission-v5.zip
+# SHA-256: 282b14462648601e40d6aff3e88eb4a665639ffc2307d19e8ccba35d04e2bd8c
+```
+
+Co się zmieniło względem V4: `include_thoughts: true` + `thinking_budget: 4096`; sampling
+0.4/0.95/40 z `max_output_tokens: 16384`; budżet 5,25 min / 45 wywołań / 80 tur / 150 s na
+komendę; prompt przepisany na jeden zbiorczy `run_command` z wieloma `grep`ami, dosłowne
+przenoszenie nazw/typów wyjątków/komunikatów z issue, **obowiązkowy niepusty patch**, edycje
+odporne na błąd parsera `gemma4` (`"""` w `old_string`) i jawną strategię dla issue bez
+identyfikatorów (~27% zadań). Usunięte: subagent-analizator, oba skills, hinty pod cztery
+publiczne repozytoria i sekcja promująca narzędzia grafowe.
+
+**V5 nie był jeszcze uruchamiany na GPU ani wysłany.** Kolejność weryfikacji: (1) prywatny
+benchmark na tych samych 30 zadaniach i seedzie 20261009 (`kaggle_smoke/gemma-agent-benchmark-v5.ipynb`),
+porównanie z V3/V4 = 11/30; (2) dopiero potem jeden oficjalny upload `submission-v5.zip` jako
+`submission.zip` - kolejka scoringu to obecnie 22-46 h, a oczekująca submissja blokuje kolejną.
+
 ## Odczyt statusu Kaggle przez GitHub Actions
 
 Workflow `../.github/workflows/gemma-kaggle-poll.yml` wykonuje wyłącznie odczyt: listuje statusy naszych submissionów i pobiera publiczną tabelę leaderboardu konkursu `gemma-4-developer-agent`. Wyniki zapisuje w `gemma4-agent/kaggle_results/` (`summary.md`, `summary.json`, CSV) i commit-uje z powrotem na gałąź sesji. **Nie przesyła nowego ZIP-a ani nie zużywa dziennego limitu submissionów.**
