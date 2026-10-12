@@ -1,0 +1,43 @@
+{
+  "tasks": 188,
+  "hit_rates": {
+    "top1": 0.4468,
+    "top2": 0.6117,
+    "top3": 0.6543,
+    "top5": 0.7181,
+    "top10": 0.8085
+  },
+  "per_repo": {
+    "encode/starlette": {
+      "top1": 0.375,
+      "top2": 0.5,
+      "top3": 0.525,
+      "top5": 0.625,
+      "top10": 0.7
+    },
+    "pallets/click": {
+      "top1": 0.575,
+      "top2": 0.8,
+      "top3": 0.85,
+      "top5": 0.85,
+      "top10": 0.95
+    },
+    "tiangolo/typer": {
+      "top1": 0.2857,
+      "top2": 0.4286,
+      "top3": 0.5714,
+      "top5": 0.7143,
+      "top10": 0.7857
+    },
+    "pydantic/pydantic": {
+      "top1": 0.2857,
+      "top2": 0.3571,
+      "top3": 0.3571,
+      "top5": 0.5,
+      "top10": 0.6429
+    }
+  },
+  "locator": "gemma4-agent/submission-v6/tools/locate.py",
+  "locator_sha256": "b59a8f4d59b5cb5f6bd7a5138ed00cf88caa2a4fd729e63866f0291f30aa7b21",
+  "mode": "holdout"
+}

@@ -2,7 +2,8 @@
 # V6 = V5 with a measured locator-first localization step.
 # V5 was grep-first; the offline lab (LOCALIZATION.md) showed plain first-grep reaches the
 # fixable source file in ~15% of tasks at top-5, while the deterministic locator embedded in
-# prompts/system.md reaches ~73% on the same 129 dev tasks and ~77% on held-out repositories.
+# prompts/system.md reaches 73.4% top-5 on the 128 dev tasks that have a fixable gold file and
+# 71.8% top-5 on 188 held-out tasks from repositories outside the dev set (65.4%/66.4% top-3).
 # Everything else from V5 is unchanged: thinking on, 45 calls, always submit a patch, no
 # analyzer/skills/graph tools, no repository-specific hints.
 agent_class: LlmAgent

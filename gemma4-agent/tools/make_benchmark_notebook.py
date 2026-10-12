@@ -5,12 +5,12 @@ The notebook in commit c0256ba embeds its candidate archive as base64 and assert
 SHA-256 before extracting it, then runs the real `swegemma` Evaluator on a deterministic
 30-task stratified sample (seed 20261009, fixed task fastapi_15588) - the same sample V2,
 V3 and V4 were measured on. This script swaps only those two constants so a new candidate
-(V5) is measured on exactly the same tasks as its predecessors.
+(V5, V6, ...) is measured on exactly the same tasks as its predecessors.
 
 Usage:
     python gemma4-agent/tools/make_benchmark_notebook.py \
-        --zip gemma4-agent/submission-v5.zip \
-        --output gemma4-agent/kaggle_smoke/gemma-agent-benchmark-v5.ipynb
+        --zip gemma4-agent/submission-v6.zip \
+        --output gemma4-agent/kaggle_smoke/gemma-agent-benchmark-v6.ipynb
 """
 
 from __future__ import annotations

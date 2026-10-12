@@ -100,7 +100,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: gemma-v6-kernel-log-${{ github.run_id }}
-          path: ${{ runner.temp }}/gemma-v5-kernel-logs/
+          path: ${{ runner.temp }}/gemma-v6-kernel-logs/
           if-no-files-found: warn
           retention-days: 3
 

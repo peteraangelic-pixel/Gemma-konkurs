@@ -36,9 +36,12 @@ def measure(module, root: Path, issue: str, gold: set[str], top: int = 10) -> li
     return [name for _, name in module.rank(struct, query)[:top]]
 
 
+TOP_GRID = (1, 2, 3, 5, 10)
+
+
 def dev_mode(module) -> dict:
     tasks = tasks_from_git(None, None)
-    hits = {1: 0, 5: 0, 10: 0}
+    hits = {k: 0 for k in TOP_GRID}
     scored = 0
     worktree = None
     current = None
@@ -53,35 +56,36 @@ def dev_mode(module) -> dict:
         checkout(worktree, task["base_commit"])
         ranked = measure(module, worktree, task.get("problem_statement") or "", targets)
         scored += 1
-        for k in (1, 5, 10):
+        for k in TOP_GRID:
             if set(ranked[:k]) & targets:
                 hits[k] += 1
         if index % 30 == 0:
             print(f"  {index}/{len(tasks)}", flush=True)
-    return {"tasks": scored, "hit_rates": {f"top{k}": round(hits[k] / max(1, scored), 4) for k in (1, 5, 10)}}
+    return {"tasks": scored,
+            "hit_rates": {f"top{k}": round(hits[k] / max(1, scored), 4) for k in TOP_GRID}}
 
 
 def holdout_mode(module, repos: list[str], per_repo: int) -> dict:
-    hits = {1: 0, 5: 0, 10: 0}
+    hits = {k: 0 for k in TOP_GRID}
     scored = 0
     per_repo_rates = {}
     for repo in repos:
         repo_dir = ensure_repo(repo)
-        repo_hits = {1: 0, 5: 0, 10: 0}
+        repo_hits = {k: 0 for k in TOP_GRID}
         rows = 0
         for task in candidate_tasks(repo_dir, per_repo):
             git(repo_dir, "checkout", "-q", "-f", task["base"])
             ranked = measure(module, repo_dir, task["title"], set(task["files"]))
             rows += 1
-            for k in (1, 5, 10):
+            for k in TOP_GRID:
                 if set(ranked[:k]) & set(task["files"]):
                     hits[k] += 1
                     repo_hits[k] += 1
         scored += rows
-        per_repo_rates[repo] = {f"top{k}": round(repo_hits[k] / max(1, rows), 4) for k in (1, 5, 10)}
+        per_repo_rates[repo] = {f"top{k}": round(repo_hits[k] / max(1, rows), 4) for k in TOP_GRID}
         print(f"  {repo}: {rows} tasks -> " + ", ".join(f"top{k} {repo_hits[k] / max(1, rows):.1%}"
                                                         for k in (1, 5, 10)), flush=True)
-    return {"tasks": scored, "hit_rates": {f"top{k}": round(hits[k] / max(1, scored), 4) for k in (1, 5, 10)},
+    return {"tasks": scored, "hit_rates": {f"top{k}": round(hits[k] / max(1, scored), 4) for k in TOP_GRID},
             "per_repo": per_repo_rates}
 
 
@@ -97,7 +101,9 @@ def main() -> int:
 
     module = load_module(args.locator)
     result = dev_mode(module) if args.mode == "dev" else holdout_mode(module, args.repo, args.tasks_per_repo)
+    import hashlib as _hashlib
     result["locator"] = str(args.locator)
+    result["locator_sha256"] = _hashlib.sha256(args.locator.read_bytes()).hexdigest()
     result["mode"] = args.mode
     print(json.dumps(result, indent=2))
     if args.out:

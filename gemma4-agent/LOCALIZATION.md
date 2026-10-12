@@ -31,7 +31,9 @@ python3 gemma4-agent/tools/locate_experiment.py    # ~65 s
 ## Wyniki: trafienie w *naprawialny* plik źródłowy ze złotego patcha
 
 Cel metryki: plik `.py` ze złotego patcha, ale nie z `docs/`, `tests/`, `scripts/` — czyli plik,
-którego edycja faktycznie może zmienić wynik testów (125/129 zadań ma taki plik).
+którego edycja faktycznie może zmienić wynik testów. Taki plik ma **128 z 129** zadań
+(jedyne bez: `fastapi_15661`, którego złoty patch rusza tylko `scripts/prepare_release.py`),
+więc mianownikiem we wszystkich tabelach jest **128**, nie 129.
 
 | receptura | top-1 | top-5 | top-10 |
 | --- | --- | --- | --- |
@@ -78,6 +80,9 @@ ten kod, który jedzie w `locator.py`).
 | tiangolo/typer | 14 | 28.6 % | 71.4 % | 78.6 % |
 | pydantic/pydantic | 14 | 28.6 % | 50.0 % | 64.3 % |
 | **razem** | **108** | **42.6 %** | **71.3 %** | **79.6 %** |
+
+(Uwaga: ten przebieg 108 zadań mierzył prototyp `tools/locator.py`; poniżej jest pomiar dokładnego
+artefaktu V6 na 188 zadaniach — to on obowiązuje.)
 
 Na repozytoriach, których procedura nigdy nie widziała, wynik jest **równy lub lepszy** od wyniku
 w zbiorze deweloperskim (68.8 % top-5), z uczciwym rozrzutem: `pydantic` (duży, wielomodułowy) daje
