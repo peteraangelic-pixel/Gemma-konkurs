@@ -1,1 +1,1 @@
-read-only check after guarded V4 submission retry returned CLI exit 1; no upload or submission; verify whether submission-v4.zip is present; UTC=2026-10-10T14:34Z
+read-only Kaggle status/score check for V4 ref 57045226; no upload, no submission, no notebook execution; UTC=2026-10-12T07:17:04Z
