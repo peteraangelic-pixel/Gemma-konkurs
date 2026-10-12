@@ -16,7 +16,7 @@ regresji V6.1 wróciły (`rich_3518`, `rich_3894`, `rich_3882`), jedna nadal spa
 doszło jedno nowe rozwiązanie (`fastapi_14873`, patch 1 291 znaków, 27 wywołań).
 
 Wynik nadal **nie bije V5 (10/30)**. Przy n=30 różnica 1 zadania to szum (CI95 dla 9/30 to
-[11 %, 30 %]), więc ten przebieg trzeba czytać mechanicznie, nie rankingowo.
+[16.7 %, 47.9 %], zgodnie z `agent_benchmark_result.json`), więc ten przebieg trzeba czytać mechanicznie, nie rankingowo.
 
 ## Pierwszy dowód end-to-end, że lokalizacja ma znaczenie
 

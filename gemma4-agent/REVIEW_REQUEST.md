@@ -63,7 +63,9 @@ Co to mówi (i czego nie mówi):
 - **naprawa V6.1 potwierdzona mechanicznie**: zero zaśmieconych diffów (było 9), trafienia
   lokalizatora 15 → 20/30, wróciły 3 z 4 regresji V6.1;
 - **wynik nadal nie bije V5** (9 vs 10/30) i przy n=30 ta różnica jest szumem (CI95 dla 9/30 to
-  [11 %, 30 %]) — czytajcie ten przebieg mechanicznie, nie rankingowo;
+  [16.7 %, 47.9 %] — wcześniejsza wersja tego dokumentu podawała błędnie [11 %, 30 %], co
+  wyłapała recenzja; teraz pilnuje tego `tools/check_docs_consistency.py`) — czytajcie ten przebieg
+  mechanicznie, nie rankingowo;
 - **pierwsza korelacja lokalizacja → wynik**: `localized=True` → 8/20 rozwiązanych (40 %),
   `localized=False` → 1/10 (10 %). Korelacja, nie dowód przyczynowy;
 - **nowy wzorzec porażki**: 2 z 8 pustych drzew to **przedwczesne `submit_patch()` bez edycji**

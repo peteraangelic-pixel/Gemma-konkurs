@@ -179,6 +179,9 @@ jobs:
       - name: Rewrite the screening comparison with the fetched results
         run: python gemma4-agent/tools/compare_screenings.py
 
+      - name: Verify documentation matches the recorded JSON artifacts
+        run: python gemma4-agent/tools/check_docs_consistency.py
+
       - name: Commit the fetched results to this branch
         run: |
           set -euo pipefail

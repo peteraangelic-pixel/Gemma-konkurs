@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -24,6 +25,16 @@ CANDIDATES = [
     ("V6.1", "v6-1-benchmark"),
     ("V6.2", "v6-benchmark"),
 ]
+
+
+def wilson(k: int, n: int, z: float = 1.96) -> tuple[float, float]:
+    if not n:
+        return 0.0, 1.0
+    p = k / n
+    denominator = 1 + z * z / n
+    center = (p + z * z / (2 * n)) / denominator
+    margin = z * math.sqrt((p * (1 - p) + z * z / (4 * n)) / n) / denominator
+    return max(0.0, center - margin), min(1.0, center + margin)
 
 
 def stats(path: Path) -> dict | None:
@@ -41,8 +52,13 @@ def stats(path: Path) -> dict | None:
     empty = [r.get("task_id") for r in tasks if (r.get("patch_chars") or 0) == 0]
     clock = [r.get("task_id") for r in tasks if (r.get("duration_seconds") or 0) >= CLOCK_CAP]
     resolved = [r.get("task_id") for r in tasks if r.get("resolved")]
+    low, high = wilson(len(resolved), len(tasks))
+    stored = data.get("score_ci95_wilson")
+    if stored and (abs(stored[0] - low) > 0.002 or abs(stored[1] - high) > 0.002):
+        raise SystemExit(f"{path}: stored CI {stored} disagrees with recomputed [{low:.4f}, {high:.4f}]")
     return {
         "total": len(tasks),
+        "ci95": [round(low * 100, 1), round(high * 100, 1)],
         "resolved": len(resolved),
         "resolved_ids": resolved,
         "empty": len(empty),
@@ -74,13 +90,14 @@ def main() -> int:
         "Te same 30 zadań i seed 20261009 w każdym przebiegu. Kolumny diagnostyczne istnieją tylko",
         "dla przebiegów po dodaniu diagnostyki per zadanie (V6.1, V6.2).",
         "",
-        "| kandydat | rozwiązane | puste drzewa (zero edycji) | śmierci na zegarze | zadania z plikami-śmieciami | w tym TYLKO śmieci | trafienia lokalizatora | średni czas |",
-        "| --- | --- | --- | --- | --- | --- | --- | --- |",
+        "| kandydat | rozwiązane | CI95 Wilsona | puste drzewa (zero edycji) | śmierci na zegarze | zadania z plikami-śmieciami | w tym TYLKO śmieci | trafienia lokalizatora | średni czas |",
+        "| --- | --- | --- | --- | --- | --- | --- | --- | --- |",
     ]
     for tag, s in present:
         loc = "—" if s["localization_hits"] is None else f"{s['localization_hits']}/{s['total']}"
         lines.append(
-            f"| {tag} | **{s['resolved']}/{s['total']}** | {s['empty']} | {s['clock_deaths']} "
+            f"| {tag} | **{s['resolved']}/{s['total']}** "
+            f"| [{s['ci95'][0]} %, {s['ci95'][1]} %] | {s['empty']} | {s['clock_deaths']} "
             f"| {s['scratch']} | {s['scratch_only']} | {loc} | {s['mean_seconds']} s |")
 
     lines += ["", "## Zmiany statusu między kolejnymi kandydatami", ""]
@@ -110,6 +127,10 @@ def main() -> int:
         "   bo diff wypełniły pliki robocze) to dwa różne objawy tej samej przyczyny.",
         "3. **Publiczny screening 30 zadań nie przewiduje ukrytego wyniku** (V3/V4/V5: 10–11/30 przy",
         "   oficjalnym 0.03), ale z diagnostyką per zadanie niezawodnie wskazuje mechanizmy porażek.",
+        "4. **Przedziały CI95 w tabeli są liczone z JSON-ów** (`score_ci95_wilson` jest dodatkowo",
+        "   kontrolowane przy generowaniu). Prozy nie wolno przepisywać ręcznie — pilnuje tego",
+        "   `python3 gemma4-agent/tools/check_docs_consistency.py` (wykrył realną rozbieżność",
+        "   [11 %, 30 %] vs [16.7 %, 47.9 %] w V6.2).",
         "",
     ]
 
