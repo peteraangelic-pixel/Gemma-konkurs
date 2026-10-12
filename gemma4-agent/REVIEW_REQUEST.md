@@ -4,12 +4,13 @@
 z gałęzi `arena/c4eeb067-gemma-konkurs` **bez wydawania czasu GPU Kaggle** — wszystko, co można
 sprawdzić na CPU, jest tu wypisane razem z komendami i hashami.
 
-**Reguła, która obowiązuje do końca recenzji:** żadnych nowych uruchomień na Kaggle. Wyjątek:
-run V6.2 ([`38262206820`](https://github.com/peteraangelic-pixel/Gemma-konkurs/actions/runs/38262206820))
-został wystartowany 2026-10-12 14:20 UTC, **zanim** użytkownik poprosił o wstrzymanie; kernel już
-wykonywał się na maszynach Kaggle i `kaggle` CLI nie udostępnia anulowania, więc pobranie jego
-wyniku nie kosztuje dodatkowego compute. Ten wynik jest **wyłącznie diagnostyczny** i sam z siebie
-nie jest podstawą do żadnej submissji.
+**Reguła, która obowiązuje:** **żadnych nowych uruchomień na Kaggle** dopóki obie gałęzie nie
+uzgodnią wersji i użytkownik nie zatwierdzi. Wszystkie przebiegi, o których mowa niżej, już się
+skończyły, a ich wyniki są w repozytorium — recenzja nie wymaga ani sekundy GPU.
+
+**Wynik V6.2 jest już znany: 9/30** (szczegóły w sekcji 2a). Run V6.2 wystartował zanim użytkownik
+poprosił o wstrzymanie; jego wynik pobrano z zakończonego kernela przez API (`kaggle kernels output`
+— czysty transfer plików, zero GPU, brak submissji), bo commit w workflow benchmarku padł.
 
 ---
 
@@ -46,6 +47,52 @@ Gałąź ma też kandydatów V5 (`submission-v5.zip`, `282b1446…`) i V1–V4 (
 Poprzednia recenzja słusznie wyłapała, że deklarowałem wynik held-out z innego artefaktu niż
 wysyłany; dlatego **oba pomiary wyżej zostały ponownie wykonane na obecnym pliku `fe25b200…`**
 i pliki dowodowe zapisują hash mierzonego pliku.
+
+## 2a. Wynik V6.2 (najświeższy, na tym samym 30-zadaniowym seedzie)
+
+| kandydat | rozwiązane | puste drzewa | śmierci na zegarze | pliki-śmieci | trafienia lokalizatora | średni czas |
+| --- | --- | --- | --- | --- | --- | --- |
+| V3 | 11/30 | 6 | 16 | — | — | 261 s |
+| V4 | 11/30 | 6 | 12 | — | — | 234 s |
+| V5 | 10/30 | 6 | 9 | — | — | 233 s |
+| V6.1 | 6/30 | 7 | 17 | 9 (7 tylko śmieci) | 15/30 | 275 s |
+| **V6.2** | **9/30** | 8 | 17 | **0** | **20/30** | 272 s |
+
+Co to mówi (i czego nie mówi):
+
+- **naprawa V6.1 potwierdzona mechanicznie**: zero zaśmieconych diffów (było 9), trafienia
+  lokalizatora 15 → 20/30, wróciły 3 z 4 regresji V6.1;
+- **wynik nadal nie bije V5** (9 vs 10/30) i przy n=30 ta różnica jest szumem (CI95 dla 9/30 to
+  [11 %, 30 %]) — czytajcie ten przebieg mechanicznie, nie rankingowo;
+- **pierwsza korelacja lokalizacja → wynik**: `localized=True` → 8/20 rozwiązanych (40 %),
+  `localized=False` → 1/10 (10 %). Korelacja, nie dowód przyczynowy;
+- **nowy wzorzec porażki**: 2 z 8 pustych drzew to **przedwczesne `submit_patch()` bez edycji**
+  (`rich_3105`: 5 wywołań/119 s; `rich_3934`: 10 wywołań/266 s). `submit_patch()` kończy sesję,
+  więc reguła „zawsze submituj" prowokuje zera z pustego drzewa;
+- **nierozwiązany wzorzec**: 6 śmierci na zegarze, w tym `rich_3006` z 4 wywołaniami w 318 s —
+  problemem jest czas pojedynczego wywołania (długie myślenie), nie liczba wywołań;
+- **reguła małego patcha potwierdzona trzeci raz**: wszystkie 9 rozwiązanych patchy < 1 900 znaków,
+  a wśród nierozwiązanych 6 przekroczyło 1 500;
+- **tani sygnał**: `fastapi_14487` zmienił plik `docs/en/docs/tutorial/handling-errors.md` — edycja
+  dokumentacji nigdy nie naprawia testów.
+
+Pełna tabela per zadanie: `kaggle_results/v6-benchmark/fetch_summary.txt`; analiza:
+`kaggle_results/v6-benchmark/analysis.md`; przebieg kernela:
+`petersharps/gemma-agent-benchmark-8c1ea5b7-20261012-142047`.
+
+## 2b. Propozycje zmian na V6.3 (do zaakceptowania lub odrzucenia w recenzji — NIE wdrożone)
+
+1. **`submit_patch()` tylko z niepustym drzewem** — strażnik higieny ma zaczynać od
+   `git status --porcelain` i jeśli jest pusty, najpierw edytować. Adresuje 2 zmierzone zera.
+2. **Niższy `thinking_budget` (4096 → 2048)** i/lub twardsze „pierwsza edycja do 6. wywołania" —
+   adresuje 6 śmierci na zegarze i przypadek 4 wywołań w 318 s.
+3. **Reguła „dokumentacja nigdy nie naprawia testów"** — jeśli top kandydat jest w `docs/`,
+   `docs_src/`, wybierz następny plik źródłowy (adresuje `fastapi_14487`).
+4. **`timeout 30`** zamiast 45 przy weryfikacji (dalsze cięcie ryzyka przekroczenia zegara).
+
+Każda z tych zmian jest tania do zmierzenia tylko na Kaggle, więc **kolejny przebieg dopiero po
+uzgodnieniu listy** — dokładnie tak, jak prosił użytkownik: jedna wspólna wersja, jedno 2,5-godzinne
+uruchomienie.
 
 ## 3. Znane tryby porażki (i co zostało naprawione)
 
@@ -113,7 +160,8 @@ Punkty 1–3 powinny przejść bez błędów; punkt 2 musi dać liczby z tabeli 
    `localization_hits` w V6.2 jako proxy, porównanie z 15/30 z V6.1)?
 4. **Prompt 16.3 KB z osadzonym skryptem**: czy to nie jest ryzyko „rozmycia instrukcji"? Alternatywa:
    skrócić skrypt (top-8 → top-6, bez linii dowodowych) i/lub skrócić listę reguł. Co byś wyciął?
-5. **Budżet 30 wywołań / deadline submisji na 18.**: rozwiązane sesje V5 miały średnio 15 wywołań,
+5. **Budżet 30 wywołań / deadline submisji na 18.** V6.2 pokazuje, że `fastapi_14851` zużyło
+   wszystkie 30 wywołań bez rezultatu, więc cap jest wiążący przynajmniej dla jednego zadania.: rozwiązane sesje V5 miały średnio 15 wywołań,
    ale V5 miało też zadanie z 32 wywołaniami i 5 000-znakowym patchem (nieudane). Czy obniżony cap
    nie ucina długiego ogona zadań, które wymagają więcej pracy?
 6. **Odziedziczone ustawienia bez lokalnej replikacji** (punkt 9 tabeli): które z nich jest
