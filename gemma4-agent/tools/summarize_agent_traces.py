@@ -254,6 +254,29 @@ def aggregate(summaries: list[dict]) -> list[dict]:
                     best = max(best, run)
             return best
 
+        # Repository edit = a write call whose target is a relative path, i.e. it lands inside the
+        # repository tree. Added BEFORE the V6.4 mini-screen ran, because the V6.3 evidence showed
+        # that counting every write as an "edit" is wrong: fastapi_15745's only write was
+        # /tmp/locate.py (absolute, outside the tree) and its diff stayed empty, while rich_3006
+        # wrote /tmp/repro.py and then made a real repository edit. Absolute writes are reported
+        # separately, never folded into the edit coverage.
+        def first_repo_write(row: dict) -> dict | None:
+            for call in row["sequence"]:
+                if call.get("tool") not in WRITE_TOOLS_AGG:
+                    continue
+                target = str(call.get("target") or "")
+                if target and not target.startswith("/"):
+                    return call
+            return None
+
+        repo_writes = {r["task"]: first_repo_write(r) for r in rows}
+        repo_rows = [r for r in rows if repo_writes[r["task"]]]
+        repo_indices = sorted(c["i"] for c in repo_writes.values() if c and c.get("i") is not None)
+        repo_within_deadline = sum(1 for i in repo_indices if i <= 4)
+        repo_times = sorted(c["t"] for c in repo_writes.values()
+                            if c and c.get("t") is not None)
+        repo_median_time = repo_times[len(repo_times) // 2] if repo_times else None
+
         submit_calls = {r["task"]: len(r["submit_patch_calls"]) for r in rows}
         outside = sorted({call.get("target") for r in rows for call in r["sequence"]
                           if call.get("tool") in WRITE_TOOLS_AGG
@@ -273,6 +296,13 @@ def aggregate(summaries: list[dict]) -> list[dict]:
             "submit_patch_total": sum(submit_calls.values()),
             "tasks_with_repeated_submit": {t: n for t, n in submit_calls.items() if n >= 2},
             "absolute_write_targets": outside,
+            "repo_write_coverage": f"{len(repo_rows)}/{len(rows)}",
+            "tasks_without_repo_write": sorted(r["task"] for r in rows
+                                               if not repo_writes[r["task"]]),
+            "median_first_repo_write_s": repo_median_time,
+            "median_first_repo_write_index": (repo_indices[len(repo_indices) // 2]
+                                              if repo_indices else None),
+            "tasks_repo_write_within_call_4": f"{repo_within_deadline}/{len(rows)}",
         })
     return out
 
@@ -309,6 +339,7 @@ def main() -> int:
                  "Pre-registered as M5 in GATES_V6_4.md; reported next to the resolved count, "
                  "never instead of it.", "",
                  "| kernel | tasks | write coverage | without any write | median first write | "
+                 "repo-edit coverage | median first repo edit | "
                  "max consec. submit | max consec. edits | submit calls | repeated submits |",
                  "| --- | --- | --- | --- | --- | --- | --- | --- | --- |"]
     for a in aggregates:
@@ -316,9 +347,16 @@ def main() -> int:
             f"| `{a['kernel']}` | {a['tasks']} | **{a['write_coverage']}** | "
             f"{len(a['tasks_without_write_attempt'])} | {a['median_first_write_s']} s "
             f"(call {a['median_first_write_index']}, in-deadline {a['tasks_first_write_within_call_4']}) | "
+            f"**{a['repo_write_coverage']}** | "
+            f"{a['median_first_repo_write_s']} s (call {a['median_first_repo_write_index']}, "
+            f"in-deadline {a['tasks_repo_write_within_call_4']}) | "
             f"{a['max_consecutive_submit_patch']} | {a['max_consecutive_edits']} | "
             f"{a['submit_patch_total']} | {a['tasks_with_repeated_submit'] or '—'} |")
     for a in aggregates:
+        if a["tasks_without_repo_write"]:
+            agg_lines += ["", f"- `{a['kernel']}` tasks with NO repository edit "
+                              f"(scratch or nothing at all): "
+                              f"{', '.join(a['tasks_without_repo_write'])}"]
         if a["tasks_without_write_attempt"]:
             agg_lines += ["", f"- `{a['kernel']}` tasks without any write attempt: "
                               f"{', '.join(a['tasks_without_write_attempt'])}"]

@@ -85,7 +85,7 @@ eksperyment (wymóg recenzji) i nie jest tu mieszana.
 | lokalizator | `tools/locate.py` `fe25b200fa52e100…` **bez zmian**, bajt w bajt taki sam w ZIP i w repo |
 | zamrożony prompt V6.3 | `gemma4-agent/candidates/v6-3/prompts-system.md` (17 603 znaków, sha256 `423da01cc4ddc019…`) — żeby archiwum V6.3 pozostało audytowalne |
 | packer | `build_submission_v6.py` + 4 strażniki reguł, 5 strażników pomiarów, zakaz `submit_patch` w `agent.yaml`, zakaz `submit_patch()` w promptcie, **strażnik sprzeczności** (odrzuca ogólny zakaz `write_file`/przekierowania shella); 6 kontrolek negatywnych sprawdzonych |
-| notebook | `kaggle_smoke/gemma-agent-benchmark-v6.ipynb` regenerowany dla `3843c878` |
+| notebook | `kaggle_smoke/gemma-agent-benchmark-v6.ipynb` regenerowany dla `aaea34e4` |
 
 **Uwaga o odtwarzaniu V6.3:** obecny packer egzekwuje reguły V6.4, więc **nie odtworzy** archiwum
 V6.3 — to celowe (V6.3 nie jest kandydatem do wysyłki: G2 = 3). Archiwum V6.3 jest zamrożone
@@ -141,7 +141,16 @@ więc w pracy włożonej w diagnozę, nie w jakości samego pomysłu na V6.4.
 
 - **pokrycie edycji** = zadania z ≥ 1 wywołaniem `edit_file`/`write_file` (liczone read-only
   z `trace-operations.json` po przebiegu). **Baseline V6.3: 23/30. Cel: ≥ 27/30.**
-- **dodatkowo: rozkład indeksu wywołania pierwszej edycji.** Baseline V6.3: mediana na wywołaniu **10**, w terminie call 4 zmieściło się **3/30** — cel ≥ 12/30.
+- **pokrycie edycji W REPO** (metryka zaostrzona **przed** przebiegiem, po lekcji z trzeciej korekty
+  M4): liczy się wyłącznie zapis o ścieżce **względnej**, czyli taki, który ląduje w drzewie
+  repozytorium; zapisy absolutne (`/tmp/...`) są raportowane osobno i **nie** wchodzą do pokrycia.
+  Powód: `fastapi_15745` zapisało `/tmp/locate.py` i zostało policzone jako „edycja", a jego diff był
+  pusty — metryka „dowolny zapis" zawyżała mechanizm. **Baseline V6.3: 22/30** (pełne 23/30 minus
+  `fastapi_15745`), bez edycji w repo: `fastapi_14459`, `fastapi_14487`, `fastapi_14851`,
+  `fastapi_15745`, `httpx_3672`, `rich_3043`, `rich_3105`, `rich_3934` — 8 zadań. Cel: ≥ 27/30.
+- **rozkład indeksu wywołania pierwszej edycji.** Baseline V6.3 (wszystkie zapisy): mediana **10**,
+  w terminie call 4: **3/30**. Baseline V6.3 (edycje **w repo**): mediana **11**, w terminie call 4:
+  **1/30**. Cel: ≥ 12/30 liczony po stronie „w repo" (próg bez zmian, metryka ostrzejsza).
 - raportowane razem: mediana czasu pierwszego zapisu (baseline 184,6 s), najdłuższa seria
   `submit_patch` (baseline 48), zapisy o ścieżce absolutnej (baseline `/tmp/locate.py`, `/tmp/repro.py`).
 
@@ -152,12 +161,48 @@ M5 mierzy **mechanizm**, nie wynik; przy n=30 nie uprawnia do twierdzenia o prze
 1. **E1**: sesji bez jakiejkolwiek próby edycji ≤ 3/30 (baseline 7/30).
 2. **E2**: `submit_patch` **nie pojawi się ani raz** w ścieżkach — narzędzia nie ma w `agent.yaml` (baseline: 48/44/42 wywołania).
 3. **E3**: co najwyżej jedna sesja z serią ≥ 3 nieudanych edycji (baseline: `fastapi_15030`, 9 pod rząd).
-4. **E4**: w ścieżkach brak zapisu o ścieżce absolutnej poza repo (baseline: `/tmp/locate.py`).
+4. **E4 (przepisane przed przebiegiem 2026-10-13 — powód podany jawnie)**: żadna sesja **nie kończy
+   się materiałem roboczym zamiast edycji** — czyli nie istnieje zadanie, którego jedynym zapisem
+   jest plik poza drzewem repo (baseline: `fastapi_15745`, tylko `/tmp/locate.py`, pusty diff).
+   **Poprzednie brzmienie E4** (brak jakiegokolwiek zapisu o ścieżce absolutnej poza repo) było
+   sprzeczne z poprawioną regułą M4, która **wprost pozwala** na `/tmp/repro.py` w każdej chwili —
+   dowód: `rich_3006` (PASS) i `fastapi_14303` pisały skrypty do `/tmp`. Zamiast karać za sam zapis
+   poza repo mierzymy to, co naprawdę zabija zadanie: **zakończenie bez edycji w repo**. Dodatkowo
+   raportujemy liczbę zapisów absolutnych i sprawdzamy, że żaden nie użył gołej nazwy pliku
+   (goła nazwa ląduje w `/workspace` i jest łapana przez G1).
 5. **E5**: mini-screen **nie jest prognozą** wyniku — rozstrzyga pełny przebieg (dowód z V6.3:
    `rich_3006` zginął na zegarze w mini, a w pełnym został rozwiązany).
 6. **E6**: jeśli po przebiegu pokrycie edycji nadal wynosi ≤ 23/30, to **reguły promptu nie zmieniają
    zachowania** i następnym dźwigniom (telemetria, parametry, architektura) poświęcamy osobny test —
    bez ponownego „dokładania reguł".
+
+## Pre-rejestracja mini-screenu V6.4 (zamrożona **przed** wypchnięciem triggera)
+
+Baseline dla **dokładnie tych 6 zadań** w V6.3 (policzony z `trace-operations.json`, nie z pamięci):
+
+| zadanie | mechanizm | patch V6.3 | edycja w repo (wywołanie) | czas | puste drzewo |
+| --- | --- | --- | --- | --- | --- |
+| `rich_3105` | M1 szybki | 0 | **brak** | — | tak |
+| `rich_3043` | M1 średni | 0 | **brak** | — | tak |
+| `fastapi_15030` | M2 pętla edycji | 0 | 11 | 212,4 s | tak |
+| `requests_6757` | M3 pętla submit | 0 | 7 | 102,8 s | tak |
+| `fastapi_15745` | M4 plik zamiast edycji | 0 | brak (tylko `/tmp/locate.py`) | 279,8 s | tak |
+| `fastapi_14077` | M3 przy zadaniu rozwiązanym | 2443 (**PASS**) | 8 | 43,1 s | nie |
+| **razem** | | **1/6 PASS** | **3/6 edycja, 0/6 w call 4** | | **5/6** |
+
+**Oczekiwania falsyfikowalne (wszystkie przed przebiegiem):**
+
+1. **P1**: ≥ **4/6** zadań ma edycję **w repo** w terminie **call 4** (baseline 0/6).
+2. **P2**: puste drzewa ≤ **1/6** (baseline 5/6).
+3. **P3**: `submit_patch` **nie pojawia się ani raz** (narzędzia nie ma w `agent.yaml`; baseline:
+   dziesiątki wywołań w `requests_6757`/`fastapi_14077`).
+4. **P4**: `fastapi_15030` nie powtarza serii ≥ 3 nieudanych `edit_file` pod rząd.
+5. **P5**: `fastapi_14077` pozostaje rozwiązany — kontrola regresji (jedyne rozwiązane zadanie
+   w tym zestawie).
+6. **Falsyfikacja**: jeśli P1 spadnie do ≤ 2/6 **lub** P2 przekroczy 1/6, to **reguły promptu nie
+   zmieniają zachowania** i zgodnie z E6 następne dźwignie dostają osobny test — bez dokładania
+   kolejnych reguł.
+7. **E5 nadal obowiązuje**: mini-screen nie jest prognozą wyniku; rozstrzyga pełny przebieg.
 
 ## Plan przebiegów — **wymaga Twojego zatwierdzenia; nic nie zostało uruchomione**
 
@@ -178,7 +223,7 @@ przebieg ≥ 9/30; (3) slot dzienny wolny; (4) użytkownik wyraźnie zatwierdza.
 
 - **V6.4 nie ma submittera i mieć go nie będzie, dopóki (1) i (2) nie są spełnione.** Bez
   zapiętego pliku nie da się wysłać niczego przypadkiem — to celowe, po dwóch wpadkach z pinem SHA.
-- Gdy warunki zajdą, submitter V6.4 (`submit_kaggle_v64_once.py`, pin `3843c878…`, komunikat „V64”,
+- Gdy warunki zajdą, submitter V6.4 (`submit_kaggle_v64_once.py`, pin `aaea34e4…`, komunikat „V64”,
   bramki `v6-4-miniscreen,v6-4-benchmark`) powstaje **w tym samym commicie co decyzja**, i dopiero
   wtedy `compare_screenings.py` dostaje wiersze `V6.4-mini`/`V6.4` (wcześniej walidator CI95 słusznie
   wymagałby wierszy bez wyników i czerwieniłby repo).
