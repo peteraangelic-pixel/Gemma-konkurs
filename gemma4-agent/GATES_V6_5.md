@@ -56,6 +56,11 @@ daje `aaea34e4…` (sprawdzone regresyjnie).
 
 ## Plan przebiegu i reguły decyzyjne (zamrożone)
 
+**Zmiana planu (2026-10-13 ~18:30 UTC, zapisana PRZED jakimkolwiek przebiegiem):** zamiast dwóch
+mini-screenów jutro startują **dwa pełne przebiegi 30 zadań** — V6.5 i V6.6 (szczegóły i uzasadnienie
+w `GATES_V6_6.md`: slot rozlicza sesję kernela, nie jej długość, więc pełny przebieg daje 5× próbkę
+za ten sam koszt). Mini pozostaje planem awaryjnym.
+
 **Krok 1 — mini-screen V6.5 na tych samych 6 zadaniach** (`rich_3105`, `rich_3043`,
 `fastapi_15030`, `requests_6757`, `fastapi_15745`, `fastapi_14077`), seed `20261009`, outdir
 `v6-5-miniscreen`, archiwum `submission-v6.5.zip`. Porównanie **parami** z V6.4 (te same zadania,

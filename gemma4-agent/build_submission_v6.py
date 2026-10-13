@@ -90,6 +90,9 @@ def optional_yaml_parse(path: Path):
 
 def validate_tree(submission_dir: Path) -> list[Path]:
     submission_dir = submission_dir.resolve()
+    # Derived from the directory name so a mis-typed --source-dir cannot package the wrong text.
+    variant = ("v66" if "6.6" in submission_dir.name
+               else "v65" if "6.5" in submission_dir.name else "v64")
     if not submission_dir.is_dir():
         fail(f"Missing submission source directory: {submission_dir}")
 
@@ -191,8 +194,24 @@ def validate_tree(submission_dir: Path) -> list[Path]:
              "tools/make_v6_prompt.py.")
     if prompt_text.count("## Locator script") != 1:
         fail("prompts/system.md must describe the locator exactly once.")
-    for required in ("cat > /tmp/locate.py <<'LOCATE_PY'", "ISSUE_EOF",
-                     "python3 /tmp/locate.py --root . --top 8",
+    # The locator invocation differs by variant on purpose (V6.6 runs the script inline so no
+    # scratch file exists to mistake for the work), so those phrases are checked per variant and
+    # banned in the others - a copied block from the wrong version must not build.
+    locator_phrases = {
+        "v64": ("cat > /tmp/locate.py <<'LOCATE_PY'", "python3 /tmp/locate.py --root . --top 8"),
+        "v65": ("cat > /tmp/locate.py <<'LOCATE_PY'", "python3 /tmp/locate.py --root . --top 8"),
+        "v66": ("python3 -c \"$(cat <<'LOCATE_PY'", "\" --root . --top 8 <<'ISSUE_EOF'"),
+    }
+    locator_banned = {
+        "v64": ("python3 -c \"$(cat <<'LOCATE_PY'",),
+        "v65": ("python3 -c \"$(cat <<'LOCATE_PY'",),
+        "v66": ("cat > /tmp/locate.py", "python3 /tmp/locate.py"),
+    }
+    for phrase in locator_banned[variant]:
+        if phrase in prompt_text:
+            fail(f"prompts/system.md carries the {variant} locator block from another variant: "
+                 f"{phrase!r}")
+    for required in (*locator_phrases[variant], "ISSUE_EOF",
                      "git status --porcelain",
                      # V64E: the blanket ban was replaced by the precise rule - it contradicted
                      # the M2 fallback (write_file) and M4 (scratch under /tmp is fine).
@@ -262,11 +281,10 @@ def validate_tree(submission_dir: Path) -> list[Path]:
                  f"{banned_phrase!r}")
     if "48 times" not in prose:
         fail("prompts/system.md lost the M3 measurement behind removing the submit tool.")
-    # ---- variant guards (V6.5) ----------------------------------------------------------------
-    # The variant is derived from the source directory name, so a mis-typed --source-dir cannot
-    # silently package the wrong text. V6.5 = V6.4 + one lever (the edit-decision framing) and must
-    # pass every V6.4 guard above as well.
-    variant = "v65" if "6.5" in submission_dir.name else "v64"
+    # ---- variant guards (V6.5, V6.6) -----------------------------------------------------------
+    # The variant is derived from the source directory name (see the top of validate_tree), so a
+    # mis-typed --source-dir cannot silently package the wrong text. Each variant must pass every
+    # V6.4 guard above, plus its own.
     V65_REQUIRED = (
         ("make it even if you are not yet certain it is the right file",
          "V6.5 permission clause (rough first edit is allowed and expected)"),
@@ -286,7 +304,23 @@ def validate_tree(submission_dir: Path) -> list[Path]:
     else:
         for phrase, label in V65_REQUIRED:
             if phrase in prose:
-                fail(f"V6.4 archive contains V6.5-only text ({label}); the variants are mixed up.")
+                fail(f"{variant} archive contains V6.5-only text ({label}); variants are mixed up.")
+
+    # ---- V6.6 lever (single-lever discipline: neither V6.4 nor V6.5 may carry it) ------------
+    V66_REQUIRED = (
+        ("four sessions wrote `/tmp/locate.py` and then never edited the repository at all",
+         "V6.6 measurement (the locator-file trap, from the full V6.4 run)"),
+    )
+    if variant == "v66":
+        for phrase, label in V66_REQUIRED:
+            if phrase not in prose:
+                fail(f"V6.6 prompt lost {label}: {phrase!r}")
+        if "LOCATE_PY" not in prompt_text:
+            fail("V6.6 prompt lost the LOCATE_PY heredoc entirely.")
+    else:
+        for phrase, label in V66_REQUIRED:
+            if phrase in prose:
+                fail(f"{variant} archive contains V6.6-only text ({label}); variants are mixed up.")
     if "as your final action" in prompt_text:
         fail("prompts/system.md still carries the V5 tail that contradicts the optional-submit rule.")
 
@@ -336,8 +370,12 @@ def main() -> int:
                              "source directory is the V6.5 tree")
     args = parser.parse_args()
     if args.output is None:
-        args.output = (BASE_DIR / "submission-v6.5.zip" if "6.5" in args.source_dir.name
-                       else DEFAULT_OUTPUT)
+        if "6.6" in args.source_dir.name:
+            args.output = BASE_DIR / "submission-v6.6.zip"
+        elif "6.5" in args.source_dir.name:
+            args.output = BASE_DIR / "submission-v6.5.zip"
+        else:
+            args.output = DEFAULT_OUTPUT
     submission_dir = (
         args.source_dir if args.source_dir.is_absolute() else (Path.cwd() / args.source_dir).resolve()
     )

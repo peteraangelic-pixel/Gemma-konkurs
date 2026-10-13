@@ -36,11 +36,13 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 V5_PROMPT = ROOT / "gemma4-agent" / "submission-v5" / "prompts" / "system.md"
 V6_DIR = ROOT / "gemma4-agent" / "submission-v6"
-LOCATOR = V6_DIR / "tools" / "locate.py"
 DEFAULT_OUT = V6_DIR / "prompts" / "system.md"
 VARIANT = os.environ.get("V6_VARIANT", "v64")
 V65_DIR = ROOT / "gemma4-agent" / "submission-v6.5"
-OUT = (V65_DIR / "prompts" / "system.md" if VARIANT == "v65" else DEFAULT_OUT)
+V66_DIR = ROOT / "gemma4-agent" / "submission-v6.6"
+VARIANT_DIR = {"v64": V6_DIR, "v65": V65_DIR, "v66": V66_DIR}[VARIANT]
+OUT = VARIANT_DIR / "prompts" / "system.md"
+LOCATOR = VARIANT_DIR / "tools" / "locate.py"
 
 LOCALIZE_STEP = """## Workflow
 1. **Extract the exact specification from the issue.** Write down every identifier (class, function, method, attribute, module), file or directory name, exception type, exact message string, CLI flag, config key, and quoted code fragment. Hidden tests usually assert exactly these names, messages and edge cases, so reuse them verbatim. Many issues are only a merged-PR title plus a link: then the title's words name the feature, and its most likely symbol is a snake_case rendering of those words (e.g. "Validate SSE fields" -> `sse.py`, `_check_...`, `ServerSentEvent`).
@@ -223,6 +225,39 @@ V65_EDITS = [
 ]
 
 
+# V6.6 lever (2026-10-13, after the full V6.4 run): the locator step itself produced zeros. Four of
+# 30 sessions wrote /tmp/locate.py and never edited the repository at all; fastapi_15745 and
+# fastapi_15588 ended after THREE tool calls (243.8 s and 340.6 s), as if the finished script were
+# the deliverable. Versions without a locator step (V3/V4/V5) had 6 empty trees, V6.x has 11. So
+# V6.6 removes the file from the localisation path instead of asking the model not to stop there:
+# the same script runs inline as the -c argument in ONE command, with the issue text on stdin.
+V66_EDITS = [
+    (
+        "cd /workspace && cat > /tmp/locate.py <<'LOCATE_PY'\n"
+        "[the whole locator script from the section at the end of this prompt, copied character for character]\n"
+        "LOCATE_PY\n"
+        "python3 /tmp/locate.py --root . --top 8 <<'ISSUE_EOF'\n"
+        "[the issue text, verbatim and complete]\n"
+        "ISSUE_EOF",
+        "cd /workspace && python3 -c \"$(cat <<'LOCATE_PY'\n"
+        "[the whole locator script from the section at the end of this prompt, copied character for character]\n"
+        "LOCATE_PY\n"
+        ")\" --root . --top 8 <<'ISSUE_EOF'\n"
+        "[the issue text, verbatim and complete]\n"
+        "ISSUE_EOF",
+    ),
+    (
+        "So if you have a helper script on disk and the tree is still untouched, stop and edit the "
+        "top candidate now.",
+        "So if you have a helper script on disk and the tree is still untouched, stop and edit the "
+        "top candidate now. Measured on the last full run, and this is why step 2 above no longer "
+        "writes any file: **four sessions wrote `/tmp/locate.py` and then never edited the "
+        "repository at all** - two of them stopped after only three tool calls, treating the "
+        "finished script as the work, and every one of them scored zero.",
+    ),
+]
+
+
 def apply_post_edits(prompt: str) -> str:
     for old, new in POST_EDITS:
         assert old in prompt, "missing anchor: " + old[:60]
@@ -261,6 +296,10 @@ def apply_post_edits(prompt: str) -> str:
     if VARIANT == "v65":
         for old, new in V65_EDITS:
             assert old in prompt, "missing V65 anchor: " + old[:60]
+            prompt = prompt.replace(old, new, 1)
+    if VARIANT == "v66":
+        for old, new in V66_EDITS:
+            assert old in prompt, "missing V66 anchor: " + old[:60]
             prompt = prompt.replace(old, new, 1)
     return prompt
 
