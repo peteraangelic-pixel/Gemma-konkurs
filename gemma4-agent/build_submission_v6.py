@@ -189,7 +189,9 @@ def validate_tree(submission_dir: Path) -> list[Path]:
                      "python3 /tmp/locate.py --root . --top 8",
                      "git status --porcelain",
                      "Never use `write_file` or shell redirection for scratch material",
-                     "**`submit_patch()` is optional.**",
+                     # V6.4 tightened this sentence ("... optional, and you may call it at
+                     # most once"); the check follows the shipped wording, not the old one.
+                     "**`submit_patch()` is optional, and you may call it at most once.**",
                      "**Documentation is not a fix.**",
                      "never end a session without a real edit on disk"):
         if required not in prompt_text:
@@ -212,6 +214,28 @@ def validate_tree(submission_dir: Path) -> list[Path]:
     for marker in ("- Keep the diff small", "- If by call 10"):
         if not any(line.strip().startswith(marker) for line in prose.splitlines()):
             fail(f"prompts/system.md lost the line break before {marker!r} (bullets are glued).")
+    # V6.4 mechanism guards: each rule is pinned to one measurement from the read-only diagnosis of
+    # the V6.3 kernels (ANALYSIS_V6_3_MECHANISMS.md). If a rule silently disappears or its measured
+    # number drifts, the build fails instead of shipping a prompt that only claims to be V6.4.
+    v64_rules = {
+        "No reading without writing": "M1 - sessions that never attempt an edit",
+        "If an `edit_file` call does not change the file, do not repeat it.": "M2 - edit loop",
+        "call it at most once": "M3 - submit_patch loop",
+        "Never create a file to help yourself": "M4 - writes outside the repository",
+    }
+    for phrase, label in v64_rules.items():
+        if prose.count(phrase) != 1:
+            fail(f"prompts/system.md must contain the V6.4 rule once ({label}): {phrase!r}")
+    for number, label in {
+        "31 calls": "M1 measurement",
+        "nine consecutive": "M2 measurement",
+        "48 times": "M3 measurement",
+        "280 s": "M4 measurement",
+    }.items():
+        if number not in prose:
+            fail(f"prompts/system.md lost the V6.4 measurement ({label}): {number!r}")
+    if "call 6 arrives with no edit on disk" not in prose:
+        fail("prompts/system.md lost the V6.4 write deadline (call 6).")
     if "submit_patch" not in prompt_text:
         fail("prompts/system.md lost the submit instructions.")
     if "as your final action" in prompt_text:

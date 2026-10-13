@@ -13,6 +13,16 @@ V6.2 design notes (all measured, see kaggle_results/v6-benchmark/analysis.md):
 * tool_call cap drops 45 -> 30 so the harness's free budget_warning arrives at call 20
   instead of 35 (measured sessions die on the 315 s clock, not on the call budget).
 
+V6.4 design notes (read-only diagnosis of the V6.3 kernels, see ANALYSIS_V6_3_MECHANISMS.md):
+* The 11 empty trees of V6.3 are four mechanisms, not one: 7 sessions never attempt any edit
+  (one burned 31 calls on run_command/read_file, two stopped by themselves at 41 s and 108 s);
+  fastapi_15030 fires nine consecutive edit_file calls at one file from 212 s to 307 s and writes
+  nothing; requests_6757 (plus fastapi_14077 and rich_3894) loops submit_patch 42-48 times and dies
+  on the 60-turn cap; fastapi_15745 writes /tmp/locate.py instead of editing the repository.
+* V6.4 therefore adds four rules, each pinned to one of those measurements: a write-without-reading
+  deadline, a fallback from a failing edit_file to write_file, submit_patch at most once, and a ban
+  on creating any file to help yourself. No budget, threshold, tool or script changes.
+
     python3 gemma4-agent/tools/make_v6_prompt.py
 """
 
@@ -97,9 +107,39 @@ POST_EDITS = [
 ]
 
 
+# V6.4: four rules, each pinned to a mechanism measured read-only in the V6.3 kernel traces
+# (ANALYSIS_V6_3_MECHANISMS.md). Anchors are the V6.3 sentences, so these edits apply in order
+# after POST_EDITS.
+V64_EDITS = [
+    # M1 - 7 of 30 sessions never attempted an edit; median first edit was 179 s of a 315 s budget.
+    (
+        "- **Hard edit deadline.** The graded artifact is the diff in `/workspace`: the harness extracts it even when you never call `submit_patch()`, so the only guaranteed zero is a tree you never edited. The locator is one call; an edit must exist on disk by call 8; stop searching by call 14; submit by call 18. A session that dies on the clock with an empty tree scores zero no matter how good the analysis was.",
+        "- **Hard edit deadline.** The graded artifact is the diff in `/workspace`: the harness extracts it even when you never call `submit_patch()`, so the only guaranteed zero is a tree you never edited. The locator is one call; an edit must exist on disk by call 8; stop searching by call 14; submit by call 18. A session that dies on the clock with an empty tree scores zero no matter how good the analysis was.\n   - **No reading without writing.** Measured on the last run: 7 of 30 sessions never attempted a single edit and scored zero - one of them spent 31 calls on `run_command` and `read_file` and two stopped on their own after 41 s and 108 s. So: the first call after your first file read must be an edit attempt, and if call 6 arrives with no edit on disk your next call is `edit_file` or `write_file` - no more reading first. Opening a top candidate and editing it beats opening five and editing none.",
+    ),
+    # M2 - nine consecutive edit_file calls at one file, 212 s to 307 s, diff still empty.
+    (
+        "   - Make the first edit as soon as you have a plausible target and refine it with further `edit_file` calls; do not batch a large rewrite into one risky step.",
+        "   - Make the first edit as soon as you have a plausible target and refine it with further `edit_file` calls; do not batch a large rewrite into one risky step.\n   - **If an `edit_file` call does not change the file, do not repeat it.** Try one different anchor; if that also fails, read the file once more and rewrite it whole with `write_file`. Measured: one session fired nine consecutive `edit_file` calls at the same file between 212 s and 307 s and the graded diff was still empty.",
+    ),
+    # M3 - submit_patch loops (48, 44, 42 calls) exhausted the 60-turn budget.
+    (
+        "   - **`submit_patch()` is optional.** The harness extracts the working-tree diff itself (`git add -N . && git diff`), so your edits are captured even if you never call it; calling it early only ends your session. Call it once the fix is on disk and you are done (or out of time) - never before a real edit exists, and never just to be sure something was submitted.",
+        "   - **`submit_patch()` is optional, and you may call it at most once.** The harness extracts the working-tree diff itself (`git add -N . && git diff`), so your edits are captured even if you never call it; calling it early only ends your session. Call it once the fix is on disk and you are done (or out of time) - never before a real edit exists, and never just to be sure something was submitted. Measured: one session called it 48 times in a row and died on the 60-turn budget with an empty tree, and two more exhausted their turns the same way (44 and 42 calls). A `submit_patch` that reports no changes is a signal to go back and edit - never to retry it.",
+    ),
+    # M4 - a session wrote /tmp/locate.py at 280 s instead of editing the repository.
+    (
+        "- If by call 10 the tree still has no edit, stop reading and investigating: open the top locator candidate and make the smallest sensible change - a wrong guess still beats submitting nothing.",
+        "- If by call 10 the tree still has no edit, stop reading and investigating: open the top locator candidate and make the smallest sensible change - a wrong guess still beats submitting nothing.\n- **Never create a file to help yourself, and never write outside the repository.** The locator is delivered inside the single `run_command` heredoc above and writes only to `/tmp`; nothing else you write may leave `/workspace`. Measured: one session spent 280 s writing `/tmp/locate.py` instead of editing the repository and scored zero. If you feel the need to create a helper file, that is your signal to edit the top candidate instead.",
+    ),
+]
+
+
 def apply_post_edits(prompt: str) -> str:
     for old, new in POST_EDITS:
         assert old in prompt, "missing anchor: " + old[:60]
+        prompt = prompt.replace(old, new, 1)
+    for old, new in V64_EDITS:
+        assert old in prompt, "missing V6.4 anchor: " + old[:60]
         prompt = prompt.replace(old, new, 1)
     return prompt
 

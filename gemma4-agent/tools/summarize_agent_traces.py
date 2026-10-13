@@ -143,6 +143,7 @@ def summarise(trace_path: Path, root: Path) -> dict:
     base = min(times) if times else None
 
     sequence: list[dict] = []
+    tool_sequence_full: list[str] = []
     truncated = False
     counts: dict[str, int] = {}
     first_write: dict | None = None
@@ -160,6 +161,7 @@ def summarise(trace_path: Path, root: Path) -> dict:
                 continue
             tool = str(call.get("tool", "<unnamed>"))
             counts[tool] = counts.get(tool, 0) + 1
+            tool_sequence_full.append(tool)
             entry = {"i": index, "tool": tool}
             if rel is not None:
                 entry["t"] = rel
@@ -185,6 +187,7 @@ def summarise(trace_path: Path, root: Path) -> dict:
         "submit_patch_calls": submits,
         "text_parts_seen": text_parts,
         "sequence": sequence,
+        "tool_sequence_full": tool_sequence_full,
         "sequence_truncated": truncated,
     }
 
@@ -204,6 +207,66 @@ def census(root: object, path: str, acc: dict, depth: int = 0) -> None:
     elif isinstance(root, list):
         for item in root[:50]:
             census(item, f"{path}[]", acc, depth + 1)
+
+
+WRITE_TOOLS_AGG = ("edit_file", "write_file", "apply_patch", "create_file", "str_replace")
+
+
+def aggregate(summaries: list[dict]) -> list[dict]:
+    """Per-kernel mechanism metrics, designed to be pre-registered (the V6.4 metric M5).
+
+    'tasks with any write attempt' is the only one that answers the question the V6.3 diagnosis
+    left open - whether a session ever tried to edit at all - and it is reported next to, never
+    instead of, the resolved count.
+    """
+    by_kernel: dict[str, list[dict]] = {}
+    for row in summaries:
+        by_kernel.setdefault(row["kernel"], []).append(row)
+
+    out: list[dict] = []
+    for kernel in sorted(by_kernel):
+        rows = by_kernel[kernel]
+        write_attempts = [r for r in rows
+                          if any(r["tool_counts"].get(tool) for tool in WRITE_TOOLS_AGG)]
+        first_times = [r["first_write_call"]["t"] for r in write_attempts
+                       if r["first_write_call"] and r["first_write_call"].get("t") is not None]
+        first_times.sort()
+        median_first = first_times[len(first_times) // 2] if first_times else None
+
+        def max_run(tool_set: tuple[str, ...]) -> int:
+            """Longest run of consecutive calls from that set, counted over the FULL call list.
+
+            Uses tool_sequence_full, not the truncated display sequence: on the first version the
+            sequence cap of 150 events silently reported 43 consecutive submit_patch calls where
+            requests_6757 actually made 48.
+            """
+            best = run = 0
+            for row in rows:
+                run = 0
+                for tool in row.get("tool_sequence_full") or [e["tool"] for e in row["sequence"]]:
+                    run = run + 1 if tool in tool_set else 0
+                    best = max(best, run)
+            return best
+
+        submit_calls = {r["task"]: len(r["submit_patch_calls"]) for r in rows}
+        outside = sorted({call.get("target") for r in rows for call in r["sequence"]
+                          if call.get("tool") in WRITE_TOOLS_AGG
+                          and str(call.get("target", "")).startswith("/")})
+        out.append({
+            "kernel": kernel,
+            "tasks": len(rows),
+            "tasks_with_write_attempt": len(write_attempts),
+            "write_coverage": f"{len(write_attempts)}/{len(rows)}",
+            "tasks_without_write_attempt": sorted(r["task"] for r in rows
+                                                  if r not in write_attempts),
+            "median_first_write_s": median_first,
+            "max_consecutive_submit_patch": max_run(("submit_patch",)),
+            "max_consecutive_edits": max_run(WRITE_TOOLS_AGG),
+            "submit_patch_total": sum(submit_calls.values()),
+            "tasks_with_repeated_submit": {t: n for t, n in submit_calls.items() if n >= 2},
+            "absolute_write_targets": outside,
+        })
+    return out
 
 
 def main() -> int:
@@ -228,9 +291,32 @@ def main() -> int:
         except Exception:  # noqa: BLE001
             pass
 
+    aggregates = aggregate(summaries)
     (args.out / "trace-operations.json").write_text(
-        json.dumps({"tasks": summaries, "failures": failures}, indent=2, ensure_ascii=False) + "\n",
+        json.dumps({"tasks": summaries, "failures": failures, "aggregates": aggregates},
+                   indent=2, ensure_ascii=False) + "\n",
         encoding="utf-8")
+
+    agg_lines = ["# Mechanism metrics per kernel (read-only trace analysis)", "",
+                 "Pre-registered as M5 in GATES_V6_4.md; reported next to the resolved count, "
+                 "never instead of it.", "",
+                 "| kernel | tasks | write coverage | without any write | median first write | "
+                 "max consec. submit | max consec. edits | submit calls | repeated submits |",
+                 "| --- | --- | --- | --- | --- | --- | --- | --- | --- |"]
+    for a in aggregates:
+        agg_lines.append(
+            f"| `{a['kernel']}` | {a['tasks']} | **{a['write_coverage']}** | "
+            f"{len(a['tasks_without_write_attempt'])} | {a['median_first_write_s']} s | "
+            f"{a['max_consecutive_submit_patch']} | {a['max_consecutive_edits']} | "
+            f"{a['submit_patch_total']} | {a['tasks_with_repeated_submit'] or '—'} |")
+    for a in aggregates:
+        if a["tasks_without_write_attempt"]:
+            agg_lines += ["", f"- `{a['kernel']}` tasks without any write attempt: "
+                              f"{', '.join(a['tasks_without_write_attempt'])}"]
+        if a["absolute_write_targets"]:
+            agg_lines += [f"- `{a['kernel']}` write targets outside the relative tree: "
+                          f"{', '.join(str(t) for t in a['absolute_write_targets'])}"]
+    (args.out / "trace-aggregate.md").write_text("\n".join(agg_lines) + "\n", encoding="utf-8")
 
     lines = ["# Trace schema census (keys and types only - no model text)", "",
              f"traces read: {len(trace_files)} | parse failures: {len(failures)}", "",
@@ -244,6 +330,11 @@ def main() -> int:
     (args.out / "trace-schema-census.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
     print(f"traces summarised: {len(summaries)} | failures: {len(failures)}")
+    for a in aggregates:
+        print(f"  [{a['kernel']}] write coverage {a['write_coverage']}, "
+              f"median first write {a['median_first_write_s']} s, "
+              f"max consecutive submit_patch {a['max_consecutive_submit_patch']}, "
+              f"absolute write targets {a['absolute_write_targets'] or 'none'}")
     for row in summaries[:32]:
         first = row["first_write_call"]
         print(f"  {row['kernel']}/{row['task']:18} events={row['events']:>3} dur={row['duration_s']}s "
