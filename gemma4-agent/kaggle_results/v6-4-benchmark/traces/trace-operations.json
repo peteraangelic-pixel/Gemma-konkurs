@@ -1,0 +1,4838 @@
+{
+  "tasks": [
+    {
+      "kernel": "gemma-agent-benchmark-aaea34e4-20261013-122940",
+      "task": "fastapi_14077",
+      "events": 40,
+      "container_key": "steps",
+      "duration_s": 226.2,
+      "tool_counts": {
+        "run_command": 15,
+        "read_file": 9,
+        "edit_file": 6
+      },
+      "first_write_call": {
+        "i": 3,
+        "tool": "edit_file",
+        "t": 34.4,
+        "target": "pyproject.toml"
+      },
+      "submit_patch_calls": [],
+      "text_parts_seen": 0,
+      "sequence": [
+        {
+          "i": 2,
+          "tool": "run_command",
+          "t": 8.3
+        },
+        {
+          "i": 3,
+          "tool": "edit_file",
+          "t": 34.4,
+          "target": "pyproject.toml"
+        },
+        {
+          "i": 4,
+          "tool": "read_file",
+          "t": 38.8,
+          "target": "fastapi/exception_handlers.py"
+        },
+        {
+          "i": 5,
+          "tool": "edit_file",
+          "t": 41.7,
+          "target": "fastapi/exception_handlers.py"
+        },
+        {
+          "i": 6,
+          "tool": "edit_file",
+          "t": 44.8,
+          "target": "fastapi/exception_handlers.py"
+        },
+        {
+          "i": 7,
+          "tool": "read_file",
+          "t": 48.1,
+          "target": "fastapi/openapi/utils.py"
+        },
+        {
+          "i": 8,
+          "tool": "edit_file",
+          "t": 51.1,
+          "target": "fastapi/openapi/utils.py"
+        },
+        {
+          "i": 9,
+          "tool": "read_file",
+          "t": 54.2,
+          "target": "fastapi/openapi/utils.py"
+        },
+        {
+          "i": 10,
+          "tool": "edit_file",
+          "t": 57.6,
+          "target": "fastapi/openapi/utils.py"
+        },
+        {
+          "i": 11,
+          "tool": "run_command",
+          "t": 78.4
+        },
+        {
+          "i": 12,
+          "tool": "run_command",
+          "t": 86.1
+        },
+        {
+          "i": 13,
+          "tool": "read_file",
+          "t": 96.6,
+          "target": "docs_src/handling_errors/tutorial005.py"
+        },
+        {
+          "i": 14,
+          "tool": "edit_file",
+          "t": 99.6,
+          "target": "docs_src/handling_errors/tutorial005.py"
+        },
+        {
+          "i": 15,
+          "tool": "run_command",
+          "t": 104.4
+        },
+        {
+          "i": 16,
+          "tool": "run_command",
+          "t": 124.1
+        },
+        {
+          "i": 17,
+          "tool": "run_command",
+          "t": 125.7
+        },
+        {
+          "i": 18,
+          "tool": "run_command",
+          "t": 162.6
+        },
+        {
+          "i": 21,
+          "tool": "read_file",
+          "t": 183.4,
+          "target": "fastapi/exception_handlers.py"
+        },
+        {
+          "i": 22,
+          "tool": "read_file",
+          "t": 185.8,
+          "target": "fastapi/openapi/utils.py"
+        },
+        {
+          "i": 23,
+          "tool": "run_command",
+          "t": 189.2
+        },
+        {
+          "i": 24,
+          "tool": "read_file",
+          "t": 191.3,
+          "target": "fastapi/openapi/utils.py"
+        },
+        {
+          "i": 25,
+          "tool": "read_file",
+          "t": 193.6,
+          "target": "docs_src/handling_errors/tutorial005.py"
+        },
+        {
+          "i": 26,
+          "tool": "read_file",
+          "t": 195.8,
+          "target": "pyproject.toml"
+        },
+        {
+          "i": 27,
+          "tool": "run_command",
+          "t": 200.1
+        },
+        {
+          "i": 28,
+          "tool": "run_command",
+          "t": 202.2
+        },
+        {
+          "i": 29,
+          "tool": "run_command",
+          "t": 203.4
+        },
+        {
+          "i": 30,
+          "tool": "run_command",
+          "t": 204.6
+        },
+        {
+          "i": 31,
+          "tool": "run_command",
+          "t": 205.9
+        },
+        {
+          "i": 35,
+          "tool": "run_command",
+          "t": 211.7
+        },
+        {
+          "i": 38,
+          "tool": "run_command",
+          "t": 219.5
+        }
+      ],
+      "tool_sequence_full": [
+        "run_command",
+        "edit_file",
+        "read_file",
+        "edit_file",
+        "edit_file",
+        "read_file",
+        "edit_file",
+        "read_file",
+        "edit_file",
+        "run_command",
+        "run_command",
+        "read_file",
+        "edit_file",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "read_file",
+        "read_file",
+        "run_command",
+        "read_file",
+        "read_file",
+        "read_file",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command"
+      ],
+      "sequence_truncated": false
+    },
+    {
+      "kernel": "gemma-agent-benchmark-aaea34e4-20261013-122940",
+      "task": "fastapi_14186",
+      "events": 14,
+      "container_key": "steps",
+      "duration_s": 305.4,
+      "tool_counts": {
+        "run_command": 7,
+        "read_file": 3,
+        "write_file": 1,
+        "edit_file": 1
+      },
+      "first_write_call": {
+        "i": 5,
+        "tool": "write_file",
+        "t": 128.6,
+        "target": "/tmp/issue.txt"
+      },
+      "submit_patch_calls": [],
+      "text_parts_seen": 0,
+      "sequence": [
+        {
+          "i": 2,
+          "tool": "run_command",
+          "t": 87.1
+        },
+        {
+          "i": 3,
+          "tool": "run_command",
+          "t": 104.9
+        },
+        {
+          "i": 4,
+          "tool": "run_command",
+          "t": 117.1
+        },
+        {
+          "i": 5,
+          "tool": "write_file",
+          "t": 128.6,
+          "target": "/tmp/issue.txt"
+        },
+        {
+          "i": 6,
+          "tool": "run_command",
+          "t": 133.8
+        },
+        {
+          "i": 7,
+          "tool": "read_file",
+          "t": 135.8,
+          "target": "fastapi/_compat/v1.py"
+        },
+        {
+          "i": 8,
+          "tool": "run_command",
+          "t": 143.8
+        },
+        {
+          "i": 9,
+          "tool": "run_command",
+          "t": 172.0
+        },
+        {
+          "i": 10,
+          "tool": "run_command",
+          "t": 195.7
+        },
+        {
+          "i": 11,
+          "tool": "read_file",
+          "t": 218.3,
+          "target": "fastapi/encoders.py"
+        },
+        {
+          "i": 12,
+          "tool": "edit_file",
+          "t": 297.2,
+          "target": "fastapi/_compat/v1.py"
+        },
+        {
+          "i": 13,
+          "tool": "read_file",
+          "t": 305.4,
+          "target": "fastapi/_compat/v1.py"
+        }
+      ],
+      "tool_sequence_full": [
+        "run_command",
+        "run_command",
+        "run_command",
+        "write_file",
+        "run_command",
+        "read_file",
+        "run_command",
+        "run_command",
+        "run_command",
+        "read_file",
+        "edit_file",
+        "read_file"
+      ],
+      "sequence_truncated": false
+    },
+    {
+      "kernel": "gemma-agent-benchmark-aaea34e4-20261013-122940",
+      "task": "fastapi_14262",
+      "events": 33,
+      "container_key": "steps",
+      "duration_s": 293.8,
+      "tool_counts": {
+        "read_file": 12,
+        "run_command": 10,
+        "edit_file": 8,
+        "get_status": 1
+      },
+      "first_write_call": {
+        "i": 11,
+        "tool": "edit_file",
+        "t": 152.5,
+        "target": "fastapi/params.py"
+      },
+      "submit_patch_calls": [],
+      "text_parts_seen": 0,
+      "sequence": [
+        {
+          "i": 2,
+          "tool": "run_command",
+          "t": 95.3
+        },
+        {
+          "i": 3,
+          "tool": "read_file",
+          "t": 103.1,
+          "target": "fastapi/param_functions.py"
+        },
+        {
+          "i": 4,
+          "tool": "run_command",
+          "t": 105.8
+        },
+        {
+          "i": 5,
+          "tool": "read_file",
+          "t": 107.5,
+          "target": "fastapi/param_functions.py"
+        },
+        {
+          "i": 6,
+          "tool": "read_file",
+          "t": 113.0,
+          "target": "fastapi/params.py"
+        },
+        {
+          "i": 7,
+          "tool": "run_command",
+          "t": 115.6
+        },
+        {
+          "i": 8,
+          "tool": "read_file",
+          "t": 139.9,
+          "target": "fastapi/params.py"
+        },
+        {
+          "i": 9,
+          "tool": "read_file",
+          "t": 144.7,
+          "target": "fastapi/param_functions.py"
+        },
+        {
+          "i": 10,
+          "tool": "read_file",
+          "t": 147.0,
+          "target": "fastapi/param_functions.py"
+        },
+        {
+          "i": 11,
+          "tool": "edit_file",
+          "t": 152.5,
+          "target": "fastapi/params.py"
+        },
+        {
+          "i": 12,
+          "tool": "edit_file",
+          "t": 165.0,
+          "target": "fastapi/param_functions.py"
+        },
+        {
+          "i": 13,
+          "tool": "read_file",
+          "t": 167.3,
+          "target": "fastapi/param_functions.py"
+        },
+        {
+          "i": 14,
+          "tool": "edit_file",
+          "t": 185.2,
+          "target": "fastapi/param_functions.py"
+        },
+        {
+          "i": 15,
+          "tool": "edit_file",
+          "t": 188.8,
+          "target": "fastapi/param_functions.py"
+        },
+        {
+          "i": 16,
+          "tool": "run_command",
+          "t": 194.0
+        },
+        {
+          "i": 17,
+          "tool": "run_command",
+          "t": 196.7
+        },
+        {
+          "i": 18,
+          "tool": "run_command",
+          "t": 198.1
+        },
+        {
+          "i": 19,
+          "tool": "run_command",
+          "t": 199.6
+        },
+        {
+          "i": 20,
+          "tool": "read_file",
+          "t": 200.9,
+          "target": "fastapi/dependencies/models.py"
+        },
+        {
+          "i": 21,
+          "tool": "edit_file",
+          "t": 206.2,
+          "target": "fastapi/dependencies/models.py"
+        },
+        {
+          "i": 22,
+          "tool": "read_file",
+          "t": 209.0,
+          "target": "fastapi/dependencies/utils.py"
+        },
+        {
+          "i": 23,
+          "tool": "run_command",
+          "t": 238.3
+        },
+        {
+          "i": 24,
+          "tool": "read_file",
+          "t": 240.1,
+          "target": "fastapi/dependencies/utils.py"
+        },
+        {
+          "i": 25,
+          "tool": "run_command",
+          "t": 245.0
+        },
+        {
+          "i": 26,
+          "tool": "read_file",
+          "t": 247.1,
+          "target": "fastapi/dependencies/utils.py"
+        },
+        {
+          "i": 27,
+          "tool": "edit_file",
+          "t": 258.6,
+          "target": "fastapi/dependencies/utils.py"
+        },
+        {
+          "i": 28,
+          "tool": "edit_file",
+          "t": 265.3,
+          "target": "fastapi/dependencies/utils.py"
+        },
+        {
+          "i": 29,
+          "tool": "edit_file",
+          "t": 275.1,
+          "target": "fastapi/dependencies/utils.py"
+        },
+        {
+          "i": 30,
+          "tool": "run_command",
+          "t": 279.2
+        },
+        {
+          "i": 31,
+          "tool": "read_file",
+          "t": 281.2,
+          "target": "fastapi/dependencies/utils.py"
+        },
+        {
+          "i": 32,
+          "tool": "get_status",
+          "t": 293.8
+        }
+      ],
+      "tool_sequence_full": [
+        "run_command",
+        "read_file",
+        "run_command",
+        "read_file",
+        "read_file",
+        "run_command",
+        "read_file",
+        "read_file",
+        "read_file",
+        "edit_file",
+        "edit_file",
+        "read_file",
+        "edit_file",
+        "edit_file",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "read_file",
+        "edit_file",
+        "read_file",
+        "run_command",
+        "read_file",
+        "run_command",
+        "read_file",
+        "edit_file",
+        "edit_file",
+        "edit_file",
+        "run_command",
+        "read_file",
+        "get_status"
+      ],
+      "sequence_truncated": false
+    },
+    {
+      "kernel": "gemma-agent-benchmark-aaea34e4-20261013-122940",
+      "task": "fastapi_14266",
+      "events": 33,
+      "container_key": "steps",
+      "duration_s": 276.4,
+      "tool_counts": {
+        "read_file": 16,
+        "run_command": 15
+      },
+      "first_write_call": null,
+      "submit_patch_calls": [],
+      "text_parts_seen": 0,
+      "sequence": [
+        {
+          "i": 2,
+          "tool": "run_command",
+          "t": 75.5
+        },
+        {
+          "i": 3,
+          "tool": "run_command",
+          "t": 82.4
+        },
+        {
+          "i": 4,
+          "tool": "run_command",
+          "t": 84.6
+        },
+        {
+          "i": 5,
+          "tool": "run_command",
+          "t": 87.7
+        },
+        {
+          "i": 6,
+          "tool": "run_command",
+          "t": 90.8
+        },
+        {
+          "i": 7,
+          "tool": "read_file",
+          "t": 94.1,
+          "target": "fastapi/openapi/utils.py"
+        },
+        {
+          "i": 8,
+          "tool": "run_command",
+          "t": 98.7
+        },
+        {
+          "i": 9,
+          "tool": "read_file",
+          "t": 100.7,
+          "target": "fastapi/openapi/utils.py"
+        },
+        {
+          "i": 10,
+          "tool": "run_command",
+          "t": 108.4
+        },
+        {
+          "i": 11,
+          "tool": "read_file",
+          "t": 129.3,
+          "target": "fastapi/applications.py"
+        },
+        {
+          "i": 12,
+          "tool": "run_command",
+          "t": 132.4
+        },
+        {
+          "i": 13,
+          "tool": "read_file",
+          "t": 136.7,
+          "target": "fastapi/openapi/utils.py"
+        },
+        {
+          "i": 14,
+          "tool": "read_file",
+          "t": 144.3,
+          "target": "fastapi/openapi/utils.py"
+        },
+        {
+          "i": 15,
+          "tool": "read_file",
+          "t": 151.4,
+          "target": "fastapi/applications.py"
+        },
+        {
+          "i": 16,
+          "tool": "read_file",
+          "t": 153.8,
+          "target": "fastapi/applications.py"
+        },
+        {
+          "i": 17,
+          "tool": "read_file",
+          "t": 156.3,
+          "target": "fastapi/applications.py"
+        },
+        {
+          "i": 18,
+          "tool": "run_command",
+          "t": 162.1
+        },
+        {
+          "i": 19,
+          "tool": "run_command",
+          "t": 195.8
+        },
+        {
+          "i": 20,
+          "tool": "run_command",
+          "t": 199.6
+        },
+        {
+          "i": 21,
+          "tool": "read_file",
+          "t": 201.8,
+          "target": "fastapi/applications.py"
+        },
+        {
+          "i": 22,
+          "tool": "read_file",
+          "t": 204.7,
+          "target": "fastapi/openapi/utils.py"
+        },
+        {
+          "i": 23,
+          "tool": "run_command",
+          "t": 207.5
+        },
+        {
+          "i": 24,
+          "tool": "read_file",
+          "t": 209.8,
+          "target": "fastapi/openapi/utils.py"
+        },
+        {
+          "i": 25,
+          "tool": "read_file",
+          "t": 215.7,
+          "target": "fastapi/openapi/utils.py"
+        },
+        {
+          "i": 26,
+          "tool": "run_command",
+          "t": 220.2
+        },
+        {
+          "i": 27,
+          "tool": "read_file",
+          "t": 246.1,
+          "target": "fastapi/applications.py"
+        },
+        {
+          "i": 28,
+          "tool": "read_file",
+          "t": 267.3,
+          "target": "fastapi/applications.py"
+        },
+        {
+          "i": 29,
+          "tool": "run_command",
+          "t": 269.8
+        },
+        {
+          "i": 30,
+          "tool": "run_command",
+          "t": 271.7
+        },
+        {
+          "i": 31,
+          "tool": "read_file",
+          "t": 273.5,
+          "target": "fastapi/applications.py"
+        },
+        {
+          "i": 32,
+          "tool": "read_file",
+          "t": 276.4,
+          "target": "fastapi/applications.py"
+        }
+      ],
+      "tool_sequence_full": [
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "read_file",
+        "run_command",
+        "read_file",
+        "run_command",
+        "read_file",
+        "run_command",
+        "read_file",
+        "read_file",
+        "read_file",
+        "read_file",
+        "read_file",
+        "run_command",
+        "run_command",
+        "run_command",
+        "read_file",
+        "read_file",
+        "run_command",
+        "read_file",
+        "read_file",
+        "run_command",
+        "read_file",
+        "read_file",
+        "run_command",
+        "run_command",
+        "read_file",
+        "read_file"
+      ],
+      "sequence_truncated": false
+    },
+    {
+      "kernel": "gemma-agent-benchmark-aaea34e4-20261013-122940",
+      "task": "fastapi_14297",
+      "events": 34,
+      "container_key": "steps",
+      "duration_s": 241.0,
+      "tool_counts": {
+        "run_command": 25,
+        "read_file": 4,
+        "edit_file": 1
+      },
+      "first_write_call": {
+        "i": 6,
+        "tool": "edit_file",
+        "t": 97.8,
+        "target": "fastapi/_compat/v2.py"
+      },
+      "submit_patch_calls": [],
+      "text_parts_seen": 0,
+      "sequence": [
+        {
+          "i": 2,
+          "tool": "run_command",
+          "t": 22.1
+        },
+        {
+          "i": 3,
+          "tool": "read_file",
+          "t": 28.0,
+          "target": "fastapi/_compat/v2.py"
+        },
+        {
+          "i": 4,
+          "tool": "read_file",
+          "t": 43.5,
+          "target": "fastapi/_compat/shared.py"
+        },
+        {
+          "i": 5,
+          "tool": "read_file",
+          "t": 67.6,
+          "target": "fastapi/_compat/v2.py"
+        },
+        {
+          "i": 6,
+          "tool": "edit_file",
+          "t": 97.8,
+          "target": "fastapi/_compat/v2.py"
+        },
+        {
+          "i": 7,
+          "tool": "run_command",
+          "t": 133.1
+        },
+        {
+          "i": 8,
+          "tool": "read_file",
+          "t": 135.3,
+          "target": "fastapi/_compat/v2.py"
+        },
+        {
+          "i": 9,
+          "tool": "run_command",
+          "t": 144.0
+        },
+        {
+          "i": 10,
+          "tool": "run_command",
+          "t": 154.6
+        },
+        {
+          "i": 11,
+          "tool": "run_command",
+          "t": 178.8
+        },
+        {
+          "i": 12,
+          "tool": "run_command",
+          "t": 179.9
+        },
+        {
+          "i": 13,
+          "tool": "run_command",
+          "t": 208.7
+        },
+        {
+          "i": 14,
+          "tool": "run_command",
+          "t": 209.9
+        },
+        {
+          "i": 15,
+          "tool": "run_command",
+          "t": 210.7
+        },
+        {
+          "i": 16,
+          "tool": "run_command",
+          "t": 211.7
+        },
+        {
+          "i": 17,
+          "tool": "run_command",
+          "t": 213.0
+        },
+        {
+          "i": 18,
+          "tool": "run_command",
+          "t": 216.4
+        },
+        {
+          "i": 19,
+          "tool": "run_command",
+          "t": 217.8
+        },
+        {
+          "i": 20,
+          "tool": "run_command",
+          "t": 218.8
+        },
+        {
+          "i": 21,
+          "tool": "run_command",
+          "t": 219.8
+        },
+        {
+          "i": 22,
+          "tool": "run_command",
+          "t": 221.2
+        },
+        {
+          "i": 23,
+          "tool": "run_command",
+          "t": 222.2
+        },
+        {
+          "i": 24,
+          "tool": "run_command",
+          "t": 223.1
+        },
+        {
+          "i": 25,
+          "tool": "run_command",
+          "t": 224.0
+        },
+        {
+          "i": 26,
+          "tool": "run_command",
+          "t": 225.0
+        },
+        {
+          "i": 27,
+          "tool": "run_command",
+          "t": 225.9
+        },
+        {
+          "i": 28,
+          "tool": "run_command",
+          "t": 226.9
+        },
+        {
+          "i": 29,
+          "tool": "run_command",
+          "t": 227.8
+        },
+        {
+          "i": 30,
+          "tool": "run_command",
+          "t": 228.8
+        },
+        {
+          "i": 31,
+          "tool": "run_command",
+          "t": 229.7
+        }
+      ],
+      "tool_sequence_full": [
+        "run_command",
+        "read_file",
+        "read_file",
+        "read_file",
+        "edit_file",
+        "run_command",
+        "read_file",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command"
+      ],
+      "sequence_truncated": false
+    },
+    {
+      "kernel": "gemma-agent-benchmark-aaea34e4-20261013-122940",
+      "task": "fastapi_14303",
+      "events": 40,
+      "container_key": "steps",
+      "duration_s": 300.2,
+      "tool_counts": {
+        "run_command": 18,
+        "read_file": 9,
+        "edit_file": 7,
+        "write_file": 1
+      },
+      "first_write_call": {
+        "i": 5,
+        "tool": "write_file",
+        "t": 41.9,
+        "target": "/tmp/repro.py"
+      },
+      "submit_patch_calls": [],
+      "text_parts_seen": 0,
+      "sequence": [
+        {
+          "i": 2,
+          "tool": "run_command",
+          "t": 8.9
+        },
+        {
+          "i": 3,
+          "tool": "read_file",
+          "t": 10.8,
+          "target": "fastapi/dependencies/utils.py"
+        },
+        {
+          "i": 4,
+          "tool": "read_file",
+          "t": 20.3,
+          "target": "fastapi/dependencies/utils.py"
+        },
+        {
+          "i": 5,
+          "tool": "write_file",
+          "t": 41.9,
+          "target": "/tmp/repro.py"
+        },
+        {
+          "i": 6,
+          "tool": "run_command",
+          "t": 54.8
+        },
+        {
+          "i": 7,
+          "tool": "edit_file",
+          "t": 69.9,
+          "target": "fastapi/dependencies/utils.py"
+        },
+        {
+          "i": 8,
+          "tool": "run_command",
+          "t": 71.4
+        },
+        {
+          "i": 9,
+          "tool": "run_command",
+          "t": 76.5
+        },
+        {
+          "i": 10,
+          "tool": "run_command",
+          "t": 79.7
+        },
+        {
+          "i": 11,
+          "tool": "run_command",
+          "t": 83.6
+        },
+        {
+          "i": 12,
+          "tool": "run_command",
+          "t": 96.4
+        },
+        {
+          "i": 13,
+          "tool": "read_file",
+          "t": 101.1,
+          "target": "fastapi/dependencies/utils.py"
+        },
+        {
+          "i": 14,
+          "tool": "run_command",
+          "t": 107.1
+        },
+        {
+          "i": 15,
+          "tool": "run_command",
+          "t": 129.5
+        },
+        {
+          "i": 16,
+          "tool": "run_command",
+          "t": 131.2
+        },
+        {
+          "i": 17,
+          "tool": "run_command",
+          "t": 132.3
+        },
+        {
+          "i": 18,
+          "tool": "run_command",
+          "t": 133.2
+        },
+        {
+          "i": 21,
+          "tool": "run_command",
+          "t": 149.1
+        },
+        {
+          "i": 22,
+          "tool": "read_file",
+          "t": 151.3,
+          "target": "fastapi/dependencies/utils.py"
+        },
+        {
+          "i": 23,
+          "tool": "read_file",
+          "t": 154.1,
+          "target": "fastapi/dependencies/utils.py"
+        },
+        {
+          "i": 24,
+          "tool": "run_command",
+          "t": 157.0
+        },
+        {
+          "i": 25,
+          "tool": "read_file",
+          "t": 159.0,
+          "target": "fastapi/dependencies/utils.py"
+        },
+        {
+          "i": 26,
+          "tool": "run_command",
+          "t": 176.5
+        },
+        {
+          "i": 27,
+          "tool": "read_file",
+          "t": 177.9,
+          "target": "fastapi/dependencies/utils.py"
+        },
+        {
+          "i": 28,
+          "tool": "read_file",
+          "t": 185.5,
+          "target": "fastapi/dependencies/utils.py"
+        },
+        {
+          "i": 29,
+          "tool": "run_command",
+          "t": 188.4
+        },
+        {
+          "i": 30,
+          "tool": "edit_file",
+          "t": 210.0,
+          "target": "fastapi/dependencies/utils.py"
+        },
+        {
+          "i": 31,
+          "tool": "read_file",
+          "t": 218.9,
+          "target": "fastapi/dependencies/utils.py"
+        },
+        {
+          "i": 32,
+          "tool": "edit_file",
+          "t": 225.5,
+          "target": "fastapi/dependencies/utils.py"
+        },
+        {
+          "i": 33,
+          "tool": "edit_file",
+          "t": 234.5,
+          "target": "fastapi/dependencies/utils.py"
+        },
+        {
+          "i": 34,
+          "tool": "edit_file",
+          "t": 244.3,
+          "target": "fastapi/dependencies/utils.py"
+        },
+        {
+          "i": 35,
+          "tool": "edit_file",
+          "t": 251.8,
+          "target": "fastapi/dependencies/utils.py"
+        },
+        {
+          "i": 36,
+          "tool": "edit_file",
+          "t": 286.4,
+          "target": "fastapi/dependencies/utils.py"
+        },
+        {
+          "i": 37,
+          "tool": "run_command",
+          "t": 289.3
+        },
+        {
+          "i": 38,
+          "tool": "run_command",
+          "t": 290.9
+        }
+      ],
+      "tool_sequence_full": [
+        "run_command",
+        "read_file",
+        "read_file",
+        "write_file",
+        "run_command",
+        "edit_file",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "read_file",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "read_file",
+        "read_file",
+        "run_command",
+        "read_file",
+        "run_command",
+        "read_file",
+        "read_file",
+        "run_command",
+        "edit_file",
+        "read_file",
+        "edit_file",
+        "edit_file",
+        "edit_file",
+        "edit_file",
+        "edit_file",
+        "run_command",
+        "run_command"
+      ],
+      "sequence_truncated": false
+    },
+    {
+      "kernel": "gemma-agent-benchmark-aaea34e4-20261013-122940",
+      "task": "fastapi_14458",
+      "events": 20,
+      "container_key": "steps",
+      "duration_s": 303.8,
+      "tool_counts": {
+        "read_file": 7,
+        "run_command": 6,
+        "edit_file": 3
+      },
+      "first_write_call": {
+        "i": 10,
+        "tool": "edit_file",
+        "t": 223.0,
+        "target": "fastapi/dependencies/models.py"
+      },
+      "submit_patch_calls": [],
+      "text_parts_seen": 0,
+      "sequence": [
+        {
+          "i": 2,
+          "tool": "run_command",
+          "t": 82.8
+        },
+        {
+          "i": 3,
+          "tool": "read_file",
+          "t": 88.4,
+          "target": "fastapi/dependencies/utils.py"
+        },
+        {
+          "i": 4,
+          "tool": "run_command",
+          "t": 92.2
+        },
+        {
+          "i": 5,
+          "tool": "read_file",
+          "t": 94.5,
+          "target": "fastapi/dependencies/models.py"
+        },
+        {
+          "i": 6,
+          "tool": "read_file",
+          "t": 99.1,
+          "target": "fastapi/dependencies/models.py`,start_line:151"
+        },
+        {
+          "i": 7,
+          "tool": "read_file",
+          "t": 120.7,
+          "target": "fastapi/dependencies/models.py`,start_line:151,end_line:188"
+        },
+        {
+          "i": 8,
+          "tool": "read_file",
+          "t": 125.2,
+          "target": "fastapi/dependencies/models.py"
+        },
+        {
+          "i": 9,
+          "tool": "run_command",
+          "t": 163.4
+        },
+        {
+          "i": 10,
+          "tool": "edit_file",
+          "t": 223.0,
+          "target": "fastapi/dependencies/models.py"
+        },
+        {
+          "i": 11,
+          "tool": "edit_file",
+          "t": 229.6,
+          "target": "fastapi/dependencies/models.py"
+        },
+        {
+          "i": 12,
+          "tool": "edit_file",
+          "t": 236.1,
+          "target": "fastapi/dependencies/models.py"
+        },
+        {
+          "i": 13,
+          "tool": "run_command",
+          "t": 237.6
+        },
+        {
+          "i": 14,
+          "tool": "run_command",
+          "t": 264.9
+        },
+        {
+          "i": 15,
+          "tool": "run_command",
+          "t": 270.0
+        },
+        {
+          "i": 18,
+          "tool": "read_file",
+          "t": 279.3,
+          "target": "fastapi/dependencies/models.py"
+        },
+        {
+          "i": 19,
+          "tool": "read_file",
+          "t": 303.8,
+          "target": "fastapi/dependencies/models.py"
+        }
+      ],
+      "tool_sequence_full": [
+        "run_command",
+        "read_file",
+        "run_command",
+        "read_file",
+        "read_file",
+        "read_file",
+        "read_file",
+        "run_command",
+        "edit_file",
+        "edit_file",
+        "edit_file",
+        "run_command",
+        "run_command",
+        "run_command",
+        "read_file",
+        "read_file"
+      ],
+      "sequence_truncated": false
+    },
+    {
+      "kernel": "gemma-agent-benchmark-aaea34e4-20261013-122940",
+      "task": "fastapi_14459",
+      "events": 20,
+      "container_key": "steps",
+      "duration_s": 299.4,
+      "tool_counts": {
+        "run_command": 9,
+        "read_file": 9
+      },
+      "first_write_call": null,
+      "submit_patch_calls": [],
+      "text_parts_seen": 0,
+      "sequence": [
+        {
+          "i": 2,
+          "tool": "run_command",
+          "t": 83.8
+        },
+        {
+          "i": 3,
+          "tool": "run_command",
+          "t": 95.5
+        },
+        {
+          "i": 4,
+          "tool": "run_command",
+          "t": 97.8
+        },
+        {
+          "i": 5,
+          "tool": "read_file",
+          "t": 99.9,
+          "target": "fastapi/openapi/utils.py"
+        },
+        {
+          "i": 6,
+          "tool": "run_command",
+          "t": 104.2
+        },
+        {
+          "i": 7,
+          "tool": "read_file",
+          "t": 106.6,
+          "target": "fastapi/openapi/utils.py"
+        },
+        {
+          "i": 8,
+          "tool": "run_command",
+          "t": 110.0
+        },
+        {
+          "i": 9,
+          "tool": "read_file",
+          "t": 112.2,
+          "target": "fastapi/dependencies/utils.py"
+        },
+        {
+          "i": 10,
+          "tool": "read_file",
+          "t": 120.6,
+          "target": "fastapi/dependencies/models.py"
+        },
+        {
+          "i": 11,
+          "tool": "read_file",
+          "t": 184.4,
+          "target": "fastapi/dependencies/utils.py"
+        },
+        {
+          "i": 12,
+          "tool": "read_file",
+          "t": 211.2,
+          "target": "fastapi/dependencies/utils.py"
+        },
+        {
+          "i": 13,
+          "tool": "run_command",
+          "t": 213.3
+        },
+        {
+          "i": 14,
+          "tool": "read_file",
+          "t": 215.0,
+          "target": "fastapi/dependencies/utils.py"
+        },
+        {
+          "i": 15,
+          "tool": "run_command",
+          "t": 236.7
+        },
+        {
+          "i": 16,
+          "tool": "read_file",
+          "t": 271.2,
+          "target": "fastapi/dependencies/utils.py"
+        },
+        {
+          "i": 17,
+          "tool": "run_command",
+          "t": 273.7
+        },
+        {
+          "i": 18,
+          "tool": "read_file",
+          "t": 275.4,
+          "target": "fastapi/dependencies/utils.py"
+        },
+        {
+          "i": 19,
+          "tool": "run_command",
+          "t": 299.4
+        }
+      ],
+      "tool_sequence_full": [
+        "run_command",
+        "run_command",
+        "run_command",
+        "read_file",
+        "run_command",
+        "read_file",
+        "run_command",
+        "read_file",
+        "read_file",
+        "read_file",
+        "read_file",
+        "run_command",
+        "read_file",
+        "run_command",
+        "read_file",
+        "run_command",
+        "read_file",
+        "run_command"
+      ],
+      "sequence_truncated": false
+    },
+    {
+      "kernel": "gemma-agent-benchmark-aaea34e4-20261013-122940",
+      "task": "fastapi_14482",
+      "events": 33,
+      "container_key": "steps",
+      "duration_s": 310.4,
+      "tool_counts": {
+        "run_command": 16,
+        "read_file": 13,
+        "edit_file": 1
+      },
+      "first_write_call": {
+        "i": 24,
+        "tool": "edit_file",
+        "t": 291.4,
+        "target": "fastapi/encoders.py"
+      },
+      "submit_patch_calls": [],
+      "text_parts_seen": 0,
+      "sequence": [
+        {
+          "i": 2,
+          "tool": "run_command",
+          "t": 77.1
+        },
+        {
+          "i": 3,
+          "tool": "run_command",
+          "t": 86.1
+        },
+        {
+          "i": 4,
+          "tool": "run_command",
+          "t": 88.7
+        },
+        {
+          "i": 5,
+          "tool": "read_file",
+          "t": 103.7,
+          "target": "tests/test_jsonable_encoder.py"
+        },
+        {
+          "i": 6,
+          "tool": "run_command",
+          "t": 108.8
+        },
+        {
+          "i": 7,
+          "tool": "read_file",
+          "t": 110.1,
+          "target": "fastapi/encoders.py"
+        },
+        {
+          "i": 8,
+          "tool": "read_file",
+          "t": 112.5,
+          "target": "fastapi/encoders.py"
+        },
+        {
+          "i": 9,
+          "tool": "read_file",
+          "t": 136.6,
+          "target": "fastapi/encoders.py"
+        },
+        {
+          "i": 10,
+          "tool": "read_file",
+          "t": 143.8,
+          "target": "fastapi/_compat.py"
+        },
+        {
+          "i": 11,
+          "tool": "run_command",
+          "t": 144.9
+        },
+        {
+          "i": 12,
+          "tool": "read_file",
+          "t": 146.9,
+          "target": "fastapi/_compat/__init__.py"
+        },
+        {
+          "i": 13,
+          "tool": "read_file",
+          "t": 149.0,
+          "target": "fastapi/_compat/main.py"
+        },
+        {
+          "i": 14,
+          "tool": "read_file",
+          "t": 152.3,
+          "target": "fastapi/_compat/v2.py"
+        },
+        {
+          "i": 15,
+          "tool": "run_command",
+          "t": 155.2
+        },
+        {
+          "i": 16,
+          "tool": "read_file",
+          "t": 185.8,
+          "target": "fastapi/_compat/v2.py"
+        },
+        {
+          "i": 17,
+          "tool": "read_file",
+          "t": 192.1,
+          "target": "fastapi/encoders.py"
+        },
+        {
+          "i": 18,
+          "tool": "read_file",
+          "t": 194.4,
+          "target": "fastapi/encoders.py"
+        },
+        {
+          "i": 19,
+          "tool": "read_file",
+          "t": 196.9,
+          "target": "fastapi/encoders.py"
+        },
+        {
+          "i": 20,
+          "tool": "run_command",
+          "t": 211.0
+        },
+        {
+          "i": 21,
+          "tool": "run_command",
+          "t": 227.5
+        },
+        {
+          "i": 22,
+          "tool": "read_file",
+          "t": 265.0,
+          "target": "fastapi/encoders.py"
+        },
+        {
+          "i": 23,
+          "tool": "run_command",
+          "t": 283.6
+        },
+        {
+          "i": 24,
+          "tool": "edit_file",
+          "t": 291.4,
+          "target": "fastapi/encoders.py"
+        },
+        {
+          "i": 25,
+          "tool": "run_command",
+          "t": 298.1
+        },
+        {
+          "i": 26,
+          "tool": "run_command",
+          "t": 300.3
+        },
+        {
+          "i": 27,
+          "tool": "run_command",
+          "t": 301.8
+        },
+        {
+          "i": 28,
+          "tool": "run_command",
+          "t": 305.4
+        },
+        {
+          "i": 29,
+          "tool": "run_command",
+          "t": 307.6
+        },
+        {
+          "i": 30,
+          "tool": "run_command",
+          "t": 308.8
+        },
+        {
+          "i": 31,
+          "tool": "run_command",
+          "t": 309.9
+        }
+      ],
+      "tool_sequence_full": [
+        "run_command",
+        "run_command",
+        "run_command",
+        "read_file",
+        "run_command",
+        "read_file",
+        "read_file",
+        "read_file",
+        "read_file",
+        "run_command",
+        "read_file",
+        "read_file",
+        "read_file",
+        "run_command",
+        "read_file",
+        "read_file",
+        "read_file",
+        "read_file",
+        "run_command",
+        "run_command",
+        "read_file",
+        "run_command",
+        "edit_file",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command"
+      ],
+      "sequence_truncated": false
+    },
+    {
+      "kernel": "gemma-agent-benchmark-aaea34e4-20261013-122940",
+      "task": "fastapi_14487",
+      "events": 34,
+      "container_key": "steps",
+      "duration_s": 230.6,
+      "tool_counts": {
+        "run_command": 24,
+        "read_file": 6,
+        "edit_file": 1
+      },
+      "first_write_call": {
+        "i": 32,
+        "tool": "edit_file",
+        "t": 227.9,
+        "target": "docs/en/docs/tutorial/handling-errors.md"
+      },
+      "submit_patch_calls": [],
+      "text_parts_seen": 0,
+      "sequence": [
+        {
+          "i": 2,
+          "tool": "run_command",
+          "t": 76.7
+        },
+        {
+          "i": 3,
+          "tool": "run_command",
+          "t": 81.4
+        },
+        {
+          "i": 4,
+          "tool": "run_command",
+          "t": 83.5
+        },
+        {
+          "i": 5,
+          "tool": "run_command",
+          "t": 85.0
+        },
+        {
+          "i": 6,
+          "tool": "run_command",
+          "t": 86.9
+        },
+        {
+          "i": 7,
+          "tool": "run_command",
+          "t": 88.2
+        },
+        {
+          "i": 8,
+          "tool": "run_command",
+          "t": 90.7
+        },
+        {
+          "i": 9,
+          "tool": "run_command",
+          "t": 92.7
+        },
+        {
+          "i": 10,
+          "tool": "run_command",
+          "t": 96.7
+        },
+        {
+          "i": 11,
+          "tool": "run_command",
+          "t": 100.4
+        },
+        {
+          "i": 12,
+          "tool": "run_command",
+          "t": 102.7
+        },
+        {
+          "i": 13,
+          "tool": "run_command",
+          "t": 107.5
+        },
+        {
+          "i": 14,
+          "tool": "run_command",
+          "t": 135.0
+        },
+        {
+          "i": 15,
+          "tool": "run_command",
+          "t": 138.5
+        },
+        {
+          "i": 16,
+          "tool": "run_command",
+          "t": 140.0
+        },
+        {
+          "i": 17,
+          "tool": "run_command",
+          "t": 144.0
+        },
+        {
+          "i": 18,
+          "tool": "run_command",
+          "t": 146.1
+        },
+        {
+          "i": 19,
+          "tool": "run_command",
+          "t": 148.1
+        },
+        {
+          "i": 20,
+          "tool": "run_command",
+          "t": 150.0
+        },
+        {
+          "i": 21,
+          "tool": "read_file",
+          "t": 152.3,
+          "target": "docs/en/docs/tutorial/handling-errors.md"
+        },
+        {
+          "i": 22,
+          "tool": "read_file",
+          "t": 170.6,
+          "target": "docs/en/docs/tutorial/handling-errors.md`,start_line:151"
+        },
+        {
+          "i": 23,
+          "tool": "read_file",
+          "t": 172.6,
+          "target": "docs/en/docs/tutorial/handling-errors.md`,start_line:151"
+        },
+        {
+          "i": 24,
+          "tool": "read_file",
+          "t": 179.5,
+          "target": "docs/en/docs/tutorial/handling-errors.md`,start_line:151"
+        },
+        {
+          "i": 25,
+          "tool": "read_file",
+          "t": 181.1,
+          "target": "docs/en/docs/tutorial/handling-errors.md"
+        },
+        {
+          "i": 26,
+          "tool": "run_command",
+          "t": 184.4
+        },
+        {
+          "i": 27,
+          "tool": "run_command",
+          "t": 187.8
+        },
+        {
+          "i": 28,
+          "tool": "read_file",
+          "t": 189.9,
+          "target": "docs/en/docs/tutorial/dependencies/dependencies-with-yield.md"
+        },
+        {
+          "i": 29,
+          "tool": "run_command",
+          "t": 193.3
+        },
+        {
+          "i": 30,
+          "tool": "run_command",
+          "t": 212.5
+        },
+        {
+          "i": 31,
+          "tool": "run_command",
+          "t": 215.9
+        },
+        {
+          "i": 32,
+          "tool": "edit_file",
+          "t": 227.9,
+          "target": "docs/en/docs/tutorial/handling-errors.md"
+        }
+      ],
+      "tool_sequence_full": [
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "read_file",
+        "read_file",
+        "read_file",
+        "read_file",
+        "read_file",
+        "run_command",
+        "run_command",
+        "read_file",
+        "run_command",
+        "run_command",
+        "run_command",
+        "edit_file"
+      ],
+      "sequence_truncated": false
+    },
+    {
+      "kernel": "gemma-agent-benchmark-aaea34e4-20261013-122940",
+      "task": "fastapi_14851",
+      "events": 36,
+      "container_key": "steps",
+      "duration_s": 279.5,
+      "tool_counts": {
+        "run_command": 20,
+        "read_file": 11,
+        "edit_file": 1
+      },
+      "first_write_call": {
+        "i": 33,
+        "tool": "edit_file",
+        "t": 255.6,
+        "target": "fastapi/routing.py"
+      },
+      "submit_patch_calls": [],
+      "text_parts_seen": 0,
+      "sequence": [
+        {
+          "i": 2,
+          "tool": "run_command",
+          "t": 78.7
+        },
+        {
+          "i": 3,
+          "tool": "run_command",
+          "t": 90.9
+        },
+        {
+          "i": 4,
+          "tool": "run_command",
+          "t": 93.8
+        },
+        {
+          "i": 5,
+          "tool": "read_file",
+          "t": 96.2,
+          "target": "fastapi/applications.py"
+        },
+        {
+          "i": 6,
+          "tool": "run_command",
+          "t": 100.2
+        },
+        {
+          "i": 7,
+          "tool": "read_file",
+          "t": 102.1,
+          "target": "fastapi/routing.py"
+        },
+        {
+          "i": 8,
+          "tool": "run_command",
+          "t": 104.8
+        },
+        {
+          "i": 9,
+          "tool": "run_command",
+          "t": 108.1
+        },
+        {
+          "i": 10,
+          "tool": "read_file",
+          "t": 110.4,
+          "target": "fastapi/routing.py"
+        },
+        {
+          "i": 11,
+          "tool": "run_command",
+          "t": 113.1
+        },
+        {
+          "i": 12,
+          "tool": "run_command",
+          "t": 120.8
+        },
+        {
+          "i": 13,
+          "tool": "read_file",
+          "t": 122.4,
+          "target": "fastapi/applications.py"
+        },
+        {
+          "i": 14,
+          "tool": "run_command",
+          "t": 125.0
+        },
+        {
+          "i": 15,
+          "tool": "run_command",
+          "t": 150.0
+        },
+        {
+          "i": 16,
+          "tool": "read_file",
+          "t": 151.8,
+          "target": "fastapi/applications.py"
+        },
+        {
+          "i": 17,
+          "tool": "read_file",
+          "t": 153.7,
+          "target": "fastapi/applications.py"
+        },
+        {
+          "i": 18,
+          "tool": "run_command",
+          "t": 155.6
+        },
+        {
+          "i": 19,
+          "tool": "read_file",
+          "t": 157.6,
+          "target": "fastapi/routing.py"
+        },
+        {
+          "i": 20,
+          "tool": "read_file",
+          "t": 159.4,
+          "target": "fastapi/routing.py"
+        },
+        {
+          "i": 21,
+          "tool": "run_command",
+          "t": 161.4
+        },
+        {
+          "i": 22,
+          "tool": "run_command",
+          "t": 168.3
+        },
+        {
+          "i": 23,
+          "tool": "run_command",
+          "t": 170.0
+        },
+        {
+          "i": 24,
+          "tool": "run_command",
+          "t": 176.0
+        },
+        {
+          "i": 25,
+          "tool": "read_file",
+          "t": 178.3,
+          "target": "fastapi/routing.py"
+        },
+        {
+          "i": 26,
+          "tool": "read_file",
+          "t": 182.1,
+          "target": "fastapi/routing.py"
+        },
+        {
+          "i": 27,
+          "tool": "run_command",
+          "t": 199.3
+        },
+        {
+          "i": 28,
+          "tool": "run_command",
+          "t": 200.7
+        },
+        {
+          "i": 29,
+          "tool": "run_command",
+          "t": 202.5
+        },
+        {
+          "i": 30,
+          "tool": "read_file",
+          "t": 205.1,
+          "target": "fastapi/applications.py"
+        },
+        {
+          "i": 31,
+          "tool": "run_command",
+          "t": 214.1
+        },
+        {
+          "i": 32,
+          "tool": "run_command",
+          "t": 228.7
+        },
+        {
+          "i": 33,
+          "tool": "edit_file",
+          "t": 255.6,
+          "target": "fastapi/routing.py"
+        }
+      ],
+      "tool_sequence_full": [
+        "run_command",
+        "run_command",
+        "run_command",
+        "read_file",
+        "run_command",
+        "read_file",
+        "run_command",
+        "run_command",
+        "read_file",
+        "run_command",
+        "run_command",
+        "read_file",
+        "run_command",
+        "run_command",
+        "read_file",
+        "read_file",
+        "run_command",
+        "read_file",
+        "read_file",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "read_file",
+        "read_file",
+        "run_command",
+        "run_command",
+        "run_command",
+        "read_file",
+        "run_command",
+        "run_command",
+        "edit_file"
+      ],
+      "sequence_truncated": false
+    },
+    {
+      "kernel": "gemma-agent-benchmark-aaea34e4-20261013-122940",
+      "task": "fastapi_14873",
+      "events": 17,
+      "container_key": "steps",
+      "duration_s": 302.9,
+      "tool_counts": {
+        "run_command": 7,
+        "read_file": 7,
+        "edit_file": 1
+      },
+      "first_write_call": {
+        "i": 12,
+        "tool": "edit_file",
+        "t": 265.0,
+        "target": "fastapi/routing.py"
+      },
+      "submit_patch_calls": [],
+      "text_parts_seen": 0,
+      "sequence": [
+        {
+          "i": 2,
+          "tool": "run_command",
+          "t": 81.2
+        },
+        {
+          "i": 3,
+          "tool": "read_file",
+          "t": 86.2,
+          "target": "fastapi/routing.py"
+        },
+        {
+          "i": 4,
+          "tool": "run_command",
+          "t": 89.0
+        },
+        {
+          "i": 5,
+          "tool": "read_file",
+          "t": 90.6,
+          "target": "fastapi/routing.py"
+        },
+        {
+          "i": 6,
+          "tool": "read_file",
+          "t": 93.4,
+          "target": "fastapi/routing.py"
+        },
+        {
+          "i": 7,
+          "tool": "read_file",
+          "t": 96.2,
+          "target": "fastapi/routing.py"
+        },
+        {
+          "i": 8,
+          "tool": "read_file",
+          "t": 121.3,
+          "target": "fastapi/routing.py"
+        },
+        {
+          "i": 9,
+          "tool": "run_command",
+          "t": 142.1
+        },
+        {
+          "i": 10,
+          "tool": "read_file",
+          "t": 143.8,
+          "target": "fastapi/routing.py"
+        },
+        {
+          "i": 11,
+          "tool": "run_command",
+          "t": 147.9
+        },
+        {
+          "i": 12,
+          "tool": "edit_file",
+          "t": 265.0,
+          "target": "fastapi/routing.py"
+        },
+        {
+          "i": 13,
+          "tool": "run_command",
+          "t": 295.3
+        },
+        {
+          "i": 14,
+          "tool": "run_command",
+          "t": 297.5
+        },
+        {
+          "i": 15,
+          "tool": "run_command",
+          "t": 299.3
+        },
+        {
+          "i": 16,
+          "tool": "read_file",
+          "t": 302.9,
+          "target": "fastapi/applications.py"
+        }
+      ],
+      "tool_sequence_full": [
+        "run_command",
+        "read_file",
+        "run_command",
+        "read_file",
+        "read_file",
+        "read_file",
+        "read_file",
+        "run_command",
+        "read_file",
+        "run_command",
+        "edit_file",
+        "run_command",
+        "run_command",
+        "run_command",
+        "read_file"
+      ],
+      "sequence_truncated": false
+    },
+    {
+      "kernel": "gemma-agent-benchmark-aaea34e4-20261013-122940",
+      "task": "fastapi_14953",
+      "events": 37,
+      "container_key": "steps",
+      "duration_s": 278.5,
+      "tool_counts": {
+        "run_command": 21,
+        "read_file": 9,
+        "edit_file": 3
+      },
+      "first_write_call": {
+        "i": 12,
+        "tool": "edit_file",
+        "t": 169.4,
+        "target": "fastapi/datastructures.py"
+      },
+      "submit_patch_calls": [],
+      "text_parts_seen": 0,
+      "sequence": [
+        {
+          "i": 2,
+          "tool": "run_command",
+          "t": 91.8
+        },
+        {
+          "i": 3,
+          "tool": "run_command",
+          "t": 99.5
+        },
+        {
+          "i": 4,
+          "tool": "read_file",
+          "t": 103.5,
+          "target": "fastapi/datastructures.py"
+        },
+        {
+          "i": 5,
+          "tool": "run_command",
+          "t": 119.7
+        },
+        {
+          "i": 6,
+          "tool": "run_command",
+          "t": 121.6
+        },
+        {
+          "i": 7,
+          "tool": "run_command",
+          "t": 146.2
+        },
+        {
+          "i": 8,
+          "tool": "run_command",
+          "t": 148.1
+        },
+        {
+          "i": 9,
+          "tool": "run_command",
+          "t": 149.4
+        },
+        {
+          "i": 10,
+          "tool": "run_command",
+          "t": 151.0
+        },
+        {
+          "i": 11,
+          "tool": "run_command",
+          "t": 158.3
+        },
+        {
+          "i": 12,
+          "tool": "edit_file",
+          "t": 169.4,
+          "target": "fastapi/datastructures.py"
+        },
+        {
+          "i": 13,
+          "tool": "run_command",
+          "t": 175.3
+        },
+        {
+          "i": 14,
+          "tool": "run_command",
+          "t": 177.4
+        },
+        {
+          "i": 15,
+          "tool": "read_file",
+          "t": 180.9,
+          "target": "fastapi/openapi/models.py"
+        },
+        {
+          "i": 16,
+          "tool": "run_command",
+          "t": 188.0
+        },
+        {
+          "i": 17,
+          "tool": "run_command",
+          "t": 192.6
+        },
+        {
+          "i": 18,
+          "tool": "run_command",
+          "t": 194.0
+        },
+        {
+          "i": 19,
+          "tool": "read_file",
+          "t": 199.7,
+          "target": "fastapi/openapi/utils.py"
+        },
+        {
+          "i": 20,
+          "tool": "run_command",
+          "t": 203.3
+        },
+        {
+          "i": 21,
+          "tool": "run_command",
+          "t": 204.7
+        },
+        {
+          "i": 22,
+          "tool": "run_command",
+          "t": 206.1
+        },
+        {
+          "i": 23,
+          "tool": "read_file",
+          "t": 208.0,
+          "target": "fastapi/_compat/__init__.py"
+        },
+        {
+          "i": 24,
+          "tool": "run_command",
+          "t": 211.1
+        },
+        {
+          "i": 25,
+          "tool": "read_file",
+          "t": 240.6,
+          "target": "fastapi/_compat/v2.py"
+        },
+        {
+          "i": 26,
+          "tool": "run_command",
+          "t": 244.1
+        },
+        {
+          "i": 27,
+          "tool": "read_file",
+          "t": 245.8,
+          "target": "fastapi/openapi/utils.py"
+        },
+        {
+          "i": 28,
+          "tool": "run_command",
+          "t": 249.5
+        },
+        {
+          "i": 29,
+          "tool": "run_command",
+          "t": 251.7
+        },
+        {
+          "i": 30,
+          "tool": "read_file",
+          "t": 255.0,
+          "target": "fastapi/openapi/utils.py"
+        },
+        {
+          "i": 31,
+          "tool": "read_file",
+          "t": 258.1,
+          "target": "fastapi/_compat/v2.py"
+        },
+        {
+          "i": 32,
+          "tool": "read_file",
+          "t": 262.2,
+          "target": "fastapi/datastructures.py"
+        },
+        {
+          "i": 33,
+          "tool": "edit_file",
+          "t": 268.7,
+          "target": "fastapi/datastructures.py"
+        },
+        {
+          "i": 34,
+          "tool": "edit_file",
+          "t": 273.4,
+          "target": "fastapi/datastructures.py"
+        }
+      ],
+      "tool_sequence_full": [
+        "run_command",
+        "run_command",
+        "read_file",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "edit_file",
+        "run_command",
+        "run_command",
+        "read_file",
+        "run_command",
+        "run_command",
+        "run_command",
+        "read_file",
+        "run_command",
+        "run_command",
+        "run_command",
+        "read_file",
+        "run_command",
+        "read_file",
+        "run_command",
+        "read_file",
+        "run_command",
+        "run_command",
+        "read_file",
+        "read_file",
+        "read_file",
+        "edit_file",
+        "edit_file"
+      ],
+      "sequence_truncated": false
+    },
+    {
+      "kernel": "gemma-agent-benchmark-aaea34e4-20261013-122940",
+      "task": "fastapi_15030",
+      "events": 13,
+      "container_key": "steps",
+      "duration_s": 308.3,
+      "tool_counts": {
+        "read_file": 5,
+        "run_command": 3,
+        "edit_file": 3
+      },
+      "first_write_call": {
+        "i": 6,
+        "tool": "edit_file",
+        "t": 206.4,
+        "target": "fastapi/responses.py"
+      },
+      "submit_patch_calls": [],
+      "text_parts_seen": 0,
+      "sequence": [
+        {
+          "i": 2,
+          "tool": "run_command",
+          "t": 79.4
+        },
+        {
+          "i": 3,
+          "tool": "run_command",
+          "t": 86.2
+        },
+        {
+          "i": 4,
+          "tool": "read_file",
+          "t": 95.4,
+          "target": "fastapi/responses.py"
+        },
+        {
+          "i": 5,
+          "tool": "read_file",
+          "t": 130.3,
+          "target": "fastapi/__init__.py"
+        },
+        {
+          "i": 6,
+          "tool": "edit_file",
+          "t": 206.4,
+          "target": "fastapi/responses.py"
+        },
+        {
+          "i": 7,
+          "tool": "edit_file",
+          "t": 234.5,
+          "target": "fastapi/responses.py"
+        },
+        {
+          "i": 8,
+          "tool": "read_file",
+          "t": 268.5,
+          "target": "fastapi/responses.py"
+        },
+        {
+          "i": 9,
+          "tool": "edit_file",
+          "t": 299.8,
+          "target": "fastapi/responses.py"
+        },
+        {
+          "i": 10,
+          "tool": "read_file",
+          "t": 302.3,
+          "target": "fastapi/responses.py"
+        },
+        {
+          "i": 11,
+          "tool": "read_file",
+          "t": 305.9,
+          "target": "fastapi/__init__.py"
+        },
+        {
+          "i": 12,
+          "tool": "run_command",
+          "t": 308.3
+        }
+      ],
+      "tool_sequence_full": [
+        "run_command",
+        "run_command",
+        "read_file",
+        "read_file",
+        "edit_file",
+        "edit_file",
+        "read_file",
+        "edit_file",
+        "read_file",
+        "read_file",
+        "run_command"
+      ],
+      "sequence_truncated": false
+    },
+    {
+      "kernel": "gemma-agent-benchmark-aaea34e4-20261013-122940",
+      "task": "fastapi_15588",
+      "events": 5,
+      "container_key": "steps",
+      "duration_s": 231.4,
+      "tool_counts": {
+        "run_command": 2,
+        "write_file": 1
+      },
+      "first_write_call": {
+        "i": 4,
+        "tool": "write_file",
+        "t": 231.4,
+        "target": "/tmp/locate.py"
+      },
+      "submit_patch_calls": [],
+      "text_parts_seen": 0,
+      "sequence": [
+        {
+          "i": 2,
+          "tool": "run_command",
+          "t": 77.5
+        },
+        {
+          "i": 3,
+          "tool": "run_command",
+          "t": 160.0
+        },
+        {
+          "i": 4,
+          "tool": "write_file",
+          "t": 231.4,
+          "target": "/tmp/locate.py"
+        }
+      ],
+      "tool_sequence_full": [
+        "run_command",
+        "run_command",
+        "write_file"
+      ],
+      "sequence_truncated": false
+    },
+    {
+      "kernel": "gemma-agent-benchmark-aaea34e4-20261013-122940",
+      "task": "fastapi_15745",
+      "events": 5,
+      "container_key": "steps",
+      "duration_s": 227.0,
+      "tool_counts": {
+        "run_command": 2,
+        "write_file": 1
+      },
+      "first_write_call": {
+        "i": 3,
+        "tool": "write_file",
+        "t": 196.2,
+        "target": "/tmp/locate.py"
+      },
+      "submit_patch_calls": [],
+      "text_parts_seen": 0,
+      "sequence": [
+        {
+          "i": 2,
+          "tool": "run_command",
+          "t": 106.9
+        },
+        {
+          "i": 3,
+          "tool": "write_file",
+          "t": 196.2,
+          "target": "/tmp/locate.py"
+        },
+        {
+          "i": 4,
+          "tool": "run_command",
+          "t": 227.0
+        }
+      ],
+      "tool_sequence_full": [
+        "run_command",
+        "write_file",
+        "run_command"
+      ],
+      "sequence_truncated": false
+    },
+    {
+      "kernel": "gemma-agent-benchmark-aaea34e4-20261013-122940",
+      "task": "httpx_3672",
+      "events": 12,
+      "container_key": "steps",
+      "duration_s": 312.9,
+      "tool_counts": {
+        "run_command": 5,
+        "read_file": 4,
+        "write_file": 1
+      },
+      "first_write_call": {
+        "i": 4,
+        "tool": "write_file",
+        "t": 162.6,
+        "target": "/tmp/locate.py"
+      },
+      "submit_patch_calls": [],
+      "text_parts_seen": 0,
+      "sequence": [
+        {
+          "i": 2,
+          "tool": "run_command",
+          "t": 78.7
+        },
+        {
+          "i": 3,
+          "tool": "run_command",
+          "t": 86.2
+        },
+        {
+          "i": 4,
+          "tool": "write_file",
+          "t": 162.6,
+          "target": "/tmp/locate.py"
+        },
+        {
+          "i": 5,
+          "tool": "run_command",
+          "t": 236.8
+        },
+        {
+          "i": 6,
+          "tool": "run_command",
+          "t": 240.5
+        },
+        {
+          "i": 7,
+          "tool": "run_command",
+          "t": 264.7
+        },
+        {
+          "i": 8,
+          "tool": "read_file",
+          "t": 266.9,
+          "target": "src/httpx/_parsers.py"
+        },
+        {
+          "i": 9,
+          "tool": "read_file",
+          "t": 273.1,
+          "target": "src/httpx/_parsers.py"
+        },
+        {
+          "i": 10,
+          "tool": "read_file",
+          "t": 276.1,
+          "target": "src/httpx/_parsers.py"
+        },
+        {
+          "i": 11,
+          "tool": "read_file",
+          "t": 312.9,
+          "target": "src/httpx/_server.py"
+        }
+      ],
+      "tool_sequence_full": [
+        "run_command",
+        "run_command",
+        "write_file",
+        "run_command",
+        "run_command",
+        "run_command",
+        "read_file",
+        "read_file",
+        "read_file",
+        "read_file"
+      ],
+      "sequence_truncated": false
+    },
+    {
+      "kernel": "gemma-agent-benchmark-aaea34e4-20261013-122940",
+      "task": "requests_6644",
+      "events": 35,
+      "container_key": "steps",
+      "duration_s": 289.1,
+      "tool_counts": {
+        "run_command": 13,
+        "read_file": 5,
+        "edit_file": 1
+      },
+      "first_write_call": {
+        "i": 12,
+        "tool": "edit_file",
+        "t": 194.9,
+        "target": "src/requests/models.py"
+      },
+      "submit_patch_calls": [],
+      "text_parts_seen": 0,
+      "sequence": [
+        {
+          "i": 2,
+          "tool": "run_command",
+          "t": 86.6
+        },
+        {
+          "i": 3,
+          "tool": "run_command",
+          "t": 95.3
+        },
+        {
+          "i": 4,
+          "tool": "run_command",
+          "t": 102.0
+        },
+        {
+          "i": 5,
+          "tool": "read_file",
+          "t": 106.1,
+          "target": "src/requests/sessions.py"
+        },
+        {
+          "i": 6,
+          "tool": "read_file",
+          "t": 108.5,
+          "target": "src/requests/models.py"
+        },
+        {
+          "i": 7,
+          "tool": "run_command",
+          "t": 111.4
+        },
+        {
+          "i": 8,
+          "tool": "read_file",
+          "t": 114.1,
+          "target": "src/requests/models.py"
+        },
+        {
+          "i": 9,
+          "tool": "read_file",
+          "t": 116.5,
+          "target": "src/requests/models.py"
+        },
+        {
+          "i": 10,
+          "tool": "run_command",
+          "t": 144.3
+        },
+        {
+          "i": 11,
+          "tool": "read_file",
+          "t": 146.4,
+          "target": "src/requests/models.py"
+        },
+        {
+          "i": 12,
+          "tool": "edit_file",
+          "t": 194.9,
+          "target": "src/requests/models.py"
+        },
+        {
+          "i": 13,
+          "tool": "run_command",
+          "t": 205.3
+        },
+        {
+          "i": 14,
+          "tool": "run_command",
+          "t": 211.5
+        },
+        {
+          "i": 15,
+          "tool": "run_command",
+          "t": 213.5
+        },
+        {
+          "i": 16,
+          "tool": "run_command",
+          "t": 215.2
+        },
+        {
+          "i": 17,
+          "tool": "run_command",
+          "t": 221.9
+        },
+        {
+          "i": 18,
+          "tool": "run_command",
+          "t": 223.1
+        },
+        {
+          "i": 21,
+          "tool": "run_command",
+          "t": 233.0
+        },
+        {
+          "i": 24,
+          "tool": "run_command",
+          "t": 242.7
+        }
+      ],
+      "tool_sequence_full": [
+        "run_command",
+        "run_command",
+        "run_command",
+        "read_file",
+        "read_file",
+        "run_command",
+        "read_file",
+        "read_file",
+        "run_command",
+        "read_file",
+        "edit_file",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command"
+      ],
+      "sequence_truncated": false
+    },
+    {
+      "kernel": "gemma-agent-benchmark-aaea34e4-20261013-122940",
+      "task": "requests_6757",
+      "events": 12,
+      "container_key": "steps",
+      "duration_s": 118.9,
+      "tool_counts": {
+        "run_command": 8,
+        "edit_file": 2
+      },
+      "first_write_call": {
+        "i": 6,
+        "tool": "edit_file",
+        "t": 86.1,
+        "target": "tox.ini"
+      },
+      "submit_patch_calls": [],
+      "text_parts_seen": 0,
+      "sequence": [
+        {
+          "i": 2,
+          "tool": "run_command",
+          "t": 8.0
+        },
+        {
+          "i": 3,
+          "tool": "run_command",
+          "t": 11.1
+        },
+        {
+          "i": 4,
+          "tool": "run_command",
+          "t": 20.5
+        },
+        {
+          "i": 5,
+          "tool": "run_command",
+          "t": 62.0
+        },
+        {
+          "i": 6,
+          "tool": "edit_file",
+          "t": 86.1,
+          "target": "tox.ini"
+        },
+        {
+          "i": 7,
+          "tool": "edit_file",
+          "t": 91.4,
+          "target": "tox.ini"
+        },
+        {
+          "i": 8,
+          "tool": "run_command",
+          "t": 94.8
+        },
+        {
+          "i": 9,
+          "tool": "run_command",
+          "t": 102.5
+        },
+        {
+          "i": 10,
+          "tool": "run_command",
+          "t": 104.0
+        },
+        {
+          "i": 11,
+          "tool": "run_command",
+          "t": 118.9
+        }
+      ],
+      "tool_sequence_full": [
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "edit_file",
+        "edit_file",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command"
+      ],
+      "sequence_truncated": false
+    },
+    {
+      "kernel": "gemma-agent-benchmark-aaea34e4-20261013-122940",
+      "task": "requests_7309",
+      "events": 17,
+      "container_key": "steps",
+      "duration_s": 180.2,
+      "tool_counts": {
+        "run_command": 9,
+        "read_file": 3,
+        "edit_file": 1,
+        "write_file": 1,
+        "get_status": 1
+      },
+      "first_write_call": {
+        "i": 6,
+        "tool": "edit_file",
+        "t": 110.6,
+        "target": "src/requests/utils.py"
+      },
+      "submit_patch_calls": [],
+      "text_parts_seen": 0,
+      "sequence": [
+        {
+          "i": 2,
+          "tool": "run_command",
+          "t": 72.7
+        },
+        {
+          "i": 3,
+          "tool": "read_file",
+          "t": 76.9,
+          "target": "src/requests/utils.py"
+        },
+        {
+          "i": 4,
+          "tool": "run_command",
+          "t": 80.1
+        },
+        {
+          "i": 5,
+          "tool": "read_file",
+          "t": 82.0,
+          "target": "src/requests/utils.py"
+        },
+        {
+          "i": 6,
+          "tool": "edit_file",
+          "t": 110.6,
+          "target": "src/requests/utils.py"
+        },
+        {
+          "i": 7,
+          "tool": "write_file",
+          "t": 121.8,
+          "target": "/tmp/repro.py"
+        },
+        {
+          "i": 8,
+          "tool": "run_command",
+          "t": 138.0
+        },
+        {
+          "i": 9,
+          "tool": "read_file",
+          "t": 162.0,
+          "target": "src/requests/utils.py"
+        },
+        {
+          "i": 10,
+          "tool": "run_command",
+          "t": 172.4
+        },
+        {
+          "i": 11,
+          "tool": "run_command",
+          "t": 174.7
+        },
+        {
+          "i": 12,
+          "tool": "run_command",
+          "t": 176.0
+        },
+        {
+          "i": 13,
+          "tool": "run_command",
+          "t": 177.1
+        },
+        {
+          "i": 14,
+          "tool": "run_command",
+          "t": 178.2
+        },
+        {
+          "i": 15,
+          "tool": "get_status",
+          "t": 179.0
+        },
+        {
+          "i": 16,
+          "tool": "run_command",
+          "t": 180.2
+        }
+      ],
+      "tool_sequence_full": [
+        "run_command",
+        "read_file",
+        "run_command",
+        "read_file",
+        "edit_file",
+        "write_file",
+        "run_command",
+        "read_file",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "get_status",
+        "run_command"
+      ],
+      "sequence_truncated": false
+    },
+    {
+      "kernel": "gemma-agent-benchmark-aaea34e4-20261013-122940",
+      "task": "rich_2725",
+      "events": 16,
+      "container_key": "steps",
+      "duration_s": 243.4,
+      "tool_counts": {
+        "run_command": 9,
+        "read_file": 3,
+        "edit_file": 1,
+        "write_file": 1
+      },
+      "first_write_call": {
+        "i": 7,
+        "tool": "edit_file",
+        "t": 175.5,
+        "target": "rich/table.py"
+      },
+      "submit_patch_calls": [],
+      "text_parts_seen": 0,
+      "sequence": [
+        {
+          "i": 2,
+          "tool": "run_command",
+          "t": 88.4
+        },
+        {
+          "i": 3,
+          "tool": "run_command",
+          "t": 98.9
+        },
+        {
+          "i": 4,
+          "tool": "read_file",
+          "t": 102.1,
+          "target": "rich/table.py"
+        },
+        {
+          "i": 5,
+          "tool": "read_file",
+          "t": 110.9,
+          "target": "rich/table.py"
+        },
+        {
+          "i": 6,
+          "tool": "run_command",
+          "t": 149.6
+        },
+        {
+          "i": 7,
+          "tool": "edit_file",
+          "t": 175.5,
+          "target": "rich/table.py"
+        },
+        {
+          "i": 8,
+          "tool": "write_file",
+          "t": 208.4,
+          "target": "/tmp/repro.py"
+        },
+        {
+          "i": 9,
+          "tool": "run_command",
+          "t": 221.7
+        },
+        {
+          "i": 10,
+          "tool": "run_command",
+          "t": 224.4
+        },
+        {
+          "i": 11,
+          "tool": "read_file",
+          "t": 225.7,
+          "target": "rich/box.py"
+        },
+        {
+          "i": 12,
+          "tool": "run_command",
+          "t": 234.1
+        },
+        {
+          "i": 13,
+          "tool": "run_command",
+          "t": 236.5
+        },
+        {
+          "i": 14,
+          "tool": "run_command",
+          "t": 237.7
+        },
+        {
+          "i": 15,
+          "tool": "run_command",
+          "t": 243.4
+        }
+      ],
+      "tool_sequence_full": [
+        "run_command",
+        "run_command",
+        "read_file",
+        "read_file",
+        "run_command",
+        "edit_file",
+        "write_file",
+        "run_command",
+        "run_command",
+        "read_file",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command"
+      ],
+      "sequence_truncated": false
+    },
+    {
+      "kernel": "gemma-agent-benchmark-aaea34e4-20261013-122940",
+      "task": "rich_3006",
+      "events": 39,
+      "container_key": "steps",
+      "duration_s": 235.9,
+      "tool_counts": {
+        "run_command": 21,
+        "read_file": 3,
+        "edit_file": 1
+      },
+      "first_write_call": {
+        "i": 14,
+        "tool": "edit_file",
+        "t": 176.5,
+        "target": "rich/repr.py"
+      },
+      "submit_patch_calls": [],
+      "text_parts_seen": 0,
+      "sequence": [
+        {
+          "i": 2,
+          "tool": "run_command",
+          "t": 81.8
+        },
+        {
+          "i": 3,
+          "tool": "run_command",
+          "t": 91.7
+        },
+        {
+          "i": 4,
+          "tool": "run_command",
+          "t": 96.4
+        },
+        {
+          "i": 5,
+          "tool": "run_command",
+          "t": 99.1
+        },
+        {
+          "i": 6,
+          "tool": "run_command",
+          "t": 100.8
+        },
+        {
+          "i": 7,
+          "tool": "run_command",
+          "t": 102.6
+        },
+        {
+          "i": 8,
+          "tool": "run_command",
+          "t": 106.1
+        },
+        {
+          "i": 9,
+          "tool": "read_file",
+          "t": 109.9,
+          "target": "rich/repr.py"
+        },
+        {
+          "i": 10,
+          "tool": "run_command",
+          "t": 121.8
+        },
+        {
+          "i": 11,
+          "tool": "run_command",
+          "t": 137.2
+        },
+        {
+          "i": 12,
+          "tool": "read_file",
+          "t": 141.2,
+          "target": "rich/repr.py"
+        },
+        {
+          "i": 13,
+          "tool": "read_file",
+          "t": 160.7,
+          "target": "rich/repr.py"
+        },
+        {
+          "i": 14,
+          "tool": "edit_file",
+          "t": 176.5,
+          "target": "rich/repr.py"
+        },
+        {
+          "i": 15,
+          "tool": "run_command",
+          "t": 178.1
+        },
+        {
+          "i": 16,
+          "tool": "run_command",
+          "t": 181.3
+        },
+        {
+          "i": 17,
+          "tool": "run_command",
+          "t": 185.0
+        },
+        {
+          "i": 18,
+          "tool": "run_command",
+          "t": 186.7
+        },
+        {
+          "i": 19,
+          "tool": "run_command",
+          "t": 187.9
+        },
+        {
+          "i": 20,
+          "tool": "run_command",
+          "t": 188.8
+        },
+        {
+          "i": 21,
+          "tool": "run_command",
+          "t": 190.0
+        },
+        {
+          "i": 24,
+          "tool": "run_command",
+          "t": 193.2
+        },
+        {
+          "i": 25,
+          "tool": "run_command",
+          "t": 194.3
+        },
+        {
+          "i": 26,
+          "tool": "run_command",
+          "t": 195.4
+        },
+        {
+          "i": 27,
+          "tool": "run_command",
+          "t": 196.5
+        },
+        {
+          "i": 30,
+          "tool": "run_command",
+          "t": 204.2
+        }
+      ],
+      "tool_sequence_full": [
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "read_file",
+        "run_command",
+        "run_command",
+        "read_file",
+        "read_file",
+        "edit_file",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command"
+      ],
+      "sequence_truncated": false
+    },
+    {
+      "kernel": "gemma-agent-benchmark-aaea34e4-20261013-122940",
+      "task": "rich_3043",
+      "events": 6,
+      "container_key": "steps",
+      "duration_s": 313.6,
+      "tool_counts": {
+        "run_command": 3,
+        "write_file": 1
+      },
+      "first_write_call": {
+        "i": 5,
+        "tool": "write_file",
+        "t": 313.6,
+        "target": "/tmp/locate.py"
+      },
+      "submit_patch_calls": [],
+      "text_parts_seen": 0,
+      "sequence": [
+        {
+          "i": 2,
+          "tool": "run_command",
+          "t": 77.0
+        },
+        {
+          "i": 3,
+          "tool": "run_command",
+          "t": 154.3
+        },
+        {
+          "i": 4,
+          "tool": "run_command",
+          "t": 235.4
+        },
+        {
+          "i": 5,
+          "tool": "write_file",
+          "t": 313.6,
+          "target": "/tmp/locate.py"
+        }
+      ],
+      "tool_sequence_full": [
+        "run_command",
+        "run_command",
+        "run_command",
+        "write_file"
+      ],
+      "sequence_truncated": false
+    },
+    {
+      "kernel": "gemma-agent-benchmark-aaea34e4-20261013-122940",
+      "task": "rich_3052",
+      "events": 16,
+      "container_key": "steps",
+      "duration_s": 304.4,
+      "tool_counts": {
+        "edit_file": 6,
+        "run_command": 4,
+        "read_file": 4
+      },
+      "first_write_call": {
+        "i": 5,
+        "tool": "edit_file",
+        "t": 142.8,
+        "target": "rich/prompt.py"
+      },
+      "submit_patch_calls": [],
+      "text_parts_seen": 0,
+      "sequence": [
+        {
+          "i": 2,
+          "tool": "run_command",
+          "t": 85.1
+        },
+        {
+          "i": 3,
+          "tool": "read_file",
+          "t": 89.3,
+          "target": "rich/prompt.py"
+        },
+        {
+          "i": 4,
+          "tool": "read_file",
+          "t": 92.3,
+          "target": "rich/prompt.py"
+        },
+        {
+          "i": 5,
+          "tool": "edit_file",
+          "t": 142.8,
+          "target": "rich/prompt.py"
+        },
+        {
+          "i": 6,
+          "tool": "edit_file",
+          "t": 178.5,
+          "target": "rich/prompt.py"
+        },
+        {
+          "i": 7,
+          "tool": "edit_file",
+          "t": 186.2,
+          "target": "rich/prompt.py"
+        },
+        {
+          "i": 8,
+          "tool": "edit_file",
+          "t": 208.7,
+          "target": "rich/prompt.py"
+        },
+        {
+          "i": 9,
+          "tool": "edit_file",
+          "t": 227.4,
+          "target": "rich/prompt.py"
+        },
+        {
+          "i": 10,
+          "tool": "run_command",
+          "t": 230.1
+        },
+        {
+          "i": 11,
+          "tool": "read_file",
+          "t": 256.8,
+          "target": "tests/test_prompt.py"
+        },
+        {
+          "i": 12,
+          "tool": "run_command",
+          "t": 267.5
+        },
+        {
+          "i": 13,
+          "tool": "read_file",
+          "t": 272.0,
+          "target": "rich/prompt.py"
+        },
+        {
+          "i": 14,
+          "tool": "edit_file",
+          "t": 302.1,
+          "target": "rich/prompt.py"
+        },
+        {
+          "i": 15,
+          "tool": "run_command",
+          "t": 304.4
+        }
+      ],
+      "tool_sequence_full": [
+        "run_command",
+        "read_file",
+        "read_file",
+        "edit_file",
+        "edit_file",
+        "edit_file",
+        "edit_file",
+        "edit_file",
+        "run_command",
+        "read_file",
+        "run_command",
+        "read_file",
+        "edit_file",
+        "run_command"
+      ],
+      "sequence_truncated": false
+    },
+    {
+      "kernel": "gemma-agent-benchmark-aaea34e4-20261013-122940",
+      "task": "rich_3105",
+      "events": 10,
+      "container_key": "steps",
+      "duration_s": 73.8,
+      "tool_counts": {
+        "run_command": 8
+      },
+      "first_write_call": null,
+      "submit_patch_calls": [],
+      "text_parts_seen": 0,
+      "sequence": [
+        {
+          "i": 2,
+          "tool": "run_command",
+          "t": 6.9
+        },
+        {
+          "i": 3,
+          "tool": "run_command",
+          "t": 13.1
+        },
+        {
+          "i": 4,
+          "tool": "run_command",
+          "t": 21.8
+        },
+        {
+          "i": 5,
+          "tool": "run_command",
+          "t": 24.7
+        },
+        {
+          "i": 6,
+          "tool": "run_command",
+          "t": 28.2
+        },
+        {
+          "i": 7,
+          "tool": "run_command",
+          "t": 30.7
+        },
+        {
+          "i": 8,
+          "tool": "run_command",
+          "t": 61.3
+        },
+        {
+          "i": 9,
+          "tool": "run_command",
+          "t": 73.8
+        }
+      ],
+      "tool_sequence_full": [
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command"
+      ],
+      "sequence_truncated": false
+    },
+    {
+      "kernel": "gemma-agent-benchmark-aaea34e4-20261013-122940",
+      "task": "rich_3518",
+      "events": 47,
+      "container_key": "steps",
+      "duration_s": 260.4,
+      "tool_counts": {
+        "run_command": 19,
+        "read_file": 11,
+        "edit_file": 10
+      },
+      "first_write_call": {
+        "i": 16,
+        "tool": "edit_file",
+        "t": 146.6,
+        "target": "rich/table.py"
+      },
+      "submit_patch_calls": [],
+      "text_parts_seen": 0,
+      "sequence": [
+        {
+          "i": 2,
+          "tool": "run_command",
+          "t": 74.2
+        },
+        {
+          "i": 3,
+          "tool": "read_file",
+          "t": 78.8,
+          "target": "rich/table.py"
+        },
+        {
+          "i": 4,
+          "tool": "run_command",
+          "t": 82.8
+        },
+        {
+          "i": 5,
+          "tool": "read_file",
+          "t": 84.8,
+          "target": "rich/table.py"
+        },
+        {
+          "i": 6,
+          "tool": "run_command",
+          "t": 88.3
+        },
+        {
+          "i": 7,
+          "tool": "read_file",
+          "t": 106.6,
+          "target": "rich/table.py"
+        },
+        {
+          "i": 8,
+          "tool": "read_file",
+          "t": 116.9,
+          "target": "rich/table.py"
+        },
+        {
+          "i": 9,
+          "tool": "read_file",
+          "t": 124.9,
+          "target": "rich/table.py"
+        },
+        {
+          "i": 10,
+          "tool": "read_file",
+          "t": 127.1,
+          "target": "rich/table.py"
+        },
+        {
+          "i": 11,
+          "tool": "read_file",
+          "t": 128.8,
+          "target": "rich/table.py"
+        },
+        {
+          "i": 12,
+          "tool": "read_file",
+          "t": 130.5,
+          "target": "rich/table.py"
+        },
+        {
+          "i": 13,
+          "tool": "run_command",
+          "t": 132.7
+        },
+        {
+          "i": 14,
+          "tool": "read_file",
+          "t": 134.4,
+          "target": "rich/table.py"
+        },
+        {
+          "i": 15,
+          "tool": "read_file",
+          "t": 137.2,
+          "target": "rich/table.py"
+        },
+        {
+          "i": 16,
+          "tool": "edit_file",
+          "t": 146.6,
+          "target": "rich/table.py"
+        },
+        {
+          "i": 17,
+          "tool": "edit_file",
+          "t": 174.1,
+          "target": "rich/table.py"
+        },
+        {
+          "i": 18,
+          "tool": "edit_file",
+          "t": 176.5,
+          "target": "rich/table.py"
+        },
+        {
+          "i": 19,
+          "tool": "edit_file",
+          "t": 179.4,
+          "target": "rich/table.py"
+        },
+        {
+          "i": 20,
+          "tool": "edit_file",
+          "t": 182.2,
+          "target": "rich/table.py"
+        },
+        {
+          "i": 21,
+          "tool": "edit_file",
+          "t": 185.0,
+          "target": "rich/table.py"
+        },
+        {
+          "i": 22,
+          "tool": "edit_file",
+          "t": 188.0,
+          "target": "rich/table.py"
+        },
+        {
+          "i": 23,
+          "tool": "edit_file",
+          "t": 192.6,
+          "target": "rich/table.py"
+        },
+        {
+          "i": 24,
+          "tool": "read_file",
+          "t": 197.7,
+          "target": "rich/table.py"
+        },
+        {
+          "i": 25,
+          "tool": "edit_file",
+          "t": 200.6,
+          "target": "rich/table.py"
+        },
+        {
+          "i": 26,
+          "tool": "edit_file",
+          "t": 205.2,
+          "target": "rich/table.py"
+        },
+        {
+          "i": 27,
+          "tool": "run_command",
+          "t": 214.4
+        },
+        {
+          "i": 28,
+          "tool": "run_command",
+          "t": 221.4
+        },
+        {
+          "i": 29,
+          "tool": "run_command",
+          "t": 227.4
+        },
+        {
+          "i": 30,
+          "tool": "run_command",
+          "t": 228.9
+        },
+        {
+          "i": 31,
+          "tool": "run_command",
+          "t": 230.4
+        },
+        {
+          "i": 32,
+          "tool": "run_command",
+          "t": 231.6
+        },
+        {
+          "i": 33,
+          "tool": "run_command",
+          "t": 232.9
+        },
+        {
+          "i": 34,
+          "tool": "run_command",
+          "t": 233.9
+        },
+        {
+          "i": 35,
+          "tool": "run_command",
+          "t": 234.8
+        },
+        {
+          "i": 36,
+          "tool": "run_command",
+          "t": 235.7
+        },
+        {
+          "i": 39,
+          "tool": "run_command",
+          "t": 240.3
+        },
+        {
+          "i": 40,
+          "tool": "run_command",
+          "t": 241.1
+        },
+        {
+          "i": 43,
+          "tool": "run_command",
+          "t": 250.4
+        },
+        {
+          "i": 44,
+          "tool": "run_command",
+          "t": 255.5
+        },
+        {
+          "i": 45,
+          "tool": "run_command",
+          "t": 259.2
+        }
+      ],
+      "tool_sequence_full": [
+        "run_command",
+        "read_file",
+        "run_command",
+        "read_file",
+        "run_command",
+        "read_file",
+        "read_file",
+        "read_file",
+        "read_file",
+        "read_file",
+        "read_file",
+        "run_command",
+        "read_file",
+        "read_file",
+        "edit_file",
+        "edit_file",
+        "edit_file",
+        "edit_file",
+        "edit_file",
+        "edit_file",
+        "edit_file",
+        "edit_file",
+        "read_file",
+        "edit_file",
+        "edit_file",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command"
+      ],
+      "sequence_truncated": false
+    },
+    {
+      "kernel": "gemma-agent-benchmark-aaea34e4-20261013-122940",
+      "task": "rich_3718",
+      "events": 39,
+      "container_key": "steps",
+      "duration_s": 281.4,
+      "tool_counts": {
+        "run_command": 25,
+        "edit_file": 7,
+        "read_file": 4
+      },
+      "first_write_call": {
+        "i": 13,
+        "tool": "edit_file",
+        "t": 205.9,
+        "target": "rich/panel.py"
+      },
+      "submit_patch_calls": [],
+      "text_parts_seen": 0,
+      "sequence": [
+        {
+          "i": 2,
+          "tool": "run_command",
+          "t": 77.9
+        },
+        {
+          "i": 3,
+          "tool": "run_command",
+          "t": 88.8
+        },
+        {
+          "i": 4,
+          "tool": "run_command",
+          "t": 91.0
+        },
+        {
+          "i": 5,
+          "tool": "run_command",
+          "t": 96.8
+        },
+        {
+          "i": 6,
+          "tool": "run_command",
+          "t": 99.5
+        },
+        {
+          "i": 7,
+          "tool": "read_file",
+          "t": 101.7,
+          "target": "rich/panel.py"
+        },
+        {
+          "i": 8,
+          "tool": "read_file",
+          "t": 104.5,
+          "target": "rich/panel.py`,start_line:151"
+        },
+        {
+          "i": 9,
+          "tool": "read_file",
+          "t": 107.5,
+          "target": "rich/panel.py`,start_line:151"
+        },
+        {
+          "i": 10,
+          "tool": "read_file",
+          "t": 111.3,
+          "target": "rich/panel.py"
+        },
+        {
+          "i": 11,
+          "tool": "run_command",
+          "t": 162.9
+        },
+        {
+          "i": 12,
+          "tool": "run_command",
+          "t": 191.1
+        },
+        {
+          "i": 13,
+          "tool": "edit_file",
+          "t": 205.9,
+          "target": "rich/panel.py"
+        },
+        {
+          "i": 14,
+          "tool": "edit_file",
+          "t": 209.7,
+          "target": "rich/panel.py"
+        },
+        {
+          "i": 15,
+          "tool": "edit_file",
+          "t": 213.2,
+          "target": "rich/panel.py"
+        },
+        {
+          "i": 16,
+          "tool": "edit_file",
+          "t": 218.4,
+          "target": "rich/panel.py"
+        },
+        {
+          "i": 17,
+          "tool": "edit_file",
+          "t": 222.5,
+          "target": "rich/panel.py"
+        },
+        {
+          "i": 18,
+          "tool": "edit_file",
+          "t": 226.9,
+          "target": "rich/panel.py"
+        },
+        {
+          "i": 19,
+          "tool": "edit_file",
+          "t": 229.4,
+          "target": "rich/panel.py"
+        },
+        {
+          "i": 20,
+          "tool": "run_command",
+          "t": 231.2
+        },
+        {
+          "i": 21,
+          "tool": "run_command",
+          "t": 233.1
+        },
+        {
+          "i": 22,
+          "tool": "run_command",
+          "t": 236.1
+        },
+        {
+          "i": 23,
+          "tool": "run_command",
+          "t": 237.5
+        },
+        {
+          "i": 24,
+          "tool": "run_command",
+          "t": 238.5
+        },
+        {
+          "i": 25,
+          "tool": "run_command",
+          "t": 240.0
+        },
+        {
+          "i": 26,
+          "tool": "run_command",
+          "t": 241.3
+        },
+        {
+          "i": 27,
+          "tool": "run_command",
+          "t": 242.4
+        },
+        {
+          "i": 28,
+          "tool": "run_command",
+          "t": 243.4
+        },
+        {
+          "i": 29,
+          "tool": "run_command",
+          "t": 244.4
+        },
+        {
+          "i": 30,
+          "tool": "run_command",
+          "t": 245.3
+        },
+        {
+          "i": 31,
+          "tool": "run_command",
+          "t": 246.3
+        },
+        {
+          "i": 32,
+          "tool": "run_command",
+          "t": 247.2
+        },
+        {
+          "i": 33,
+          "tool": "run_command",
+          "t": 248.2
+        },
+        {
+          "i": 34,
+          "tool": "run_command",
+          "t": 249.2
+        },
+        {
+          "i": 35,
+          "tool": "run_command",
+          "t": 250.1
+        },
+        {
+          "i": 36,
+          "tool": "run_command",
+          "t": 251.1
+        },
+        {
+          "i": 37,
+          "tool": "run_command",
+          "t": 274.7
+        }
+      ],
+      "tool_sequence_full": [
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "read_file",
+        "read_file",
+        "read_file",
+        "read_file",
+        "run_command",
+        "run_command",
+        "edit_file",
+        "edit_file",
+        "edit_file",
+        "edit_file",
+        "edit_file",
+        "edit_file",
+        "edit_file",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command"
+      ],
+      "sequence_truncated": false
+    },
+    {
+      "kernel": "gemma-agent-benchmark-aaea34e4-20261013-122940",
+      "task": "rich_3882",
+      "events": 46,
+      "container_key": "steps",
+      "duration_s": 311.7,
+      "tool_counts": {
+        "run_command": 18,
+        "read_file": 12,
+        "edit_file": 12
+      },
+      "first_write_call": {
+        "i": 15,
+        "tool": "edit_file",
+        "t": 172.4,
+        "target": "rich/prompt.py"
+      },
+      "submit_patch_calls": [],
+      "text_parts_seen": 0,
+      "sequence": [
+        {
+          "i": 2,
+          "tool": "run_command",
+          "t": 73.8
+        },
+        {
+          "i": 3,
+          "tool": "read_file",
+          "t": 78.3,
+          "target": "rich/prompt.py"
+        },
+        {
+          "i": 4,
+          "tool": "read_file",
+          "t": 81.1,
+          "target": "rich/prompt.py"
+        },
+        {
+          "i": 5,
+          "tool": "read_file",
+          "t": 102.1,
+          "target": "rich/console.py"
+        },
+        {
+          "i": 6,
+          "tool": "run_command",
+          "t": 104.7
+        },
+        {
+          "i": 7,
+          "tool": "read_file",
+          "t": 121.4,
+          "target": "rich/console.py"
+        },
+        {
+          "i": 8,
+          "tool": "run_command",
+          "t": 125.7
+        },
+        {
+          "i": 9,
+          "tool": "read_file",
+          "t": 127.4,
+          "target": "rich/console.py"
+        },
+        {
+          "i": 10,
+          "tool": "read_file",
+          "t": 130.0,
+          "target": "rich/console.py"
+        },
+        {
+          "i": 11,
+          "tool": "run_command",
+          "t": 131.4
+        },
+        {
+          "i": 12,
+          "tool": "read_file",
+          "t": 133.1,
+          "target": "rich/console.py"
+        },
+        {
+          "i": 13,
+          "tool": "read_file",
+          "t": 134.8,
+          "target": "rich/console.py"
+        },
+        {
+          "i": 14,
+          "tool": "read_file",
+          "t": 152.3,
+          "target": "rich/protocol.py"
+        },
+        {
+          "i": 15,
+          "tool": "edit_file",
+          "t": 172.4,
+          "target": "rich/prompt.py"
+        },
+        {
+          "i": 16,
+          "tool": "edit_file",
+          "t": 200.4,
+          "target": "rich/prompt.py"
+        },
+        {
+          "i": 17,
+          "tool": "edit_file",
+          "t": 202.6,
+          "target": "rich/prompt.py"
+        },
+        {
+          "i": 18,
+          "tool": "edit_file",
+          "t": 205.7,
+          "target": "rich/prompt.py"
+        },
+        {
+          "i": 19,
+          "tool": "edit_file",
+          "t": 208.0,
+          "target": "rich/prompt.py"
+        },
+        {
+          "i": 20,
+          "tool": "edit_file",
+          "t": 210.3,
+          "target": "rich/prompt.py"
+        },
+        {
+          "i": 21,
+          "tool": "edit_file",
+          "t": 215.0,
+          "target": "rich/prompt.py"
+        },
+        {
+          "i": 22,
+          "tool": "edit_file",
+          "t": 217.4,
+          "target": "rich/prompt.py"
+        },
+        {
+          "i": 23,
+          "tool": "edit_file",
+          "t": 221.8,
+          "target": "rich/prompt.py"
+        },
+        {
+          "i": 24,
+          "tool": "read_file",
+          "t": 224.5,
+          "target": "rich/prompt.py"
+        },
+        {
+          "i": 25,
+          "tool": "read_file",
+          "t": 227.2,
+          "target": "rich/prompt.py"
+        },
+        {
+          "i": 26,
+          "tool": "edit_file",
+          "t": 233.0,
+          "target": "rich/prompt.py"
+        },
+        {
+          "i": 27,
+          "tool": "edit_file",
+          "t": 238.0,
+          "target": "rich/prompt.py"
+        },
+        {
+          "i": 28,
+          "tool": "read_file",
+          "t": 240.3,
+          "target": "rich/prompt.py"
+        },
+        {
+          "i": 29,
+          "tool": "edit_file",
+          "t": 248.9,
+          "target": "rich/prompt.py"
+        },
+        {
+          "i": 30,
+          "tool": "run_command",
+          "t": 288.6
+        },
+        {
+          "i": 31,
+          "tool": "run_command",
+          "t": 290.0
+        },
+        {
+          "i": 32,
+          "tool": "run_command",
+          "t": 291.4
+        },
+        {
+          "i": 33,
+          "tool": "run_command",
+          "t": 292.5
+        },
+        {
+          "i": 34,
+          "tool": "run_command",
+          "t": 293.9
+        },
+        {
+          "i": 35,
+          "tool": "run_command",
+          "t": 295.4
+        },
+        {
+          "i": 36,
+          "tool": "run_command",
+          "t": 296.5
+        },
+        {
+          "i": 37,
+          "tool": "run_command",
+          "t": 297.7
+        },
+        {
+          "i": 38,
+          "tool": "run_command",
+          "t": 298.9
+        },
+        {
+          "i": 39,
+          "tool": "run_command",
+          "t": 300.1
+        },
+        {
+          "i": 40,
+          "tool": "run_command",
+          "t": 301.2
+        },
+        {
+          "i": 41,
+          "tool": "run_command",
+          "t": 302.4
+        },
+        {
+          "i": 42,
+          "tool": "run_command",
+          "t": 303.6
+        },
+        {
+          "i": 43,
+          "tool": "run_command",
+          "t": 304.8
+        }
+      ],
+      "tool_sequence_full": [
+        "run_command",
+        "read_file",
+        "read_file",
+        "read_file",
+        "run_command",
+        "read_file",
+        "run_command",
+        "read_file",
+        "read_file",
+        "run_command",
+        "read_file",
+        "read_file",
+        "read_file",
+        "edit_file",
+        "edit_file",
+        "edit_file",
+        "edit_file",
+        "edit_file",
+        "edit_file",
+        "edit_file",
+        "edit_file",
+        "edit_file",
+        "read_file",
+        "read_file",
+        "edit_file",
+        "edit_file",
+        "read_file",
+        "edit_file",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command"
+      ],
+      "sequence_truncated": false
+    },
+    {
+      "kernel": "gemma-agent-benchmark-aaea34e4-20261013-122940",
+      "task": "rich_3894",
+      "events": 30,
+      "container_key": "steps",
+      "duration_s": 296.1,
+      "tool_counts": {
+        "run_command": 15,
+        "read_file": 7,
+        "write_file": 1,
+        "edit_file": 1
+      },
+      "first_write_call": {
+        "i": 12,
+        "tool": "write_file",
+        "t": 158.6,
+        "target": "/tmp/repro.py"
+      },
+      "submit_patch_calls": [],
+      "text_parts_seen": 0,
+      "sequence": [
+        {
+          "i": 2,
+          "tool": "run_command",
+          "t": 86.0
+        },
+        {
+          "i": 3,
+          "tool": "run_command",
+          "t": 95.3
+        },
+        {
+          "i": 4,
+          "tool": "read_file",
+          "t": 99.0,
+          "target": "rich/_inspect.py"
+        },
+        {
+          "i": 5,
+          "tool": "read_file",
+          "t": 104.8,
+          "target": "rich/_inspect.py"
+        },
+        {
+          "i": 8,
+          "tool": "read_file",
+          "t": 113.6,
+          "target": "rich/__init__.py"
+        },
+        {
+          "i": 9,
+          "tool": "run_command",
+          "t": 117.0
+        },
+        {
+          "i": 10,
+          "tool": "read_file",
+          "t": 138.8,
+          "target": "rich/_inspect.py"
+        },
+        {
+          "i": 11,
+          "tool": "read_file",
+          "t": 140.4,
+          "target": "rich/_inspect.py"
+        },
+        {
+          "i": 12,
+          "tool": "write_file",
+          "t": 158.6,
+          "target": "/tmp/repro.py"
+        },
+        {
+          "i": 13,
+          "tool": "run_command",
+          "t": 165.6
+        },
+        {
+          "i": 14,
+          "tool": "run_command",
+          "t": 171.4
+        },
+        {
+          "i": 15,
+          "tool": "run_command",
+          "t": 173.1
+        },
+        {
+          "i": 16,
+          "tool": "run_command",
+          "t": 182.1
+        },
+        {
+          "i": 17,
+          "tool": "read_file",
+          "t": 214.0,
+          "target": "rich/_inspect.py"
+        },
+        {
+          "i": 18,
+          "tool": "run_command",
+          "t": 240.1
+        },
+        {
+          "i": 19,
+          "tool": "read_file",
+          "t": 256.5,
+          "target": "rich/_inspect.py"
+        },
+        {
+          "i": 20,
+          "tool": "edit_file",
+          "t": 261.9,
+          "target": "rich/_inspect.py"
+        },
+        {
+          "i": 21,
+          "tool": "run_command",
+          "t": 263.4
+        },
+        {
+          "i": 22,
+          "tool": "run_command",
+          "t": 266.9
+        },
+        {
+          "i": 23,
+          "tool": "run_command",
+          "t": 269.0
+        },
+        {
+          "i": 24,
+          "tool": "run_command",
+          "t": 272.9
+        },
+        {
+          "i": 25,
+          "tool": "run_command",
+          "t": 294.0
+        },
+        {
+          "i": 28,
+          "tool": "run_command",
+          "t": 295.2
+        },
+        {
+          "i": 29,
+          "tool": "run_command",
+          "t": 296.1
+        }
+      ],
+      "tool_sequence_full": [
+        "run_command",
+        "run_command",
+        "read_file",
+        "read_file",
+        "read_file",
+        "run_command",
+        "read_file",
+        "read_file",
+        "write_file",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "read_file",
+        "run_command",
+        "read_file",
+        "edit_file",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command",
+        "run_command"
+      ],
+      "sequence_truncated": false
+    },
+    {
+      "kernel": "gemma-agent-benchmark-aaea34e4-20261013-122940",
+      "task": "rich_3934",
+      "events": 13,
+      "container_key": "steps",
+      "duration_s": 309.4,
+      "tool_counts": {
+        "run_command": 7,
+        "read_file": 4
+      },
+      "first_write_call": null,
+      "submit_patch_calls": [],
+      "text_parts_seen": 0,
+      "sequence": [
+        {
+          "i": 2,
+          "tool": "run_command",
+          "t": 77.4
+        },
+        {
+          "i": 3,
+          "tool": "read_file",
+          "t": 84.6,
+          "target": "rich/live.py"
+        },
+        {
+          "i": 4,
+          "tool": "read_file",
+          "t": 91.9,
+          "target": "rich/live_render.py"
+        },
+        {
+          "i": 5,
+          "tool": "run_command",
+          "t": 118.0
+        },
+        {
+          "i": 6,
+          "tool": "run_command",
+          "t": 122.1
+        },
+        {
+          "i": 7,
+          "tool": "run_command",
+          "t": 170.6
+        },
+        {
+          "i": 8,
+          "tool": "read_file",
+          "t": 176.9,
+          "target": "rich/live.py"
+        },
+        {
+          "i": 9,
+          "tool": "read_file",
+          "t": 180.2,
+          "target": "rich/live.py"
+        },
+        {
+          "i": 10,
+          "tool": "run_command",
+          "t": 231.9
+        },
+        {
+          "i": 11,
+          "tool": "run_command",
+          "t": 272.4
+        },
+        {
+          "i": 12,
+          "tool": "run_command",
+          "t": 309.4
+        }
+      ],
+      "tool_sequence_full": [
+        "run_command",
+        "read_file",
+        "read_file",
+        "run_command",
+        "run_command",
+        "run_command",
+        "read_file",
+        "read_file",
+        "run_command",
+        "run_command",
+        "run_command"
+      ],
+      "sequence_truncated": false
+    }
+  ],
+  "failures": [],
+  "aggregates": [
+    {
+      "kernel": "gemma-agent-benchmark-aaea34e4-20261013-122940",
+      "tasks": 30,
+      "tasks_with_write_attempt": 26,
+      "write_coverage": "26/30",
+      "tasks_without_write_attempt": [
+        "fastapi_14266",
+        "fastapi_14459",
+        "rich_3105",
+        "rich_3934"
+      ],
+      "median_first_write_s": 175.5,
+      "median_first_write_index": 10,
+      "tasks_first_write_within_call_4": "4/30",
+      "max_consecutive_submit_patch": 0,
+      "max_consecutive_edits": 9,
+      "submit_patch_total": 0,
+      "tasks_with_repeated_submit": {},
+      "absolute_write_targets": [
+        "/tmp/issue.txt",
+        "/tmp/locate.py",
+        "/tmp/repro.py"
+      ],
+      "repo_write_coverage": "22/30",
+      "tasks_without_repo_write": [
+        "fastapi_14266",
+        "fastapi_14459",
+        "fastapi_15588",
+        "fastapi_15745",
+        "httpx_3672",
+        "rich_3043",
+        "rich_3105",
+        "rich_3934"
+      ],
+      "median_first_repo_write_s": 176.5,
+      "median_first_repo_write_index": 12,
+      "tasks_repo_write_within_call_4": "1/30"
+    }
+  ]
+}
