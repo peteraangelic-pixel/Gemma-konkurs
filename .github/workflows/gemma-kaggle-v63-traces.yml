@@ -1,0 +1,97 @@
+# Read-only step 2 of the V6.3 diagnostics: the first fetch showed the kernels produced
+# candidate_eval_results/traces/trace_<task>.json (50-177 KB each) - the per-task tool sequences we
+# need to see WHY sessions end without an edit. This workflow re-downloads the kernel outputs (no
+# GPU, no Kaggle job; 'kaggle kernels output' only transfers files of a finished version), turns
+# every trace into an OPERATIONAL summary - tool names, relative timings, first write-like call,
+# submit_patch calls - and commits only those summaries plus a keys-and-types census. Raw model
+# text is never copied: the extractor counts text parts and truncates every string.
+#
+# Nothing runs until gemma4-agent/kaggle_smoke/v63-traces.trigger is pushed.
+
+name: Gemma V6.3 read-only trace summaries
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - arena/c4eeb067-gemma-konkurs
+    paths:
+      - gemma4-agent/kaggle_smoke/v63-traces.trigger
+
+permissions:
+  contents: write
+
+concurrency:
+  group: v63-traces.trigger-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  summarise:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout session branch
+        uses: actions/checkout@v4
+        with:
+          ref: arena/c4eeb067-gemma-konkurs
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Kaggle CLI
+        run: python -m pip install --disable-pip-version-check --quiet kaggle
+
+      - name: Configure Kaggle credentials
+        env:
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "$KAGGLE_API_TOKEN" ]; then
+            echo "Repository Actions secret KAGGLE_API_TOKEN is missing."
+            exit 1
+          fi
+          mkdir -p "$HOME/.kaggle"
+          printf '%s' "$KAGGLE_API_TOKEN" | tr -d '\r\n' > "$HOME/.kaggle/access_token"
+          chmod 600 "$HOME/.kaggle/access_token"
+          echo "Kaggle CLI configured; token value was not logged."
+
+      - name: Download kernel outputs (read-only) and summarise traces
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v63-traces"
+          for ref in \
+            petersharps/gemma-agent-benchmark-650e1dba-20261013-010824 \
+            petersharps/gemma-agent-benchmark-abf22bac-20261013-005906 ; do
+            echo "--- $ref ---"
+            python -m kaggle kernels output "$ref" -p "$RUNNER_TEMP/v63-traces/$(basename "$ref")" \
+              || echo "output fetch failed for $ref (recorded as-is)"
+          done
+          find "$RUNNER_TEMP/v63-traces" -name 'trace_*.json' -printf '%10s  %p\n' | head -40
+          python3 gemma4-agent/tools/summarize_agent_traces.py \
+            --traces-dir "$RUNNER_TEMP/v63-traces" \
+            --out gemma4-agent/kaggle_results/v6-3-diagnostics/traces
+
+      - name: Commit trace summaries with the safe pattern
+        if: always()
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin "$GITHUB_REF_NAME"
+          # SAFE PATTERN - see the other workflows (2026-10-13 incident).
+          rm -rf /tmp/keep && mkdir -p /tmp/keep
+          cp -r gemma4-agent/kaggle_results/v6-3-diagnostics /tmp/keep/ 2>/dev/null || true
+          git reset --hard "origin/$GITHUB_REF_NAME"
+          mkdir -p gemma4-agent/kaggle_results
+          cp -r /tmp/keep/v6-3-diagnostics gemma4-agent/kaggle_results/ 2>/dev/null || true
+          git add -f gemma4-agent/kaggle_results/v6-3-diagnostics 2>/dev/null || true
+          git rm -q --ignore-unmatch gemma4-agent/kaggle_smoke/v63-traces.trigger
+          if [ -z "$(git diff --cached --name-only)" ]; then
+            echo "Nothing to commit: no trace summaries were produced."
+            exit 0
+          fi
+          git commit -m "chore(gemma): record read-only per-task trace summaries for the V6.3 runs [skip ci]"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
