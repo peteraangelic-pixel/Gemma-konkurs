@@ -78,6 +78,29 @@ własnego promptu wykrył, że tekst obiecywał budżet 45 wywołań, gdy harnes
    + wynik nie gorszy niż V5 o więcej niż 2 zadania. Porażka = którakolwiek z G1–G3 złamana
    → wracamy do projektowania, nie do wysyłki.
 
+## Reguła decyzyjna o submissji — zapisana 2026-10-13 01:05 UTC, PRZED wynikami V6.3
+
+Użytkownik upoważnił sesję: „zrób submission z tej wersji, jeśli uznasz to za stosowne".
+Żeby to upoważnienie nie zamieniło się w uznaniowość po fakcie, próg jest **zamrożony tutaj**:
+
+Submissja V6.3 (`submission-v6.zip`, SHA-256 `650e1dba10c5b269c616a670255c3a585a57d750ce0f8428581ae65ea528f5c4`,
+komunikat „V63", plik stagingowany jako `submission.zip`) **następuje wtedy i tylko wtedy, gdy**:
+
+1. mini-screen: G1 = G2 = G3 = 0 na wszystkich 4 zadaniach;
+2. pełny screening: G1 = G2 = G3 = 0;
+3. pełny screening: rozwiązane ≥ **9/30** (czyli nie gorzej niż V6.2 i w granicy jednego zadania od V5);
+4. slot dzienny wolny (brak submissji w ciągu 24 h — pilnuje `submit_kaggle_v63_once.py`);
+5. `--require-gates v6-3-miniscreen,v6-3-benchmark` przechodzi (bramka jest wbudowana w uploader,
+   więc warunki 1–2 nie mogą zostać pominięte przez pomyłkę).
+
+**Jeśli któryś punkt nie przejdzie — submissji NIE MA**, niezależnie od tego, jak dobre wydają się
+inne liczby. Uzasadnienie merytoryczne submissji (przy spełnionych warunkach): obecny wynik
+oficjalny 0.03 pochodzi z artefaktu V4, który na tej samej próbce produkował 6 pustych drzew;
+V6.3 usuwa dwie zmierzone klasy zer (sesja bez edycji, diff z plików-śmieci) i podnosi trafienia
+lokalizatora, więc oczekiwana wartość na ukrytym zbiorze jest wyższa niż V4 — nawet jeśli próbka
+publiczna tego nie rozstrzyga przy n=30. **Nie twierdzę, że V6.3 pobije V5**; twierdzę, że jest
+pierwszym kandydatem bez zmierzonej klasy zer, a to jest jedyna dźwignia, jaką mamy.
+
 ## Kiedy w ogóle rozważać oficjalną submissję
 
 Dopiero gdy: G1–G3 zaliczone w **obu** przebiegach (mini + pełny), mechanizm nie produkuje zer z
