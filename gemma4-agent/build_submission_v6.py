@@ -262,6 +262,31 @@ def validate_tree(submission_dir: Path) -> list[Path]:
                  f"{banned_phrase!r}")
     if "48 times" not in prose:
         fail("prompts/system.md lost the M3 measurement behind removing the submit tool.")
+    # ---- variant guards (V6.5) ----------------------------------------------------------------
+    # The variant is derived from the source directory name, so a mis-typed --source-dir cannot
+    # silently package the wrong text. V6.5 = V6.4 + one lever (the edit-decision framing) and must
+    # pass every V6.4 guard above as well.
+    variant = "v65" if "6.5" in submission_dir.name else "v64"
+    V65_REQUIRED = (
+        ("make it even if you are not yet certain it is the right file",
+         "V6.5 permission clause (rough first edit is allowed and expected)"),
+        ("intent, not accuracy",
+         "V6.5 boundary that keeps the permission from contradicting the anti-dummy rule"),
+        ("15 `run_command` calls in 107 s", "V6.5 measurement (the voluntary stop)"),
+        ("336.7 s", "V6.5 measurement (ten reads of one file)"),
+        ("322.7 s", "V6.5 measurement (clock death with no edit)"),
+    )
+    if variant == "v65":
+        for phrase, label in V65_REQUIRED:
+            if phrase not in prose:
+                fail(f"V6.5 prompt lost {label}: {phrase!r}")
+        for banned in ("once you are certain", "until you are sure", "wait until you know"):
+            if banned in prose.lower():
+                fail(f"V6.5 prompt still asks the model to wait for certainty: {banned!r}")
+    else:
+        for phrase, label in V65_REQUIRED:
+            if phrase in prose:
+                fail(f"V6.4 archive contains V6.5-only text ({label}); the variants are mixed up.")
     if "as your final action" in prompt_text:
         fail("prompts/system.md still carries the V5 tail that contradicts the optional-submit rule.")
 
@@ -306,8 +331,13 @@ def build_zip(output: Path, files: list[Path], submission_dir: Path) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--source-dir", type=Path, default=DEFAULT_SUBMISSION_DIR)
-    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    parser.add_argument("--output", type=Path, default=None,
+                        help="defaults to submission-v6.zip, or submission-v6.5.zip when the "
+                             "source directory is the V6.5 tree")
     args = parser.parse_args()
+    if args.output is None:
+        args.output = (BASE_DIR / "submission-v6.5.zip" if "6.5" in args.source_dir.name
+                       else DEFAULT_OUTPUT)
     submission_dir = (
         args.source_dir if args.source_dir.is_absolute() else (Path.cwd() / args.source_dir).resolve()
     )

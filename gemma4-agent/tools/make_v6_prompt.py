@@ -29,6 +29,7 @@ V6.4 design notes (read-only diagnosis of the V6.3 kernels, see ANALYSIS_V6_3_ME
 from __future__ import annotations
 
 import re
+import os
 import sys
 from pathlib import Path
 
@@ -36,7 +37,10 @@ ROOT = Path(__file__).resolve().parents[2]
 V5_PROMPT = ROOT / "gemma4-agent" / "submission-v5" / "prompts" / "system.md"
 V6_DIR = ROOT / "gemma4-agent" / "submission-v6"
 LOCATOR = V6_DIR / "tools" / "locate.py"
-OUT = V6_DIR / "prompts" / "system.md"
+DEFAULT_OUT = V6_DIR / "prompts" / "system.md"
+VARIANT = os.environ.get("V6_VARIANT", "v64")
+V65_DIR = ROOT / "gemma4-agent" / "submission-v6.5"
+OUT = (V65_DIR / "prompts" / "system.md" if VARIANT == "v65" else DEFAULT_OUT)
 
 LOCALIZE_STEP = """## Workflow
 1. **Extract the exact specification from the issue.** Write down every identifier (class, function, method, attribute, module), file or directory name, exception type, exact message string, CLI flag, config key, and quoted code fragment. Hidden tests usually assert exactly these names, messages and edge cases, so reuse them verbatim. Many issues are only a merged-PR title plus a link: then the title's words name the feature, and its most likely symbol is a snake_case rendering of those words (e.g. "Validate SSE fields" -> `sse.py`, `_check_...`, `ServerSentEvent`).
@@ -179,6 +183,46 @@ V64E_EDITS = [
      '- **A scratch file is never the answer, but it is also never forbidden.** Repro scripts under `/tmp` are allowed at any point in the session - a task that PASSED wrote `/tmp/repro.py` and then edited `rich/repr.py`, and a second one wrote its repro before its source edit and still patched the file. What is fatal is finishing with no repository edit: one session wrote only `/tmp/locate.py` at 279.8 s and ended with an empty tree. So if you have a helper script on disk and the tree is still untouched, stop and edit the top candidate now.'),
 ]
 
+# V6.5 lever (2026-10-13): the deadline alone did not change behaviour. In the V6.4 mini-screen the
+# explicit "intended edit by call 4" sentence was ignored in 6/6 tasks (repository edits within
+# call 4: 0/6, median at call 7), and the three sessions that ended empty were not blocked by the
+# clock: rich_3105 made 15 run_command calls in 107 s and then stopped on its own, rich_3043 ran
+# 322.7 s and fastapi_15745 read fastapi/routing.py ten times over 336.7 s. Meanwhile every session
+# that did edit produced a patch. So V6.5 changes the framing of the edit decision from a
+# prohibition ("do not be slow") to an expectation ("a rough, revisable first edit is the job"),
+# with the intent-vs-accuracy boundary spelled out so it cannot contradict the anti-dummy rule.
+V65_EDITS = [
+    # Append, never replace: every V6.4 sentence and measurement stays in place (the packer checks
+    # them), and the new evidence is added after the rule it supports.
+    (
+        "**never write a dummy or placeholder edit merely to satisfy the deadline** - a "
+        "wrong-but-sincere fix can pass, a placeholder cannot.",
+        "**never write a dummy or placeholder edit merely to satisfy the deadline** - a "
+        "wrong-but-sincere fix can pass, a placeholder cannot. That deadline was in this prompt on "
+        "the next run too and was still ignored in every task: three sessions ended with an empty "
+        "tree and none of them was stopped by the clock - one made 15 `run_command` calls in 107 s "
+        "and then stopped by itself, one ran 322.7 s, one read a single file ten times over "
+        "336.7 s. Every session that did edit produced a patch instead. If you have read the "
+        "locator's top candidate and you are still reading, you are off track - edit now."
+    ),
+    (
+        "   - The first intended edit must be on disk by tool call 4, even if it is a conservative, "
+        "minimal fix that you will refine. It must address the reported issue; never create a dummy "
+        "edit merely to satisfy the deadline. Refine it with further `edit_file` calls; do not batch "
+        "a large rewrite into one risky step.",
+        "   - The first intended edit must be on disk by tool call 4 - **make it even if you are not "
+        "yet certain it is the right file.** A conservative, minimal fix that you refine afterwards "
+        "is exactly what is asked for; an edit to the wrong candidate is recoverable (you revise or "
+        "revert it), while an untouched tree is not. You do not need the root cause before your "
+        "first edit, only a plausible one. It must address the reported issue as best you can: never "
+        "create a dummy edit merely to satisfy the deadline. The line between an intended edit and a "
+        "dummy is **intent, not accuracy** - a crude attempt at the real issue is expected, a change "
+        "you know is unrelated is not. Refine it with further `edit_file` calls; do not batch a "
+        "large rewrite into one risky step."
+    ),
+]
+
+
 def apply_post_edits(prompt: str) -> str:
     for old, new in POST_EDITS:
         assert old in prompt, "missing anchor: " + old[:60]
@@ -214,10 +258,15 @@ def apply_post_edits(prompt: str) -> str:
     for old, new in V64E_EDITS:
         assert old in prompt, "missing V64E anchor: " + old[:60]
         prompt = prompt.replace(old, new, 1)
+    if VARIANT == "v65":
+        for old, new in V65_EDITS:
+            assert old in prompt, "missing V65 anchor: " + old[:60]
+            prompt = prompt.replace(old, new, 1)
     return prompt
 
 
 def main() -> int:
+    print(f"variant: {VARIANT} -> {OUT.name}")
     prompt = V5_PROMPT.read_text(encoding="utf-8")
     script = LOCATOR.read_text(encoding="utf-8").rstrip("\n")
 
