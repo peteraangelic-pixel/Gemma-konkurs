@@ -1,0 +1,18 @@
+# Transfer record for gemma4-agent/kaggle_results/v6-3-benchmark
+
+- run.json: 2068 B sha256=7f69d5ef06c9a5caa103c81f63761bd5eb43b7b8a64b685f710cad09720133ad
+- agent_benchmark_result.json: 14816 B sha256=d0b6c1759332fadb2d7951630a6ad6658e53d240e4c5fa2992acb18700d2f6cd
+
+- measured archive sha256: 650e1dba10c5b269c616a670255c3a585a57d750ce0f8428581ae65ea528f5c4
+- canonical reproducible build: ea80bc16017c9ec92163fdd6533146106a41bf7b69d048cfa292cb21187070c3
+- note: the measured archive differs from the canonical build only in ZIP entry timestamps; the extracted contents were verified byte-identical (see GATES_V6_3.md).
+- kernel_ref: petersharps/gemma-agent-benchmark-650e1dba-20261013-010824
+- run status: complete | created: 2026-10-13T01:08:24+00:00 | updated: 2026-10-13T03:30:01+00:00
+- task_count_requested: 30 | seed: 20261009
+
+- resolved: 10/30 | score: 0.3333333333333333 | stored CI95: [0.19230295526846194, 0.5122027418616973]
+- empty trees: 11 (rich_3934, fastapi_14851, fastapi_14266, fastapi_14487, rich_3043, rich_3105, fastapi_15030, fastapi_14459, requests_6757, fastapi_15745, httpx_3672)
+- clock deaths: 15 (requests_6644, rich_3934, fastapi_14851, fastapi_14266, fastapi_14487, rich_3518, fastapi_14873, fastapi_15030, fastapi_15588, fastapi_14459, fastapi_14262, fastapi_14482, fastapi_15745, fastapi_14458, httpx_3672)
+- scratch files: 0 | premature empty: 3 | docs-only: 0
+- localisation hits: 18/30 | mean task time: 252.7 s
+- recomputed CI95: [19.2, 51.2]
