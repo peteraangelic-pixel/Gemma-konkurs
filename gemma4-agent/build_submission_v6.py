@@ -194,7 +194,9 @@ def validate_tree(submission_dir: Path) -> list[Path]:
     for required in ("cat > /tmp/locate.py <<'LOCATE_PY'", "ISSUE_EOF",
                      "python3 /tmp/locate.py --root . --top 8",
                      "git status --porcelain",
-                     "Never use `write_file` or shell redirection for scratch material",
+                     # V64E: the blanket ban was replaced by the precise rule - it contradicted
+                     # the M2 fallback (write_file) and M4 (scratch under /tmp is fine).
+                     "Never let a bare filename like `locate.py`, `issue.txt` or `repro.py`",
                      # V6.4 removed the tool entirely, so the required sentence is now the
                      # "no submit tool" statement, not the old optional-submit wording.
                      "**There is no submit tool.**",
@@ -227,8 +229,8 @@ def validate_tree(submission_dir: Path) -> list[Path]:
         "No reading without writing, and no dummy edits": "M1 - sessions that never attempt an edit",
         "If an `edit_file` call does not change the file, do not repeat it.": "M2 - edit loop",
         "There is no submit tool": "M3 - the submit tool was removed after 42-48 call loops",
-        "Scratch files are never your answer":
-            "M4 - scratch files may not replace the edit (narrowed after rich_3006 passed using /tmp/repro.py)",
+        "A scratch file is never the answer, but it is also never forbidden":
+            "M4 - scratch files allowed, finishing without an edit fatal (verified against trace order)",
     }
     for phrase, label in v64_rules.items():
         if prose.count(phrase) != 1:
@@ -237,8 +239,8 @@ def validate_tree(submission_dir: Path) -> list[Path]:
         "31 calls": "M1 measurement",
         "nine consecutive": "M2 measurement",
         "48 times": "M3 measurement",
-        "280 s": "M4 measurement (a scratch file replacing the edit)",
-        "/tmp/repro.py": "M4 counter-example (a scratch file after the edit, in a passed task)",
+        "/tmp/repro.py": "M4 counter-example (a scratch file BEFORE the edit, in a passed task)",
+        "279.8 s": "M4 measurement (the session that wrote only a scratch file and ended empty)",
     }.items():
         if number not in prose:
             fail(f"prompts/system.md lost the V6.4 measurement ({label}): {number!r}")
@@ -251,6 +253,13 @@ def validate_tree(submission_dir: Path) -> list[Path]:
         fail("prompts/system.md instructs calling submit_patch(), a tool V6.4 removed.")
     if "no submit tool" not in prompt_text.lower():
         fail("prompts/system.md must state that there is no submit tool.")
+    # Contradiction guard, added after the second branch pointed out that presence checks do not
+    # catch mutually exclusive instructions: a blanket ban on write_file/shell redirection cannot
+    # coexist with the M2 fallback (rewrite the file with write_file) or M4 (scratch under /tmp).
+    for banned_phrase in ("Never use `write_file`", "never use `write_file` or shell redirection"):
+        if banned_phrase.lower() in prose.lower():
+            fail(f"prompts/system.md contains a blanket tool ban that contradicts M2/M4: "
+                 f"{banned_phrase!r}")
     if "48 times" not in prose:
         fail("prompts/system.md lost the M3 measurement behind removing the submit tool.")
     if "as your final action" in prompt_text:

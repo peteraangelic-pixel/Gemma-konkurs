@@ -13,7 +13,7 @@ diagnozy kerneli V6.3 (`ANALYSIS_V6_3_MECHANISMS.md`):
 | **M1** „No reading without writing” — pierwsze wywołanie po przeczytaniu pierwszego pliku to próba edycji; jeśli do wywołania 6 nie ma edycji, następne wywołanie **musi** być `edit_file`/`write_file` | brak jakiejkolwiek próby edycji | 7/30 sesji bez edycji; jedna zużyła 31 wywołań na `run_command`/`read_file`; dwie skończyły same po 41 s i 108 s; mediana pierwszej edycji 179 s z 315 s |
 | **M2** „If an `edit_file` call does not change the file, do not repeat it” — jedna inna kotwica, potem `write_file` całego pliku | pętla nieudanych edycji | `fastapi_15030`: 9 wywołań `edit_file` pod rząd (212–307 s), diff nadal 0 znaków |
 | **M3** „`submit_patch()` … at most once” — powtórzenie submitu to sygnał do edycji, nie do ponawiania | pętla submitu zjadająca limit tur | `requests_6757` 48 wywołań, `fastapi_14077` 44, `rich_3894` 42 → wszystkie trzy padły na limicie 60 tur |
-| **M4** „Scratch files are never your answer” — przed pierwszą edycją wolno tylko heredok lokalizatora; po edycji skrypt `repro` w `/tmp` jest dozwolony, ale oceniany jest wyłącznie diff w repo | plik-pomocnik zamiast edycji | `fastapi_15745`: `write_file` → `/tmp/locate.py` o 279,8 s, zero edycji (pusty patch); **kontrprzykład**: `rich_3006` napisał `/tmp/repro.py` *po* edycji i zdał — reguła NIE może tego zabraniać |
+| **M4** „A scratch file is never the answer, but it is also never forbidden” — skrypty `repro` w `/tmp` dozwolone w każdej chwili; zabójcze jest skończenie **bez edycji** | plik-pomocnik zamiast edycji | `fastapi_15745`: wyłącznie `write_file` → `/tmp/locate.py` o 279,8 s, zero edycji (pusty patch); **kontrprzykłady, które uratowały regułę przed przeinaczeniem**: `rich_3006` (PASS) i `fastapi_14303` napisały `/tmp/repro.py` *przed* swoją edycją — korekta po recenzji drugiej gałęzi |
 
 ### Piąta zmiana (scalona z pracy drugiej gałęzi) — usunięcie narzędzia `submit_patch`
 
@@ -79,12 +79,12 @@ eksperyment (wymóg recenzji) i nie jest tu mieszana.
 
 | element | wartość |
 | --- | --- |
-| archiwum | `gemma4-agent/submission-v6.zip`, **13 427 B**, sha256 `b5db88b8d393e92dc03ef8de7e97af42370e033b91d7ed4b3a25a38d771e2603` |
+| archiwum | `gemma4-agent/submission-v6.zip`, **13 455 B**, sha256 `aaea34e439c8c36d3dc6c434d98849beae4361c43cdb3a95d715bcb15f409329` |
 | odtwarzalność | dwa kolejne buildy = ten sam hash (stały znacznik ZIP 1980-01-01); kontrola negatywna: podmiana jednej reguły wywala build |
 | prompt | 18 966 znaków (V6.3: 17 603); wobec V6.3: **+4 linie reguł, przepisana proza o submicie** (dokładnie cztery reguły; jedna linia zmieniona: „optional” → „optional, and you may call it at most once”) |
 | lokalizator | `tools/locate.py` `fe25b200fa52e100…` **bez zmian**, bajt w bajt taki sam w ZIP i w repo |
 | zamrożony prompt V6.3 | `gemma4-agent/candidates/v6-3/prompts-system.md` (17 603 znaków, sha256 `423da01cc4ddc019…`) — żeby archiwum V6.3 pozostało audytowalne |
-| packer | `build_submission_v6.py` + 4 strażniki reguł, 4 strażniki pomiarów, zakaz `submit_patch` w `agent.yaml`, zakaz `submit_patch()` w promptcie; kontrole negatywne obu sprawdzone |
+| packer | `build_submission_v6.py` + 4 strażniki reguł, 5 strażników pomiarów, zakaz `submit_patch` w `agent.yaml`, zakaz `submit_patch()` w promptcie, **strażnik sprzeczności** (odrzuca ogólny zakaz `write_file`/przekierowania shella); 6 kontrolek negatywnych sprawdzonych |
 | notebook | `kaggle_smoke/gemma-agent-benchmark-v6.ipynb` regenerowany dla `3843c878` |
 
 **Uwaga o odtwarzaniu V6.3:** obecny packer egzekwuje reguły V6.4, więc **nie odtworzy** archiwum
@@ -104,7 +104,7 @@ w pokryciu mechanizmów, nie w wyniku. Żadna z wersji nie była mierzona, więc
 | **M1** brak próby edycji — 7/30 | **TAK** (termin call 4 + zakaz atrapy) | **TAK** (ich brzmienie, przyjęte) |
 | **M2** pętla nieudanych `edit_file` — 1/30 (`fastapi_15030`, 9 wywołań) | **nie** — brak jakiejkolwiek reguły ratunkowej | **TAK** (inna kotwica, potem `write_file` całego pliku) |
 | **M3** pętla `submit_patch` — 2/30 | **TAK** (narzędzie usunięte) | **TAK** (to samo) |
-| **M4** plik-pomocnik zamiast edycji — 1/30 (`fastapi_15745`) | **nie** — reguła wprost pozwala na inne pliki w `/tmp` („If any other scratch file is needed, put it under `/tmp`"), czyli dopuszcza zachowanie, które opróżniło to zadanie | **TAK**, ale wąsko: zakaz tylko *zastępowania* edycji plikiem; po edycji `repro` w `/tmp` jest dozwolony |
+| **M4** plik-pomocnik zamiast edycji — 1/30 (`fastapi_15745`) | **nie adresuje wprost**, ale ich łagodna reguła („put it under `/tmp`”) **nie zabrania wzorca, który zdał** | **TAK**, w wersji potwierdzonej śladami: dozwolone w każdej chwili, zabójcze tylko zakończenie bez edycji — ich uwaga wymusiła trzecią korektę |
 | **pokrycie pustych drzew** | **9/11** | **11/11** |
 | różnica w zadaniach | — | **2/30 = 6,7 pp próbki** były gwarantowanymi zerami z przyczyn, których ich wersja nie adresuje |
 
@@ -121,8 +121,10 @@ Przyjąłem go w całości, z podpisem w `GATES_V6_4.md` i w historii commitów.
 +8,3 % u mnie — koszt nieistotny dla modelu, ale to ich zaleta), ich builder ma równoważne strażniki
 (dokładny zbiór narzędzi, budżety, CRC, determinizm), a ich łagodniejsza reguła o plikach
 tymczasowych **okazała się mieć rację**: dopuszcza wzorzec, którego użyło rozwiązane `rich_3006`.
-Właśnie dlatego **zaweziłem swoją regułę M4** zamiast ją zostawiać w formie zakazu — ich wersja
-wskazała koszt, którego nie zmierzyłem przed wypchnięciem.
+Właśnie dlatego **dwukrotnie poprawiałem regułę M4** — najpierw zwężając ją, potem przepisując po
+sprawdzeniu kolejności zdarzeń — a ich łagodna wersja została ostatecznie wchłonięta. Ich recenzja
+wskazała koszt, którego nie zmierzyłem przed wypchnięciem, i to jest druga rzecz (po terminie
+call 4), w której mieli rację, a ja nie.
 
 **Różnica netto, w jednym zdaniu:** mój kandydat adresuje 4 z 4 zmierzonych mechanizmów, ich 2 z 4;
 przy czym gdyby ich paczkę uzupełnić o regułę M2 i wąską wersję M4, byłaby równoważna. Różnica jest
@@ -188,18 +190,48 @@ V6.4 nie obiecuje wyższego wyniku. Testuje cztery mechanizmy, które w V6.3 pro
 wiedza: wiemy, że problem nie leży w regułach promptu. Jeśli E1–E4 nie przejdą, reguły są
 nieskuteczne w tej formie i wracamy do projektowania — z tym samym, niemodyfikowanym progiem.
 
+## Trzecia korekta M4 — mój błąd, znaleziony przez drugą gałąź (2026-10-13 ~09:40 UTC)
+
+Recenzja drugiej gałęzi sprawdziła **kolejność** zdarzeń w śladzie `rich_3006` i miała rację:
+
+| zdarzenie w śladzie `rich_3006` | czas | co |
+| --- | --- | --- |
+| 17 | 161,5 s | `write_file /tmp/repro.py` |
+| 20 | 180,6 s | `edit_file rich/repr.py` |
+| — | — | wynik: **PASS**, patch 558 znaków |
+
+Skrypt pomocniczy powstał więc **przed** edycją, a zadanie i tak zdało — dokładnie odwrotnie, niż
+napisałem w poprzedniej wersji reguły („wrote `/tmp/repro.py` only after its edit and passed").
+To samo pokazuje `fastapi_14303`: `write_file /tmp/repro.py` przy zdarzeniu 4 (37,7 s), `edit_file`
+przy zdarzeniu 6, patch 745 znaków. **Moja reguła M4 zabraniała wzorca, który dwa razy zadziałał**,
+a w dodatku była wewnętrznie sprzeczna: instrukcja „nigdy nie używaj `write_file` ani przekierowania
+shella na materiały robocze" (z ery V6.2) kolidowała z M4 (skrypt w `/tmp` dozwolony) i z M2
+(ratunek polega na `write_file`).
+
+**Reguła M4 po trzeciej korekcie:** „A scratch file is never the answer, but it is also never
+forbidden." Skrypty `repro` w `/tmp` są dozwolone w każdej chwili; zabójcze jest **skończenie bez
+edycji w repo** — `fastapi_15745` napisało wyłącznie `/tmp/locate.py` o 279,8 s i miało puste drzewo.
+Sprzeczna instrukcja została przepisana na precyzyjną wersję o **gołej nazwie pliku** (lekcja
+zmierzona: 9/30 sesji zniszczonych w V6.1), a packer dostał **strażnik sprzeczności**, który odrzuca
+każdy ogólny zakaz `write_file`/przekierowania shella, bo taki zakaz nie może współistnieć z M2 i M4.
+Cztery kontrolki negatywne (reguła M4, przywrócony zakaz, kontrprzykład, pomiar 279,8 s) wywalają
+build — sprawdzone.
+
+Wniosek metodyczny: **sprawdzenie obecności reguł nie zastępuje sprawdzenia ich spójności** —
+dokładnie tak, jak napisała druga gałąź. Nowy strażnik adresuje tę klasę błędu, nie ten jeden przypadek.
+
 ## Skąd ta wersja i co z pracą drugiej gałęzi
 
-Paczka V6.4 drugiej gałęzi (sha256 `0cc04c08f16b3ee965bf449af5ed8599eb4b18876f593f98f01de82bec37d514`,
-pliki `submission-v6.4.zip`, `V6_4_PREPARATION.md`, `build_submission_v64.py`) **nie została
-zcommitowana ani wypchnięta** — jej własna notatka to potwierdza, a `git ls-remote` pokazuje na
-`arena/6d081d52-gemma-konkurs` nadal tip `7a10a03` z 2026-10-12 07:17. Dlatego nie da się jej
-porównać plik po pliku: praca istnieje w sandboxie tamtej sesji, nie w repozytorium.
+**Aktualizacja 2026-10-13 09:45 UTC:** druga gałąź **wypchnęła** swoją paczkę (commit `8eb94cd`,
+tip `8eb94cde`) i **weszła do wspólnej historii** przez scalenie `23ca7ad`. Weryfikacja plik po pliku
+jest więc wykonana i stoi w tabeli wyżej (SHA zgodny, archiwum == katalog, konfiguracje identyczne
+z V6.3, builder deterministyczny ze strażnikami).
 
-Stan scalenia na dziś: **przyjęte i zweryfikowane** — usunięcie `submit_patch` oraz naprawa
-sprzeczności o `/tmp/locate.py`; **odłożone** — termin call 4 jako osobne ramię. Prośba do drugiej
-sesji: wypchnąć swoją paczkę (choćby na jej własną gałąź), żeby dało się zrobić uczciwy `diff`
-plików `agent.yaml`, `prompts/system.md` i skryptu budującego zamiast opierać się na opisie.
+Stan scalenia na dziś: **przyjęte** — usunięcie `submit_patch`, naprawa sprzeczności o `/tmp/locate.py`
+oraz **termin pierwszej edycji call 4 z zakazem atrapy** (zmiana decyzji po zobaczeniu pełnego
+brzmienia). **Nieprzyjęte pozostają** wyłącznie rzeczy, których w ich paczce nie było; po trzeciej
+korekcie M4 (poniżej) ich łagodniejsza reguła o plikach tymczasowych **okazała się trafna
+i została wchłonięta**.
 
 ## Dopisane po scaleniu (nadal przed przebiegiem)
 
@@ -211,5 +243,6 @@ raportowane jako podejrzenie gry w próg (V6.3: 0 takich).
 **Paczka drugiej gałęzi zostaje w historii jako alternatywa**, nie jako kandydat do przebiegu:
 `gemma4-agent/submission-v6.4.zip` (`0cc04c08…`) + `submission-v6.4/` + `build_submission_v64.py` +
 `V6_4_PREPARATION.md`. Kandydatem do uruchomienia jest **wyłącznie** `submission-v6.zip`
-(`f4e1edcb…`), bo tylko on zawiera wszystkie cztery reguły mechanizmu razem z ich terminem.
+(`aaea34e4…`), bo tylko on zawiera wszystkie cztery reguły mechanizmu razem z ich terminem,
+poprawione po recenzji.
 Jeśli kiedyś zechcemy rozdzielić ramiona, ich paczka jest gotowym, zweryfikowanym punktem wyjścia.

@@ -172,6 +172,13 @@ V64D_EDITS = [
      '- **Scratch files are never your answer.** The single `/tmp/locate.py` heredoc in step 2 is the only file you may create before your first edit. After the fix is already on disk you may write a repro script under `/tmp` to check it, but the repository diff is the only thing graded - measured: one session spent 280 s writing `/tmp/locate.py` instead of editing and scored zero, while another wrote `/tmp/repro.py` only after its edit and passed. Never use bare filenames (they land in `/workspace`), and never write anywhere except `/tmp` and `/workspace`.'),
 ]
 
+V64E_EDITS = [
+    ('   - **Never use `write_file` or shell redirection for scratch material, and never let a bare filename like `locate.py`, `issue.txt` or `repro.py` be created in `/workspace`.** Measured on the previous run: bare filenames are resolved inside `/workspace`, so the graded diff became the 7.7 KB script plus the issue text instead of a fix - 9 of 30 sessions were destroyed that way and 7 of them produced no code change at all. Everything you create outside the fix belongs under `/tmp` with an absolute path, and `/tmp` never appears in the diff.',
+     '   - **Never let a bare filename like `locate.py`, `issue.txt` or `repro.py` be created in `/workspace`.** A bare relative path resolves inside `/workspace`, so the graded diff becomes your scratch material instead of a fix - measured on an earlier run: 9 of 30 sessions were destroyed that way and 7 of them produced no code change at all. Always give a scratch file an absolute `/tmp/...` path; `write_file` and shell redirection are both fine for that, and `/tmp` never appears in the diff.'),
+    ('- **Scratch files are never your answer.** The single `/tmp/locate.py` heredoc in step 2 is the only file you may create before your first edit. After the fix is already on disk you may write a repro script under `/tmp` to check it, but the repository diff is the only thing graded - measured: one session spent 280 s writing `/tmp/locate.py` instead of editing and scored zero, while another wrote `/tmp/repro.py` only after its edit and passed. Never use bare filenames (they land in `/workspace`), and never write anywhere except `/tmp` and `/workspace`.',
+     '- **A scratch file is never the answer, but it is also never forbidden.** Repro scripts under `/tmp` are allowed at any point in the session - a task that PASSED wrote `/tmp/repro.py` and then edited `rich/repr.py`, and a second one wrote its repro before its source edit and still patched the file. What is fatal is finishing with no repository edit: one session wrote only `/tmp/locate.py` at 279.8 s and ended with an empty tree. So if you have a helper script on disk and the tree is still untouched, stop and edit the top candidate now.'),
+]
+
 def apply_post_edits(prompt: str) -> str:
     for old, new in POST_EDITS:
         assert old in prompt, "missing anchor: " + old[:60]
@@ -196,6 +203,16 @@ def apply_post_edits(prompt: str) -> str:
     # supports: scratch material may not be the answer and may not exist before the first edit.
     for old, new in V64D_EDITS:
         assert old in prompt, "missing V64D anchor: " + old[:60]
+        prompt = prompt.replace(old, new, 1)
+    # V64E (third revision of M4, after the second branch checked the trace order):
+    # my counter-example was WRONG - rich_3006 wrote /tmp/repro.py at 161.5 s and edited rich/repr.py
+    # at 180.6 s, i.e. the scratch file came FIRST and the task still passed, and fastapi_14303 did
+    # the same before patching. So a pre-edit repro script is harmless. What killed fastapi_15745 was
+    # finishing with no edit at all. The rule now says exactly that, and the blanket ban on
+    # write_file/shell redirection for scratch material is gone - it contradicted both this rule and
+    # the M2 fallback that relies on write_file.
+    for old, new in V64E_EDITS:
+        assert old in prompt, "missing V64E anchor: " + old[:60]
         prompt = prompt.replace(old, new, 1)
     return prompt
 
