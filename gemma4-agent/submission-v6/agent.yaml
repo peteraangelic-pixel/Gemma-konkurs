@@ -4,12 +4,18 @@
 # fixable source file in ~15% of tasks at top-5, while the deterministic locator embedded in
 # prompts/system.md reaches 73.4% top-5 on the 128 dev tasks that have a fixable gold file and
 # 71.8% top-5 on 188 held-out tasks from repositories outside the dev set (65.4%/66.4% top-3).
-# Everything else from V5 is unchanged: thinking on, 45 calls, always submit a patch, no
-# analyzer/skills/graph tools, no repository-specific hints.
+# Everything else from V5 is unchanged: thinking on, 30 calls, no analyzer/skills/graph tools,
+# no repository-specific hints.
+# V6.4 (2026-10-13): the `submit_patch` tool was REMOVED from this list. Two reasons, both
+# measured on the V6.3 run: (a) sessions that had it looped on it - 48, 44 and 42 calls in a row -
+# and died on the 60-turn budget with empty trees (M3 in ANALYSIS_V6_3_MECHANISMS.md); (b) it is
+# not needed: 17 of 30 V6.3 tasks never called it, 8 of those still had their diff graded, and two
+# of them (fastapi_14873, fastapi_14458) PASSED the hidden tests without a single call. The harness
+# extracts the working-tree diff itself.
 agent_class: LlmAgent
 name: gemma4_locator_repair
 model: gemma-4-31b-it-qat-w4a16-ct
-description: A time-budgeted software-repair agent that localizes an issue with a measured deterministic locator, makes a minimal source edit, and always submits a patch.
+description: A time-budgeted software-repair agent that localizes an issue with a measured deterministic locator, makes a minimal source edit, and leaves the working-tree diff as its answer.
 instruction: !include prompts/system.md
 tools:
   # Graph tools stay registered so an attempted call cannot break the ADK tool loop,
@@ -19,7 +25,6 @@ tools:
   - edit_file
   - write_file
   - get_status
-  - submit_patch
   - get_code_neighbors
   - search_similar_code
   - get_code_subgraph

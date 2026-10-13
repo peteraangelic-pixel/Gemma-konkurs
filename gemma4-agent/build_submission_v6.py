@@ -138,9 +138,15 @@ def validate_tree(submission_dir: Path) -> list[Path]:
     unknown = sorted(declared_tools - ALLOWED_TOOLS)
     if unknown:
         fail("Root agent declares tools outside the harness registry: " + ", ".join(unknown))
-    for required_tool in ("run_command", "read_file", "edit_file", "write_file", "submit_patch"):
+    for required_tool in ("run_command", "read_file", "edit_file", "write_file"):
         if required_tool not in declared_tools:
             fail(f"Root agent is missing required tool {required_tool!r}.")
+    # V6.4: the submit tool must NOT be declared. Verified read-only on the V6.3 run: 17/30 tasks
+    # never called it, 8 of those still had a graded diff and two PASSED without it (fastapi_14873,
+    # fastapi_14458), while the sessions that did have it looped 42-48 times and died on the
+    # 60-turn cap. Removing it deletes the whole failure mode instead of asking the model to avoid it.
+    if "submit_patch" in declared_tools:
+        fail("V6.4 removed the submit_patch tool deliberately; do not declare it in agent.yaml.")
     if "sub_agents" in root_text or "agent_tool" in root_text:
         fail("V6 is intentionally single-agent; remove sub_agents/agent_tool from agent.yaml.")
     if "skills:" in root_text:
@@ -189,9 +195,9 @@ def validate_tree(submission_dir: Path) -> list[Path]:
                      "python3 /tmp/locate.py --root . --top 8",
                      "git status --porcelain",
                      "Never use `write_file` or shell redirection for scratch material",
-                     # V6.4 tightened this sentence ("... optional, and you may call it at
-                     # most once"); the check follows the shipped wording, not the old one.
-                     "**`submit_patch()` is optional, and you may call it at most once.**",
+                     # V6.4 removed the tool entirely, so the required sentence is now the
+                     # "no submit tool" statement, not the old optional-submit wording.
+                     "**There is no submit tool.**",
                      "**Documentation is not a fix.**",
                      "never end a session without a real edit on disk"):
         if required not in prompt_text:
@@ -220,8 +226,9 @@ def validate_tree(submission_dir: Path) -> list[Path]:
     v64_rules = {
         "No reading without writing": "M1 - sessions that never attempt an edit",
         "If an `edit_file` call does not change the file, do not repeat it.": "M2 - edit loop",
-        "call it at most once": "M3 - submit_patch loop",
-        "Never create a file to help yourself": "M4 - writes outside the repository",
+        "There is no submit tool": "M3 - the submit tool was removed after 42-48 call loops",
+        "Apart from the single locator heredoc in step 2, never create a file to help yourself":
+            "M4 - writes outside the repository (with the locator exception stated)",
     }
     for phrase, label in v64_rules.items():
         if prose.count(phrase) != 1:
@@ -236,8 +243,12 @@ def validate_tree(submission_dir: Path) -> list[Path]:
             fail(f"prompts/system.md lost the V6.4 measurement ({label}): {number!r}")
     if "call 6 arrives with no edit on disk" not in prose:
         fail("prompts/system.md lost the V6.4 write deadline (call 6).")
-    if "submit_patch" not in prompt_text:
-        fail("prompts/system.md lost the submit instructions.")
+    if "submit_patch()" in prompt_text:
+        fail("prompts/system.md instructs calling submit_patch(), a tool V6.4 removed.")
+    if "no submit tool" not in prompt_text.lower():
+        fail("prompts/system.md must state that there is no submit tool.")
+    if "48 times" not in prose:
+        fail("prompts/system.md lost the M3 measurement behind removing the submit tool.")
     if "as your final action" in prompt_text:
         fail("prompts/system.md still carries the V5 tail that contradicts the optional-submit rule.")
 

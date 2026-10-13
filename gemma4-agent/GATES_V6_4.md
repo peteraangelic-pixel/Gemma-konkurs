@@ -15,6 +15,44 @@ diagnozy kerneli V6.3 (`ANALYSIS_V6_3_MECHANISMS.md`):
 | **M3** „`submit_patch()` … at most once” — powtórzenie submitu to sygnał do edycji, nie do ponawiania | pętla submitu zjadająca limit tur | `requests_6757` 48 wywołań, `fastapi_14077` 44, `rich_3894` 42 → wszystkie trzy padły na limicie 60 tur |
 | **M4** „Never create a file to help yourself, and never write outside the repository” | zapis poza repozytorium | `fastapi_15745`: `write_file` → `/tmp/locate.py` o 279,8 s; w ścieżkach widać też `/tmp/repro.py` |
 
+### Piąta zmiana (scalona z pracy drugiej gałęzi) — usunięcie narzędzia `submit_patch`
+
+Druga gałąź przygotowała offline kandydata V6.4 z dwiema zmianami: przesunięciem terminu pierwszej
+edycji z call 8 na call 4 i **usunięciem `submit_patch` z `agent.yaml`**; jej własne zastrzeżenie
+brzmiało: „usunięcie `submit_patch` zakłada, że harness przechwyci working-tree diff — to założenie
+nie zostało zweryfikowane end-to-end". **Zastrzeżenie jest już nieaktualne: zweryfikowałem je
+read-only na danych V6.3.**
+
+| dowód (pełny przebieg V6.3) | liczba |
+| --- | --- |
+| zadania, które **ani razu** nie wywołały `submit_patch` | **17/30** |
+| z nich: niepusty patch, który został **oceniony** | **8** (`rich_3052`, `fastapi_14873`, `fastapi_15588`, `fastapi_14186`, `fastapi_14262`, `requests_7309`, `fastapi_14482`, `fastapi_14458`) |
+| z nich: **PASS** bez żadnego wywołania submitu | **2** — `fastapi_14873` (patch 1 681 znaków), `fastapi_14458` (1 361) |
+
+Skoro harness ocenił i zaliczył zadania, w których nigdy nie wywołano submitu, narzędzie jest zbędne —
+a sesje, które je miały, wpadały w pętle 48/44/42 wywołań i padały na limicie 60 tur. **Usunięcie
+narzędzia likwiduje mechanizm M3 u źródła**, zamiast prosić model, żeby go unikał; dlatego przyjęte.
+Usunięcie pociągnęło przepisanie prozy: prompt nie zawiera już **żadnego** `submit_patch()`
+(strażnik packera to egzekwuje), a `agent.yaml` nie deklaruje narzędzia (drugi strażnik).
+
+**Sprzeczność zgłoszona przez drugą gałąź, naprawiona:** reguła M4 („nie twórz plików”) kolidowała
+z krokiem 2 (heredoc `cat > /tmp/locate.py`). Nowe brzmienie mówi wprost: „**Poza pojedynczym
+heredokiem lokalizatora w kroku 2** nigdy nie twórz pliku, który ma ci pomóc…".
+
+**Czego NIE przyjąłem i dlaczego:** drugą zmianę z ich paczki — termin pierwszej edycji **call 4**
+zamiast call 6/8. Diagnoza nie daje podstawy na 4 (mediana pierwszej edycji w zadaniach rozwiązanych
+to 179 s ≈ call 10; dwie najszybsze sesje bez edycji skończyły w 41 s i 108 s, więc problemem nie był
+moment progu, a brak jakiejkolwiek próby). Zmiana jest niepomierzona, a mieszanie jej z resztą
+zablokowałoby interpretację; jeśli chcemy ją przetestować, dostanie **osobne ramię** z tym samym
+instrumentem.
+
+**Uczciwa uwaga o „koktajlu":** paczka V6.4 zmienia naraz kilka rzeczy i sama w sobie nie przypisze
+efektu pojedynczemu przełącznikowi — dokładnie tak, jak ostrzegła druga gałąź. Różnica jest w tym,
+że **nasz instrument to mierzy per mechanizm**: po przebiegu z samych ścieżek policzymy osobno
+pokrycie edycji (M1), najdłuższą serię `edit_file` (M2), liczbę `submit_patch` (M3 — oczekiwane 0,
+bo narzędzia nie ma) i zapisy o ścieżce absolutnej (M4). Koktajl jest więc akceptowalny **tylko
+dlatego**, że umiemy rozłożyć wynik na składowe; gdybyśmy tego nie mieli, należałoby rozbić paczkę.
+
 **Czego V6.4 NIE zmienia:** budżet 30 wywołań, 60 tur, 150 s na komendę, 5,25 min sesji, timeout
 testów 45 s, `thinking_budget` 4096, skrypt lokalizatora. Zmiana budżetu myślenia to osobny
 eksperyment (wymóg recenzji) i nie jest tu mieszana.
@@ -23,12 +61,12 @@ eksperyment (wymóg recenzji) i nie jest tu mieszana.
 
 | element | wartość |
 | --- | --- |
-| archiwum | `gemma4-agent/submission-v6.zip`, **13 053 B**, sha256 `3843c8788c756777c6c93e9d9ada81b43ebcca5d2e1c093884a194a831726a89` |
+| archiwum | `gemma4-agent/submission-v6.zip`, **13 289 B**, sha256 `b3dca6323306160ebfa3dcdfec929cfd757b79d0a5318e6642c5ee7cc9e1f73e` |
 | odtwarzalność | dwa kolejne buildy = ten sam hash (stały znacznik ZIP 1980-01-01); kontrola negatywna: podmiana jednej reguły wywala build |
-| prompt | 19 166 znaków (V6.3: 17 603); diff wobec V6.3 = **+4 / −1 linia** (dokładnie cztery reguły; jedna linia zmieniona: „optional” → „optional, and you may call it at most once”) |
+| prompt | 18 966 znaków (V6.3: 17 603); wobec V6.3: **+4 linie reguł, przepisana proza o submicie** (dokładnie cztery reguły; jedna linia zmieniona: „optional” → „optional, and you may call it at most once”) |
 | lokalizator | `tools/locate.py` `fe25b200fa52e100…` **bez zmian**, bajt w bajt taki sam w ZIP i w repo |
 | zamrożony prompt V6.3 | `gemma4-agent/candidates/v6-3/prompts-system.md` (17 603 znaków, sha256 `423da01cc4ddc019…`) — żeby archiwum V6.3 pozostało audytowalne |
-| packer | `build_submission_v6.py` + 4 strażniki reguł i 4 strażniki pomiarów (`31 calls`, `nine consecutive`, `48 times`, `280 s`) |
+| packer | `build_submission_v6.py` + 4 strażniki reguł, 4 strażniki pomiarów, zakaz `submit_patch` w `agent.yaml`, zakaz `submit_patch()` w promptcie; kontrole negatywne obu sprawdzone |
 | notebook | `kaggle_smoke/gemma-agent-benchmark-v6.ipynb` regenerowany dla `3843c878` |
 
 **Uwaga o odtwarzaniu V6.3:** obecny packer egzekwuje reguły V6.4, więc **nie odtworzy** archiwum
@@ -55,7 +93,7 @@ M5 mierzy **mechanizm**, nie wynik; przy n=30 nie uprawnia do twierdzenia o prze
 ## Pre-registered oczekiwania (falsyfikowalne — zapisane przed przebiegiem)
 
 1. **E1**: sesji bez jakiejkolwiek próby edycji ≤ 3/30 (baseline 7/30).
-2. **E2**: żadna sesja nie wywoła `submit_patch` więcej niż 2 razy (baseline: 44/48/42).
+2. **E2**: `submit_patch` **nie pojawi się ani raz** w ścieżkach — narzędzia nie ma w `agent.yaml` (baseline: 48/44/42 wywołania).
 3. **E3**: co najwyżej jedna sesja z serią ≥ 3 nieudanych edycji (baseline: `fastapi_15030`, 9 pod rząd).
 4. **E4**: w ścieżkach brak zapisu o ścieżce absolutnej poza repo (baseline: `/tmp/locate.py`).
 5. **E5**: mini-screen **nie jest prognozą** wyniku — rozstrzyga pełny przebieg (dowód z V6.3:
@@ -94,3 +132,16 @@ V6.4 nie obiecuje wyższego wyniku. Testuje cztery mechanizmy, które w V6.3 pro
 **gwarantowane zera**. Jeśli E1–E4 przejdą, a liczba rozwiązań nie wzrośnie, to nadal użyteczna
 wiedza: wiemy, że problem nie leży w regułach promptu. Jeśli E1–E4 nie przejdą, reguły są
 nieskuteczne w tej formie i wracamy do projektowania — z tym samym, niemodyfikowanym progiem.
+
+## Skąd ta wersja i co z pracą drugiej gałęzi
+
+Paczka V6.4 drugiej gałęzi (sha256 `0cc04c08f16b3ee965bf449af5ed8599eb4b18876f593f98f01de82bec37d514`,
+pliki `submission-v6.4.zip`, `V6_4_PREPARATION.md`, `build_submission_v64.py`) **nie została
+zcommitowana ani wypchnięta** — jej własna notatka to potwierdza, a `git ls-remote` pokazuje na
+`arena/6d081d52-gemma-konkurs` nadal tip `7a10a03` z 2026-10-12 07:17. Dlatego nie da się jej
+porównać plik po pliku: praca istnieje w sandboxie tamtej sesji, nie w repozytorium.
+
+Stan scalenia na dziś: **przyjęte i zweryfikowane** — usunięcie `submit_patch` oraz naprawa
+sprzeczności o `/tmp/locate.py`; **odłożone** — termin call 4 jako osobne ramię. Prośba do drugiej
+sesji: wypchnąć swoją paczkę (choćby na jej własną gałąź), żeby dało się zrobić uczciwy `diff`
+plików `agent.yaml`, `prompts/system.md` i skryptu budującego zamiast opierać się na opisie.

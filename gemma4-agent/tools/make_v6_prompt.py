@@ -134,12 +134,40 @@ V64_EDITS = [
 ]
 
 
+V64B_EDITS = [
+    ("the harness extracts it even when you never call `submit_patch()`, so the only guaranteed zero is a tree you never edited.",
+     "the harness extracts it on its own, so the only guaranteed zero is a tree you never edited."),
+    ('Therefore: **never end a session without a real edit on disk** - the harness captures the working-tree diff even if you never call `submit_patch()`, and it ends the session when you do call it. A session that runs out of time with an unrelated or empty diff scores zero just the same.',
+     'Therefore: **never end a session without a real edit on disk**: there is no submit step to call - the harness captures the working-tree diff by itself - and a session that runs out of time with an unrelated or empty diff scores zero just the same.'),
+    ('an edit must exist on disk by call 8; stop searching by call 14; submit by call 18.',
+     'an edit must exist on disk by call 8; stop searching by call 14; be finished by call 18.'),
+    ('Past call 18, skip verification entirely and submit.',
+     'Past call 18, skip verification entirely and finish.'),
+    ('7. **Final check, then decide whether to submit at all.**',
+     '7. **Final check before you stop.**'),
+    ('do not submit - keep working.',
+     'keep working.'),
+    ('   - **`submit_patch()` is optional, and you may call it at most once.** The harness extracts the working-tree diff itself (`git add -N . && git diff`), so your edits are captured even if you never call it; calling it early only ends your session. Call it once the fix is on disk and you are done (or out of time) - never before a real edit exists, and never just to be sure something was submitted. Measured: one session called it 48 times in a row and died on the 60-turn budget with an empty tree, and two more exhausted their turns the same way (44 and 42 calls). A `submit_patch` that reports no changes is a signal to go back and edit - never to retry it.',
+     '   - **There is no submit tool.** Your tool list has no `submit_patch`: the harness extracts the working-tree diff itself (`git add -N . && git diff`), so the only thing that matters is what is on disk when the session ends, and there is no step to wait for. Measured: the sessions that had that tool looped on it - one called it 48 times in a row and died on the 60-turn budget with an empty tree, two more exhausted their turns the same way (44 and 42 calls) - which is why it is gone from this build.'),
+    ('- If by call 10 the tree still has no edit, stop reading and investigating: open the top locator candidate and make the smallest sensible change - a wrong guess still beats submitting nothing.\n- **Never create a file to help yourself, and never write outside the repository.** The locator is delivered inside the single `run_command` heredoc above and writes only to `/tmp`; nothing else you write may leave `/workspace`.',
+     '- If by call 10 the tree still has no edit, stop reading and investigating: open the top locator candidate and make the smallest sensible change - a wrong guess still beats finishing with nothing.\n- **Apart from the single locator heredoc in step 2, never create a file to help yourself, and never write outside the repository.** That one heredoc writes `/tmp/locate.py` and the issue text, and it is the only exception; everything else you write must be an edit inside `/workspace`.'),
+    ('- If a test you ran fails, read the failure, make ONE targeted correction, and submit. Never revert to an empty diff.',
+     '- If a test you ran fails, read the failure, make ONE targeted correction, and stop. Never revert to an empty diff.'),
+]
+
+
 def apply_post_edits(prompt: str) -> str:
     for old, new in POST_EDITS:
         assert old in prompt, "missing anchor: " + old[:60]
         prompt = prompt.replace(old, new, 1)
     for old, new in V64_EDITS:
         assert old in prompt, "missing V6.4 anchor: " + old[:60]
+        prompt = prompt.replace(old, new, 1)
+    # V64B: the submit tool is gone, so no sentence may instruct calling it, and the locator
+    # heredoc is now an explicit exception to the "never create a file" rule (contradiction
+    # reported by the second branch on 2026-10-13).
+    for old, new in V64B_EDITS:
+        assert old in prompt, "missing V64B anchor: " + old[:60]
         prompt = prompt.replace(old, new, 1)
     return prompt
 
