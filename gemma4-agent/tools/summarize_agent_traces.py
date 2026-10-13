@@ -232,6 +232,12 @@ def aggregate(summaries: list[dict]) -> list[dict]:
                        if r["first_write_call"] and r["first_write_call"].get("t") is not None]
         first_times.sort()
         median_first = first_times[len(first_times) // 2] if first_times else None
+        # Call index of the first write, so the V6.4 call-4 deadline can be checked directly
+        # instead of being inferred from wall-clock times.
+        first_indices = sorted(r["first_write_call"]["i"] for r in write_attempts
+                               if r["first_write_call"] and r["first_write_call"].get("i") is not None)
+        median_index = first_indices[len(first_indices) // 2] if first_indices else None
+        within_deadline = sum(1 for i in first_indices if i <= 4)
 
         def max_run(tool_set: tuple[str, ...]) -> int:
             """Longest run of consecutive calls from that set, counted over the FULL call list.
@@ -260,6 +266,8 @@ def aggregate(summaries: list[dict]) -> list[dict]:
             "tasks_without_write_attempt": sorted(r["task"] for r in rows
                                                   if r not in write_attempts),
             "median_first_write_s": median_first,
+            "median_first_write_index": median_index,
+            "tasks_first_write_within_call_4": f"{within_deadline}/{len(rows)}",
             "max_consecutive_submit_patch": max_run(("submit_patch",)),
             "max_consecutive_edits": max_run(WRITE_TOOLS_AGG),
             "submit_patch_total": sum(submit_calls.values()),
@@ -306,7 +314,8 @@ def main() -> int:
     for a in aggregates:
         agg_lines.append(
             f"| `{a['kernel']}` | {a['tasks']} | **{a['write_coverage']}** | "
-            f"{len(a['tasks_without_write_attempt'])} | {a['median_first_write_s']} s | "
+            f"{len(a['tasks_without_write_attempt'])} | {a['median_first_write_s']} s "
+            f"(call {a['median_first_write_index']}, in-deadline {a['tasks_first_write_within_call_4']}) | "
             f"{a['max_consecutive_submit_patch']} | {a['max_consecutive_edits']} | "
             f"{a['submit_patch_total']} | {a['tasks_with_repeated_submit'] or '—'} |")
     for a in aggregates:
@@ -332,7 +341,8 @@ def main() -> int:
     print(f"traces summarised: {len(summaries)} | failures: {len(failures)}")
     for a in aggregates:
         print(f"  [{a['kernel']}] write coverage {a['write_coverage']}, "
-              f"median first write {a['median_first_write_s']} s, "
+              f"median first write {a['median_first_write_s']} s (call index "
+              f"{a['median_first_write_index']}, within call 4: {a['tasks_first_write_within_call_4']}), "
               f"max consecutive submit_patch {a['max_consecutive_submit_patch']}, "
               f"absolute write targets {a['absolute_write_targets'] or 'none'}")
     for row in summaries[:32]:

@@ -217,14 +217,14 @@ def validate_tree(submission_dir: Path) -> list[Path]:
     if "\\n" in prose:
         fail("prompts/system.md contains a literal backslash-n outside the script block; "
              "a source line continuation probably glued two bullets together.")
-    for marker in ("- Keep the diff small", "- If by call 10"):
+    for marker in ("- Keep the diff small", "- If by tool call 4"):
         if not any(line.strip().startswith(marker) for line in prose.splitlines()):
             fail(f"prompts/system.md lost the line break before {marker!r} (bullets are glued).")
     # V6.4 mechanism guards: each rule is pinned to one measurement from the read-only diagnosis of
     # the V6.3 kernels (ANALYSIS_V6_3_MECHANISMS.md). If a rule silently disappears or its measured
     # number drifts, the build fails instead of shipping a prompt that only claims to be V6.4.
     v64_rules = {
-        "No reading without writing": "M1 - sessions that never attempt an edit",
+        "No reading without writing, and no dummy edits": "M1 - sessions that never attempt an edit",
         "If an `edit_file` call does not change the file, do not repeat it.": "M2 - edit loop",
         "There is no submit tool": "M3 - the submit tool was removed after 42-48 call loops",
         "Apart from the single locator heredoc in step 2, never create a file to help yourself":
@@ -241,8 +241,11 @@ def validate_tree(submission_dir: Path) -> list[Path]:
     }.items():
         if number not in prose:
             fail(f"prompts/system.md lost the V6.4 measurement ({label}): {number!r}")
-    if "call 6 arrives with no edit on disk" not in prose:
-        fail("prompts/system.md lost the V6.4 write deadline (call 6).")
+    if "must exist on disk by call 4" not in prose:
+        fail("prompts/system.md lost the V6.4 write deadline (call 4).")
+    if "never create a dummy edit" not in prose:
+        fail("prompts/system.md lost the ban on placeholder edits, which is what makes the "
+             "deadline a requirement of an intended change.")
     if "submit_patch()" in prompt_text:
         fail("prompts/system.md instructs calling submit_patch(), a tool V6.4 removed.")
     if "no submit tool" not in prompt_text.lower():

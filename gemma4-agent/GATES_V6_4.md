@@ -39,12 +39,30 @@ Usunięcie pociągnęło przepisanie prozy: prompt nie zawiera już **żadnego**
 z krokiem 2 (heredoc `cat > /tmp/locate.py`). Nowe brzmienie mówi wprost: „**Poza pojedynczym
 heredokiem lokalizatora w kroku 2** nigdy nie twórz pliku, który ma ci pomóc…".
 
-**Czego NIE przyjąłem i dlaczego:** drugą zmianę z ich paczki — termin pierwszej edycji **call 4**
-zamiast call 6/8. Diagnoza nie daje podstawy na 4 (mediana pierwszej edycji w zadaniach rozwiązanych
-to 179 s ≈ call 10; dwie najszybsze sesje bez edycji skończyły w 41 s i 108 s, więc problemem nie był
-moment progu, a brak jakiejkolwiek próby). Zmiana jest niepomierzona, a mieszanie jej z resztą
-zablokowałoby interpretację; jeśli chcemy ją przetestować, dostanie **osobne ramię** z tym samym
-instrumentem.
+### Weryfikacja ich paczki (plik po pliku, gdy ją wypchnęli) i scalenie terminu call 4
+
+Druga gałąź wypchnęła paczkę commitem `8eb94cd` („Add offline V6.4 candidate package"). Weryfikacja:
+
+| sprawdzenie | wynik |
+| --- | --- |
+| SHA archiwum vs deklaracja `0cc04c08…` | **zgodny** |
+| archiwum vs katalog źródłowy | **identyczne** (`diff -rq`, 5 plików) |
+| `tools/locate.py` vs V6.3 | **identyczny** (deklaracja prawdziwa) |
+| `configs/sampling.yaml`, `eval_config.yaml` vs V6.3 | **identyczne** (deklaracja „limity bez zmian" prawdziwa; mój pierwszy test dał fałszywy alarm przez własną literówkę w nazwie pliku) |
+| `agent.yaml` | `submit_patch` usunięty — ta sama konkluzja, którą już scaliliśmy |
+| ich builder `build_submission_v64.py` | deterministyczny (stały czas ZIP, `create_system=3`, flaga UTF-8 0x800, `external_attr`), egzekwuje dokładny zbiór narzędzi, brak `submit_patch`, budżety 30/60/5.25, treść archiwum i CRC |
+
+**Termin pierwszej edycji — zmiana decyzji, przyjęte.** Wcześniej odłożyłem call 4 jako niepomierzony;
+po zobaczeniu ich pełnego brzmienia przyjmuję je, z dwóch powodów merytorycznych: (1) zawiera
+**zakaz atrapy edycji** („never create a dummy edit merely to satisfy the deadline") — a recenzent
+prosił dokładnie o wymóg **zamierzonej** zmiany; bez tego zakazu próg jest grą w statystyki,
+z nim jest wymogiem; (2) okazało się, że próg ma **ostry, policzalny baseline**: w V6.3 mediana
+pierwszej edycji wypadła na **wywołaniu nr 10**, a w terminie call 4 zmieściło się **3/30** zadań.
+Nowe brzmienie (scalone): termin call 4 + zakaz atrapy + moja reguła ratunkowa M2 + moja reguła M4.
+
+**Uczciwie o koszcie tego scalenia:** dwa ramiona (ich call 4, mój call 6/8) zostały zastąpione
+jednym, więc ten przebieg nie rozstrzygnie, „czy 4 lepsze od 8". Rozstrzygnie natomiast, czy próg
+w ogóle działa — bo mierzymy rozkład indeksu wywołania pierwszej edycji, nie tylko średnią.
 
 **Uczciwa uwaga o „koktajlu":** paczka V6.4 zmienia naraz kilka rzeczy i sama w sobie nie przypisze
 efektu pojedynczemu przełącznikowi — dokładnie tak, jak ostrzegła druga gałąź. Różnica jest w tym,
@@ -61,7 +79,7 @@ eksperyment (wymóg recenzji) i nie jest tu mieszana.
 
 | element | wartość |
 | --- | --- |
-| archiwum | `gemma4-agent/submission-v6.zip`, **13 289 B**, sha256 `b3dca6323306160ebfa3dcdfec929cfd757b79d0a5318e6642c5ee7cc9e1f73e` |
+| archiwum | `gemma4-agent/submission-v6.zip`, **13 401 B**, sha256 `f4e1edcb055d960896736939541cdda8d4f2219d2f7c69fbbd474e0ddd51501d` |
 | odtwarzalność | dwa kolejne buildy = ten sam hash (stały znacznik ZIP 1980-01-01); kontrola negatywna: podmiana jednej reguły wywala build |
 | prompt | 18 966 znaków (V6.3: 17 603); wobec V6.3: **+4 linie reguł, przepisana proza o submicie** (dokładnie cztery reguły; jedna linia zmieniona: „optional” → „optional, and you may call it at most once”) |
 | lokalizator | `tools/locate.py` `fe25b200fa52e100…` **bez zmian**, bajt w bajt taki sam w ZIP i w repo |
@@ -85,6 +103,7 @@ workflow, uploader odmówi z `archive_hash_mismatch` (exit 2) — czyli bezpiecz
 
 - **pokrycie edycji** = zadania z ≥ 1 wywołaniem `edit_file`/`write_file` (liczone read-only
   z `trace-operations.json` po przebiegu). **Baseline V6.3: 23/30. Cel: ≥ 27/30.**
+- **dodatkowo: rozkład indeksu wywołania pierwszej edycji.** Baseline V6.3: mediana na wywołaniu **10**, w terminie call 4 zmieściło się **3/30** — cel ≥ 12/30.
 - raportowane razem: mediana czasu pierwszego zapisu (baseline 184,6 s), najdłuższa seria
   `submit_patch` (baseline 48), zapisy o ścieżce absolutnej (baseline `/tmp/locate.py`, `/tmp/repro.py`).
 
@@ -145,3 +164,16 @@ Stan scalenia na dziś: **przyjęte i zweryfikowane** — usunięcie `submit_pat
 sprzeczności o `/tmp/locate.py`; **odłożone** — termin call 4 jako osobne ramię. Prośba do drugiej
 sesji: wypchnąć swoją paczkę (choćby na jej własną gałąź), żeby dało się zrobić uczciwy `diff`
 plików `agent.yaml`, `prompts/system.md` i skryptu budującego zamiast opierać się na opisie.
+
+## Dopisane po scaleniu (nadal przed przebiegiem)
+
+**E7 (nowe):** liczba zadań z pierwszą edycją w terminie call 4 wzrośnie z 3/30 do **≥ 12/30**.
+**E8 (nowe):** żaden scenariusz nie okaże się „atrapą" — sprawdzane pośrednio: zadania, w których
+pierwsza edycja dotyczy pliku niebędącego kandydatem lokalizatora **i** patch jest pusty na koniec,
+raportowane jako podejrzenie gry w próg (V6.3: 0 takich).
+
+**Paczka drugiej gałęzi zostaje w historii jako alternatywa**, nie jako kandydat do przebiegu:
+`gemma4-agent/submission-v6.4.zip` (`0cc04c08…`) + `submission-v6.4/` + `build_submission_v64.py` +
+`V6_4_PREPARATION.md`. Kandydatem do uruchomienia jest **wyłącznie** `submission-v6.zip`
+(`f4e1edcb…`), bo tylko on zawiera wszystkie cztery reguły mechanizmu razem z ich terminem.
+Jeśli kiedyś zechcemy rozdzielić ramiona, ich paczka jest gotowym, zweryfikowanym punktem wyjścia.

@@ -156,6 +156,17 @@ V64B_EDITS = [
 ]
 
 
+V64C_EDITS = [
+    ('The locator is one call; an edit must exist on disk by call 8; stop searching by call 14; be finished by call 18.',
+     'The locator is one call: read the highest-ranked plausible candidate, then edit in the next call. An **intended** source or configuration edit must exist on disk by call 4; stop searching by call 14; be finished by call 18.'),
+    ('   - **No reading without writing.** Measured on the last run: 7 of 30 sessions never attempted a single edit and scored zero - one of them spent 31 calls on `run_command` and `read_file` and two stopped on their own after 41 s and 108 s. So: the first call after your first file read must be an edit attempt, and if call 6 arrives with no edit on disk your next call is `edit_file` or `write_file` - no more reading first. Opening a top candidate and editing it beats opening five and editing none.',
+     '   - **No reading without writing, and no dummy edits.** Measured on the last run: 7 of 30 sessions never attempted a single edit and scored zero - one of them spent 31 calls on `run_command` and `read_file`, and two stopped on their own after 41 s and 108 s. So the first call after your first file read must be an edit attempt, the deadline is call 4, and it must be a real attempt at the reported issue: **never write a dummy or placeholder edit merely to satisfy the deadline** - a wrong-but-sincere fix can pass, a placeholder cannot.'),
+    ('   - Make the first edit as soon as you have a plausible target and refine it with further `edit_file` calls; do not batch a large rewrite into one risky step.',
+     '   - The first intended edit must be on disk by tool call 4, even if it is a conservative, minimal fix that you will refine. It must address the reported issue; never create a dummy edit merely to satisfy the deadline. Refine it with further `edit_file` calls; do not batch a large rewrite into one risky step.'),
+    ('- If by call 10 the tree still has no edit, stop reading and investigating: open the top locator candidate and make the smallest sensible change - a wrong guess still beats finishing with nothing.',
+     '- If by tool call 4 the tree still has no intended edit, stop reading and investigating: open the top locator candidate and make the smallest sensible issue-related change. No placeholder edits - a sincere wrong guess beats finishing with nothing.'),
+]
+
 def apply_post_edits(prompt: str) -> str:
     for old, new in POST_EDITS:
         assert old in prompt, "missing anchor: " + old[:60]
@@ -168,6 +179,12 @@ def apply_post_edits(prompt: str) -> str:
     # reported by the second branch on 2026-10-13).
     for old, new in V64B_EDITS:
         assert old in prompt, "missing V64B anchor: " + old[:60]
+        prompt = prompt.replace(old, new, 1)
+    # V64C: the second branch's tighter formulation of the deadline (call 4) with its explicit
+    # ban on placeholder edits - adopted because the review asked for a requirement of an early
+    # *intended* change, and the ban is what makes "intended" enforceable rather than decorative.
+    for old, new in V64C_EDITS:
+        assert old in prompt, "missing V64C anchor: " + old[:60]
         prompt = prompt.replace(old, new, 1)
     return prompt
 
