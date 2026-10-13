@@ -135,3 +135,7 @@ jobs:
           fi
           git commit -m "chore(gemma): record Run private same-seed 30-task V6.3 benchmark [skip ci]"
           git push origin "HEAD:${GITHUB_REF_NAME}"
+
+      - name: Verify documentation consistency (CI95 intervals against recorded JSON)
+        if: always()
+        run: python3 gemma4-agent/tools/check_docs_consistency.py

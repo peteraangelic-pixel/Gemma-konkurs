@@ -83,7 +83,7 @@ python3 gemma4-agent/tools/submit_kaggle_v63_once.py --archive gemma4-agent/subm
 Konsekwencja merytoryczna, którą prosimy ocenić niezależnie: **czy V6.3 w ogóle jest lepszym
 artefaktem do wysłania niż V5?** V6.3 = 10/30 przy 11 zerach; V5 = 10/30 przy 6 zerach. Pusty patch to
 gwarantowane zero punktowe, a zer V6.3 ma prawie dwa razy więcej niż V5 — mimo to obecny wynik
-oficjalny 0.03 pochodzi właśnie z V5. Nasz wniosek: **V5 wygląda na bezpieczniejszy do submissji niż
+oficjalny 0.03 pochodzi z **V4** (ref `57045226`, jedyna oceniona submissja); wynik V5 jest nieoficjalny. Nasz wniosek: **V5 wygląda na bezpieczniejszy do submissji niż
 V6.3**, ale to twierdzenie o zerach, nie o wyniku, i chętnie je obalimy.
 
 ## 5. Co naprawiliśmy dziś w infrastrukturze (to też warto ocenić)
@@ -111,6 +111,18 @@ V6.3**, ale to twierdzenie o zerach, nie o wyniku, i chętnie je obalimy.
    transkryptów? Które z tych da się zmierzyć bez GPU?
 4. Czy opłaca się pobrać transkrypty sesji dla 11 pustych drzew (API Kaggle, czysty transfer), żeby
    ustalić, na czym sesja faktycznie traci czas — czy to pytanie testowe, a nie diagnostyczne?
+
+## 6a. Odpowiedź recenzenta (otrzymana 2026-10-13) i co z niej wynika
+
+Recenzja przyszła czatem (nie commitem) — pełny tekst w `REVIEWS/2026-10-13-recenzja-drugiej-galezi-V63.md`.
+
+| punkt recenzji | nasze działanie |
+| --- | --- |
+| 1. zgoda na odrzucenie V6.3; uwaga, że pełny run ruszył przypadkowo (nie przez recenzenta) | incydent był po naszej stronie i jest zapisany w `GATES_V6_3.md`; brak działania poza zapisem |
+| 2. V5 jako **ostrożniejszy punkt odniesienia, nie zwycięzca**; para V5–V6.3 1:1; poprawka: 0.03 = **V4**, V5 nieoficjalny | poprawione wyżej; w §4 usunięto błędne przypisanie 0.03 do V5 |
+| 3. V6.4: najpierw diagnoza braku edycji, **potem** wyraźniejszy wymóg wczesnej zmiany kodu; obniżenia budżetu 4096→2048 nie robić teraz; mini-screen nie jest prognozą | przyjęte; plan V6.4 dopiero po diagnozie, bez zmiany budżetu myślenia |
+| 4. spróbować odczytać log istniejącego kernela read-only; szukać wyłącznie śladów operacyjnych (czas, nazwy narzędzi, moment pierwszej edycji, wywołania submisji), nie surowego rozumowania; jeśli śladów nie ma — dodać telemetrię w przyszłym uzgodnionym runie | wykonane: read-only fetch logów i plików wyjściowych obu kernelów V6.3 (`kaggle_results/v6-3-diagnostics/`) |
+| 5. walidator CI95 jest w repo, ale workflow pobierania go nie uruchamia | wpięty do wszystkich workflow, które regenerują historię screeningów |
 
 ## 7. Weryfikacja bez GPU (wszystko na CPU)
 
