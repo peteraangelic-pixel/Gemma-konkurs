@@ -163,6 +163,27 @@ def main() -> int:
                      f"wynik zgłaszany osobno: {s_['resolved']}/{s_['total']} "
                      f"CI95 [{s_['ci95'][0]} %, {s_['ci95'][1]} %]")
 
+    by_tag = dict(present)
+    if "V6.3-mini" in by_tag and "V6.3" in by_tag:
+        both = (by_tag["V6.3-mini"], by_tag["V6.3"])
+        gates_zero = all(x["scratch"] == 0 and x["premature_empty"] == 0 and x["docs_only"] == 0
+                         for x in both)
+        enough = by_tag["V6.3"]["resolved"] >= 9
+        verdict = "SPEŁNIONA -> submissja możliwa" if (gates_zero and enough) else "NIESPEŁNIONA -> submissja zablokowana"
+        reasons = []
+        for tag, x in (("V6.3-mini", both[0]), ("V6.3", both[1])):
+            if x["premature_empty"]:
+                reasons.append(f"{tag}: G2={x['premature_empty']}")
+            if x["scratch"]:
+                reasons.append(f"{tag}: G1={x['scratch']}")
+            if x["docs_only"]:
+                reasons.append(f"{tag}: G3={x['docs_only']}")
+        if not enough:
+            reasons.append(f"V6.3: rozwiązane {by_tag['V6.3']['resolved']}/30 < 9")
+        lines += ["", f"- **reguła decyzyjna z GATES_V6_3.md** (G1=G2=G3=0 w obu przebiegach "
+                      f"i ≥9/30 w pełnym): **{verdict}**"
+                      + (f" — powody: {', '.join(reasons)}" if reasons else "")]
+
     mini = dict(present).get("V6.3-mini")
     if mini:
         o1 = ("rich_3105" not in mini["empty_ids"] and "rich_3934" not in mini["empty_ids"]

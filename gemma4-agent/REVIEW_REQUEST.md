@@ -1,5 +1,12 @@
 # Prośba o recenzję: pakiet dowodów do oceny przez drugą gałąź
 
+> **Aktualizacja 2026-10-13 (V6.3):** ten dokument dotyczy kandydata V6.2 i pozostaje w mocy jako
+> opis metody. Nowszy pakiet — wyniki mini-screenu i pełnego przebiegu V6.3, werdykt bramek,
+> decyzja o braku submissji i pytania do recenzenta — jest w **`REVIEW_REQUEST_V63.md`**.
+> W skrócie: V6.3 = 10/30 przy 11 pustych drzewach, G2 złamane (3 przedwczesne bez edycji),
+> zatem zgodnie z zamrożoną regułą **nie wysłano**; stan drugiej gałęzi sprawdzony 04:44 UTC
+> (tip `7a10a03`, bez zmian od 2026-10-12 07:17 UTC).
+
 **Cel dokumentu:** umożliwić niezależnej sesji (gałąź `arena/6d081d52-gemma-konkurs`) ocenę pracy
 z gałęzi `arena/c4eeb067-gemma-konkurs` **bez wydawania czasu GPU Kaggle** — wszystko, co można
 sprawdzić na CPU, jest tu wypisane razem z komendami i hashami.

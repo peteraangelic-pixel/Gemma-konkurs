@@ -66,6 +66,8 @@ Bramki są **osobne od liczby rozwiązanych zadań** i nie przesuwa się ich po 
 - **V6.3-mini**: G1 brak plików-śmieci: PASS (0); G2 brak przedwczesnych submisji bez edycji: PASS (0); G3 zero diffów wyłącznie dokumentacyjnych: PASS (0); G4 cel: puste drzewa <= 4 (jest 4); wynik zgłaszany osobno: 0/4 CI95 [0.0 %, 49.0 %]
 - **V6.3**: G1 brak plików-śmieci: PASS (0); G2 brak przedwczesnych submisji bez edycji: FAIL (3); G3 zero diffów wyłącznie dokumentacyjnych: PASS (0); G4 cel: puste drzewa <= 4 (jest 11); wynik zgłaszany osobno: 10/30 CI95 [19.2 %, 51.2 %]
 
+- **reguła decyzyjna z GATES_V6_3.md** (G1=G2=G3=0 w obu przebiegach i ≥9/30 w pełnym): **NIESPEŁNIONA -> submissja zablokowana** — powody: V6.3: G2=3
+
 ## Werdykt pre-registered oczekiwań (V6.3-mini)
 
 Zapisane w GATES_V6_3.md **przed** przebiegiem; werdykt liczony maszynowo z JSON-a.

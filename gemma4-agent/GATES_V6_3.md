@@ -86,6 +86,57 @@ własnego promptu wykrył, że tekst obiecywał budżet 45 wywołań, gdy harnes
    + wynik nie gorszy niż V5 o więcej niż 2 zadania. Porażka = którakolwiek z G1–G3 złamana
    → wracamy do projektowania, nie do wysyłki.
 
+## Wynik pełnego przebiegu 30 zadań (2026-10-13 03:30 UTC) i decyzja
+
+Run `38330672815` (archiwum `650e1dba…`, treść identyczna z kanonicznym `ea80bc16…`) ukończył kernel,
+ale jego krok commitu wyników padł — liczby odzyskano z artefaktu runu osobnym workflowem
+`38347822030` (czysty transfer, bez GPU; rekord transferu z hashami:
+`kaggle_results/v6-3-benchmark/fetch_summary.txt`).
+
+| metryka | V6.2 | V6.3 (pełny) |
+| --- | --- | --- |
+| rozwiązane | 9/30 [16.7 %, 47.9 %] | **10/30 [19.2 %, 51.2 %]** |
+| puste drzewa | 8 | **11** |
+| z tego przedwczesne | 2 | **3** |
+| śmierci na zegarze | 17 | 15 |
+| pliki-śmieci (G1) | 0 | 0 |
+| tylko dokumentacja (G3) | 1 | 0 |
+| trafienia lokalizatora | 20/30 | 18/30 |
+| średni czas zadania | 272.4 s | 252.7 s |
+
+**Bramki: G1 PASS (0), G2 FAIL (3), G3 PASS (0).** Cel G4 (≤4 puste drzewa) chybiony (11).
+
+### Decyzja: NIE WYSYŁAMY V6.3
+
+Reguła decyzyjna zapisana wyżej (01:05 UTC, **przed** wynikami) wymaga G1–G3 = 0 w **obu** przebiegach.
+G2 = 3 → warunek niespełniony → **submissji nie ma**. Decyzja jest mechaniczna i nie przesuwam progu po
+fakcie w żadną stronę. Submitter potwierdza to niezależnie: `--require-gates v6-3-miniscreen,v6-3-benchmark`
+→ `status: gate_blocked`, exit 7, `submission_created: false` (sprawdzone lokalnie 2026-10-13 04:44 UTC,
+hash archiwum zgodny z pinem).
+
+### Co obalił pełny przebieg
+
+1. **Zmiany (a)+(c) nie usunęły klasy zer.** Pustych drzew jest **11**, o trzy więcej niż w V6.2, przy
+   jednym zadaniu więcej rozwiązanych. Trzy sesje skończyły przed zegarem bez żadnej edycji:
+   `rich_3105` (7 wywołań/43 s), `rich_3043` (8/110), `requests_6757` (12/211). To samo `rich_3105`
+   w mini-screenie dojechało do zegara (22 wywołania/318 s) i też nie zapisało edycji — **sesja bez
+   edycji to zachowanie modelu, nie skutek reguły (a)**.
+2. **Trafienia lokalizatora spadły 20 → 18/30**, choć skrypt lokalizatora się nie zmienił
+   (`fe25b200…`). Przy pustym patchu to pole nie ma danych, więc różnica jest szumem przebiegu.
+3. **Wariancja między przebiegami:** `rich_3006` w mini-screenie zginął na zegarze (4 wywołania/318 s),
+   a w pełnym przebiegu został **rozwiązany**. Ten sam seed i praktycznie to samo archiwum → mini-screen
+   nie przenosi się 1:1, pojedyncze zadania to ruletka.
+4. `fastapi_14487` (oczekiwanie O2) nie zrobił diffu dokumentacyjnego, ale i tak nie powstała żadna
+   edycja — 27 wywołań, 320 s, patch 0. Mechanizm zaliczony, wynik nie.
+
+### Wniosek dla następnej wersji (bez obietnic)
+
+Naprawa mechanizmu bez naprawy *umiejętności wykonania edycji w budżecie* nie podnosi wyniku: V6.3 jest
+o jedno zadanie lepszy od V6.2 i równy V5 (10/30), przy większej liczbie zer. Kierunek na kolejną wersję
+musi wynikać z analizy, **dlaczego sesja kończy się bez edycji** — a do tego potrzebny jest transkrypt
+sesji, którego ten przebieg nie zostawił (log kernela nie był pobierany, bo jego krok ma `if: failure()`,
+a kernel zakończył się sukcesem).
+
 ## Incydent 2026-10-13: commit workflow cofnął pracę na branchu (naprawione)
 
 Commit wyników mini-screenu (`49ee5e0`, autor `github-actions[bot]`) **skasował** z branchu:
