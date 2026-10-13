@@ -237,9 +237,13 @@ Wszystko poniżej pochodzi z artefaktów: `kaggle_results/v6-4-miniscreen/agent_
   wiedzy, tylko kolejność działań — potrzebny mechanizm wymuszający edycję (architektura/budżet),
   a nie kolejne zdanie w prompcie.
 - **Co przechodzi do V6.5:** reguły M2 i M3 (zmierzone: usuwają pętle i zamieniają puste drzewa
-  w patche), reguła M4 w wersji potwierdzonej śladami, brak `submit_patch`. Pełny przebieg 30 zadań
-  dla V6.4 pozostaje **nieuruchomiony** — czeka na Twoją decyzję, bo nie może już prowadzić do
-  submissji tej wersji.
+  w patche), reguła M4 w wersji potwierdzonej śladami, brak `submit_patch`.
+- **Decyzja użytkownika (2026-10-13, po przedstawieniu wyniku): „oba naraz"** — pełny przebieg
+  30 zadań V6.4 startuje jako pomiar **wyłącznie informacyjny** (czy zamiana pustych drzew w patche
+  przekłada się na liczbę rozwiązań; paired vs V6.3), a równolegle powstaje V6.5 z dźwignią na sesje
+  uwięzione w rozpoznaniu. Zapisane w nagłówku `gemma-kaggle-v64-benchmark.yml`, żeby nikt
+  (włącznie ze mną) nie pomylił tego przebiegu z kandydatem do wysłania: **V6.4 jest wykluczony przez
+  G2 = 1 w mini** i ten przebieg tego nie zmienia.
 
 ## Plan przebiegów — **wymaga Twojego zatwierdzenia; nic nie zostało uruchomione**
 
