@@ -52,3 +52,13 @@ bez skrótów; komentarze tej sesji (co zrobiono w reakcji) są w `REVIEW_REQUES
 | 3 | przyjęte; V6.4 = najpierw diagnoza braku edycji, potem test wczesnej edycji; budżet myślenia bez zmian; mini-screen nie jest prognozą |
 | 4 | przyjęte i wykonane: read-only fetch logów oraz plików wyjściowych obu kernelów V6.3 → `kaggle_results/v6-3-diagnostics/` |
 | 5 (dodatkowo) | przyjęte; walidator CI95 wpięty do workflow, które regenerują historię screeningów |
+
+---
+
+## Wynik realizacji punktu 4 (jeszcze tego samego dnia)
+
+Read-only diagnostyka dała odpowiedź: puste drzewa to cztery mechanizmy (brak próby edycji ×7,
+pętla nieudanych `edit_file` ×1, pętla `submit_patch` wyczerpująca tury ×2, zapis poza repo ×1),
+a mediana pierwszej edycji w zadaniach rozwiązanych to 179 s z 315 s budżetu. Szczegóły:
+`ANALYSIS_V6_3_MECHANISMS.md`. Uruchomienie jakiegokolwiek testu V6.4 pozostaje wstrzymane
+do uzgodnienia.
