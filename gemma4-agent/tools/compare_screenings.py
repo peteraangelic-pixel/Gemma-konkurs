@@ -30,6 +30,7 @@ CANDIDATES = [
     # V6.4 mini-screen: the six mechanism tasks. Recorded for the paired comparison on the common
     # six tasks; its CI95 over n=6 is not a score estimate (E5: the mini-screen is not a forecast).
     ("V6.4-mini", "v6-4-miniscreen"),
+    ("V6.4", "v6-4-benchmark"),
 ]
 EARLY_END_SECONDS = 280.0  # a session ending well before the 315 s cap
 DOCS_RE = re.compile(r"(^|/)(docs|doc)(/|$)|\\.md$|\\.rst$")

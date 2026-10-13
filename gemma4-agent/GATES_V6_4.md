@@ -245,6 +245,28 @@ Wszystko poniżej pochodzi z artefaktów: `kaggle_results/v6-4-miniscreen/agent_
   (włącznie ze mną) nie pomylił tego przebiegu z kandydatem do wysłania: **V6.4 jest wykluczony przez
   G2 = 1 w mini** i ten przebieg tego nie zmienia.
 
+## Wynik pełnego przebiegu 30 zadań — dopisane **po** przebiegu (2026-10-13, 15:18 UTC)
+
+Kernel `petersharps/gemma-agent-benchmark-aaea34e4-20261013-122940`, 169 min, średnio 298,4 s/zadanie.
+Pełny opis i diagnoza: `ANALYSIS_V6_4_FULL.md`.
+
+- **10/30 rozwiązań — dokładnie ten sam zbiór zadań co V6.3 (+0 / −0 parami).** CI95 [19,2; 51,2].
+- **Puste drzewa 11/30 (V6.3: 11)** — wymiana: `fastapi_15030` naprawione (0 → 1348 B),
+  `fastapi_15588` zepsute (było z patchem, teraz 0; sesja skończyła po **3 wywołaniach**).
+- **Wzrost średniego czasu zadania** 252,7 → 298,4 s bez zysku punktowego.
+- **Werdykt pre-rejestracji S1–S3 z tej sesji: S1 spełnione (10/30, równość), S2 NARUSZONE (11 > 8),
+  S3 NARUSZONE (G2 = 3 > 1) → V6.4 nie spełnia warunku submissji; nie wysłano.**
+- **E7 OBALONE:** pierwsza edycja w repo w terminie call 4 w **1/30** (cel ≥ 12/30) — dokładnie tyle,
+  ile w V6.3. **E6 formalnie nie zachodzi** (pokrycie dowolnych zapisów 23 → 26/30), ale pokrycie
+  edycji w repo stoi na 22/30, więc zachowanie zmieniło się tylko brzegowo.
+- **M3 domknięte strukturalnie:** 0 wywołań `submit_patch` (V6.3: dziesiątki), najdłuższa seria 0.
+- **Nowe zjawisko (mechanizm B):** 4 zadania (13 %) napisały `/tmp/locate.py` i **skończyły bez
+  edycji** (`fastapi_15745` i `fastapi_15588` po 3 wywołaniach w ~244 s). V3/V4/V5, które nie mają
+  kroku lokalizatora, miały 6 pustych drzew; V6.x ma 11. Lokalizator dodaje własny sposób na zero.
+- **Bramka G2 = 0 nie została spełniona przez ŻADNĄ wersję, także przez V4** (`0,03` oficjalnie, G2 = 1).
+  Utrzymywanie jej jako twardego progu oznacza, że nie wysłalibyśmy nawet V4 — do rozstrzygnięcia
+  przed kolejną decyzją o submissji.
+
 ## Plan przebiegów — **wymaga Twojego zatwierdzenia; nic nie zostało uruchomione**
 
 1. **Mini-screen 6 zadań mechanizmowych:** `rich_3105` (M1 szybki), `rich_3043` (M1 średni),

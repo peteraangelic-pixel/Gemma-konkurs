@@ -14,6 +14,7 @@ nie jako oszacowanie wyniku. Kolumny diagnostyczne istnieją dopiero od V6.1.
 | V6.3-mini | **0/4** | [0.0 %, 49.0 %] | 4 | 0 | 4 | 0 | 0 | 0/4 | 318.4 s |
 | V6.3 | **10/30** | [19.2 %, 51.2 %] | 11 | 3 | 15 | 0 | 0 | 18/30 | 252.7 s |
 | V6.4-mini | **1/6** | [3.0 %, 56.4 %] | 3 | 1 | 4 | 0 | 0 | 2/6 | 289.9 s |
+| V6.4 | **10/30** | [19.2 %, 51.2 %] | 11 | 3 | 19 | 0 | 0 | 17/30 | 298.4 s |
 
 ## Zmiany statusu między kolejnymi kandydatami
 
@@ -27,6 +28,7 @@ zaraportowałby jako straty zadania, których w ogóle nie uruchamiał.
 - V6.2 → V6.3-mini: +0 (—), -0 (—) — na 4 wspólnych zadaniach (V6.2: 30, V6.3-mini: 4 uruchomionych)
 - V6.3-mini → V6.3: +1 (rich_3006), -0 (—) — na 4 wspólnych zadaniach (V6.3-mini: 4, V6.3: 30 uruchomionych)
 - V6.3 → V6.4-mini: +0 (—), -0 (—) — na 6 wspólnych zadaniach (V6.3: 30, V6.4-mini: 6 uruchomionych)
+- V6.4-mini → V6.4: +0 (—), -0 (—) — na 6 wspólnych zadaniach (V6.4-mini: 6, V6.4: 30 uruchomionych)
 
 ### V6.1: zadania z plikami-śmieciami w diffie
 
@@ -64,6 +66,10 @@ zaraportowałby jako straty zadania, których w ogóle nie uruchamiał.
 ### V6.4-mini: puste drzewa (3)
 
 - rich_3105, rich_3043, fastapi_15745
+
+### V6.4: puste drzewa (11)
+
+- rich_3934, fastapi_14851, fastapi_14266, fastapi_14487, rich_3043, rich_3105, fastapi_15588, fastapi_14459, requests_6757, fastapi_15745, httpx_3672
 
 ## Bramki jakości V6.3 (pre-registered 2026-10-12, przed przebiegiem)
 
