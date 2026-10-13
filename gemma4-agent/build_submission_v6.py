@@ -199,6 +199,19 @@ def validate_tree(submission_dir: Path) -> list[Path]:
     if len(prompt_text) > MAX_PROMPT_CHARS:
         fail(f"prompts/system.md is {len(prompt_text)} chars (> {MAX_PROMPT_CHARS}); "
              "keep the prompt lean so no step gets skipped.")
+    # V6.3 prompt-quality guards (three real defects shipped once: a stale call budget, a
+    # duplicated sentence and two bullets glued together by a Python line continuation).
+    prose = prompt_text.split("## Locator script", 1)[0]
+    if "45 tool calls" in prose:
+        fail("prompts/system.md quotes the stale 45-call budget; the harness cap is 30.")
+    if prose.count("narrowest test target, always bounded:") != 1:
+        fail("prompts/system.md has a duplicated verification sentence.")
+    if "\\n" in prose:
+        fail("prompts/system.md contains a literal backslash-n outside the script block; "
+             "a source line continuation probably glued two bullets together.")
+    for marker in ("- Keep the diff small", "- If by call 10"):
+        if not any(line.strip().startswith(marker) for line in prose.splitlines()):
+            fail(f"prompts/system.md lost the line break before {marker!r} (bullets are glued).")
     if "submit_patch" not in prompt_text:
         fail("prompts/system.md lost the submit instructions.")
     if "as your final action" in prompt_text:

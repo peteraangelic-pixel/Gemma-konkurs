@@ -25,6 +25,20 @@ gałęzi `arena/6d081d52-gemma-konkurs`). Zasady:
 - **17 sesji kończących się na zegarze pozostaje osobnym, nierozwiązanym celem** — V6.3 go nie
   adresuje i nie udajemy, że adresuje.
 
+## Tożsamość artefaktów (weryfikowalna)
+
+| przebieg | archiwum | SHA-256 |
+| --- | --- | --- |
+| mini-screen 4 zadań | `submission-v6.zip` (build V6.3) | `abf22bac2c67c639342f56e890fd77cb36c91811d07cf1c239c84ef28fa1216e` |
+| pełny screening 30 zadań | `submission-v6.zip` (build V6.3 + korekta prozy) | `650e1dba10c5b269c616a670255c3a585a57d750ce0f8428581ae65ea528f5c4` |
+
+Różnica między tymi buildami to **wyłącznie proza promptu** — 11 zmienionych linii (poprawione
+„45 tool calls" → 30, usunięte zduplikowane zdanie w kroku 6, dwa punkty sklejone kontynuacją
+linii w źródle Pythona rozdzielone). Zweryfikowane `difflib.unified_diff` na zawartości obu
+ZIP-ów: **żadna reguła, próg, bajt skryptu ani konfiguracja się nie zmieniły**, więc wynik
+mini-screenu opisuje ten sam mechanizm, który mierzy pełny przebieg. Powód poprawki: przegląd
+własnego promptu wykrył, że tekst obiecywał budżet 45 wywołań, gdy harness tnie na 30.
+
 ## Bramki (hard) — raportowane per przebieg
 
 | bramka | definicja operacyjna | próg |
