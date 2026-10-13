@@ -1,0 +1,602 @@
+# v63-full.log
+- total lines: 1799 | operational matches: 514
+
+## first 40 lines
+    [{"stream_name":"stderr","time":9.753296535,"data":"/usr/local/lib/python3.12/dist-packages/nbformat/__init__.py:96: MissingIDFieldWarning: Cell is missing an id field, this will become a hard error in future nbformat versions. You may want to use `normalize()` on your notebooks before validations (available since nbformat 5.1.4). Previous versions of nbformat are fixing this issue transparently, 
+    ,{"stream_name":"stderr","time":9.75333879,"data":"  validate(nb)\n"}
+    ,{"stream_name":"stderr","time":11.076485157,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+    ,{"stream_name":"stderr","time":11.076508982,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+    ,{"stream_name":"stderr","time":11.076512075,"data":"0.00s - to python to disable frozen modules.\n"}
+    ,{"stream_name":"stderr","time":11.076514313,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+    ,{"stream_name":"stderr","time":11.797067095,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+    ,{"stream_name":"stderr","time":11.797090331,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+    ,{"stream_name":"stderr","time":11.797093358,"data":"0.00s - to python to disable frozen modules.\n"}
+    ,{"stream_name":"stderr","time":11.797095548,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+    ,{"stream_name":"stdout","time":13.414540682,"data":"Pinned Kaggle Python runtime: 3.12.13\n"}
+    ,{"stream_name":"stdout","time":13.414561761,"data":"Installing 41 offline wheels from competition wheelhouse...\n"}
+    ,{"stream_name":"stdout","time":71.615545119,"data":"Offline wheelhouse installation complete.\n"}
+    ,{"stream_name":"stdout","time":108.442564107,"data":"Submission SHA-256: 650e1dba10c5b269c616a670255c3a585a57d750ce0f8428581ae65ea528f5c4\n"}
+    ,{"stream_name":"stdout","time":108.442593073,"data":"Public development tasks available: 129\n"}
+    ,{"stream_name":"stdout","time":108.442596742,"data":"Seeded stratified sample (30 tasks, seed=20261009): {'psf/requests': 3, 'Textualize/rich': 10, 'fastapi/fastapi': 16, 'encode/httpx': 1}\n"}
+    ,{"stream_name":"stdout","time":108.442599928,"data":"Selected task IDs: requests_6644, rich_3934, fastapi_14851, rich_3718, fastapi_14266, fastapi_14487, fastapi_14953, rich_3518, fastapi_14297, rich_3894, fastapi_14303, rich_3052, rich_3043, rich_3105, fastapi_14873, fastapi_15030, fastapi_15588, rich_3006, fastapi_14186, rich_3882, fastapi_14459, requests_6757, fastapi_14262, rich_2725, request
+    ,{"stream_name":"stdout","time":122.688634723,"data":"Visible GPUs (4): ['NVIDIA L4', 'NVIDIA L4', 'NVIDIA L4', 'NVIDIA L4']\n"}
+    ,{"stream_name":"stdout","time":527.005366625,"data":"vLLM server started on http://127.0.0.1:8000/v1 (tensor parallelism=4).\n"}
+    ,{"stream_name":"stderr","time":527.195281508,"data":"/usr/local/lib/python3.12/dist-packages/google/adk/features/_feature_decorator.py:72: UserWarning: [EXPERIMENTAL] feature FeatureName.AGENT_CONFIG is enabled.\n"}
+    ,{"stream_name":"stderr","time":527.195311943,"data":"  check_feature_enabled()\n"}
+    ,{"stream_name":"stderr","time":527.195315826,"data":"/tmp/ipykernel_65/2428886316.py:58: UserWarning: [EXPERIMENTAL] EventsCompactionConfig: This feature is experimental and may change or be removed in future versions without notice. It may introduce breaking changes at any time.\n"}
+    ,{"stream_name":"stderr","time":527.19531971,"data":"  events_compaction_config=EventsCompactionConfig(\n"}
+    ,{"stream_name":"stderr","time":527.195322765,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 99efed08-4ca, creating venv without pip: Command '['/tmp/swegemma_sandbox_99efed08-4ca_ex5yycaw/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+    ,{"stream_name":"stderr","time":527.195335705,"data":"\n"}
+    ,{"stream_name":"stderr","time":527.195337793,"data":"/usr/local/lib/python3.12/dist-packages/google/adk/features/_feature_decorator.py:72: UserWarning: [EXPERIMENTAL] feature FeatureName.AGENT_CONFIG is enabled.\n"}
+    ,{"stream_name":"stderr","time":527.195340004,"data":"  check_feature_enabled()\n"}
+    ,{"stream_name":"stderr","time":527.195341797,"data":"/tmp/ipykernel_65/2428886316.py:58: UserWarning: [EXPERIMENTAL] EventsCompactionConfig: This feature is experimental and may change or be removed in future versions without notice. It may introduce breaking changes at any time.\n"}
+    ,{"stream_name":"stderr","time":527.195343924,"data":"  events_compaction_config=EventsCompactionConfig(\n"}
+    ,{"stream_name":"stderr","time":527.195345821,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 99efed08-4ca, creating venv without pip: Command '['/tmp/swegemma_sandbox_99efed08-4ca_ex5yycaw/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+    ,{"stream_name":"stdout","time":527.203381239,"data":"Diagnostics: gold map loaded for 129 published tasks\n"}
+    ,{"stream_name":"stdout","time":527.203395308,"data":"Benchmark task 1/30: requests_6644 (psf/requests)\n"}
+    ,{"stream_name":"stderr","time":843.671004356,"data":"WARNING:swegemma.harness.agent_runner:Task requests_6644 agent timed out.\n"}
+    ,{"stream_name":"stderr","time":843.671038184,"data":"\n"}
+    ,{"stream_name":"stderr","time":843.671041671,"data":"WARNING:swegemma.harness.agent_runner:Task requests_6644 agent timed out.\n"}
+    ,{"stream_name":"stderr","time":843.819065119,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 465f2d55-3f0, creating venv without pip: Command '['/tmp/swegemma_sandbox_465f2d55-3f0_ogl17s7h/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+    ,{"stream_name":"stderr","time":843.819088991,"data":"\n"}
+    ,{"stream_name":"stderr","time":843.81909243,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 465f2d55-3f0, creating venv without pip: Command '['/tmp/swegemma_sandbox_465f2d55-3f0_ogl17s7h/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+    ,{"stream_name":"stderr","time":846.317526486,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox eb0fd050-e45, creating venv without pip: Command '['/tmp/swegemma_sandbox_eb0fd050-e45_7mrtq5k_/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+    ,{"stream_name":"stderr","time":846.317554189,"data":"\n"}
+
+## operational matches
+  1: [{"stream_name":"stderr","time":9.753296535,"data":"/usr/local/lib/python3.12/dist-packages/nbformat/__init__.py:96: MissingIDFieldWarning: Cell is missing an id field, this will become a hard error in future nbformat versions. You may want to use `normalize()` on your notebooks before validations (available since nbformat 5.1.4). Previous versions of nbformat are fixing this issue transparently, 
+  3: ,{"stream_name":"stderr","time":11.076485157,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+  7: ,{"stream_name":"stderr","time":11.797067095,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+  20: ,{"stream_name":"stderr","time":527.195281508,"data":"/usr/local/lib/python3.12/dist-packages/google/adk/features/_feature_decorator.py:72: UserWarning: [EXPERIMENTAL] feature FeatureName.AGENT_CONFIG is enabled.\n"}
+  22: ,{"stream_name":"stderr","time":527.195315826,"data":"/tmp/ipykernel_65/2428886316.py:58: UserWarning: [EXPERIMENTAL] EventsCompactionConfig: This feature is experimental and may change or be removed in future versions without notice. It may introduce breaking changes at any time.\n"}
+  24: ,{"stream_name":"stderr","time":527.195322765,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 99efed08-4ca, creating venv without pip: Command '['/tmp/swegemma_sandbox_99efed08-4ca_ex5yycaw/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  26: ,{"stream_name":"stderr","time":527.195337793,"data":"/usr/local/lib/python3.12/dist-packages/google/adk/features/_feature_decorator.py:72: UserWarning: [EXPERIMENTAL] feature FeatureName.AGENT_CONFIG is enabled.\n"}
+  28: ,{"stream_name":"stderr","time":527.195341797,"data":"/tmp/ipykernel_65/2428886316.py:58: UserWarning: [EXPERIMENTAL] EventsCompactionConfig: This feature is experimental and may change or be removed in future versions without notice. It may introduce breaking changes at any time.\n"}
+  30: ,{"stream_name":"stderr","time":527.195345821,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 99efed08-4ca, creating venv without pip: Command '['/tmp/swegemma_sandbox_99efed08-4ca_ex5yycaw/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  32: ,{"stream_name":"stdout","time":527.203395308,"data":"Benchmark task 1/30: requests_6644 (psf/requests)\n"}
+  33: ,{"stream_name":"stderr","time":843.671004356,"data":"WARNING:swegemma.harness.agent_runner:Task requests_6644 agent timed out.\n"}
+  35: ,{"stream_name":"stderr","time":843.671041671,"data":"WARNING:swegemma.harness.agent_runner:Task requests_6644 agent timed out.\n"}
+  36: ,{"stream_name":"stderr","time":843.819065119,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 465f2d55-3f0, creating venv without pip: Command '['/tmp/swegemma_sandbox_465f2d55-3f0_ogl17s7h/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  38: ,{"stream_name":"stderr","time":843.81909243,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 465f2d55-3f0, creating venv without pip: Command '['/tmp/swegemma_sandbox_465f2d55-3f0_ogl17s7h/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  39: ,{"stream_name":"stderr","time":846.317526486,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox eb0fd050-e45, creating venv without pip: Command '['/tmp/swegemma_sandbox_eb0fd050-e45_7mrtq5k_/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  41: ,{"stream_name":"stderr","time":846.317557685,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox eb0fd050-e45, creating venv without pip: Command '['/tmp/swegemma_sandbox_eb0fd050-e45_7mrtq5k_/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  42: ,{"stream_name":"stdout","time":846.387808249,"data":"{\"tasks_completed_or_failed\": 1, \"resolved_count\": 1, \"score_estimate\": 1.0, \"score_ci95_wilson\": [0.20654329147389294, 1.0]}\n"}
+  43: ,{"stream_name":"stdout","time":846.38782876,"data":"Benchmark task 2/30: rich_3934 (Textualize/rich)\n"}
+  44: ,{"stream_name":"stderr","time":1163.834421734,"data":"WARNING:swegemma.harness.agent_runner:Task rich_3934 agent timed out.\n"}
+  46: ,{"stream_name":"stderr","time":1163.83446129,"data":"WARNING:swegemma.harness.agent_runner:Task rich_3934 agent timed out.\n"}
+  47: ,{"stream_name":"stderr","time":1163.842153565,"data":"WARNING:swegemma.harness.agent_runner:Task rich_3934 completed without explicit submit_patch call and no working tree modifications.\n"}
+  49: ,{"stream_name":"stderr","time":1163.842175064,"data":"WARNING:swegemma.harness.agent_runner:Task rich_3934 completed without explicit submit_patch call and no working tree modifications.\n"}
+  50: ,{"stream_name":"stderr","time":1164.003910841,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 4684cbde-3f5, creating venv without pip: Command '['/tmp/swegemma_sandbox_4684cbde-3f5_890aj8ww/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  52: ,{"stream_name":"stderr","time":1164.003932133,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 4684cbde-3f5, creating venv without pip: Command '['/tmp/swegemma_sandbox_4684cbde-3f5_890aj8ww/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  53: ,{"stream_name":"stdout","time":1164.07343277,"data":"{\"tasks_completed_or_failed\": 2, \"resolved_count\": 1, \"score_estimate\": 0.5, \"score_ci95_wilson\": [0.09452865480086614, 0.9054713451991339]}\n"}
+  54: ,{"stream_name":"stdout","time":1164.073451616,"data":"Benchmark task 3/30: fastapi_14851 (fastapi/fastapi)\n"}
+  55: ,{"stream_name":"stderr","time":1484.987939573,"data":"WARNING:swegemma.harness.agent_runner:Task fastapi_14851 agent timed out.\n"}
+  57: ,{"stream_name":"stderr","time":1484.988010492,"data":"WARNING:swegemma.harness.agent_runner:Task fastapi_14851 agent timed out.\n"}
+  58: ,{"stream_name":"stderr","time":1485.007549815,"data":"WARNING:swegemma.harness.agent_runner:Task fastapi_14851 completed without explicit submit_patch call and no working tree modifications.\n"}
+  60: ,{"stream_name":"stderr","time":1485.007573245,"data":"WARNING:swegemma.harness.agent_runner:Task fastapi_14851 completed without explicit submit_patch call and no working tree modifications.\n"}
+  61: ,{"stream_name":"stderr","time":1485.237957543,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox f525cb2a-851, creating venv without pip: Command '['/tmp/swegemma_sandbox_f525cb2a-851_a3gdzza0/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  63: ,{"stream_name":"stderr","time":1485.23798493,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox f525cb2a-851, creating venv without pip: Command '['/tmp/swegemma_sandbox_f525cb2a-851_a3gdzza0/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  64: ,{"stream_name":"stdout","time":1485.308342099,"data":"{\"tasks_completed_or_failed\": 3, \"resolved_count\": 1, \"score_estimate\": 0.3333333333333333, \"score_ci95_wilson\": [0.0614903152761605, 0.7923450448735121]}\n"}
+  65: ,{"stream_name":"stdout","time":1485.308366205,"data":"Benchmark task 4/30: rich_3718 (Textualize/rich)\n"}
+  66: ,{"stream_name":"stderr","time":1698.385566713,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 89e1a029-c52, creating venv without pip: Command '['/tmp/swegemma_sandbox_89e1a029-c52_0o6m4tyd/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  68: ,{"stream_name":"stderr","time":1698.385612767,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 89e1a029-c52, creating venv without pip: Command '['/tmp/swegemma_sandbox_89e1a029-c52_0o6m4tyd/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  69: ,{"stream_name":"stderr","time":1700.767685992,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox bba0b26b-904, creating venv without pip: Command '['/tmp/swegemma_sandbox_bba0b26b-904_qclev89y/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  71: ,{"stream_name":"stderr","time":1700.767709457,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox bba0b26b-904, creating venv without pip: Command '['/tmp/swegemma_sandbox_bba0b26b-904_qclev89y/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  72: ,{"stream_name":"stdout","time":1700.833223396,"data":"{\"tasks_completed_or_failed\": 4, \"resolved_count\": 2, \"score_estimate\": 0.5, \"score_ci95_wilson\": [0.15003570882017148, 0.8499642911798285]}\n"}
+  73: ,{"stream_name":"stdout","time":1700.833242197,"data":"Benchmark task 5/30: fastapi_14266 (fastapi/fastapi)\n"}
+  74: ,{"stream_name":"stderr","time":2020.810951811,"data":"WARNING:swegemma.harness.agent_runner:Task fastapi_14266 agent timed out.\n"}
+  76: ,{"stream_name":"stderr","time":2020.810986351,"data":"WARNING:swegemma.harness.agent_runner:Task fastapi_14266 agent timed out.\n"}
+  77: ,{"stream_name":"stderr","time":2021.037507181,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 53bec258-e7d, creating venv without pip: Command '['/tmp/swegemma_sandbox_53bec258-e7d_kn_6s7np/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  79: ,{"stream_name":"stderr","time":2021.037533856,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 53bec258-e7d, creating venv without pip: Command '['/tmp/swegemma_sandbox_53bec258-e7d_kn_6s7np/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  80: ,{"stream_name":"stdout","time":2021.10689792,"data":"{\"tasks_completed_or_failed\": 5, \"resolved_count\": 2, \"score_estimate\": 0.4, \"score_ci95_wilson\": [0.1176182311592533, 0.769280067791163]}\n"}
+  81: ,{"stream_name":"stdout","time":2021.106918639,"data":"Benchmark task 6/30: fastapi_14487 (fastapi/fastapi)\n"}
+  82: ,{"stream_name":"stderr","time":2341.255188631,"data":"WARNING:swegemma.harness.agent_runner:Task fastapi_14487 agent timed out.\n"}
+  84: ,{"stream_name":"stderr","time":2341.255226603,"data":"WARNING:swegemma.harness.agent_runner:Task fastapi_14487 agent timed out.\n"}
+  85: ,{"stream_name":"stderr","time":2341.276215579,"data":"WARNING:swegemma.harness.agent_runner:Task fastapi_14487 completed without explicit submit_patch call and no working tree modifications.\n"}
+  87: ,{"stream_name":"stderr","time":2341.276237099,"data":"WARNING:swegemma.harness.agent_runner:Task fastapi_14487 completed without explicit submit_patch call and no working tree modifications.\n"}
+  88: ,{"stream_name":"stderr","time":2341.51132566,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 62ac29f5-047, creating venv without pip: Command '['/tmp/swegemma_sandbox_62ac29f5-047_t1zqct6l/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  90: ,{"stream_name":"stderr","time":2341.511350648,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 62ac29f5-047, creating venv without pip: Command '['/tmp/swegemma_sandbox_62ac29f5-047_t1zqct6l/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  91: ,{"stream_name":"stdout","time":2341.581573626,"data":"{\"tasks_completed_or_failed\": 6, \"resolved_count\": 2, \"score_estimate\": 0.3333333333333333, \"score_ci95_wilson\": [0.09676933255921683, 0.7000116786584712]}\n"}
+  92: ,{"stream_name":"stdout","time":2341.581591185,"data":"Benchmark task 7/30: fastapi_14953 (fastapi/fastapi)\n"}
+  93: ,{"stream_name":"stderr","time":2562.4959594,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 75b4b0de-0ff, creating venv without pip: Command '['/tmp/swegemma_sandbox_75b4b0de-0ff_feud850m/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  95: ,{"stream_name":"stderr","time":2562.495994432,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 75b4b0de-0ff, creating venv without pip: Command '['/tmp/swegemma_sandbox_75b4b0de-0ff_feud850m/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  96: ,{"stream_name":"stderr","time":2566.208746028,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox bd29216c-666, creating venv without pip: Command '['/tmp/swegemma_sandbox_bd29216c-666_9e0q4b1j/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  98: ,{"stream_name":"stderr","time":2566.208775915,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox bd29216c-666, creating venv without pip: Command '['/tmp/swegemma_sandbox_bd29216c-666_9e0q4b1j/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  99: ,{"stream_name":"stdout","time":2566.274097656,"data":"{\"tasks_completed_or_failed\": 7, \"resolved_count\": 2, \"score_estimate\": 0.2857142857142857, \"score_ci95_wilson\": [0.0822171657090155, 0.6410709098517873]}\n"}
+  100: ,{"stream_name":"stdout","time":2566.274124854,"data":"Benchmark task 8/30: rich_3518 (Textualize/rich)\n"}
+  101: ,{"stream_name":"stderr","time":2879.30494655,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox ce5b4b40-fbe, creating venv without pip: Command '['/tmp/swegemma_sandbox_ce5b4b40-fbe_rsgvxzbu/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  103: ,{"stream_name":"stderr","time":2879.30499362,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox ce5b4b40-fbe, creating venv without pip: Command '['/tmp/swegemma_sandbox_ce5b4b40-fbe_rsgvxzbu/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  104: ,{"stream_name":"stderr","time":2881.797293688,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox ae0f27a5-786, creating venv without pip: Command '['/tmp/swegemma_sandbox_ae0f27a5-786_q5fo_c4r/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  106: ,{"stream_name":"stderr","time":2881.797322939,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox ae0f27a5-786, creating venv without pip: Command '['/tmp/swegemma_sandbox_ae0f27a5-786_q5fo_c4r/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  107: ,{"stream_name":"stdout","time":2881.858644593,"data":"{\"tasks_completed_or_failed\": 8, \"resolved_count\": 3, \"score_estimate\": 0.375, \"score_ci95_wilson\": [0.13684175946152105, 0.6942621454161981]}\n"}
+  108: ,{"stream_name":"stdout","time":2881.858669983,"data":"Benchmark task 9/30: fastapi_14297 (fastapi/fastapi)\n"}
+  109: ,{"stream_name":"stderr","time":3114.404928839,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox bbf5c233-dac, creating venv without pip: Command '['/tmp/swegemma_sandbox_bbf5c233-dac_5sff9jxo/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  111: ,{"stream_name":"stderr","time":3114.40496772,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox bbf5c233-dac, creating venv without pip: Command '['/tmp/swegemma_sandbox_bbf5c233-dac_5sff9jxo/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  112: ,{"stream_name":"stderr","time":3117.728333041,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 8cccceb5-4cc, creating venv without pip: Command '['/tmp/swegemma_sandbox_8cccceb5-4cc_bwi6l14q/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  114: ,{"stream_name":"stderr","time":3117.728365411,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 8cccceb5-4cc, creating venv without pip: Command '['/tmp/swegemma_sandbox_8cccceb5-4cc_bwi6l14q/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  115: ,{"stream_name":"stdout","time":3117.801664568,"data":"{\"tasks_completed_or_failed\": 9, \"resolved_count\": 3, \"score_estimate\": 0.3333333333333333, \"score_ci95_wilson\": [0.12058159868274293, 0.6458026525009102]}\n"}
+  116: ,{"stream_name":"stdout","time":3117.801687049,"data":"Benchmark task 10/30: rich_3894 (Textualize/rich)\n"}
+  117: ,{"stream_name":"stderr","time":3340.60176856,"data":"WARNING:swegemma.harness.agent_runner:Task rich_3894 agent exceeded turns budget.\n"}
+  119: ,{"stream_name":"stderr","time":3340.60180144,"data":"WARNING:swegemma.harness.agent_runner:Task rich_3894 agent exceeded turns budget.\n"}
+  120: ,{"stream_name":"stderr","time":3340.754654398,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox c61851b5-f88, creating venv without pip: Command '['/tmp/swegemma_sandbox_c61851b5-f88_70j468g5/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  122: ,{"stream_name":"stderr","time":3340.754692269,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox c61851b5-f88, creating venv without pip: Command '['/tmp/swegemma_sandbox_c61851b5-f88_70j468g5/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  123: ,{"stream_name":"stderr","time":3343.231074625,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox c31b0c9e-543, creating venv without pip: Command '['/tmp/swegemma_sandbox_c31b0c9e-543_h2gvhcaa/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  125: ,{"stream_name":"stderr","time":3343.231101574,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox c31b0c9e-543, creating venv without pip: Command '['/tmp/swegemma_sandbox_c31b0c9e-543_h2gvhcaa/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  126: ,{"stream_name":"stdout","time":3343.30442728,"data":"{\"tasks_completed_or_failed\": 10, \"resolved_count\": 4, \"score_estimate\": 0.4, \"score_ci95_wilson\": [0.16817758120350967, 0.6873304525498135]}\n"}
+  127: ,{"stream_name":"stdout","time":3343.30447426,"data":"Benchmark task 11/30: fastapi_14303 (fastapi/fastapi)\n"}
+  128: ,{"stream_name":"stderr","time":3479.980006285,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 84e294d5-b8d, creating venv without pip: Command '['/tmp/swegemma_sandbox_84e294d5-b8d_rn2qgfu_/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  130: ,{"stream_name":"stderr","time":3479.980049207,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 84e294d5-b8d, creating venv without pip: Command '['/tmp/swegemma_sandbox_84e294d5-b8d_rn2qgfu_/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  131: ,{"stream_name":"stderr","time":3482.853824128,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 3e906637-ece, creating venv without pip: Command '['/tmp/swegemma_sandbox_3e906637-ece_onuxkrlr/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  133: ,{"stream_name":"stderr","time":3482.853852542,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 3e906637-ece, creating venv without pip: Command '['/tmp/swegemma_sandbox_3e906637-ece_onuxkrlr/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  134: ,{"stream_name":"stdout","time":3482.926150528,"data":"{\"tasks_completed_or_failed\": 11, \"resolved_count\": 4, \"score_estimate\": 0.36363636363636365, \"score_ci95_wilson\": [0.15166223614131383, 0.6462032231083628]}\n"}
+  135: ,{"stream_name":"stdout","time":3482.926172204,"data":"Benchmark task 12/30: rich_3052 (Textualize/rich)\n"}
+  136: ,{"stream_name":"stderr","time":3652.434293402,"data":"WARNING:adk_eval_core.plugins.retry_plugin:Non-retryable model error: ContextWindowExceededError: litellm.ContextWindowExceededError: litellm.BadRequestError: ContextWindowExceededError: OpenAIException - This model's maximum context length is 32768 tokens. However, you requested 16384 output tokens and your prompt contains at least 16385 inpu
+  138: ,{"stream_name":"stderr","time":3652.43433028,"data":"WARNING:adk_eval_core.plugins.retry_plugin:Non-retryable model error: ContextWindowExceededError: litellm.ContextWindowExceededError: litellm.BadRequestError: ContextWindowExceededError: OpenAIException - This model's maximum context length is 32768 tokens. However, you requested 16384 output tokens and your prompt contains at least 16385 input
+  139: ,{"stream_name":"stderr","time":3652.443044329,"data":"ERROR:swegemma.harness.agent_runner:Error during sandbox execution for task rich_3052\n"}
+  140: ,{"stream_name":"stderr","time":3652.443063794,"data":"Traceback (most recent call last):\n"}
+  152: ,{"stream_name":"stderr","time":3652.4430995,"data":" return cast(LegacyAPIResponse[R], await func(*args, **kwargs))\n"}
+  155: ,{"stream_name":"stderr","time":3652.443105512,"data":" return await self._post(\n"}
+  158: ,{"stream_name":"stderr","time":3652.443111227,"data":" return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)\n"}
+  162: ,{"stream_name":"stderr","time":3652.443119727,"data":"openai.BadRequestError: Error code: 400 - {'error': {'message': \"This model's maximum context length is 32768 tokens. However, you requested 16384 output tokens and your prompt contains at least 16385 input tokens, for a total of at least 32769 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (par
+  164: ,{"stream_name":"stderr","time":3652.443124174,"data":"During handling of the above exception, another exception occurred:\n"}
+  166: ,{"stream_name":"stderr","time":3652.443127709,"data":"Traceback (most recent call last):\n"}
+  172: ,{"stream_name":"stderr","time":3652.443138829,"data":"litellm.llms.openai.common_utils.OpenAIError: Error code: 400 - {'error': {'message': \"This model's maximum context length is 32768 tokens. However, you requested 16384 output tokens and your prompt contains at least 16385 input tokens, for a total of at least 32769 tokens. Please reduce the length of the input prompt or the number of request
+  174: ,{"stream_name":"stderr","time":3652.443146049,"data":"During handling of the above exception, another exception occurred:\n"}
+  176: ,{"stream_name":"stderr","time":3652.443149627,"data":"Traceback (most recent call last):\n"}
+  211: ,{"stream_name":"stderr","time":3652.443218232,"data":" return await acompletion(\n"}
+  219: ,{"stream_name":"stderr","time":3652.443233318,"data":" raise exception_type(\n"}
+  221: ,{"stream_name":"stderr","time":3652.443236815,"data":" File \"/usr/local/lib/python3.12/dist-packages/litellm/litellm_core_utils/exception_mapping_utils.py\", line 2456, in exception_type\n"}
+  223: ,{"stream_name":"stderr","time":3652.443240567,"data":" File \"/usr/local/lib/python3.12/dist-packages/litellm/litellm_core_utils/exception_mapping_utils.py\", line 400, in exception_type\n"}
+  225: ,{"stream_name":"stderr","time":3652.443244429,"data":"litellm.exceptions.ContextWindowExceededError: litellm.ContextWindowExceededError: litellm.BadRequestError: ContextWindowExceededError: OpenAIException - This model's maximum context length is 32768 tokens. However, you requested 16384 output tokens and your prompt contains at least 16385 input tokens, for a total of at least 32769 tokens. Ple
+  227: ,{"stream_name":"stderr","time":3652.443261914,"data":"ERROR:swegemma.harness.agent_runner:Error during sandbox execution for task rich_3052\n"}
+  228: ,{"stream_name":"stderr","time":3652.443263881,"data":"Traceback (most recent call last):\n"}
+  240: ,{"stream_name":"stderr","time":3652.443286204,"data":" return cast(LegacyAPIResponse[R], await func(*args, **kwargs))\n"}
+  243: ,{"stream_name":"stderr","time":3652.443292319,"data":" return await self._post(\n"}
+  246: ,{"stream_name":"stderr","time":3652.443297815,"data":" return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)\n"}
+  250: ,{"stream_name":"stderr","time":3652.443305367,"data":"openai.BadRequestError: Error code: 400 - {'error': {'message': \"This model's maximum context length is 32768 tokens. However, you requested 16384 output tokens and your prompt contains at least 16385 input tokens, for a total of at least 32769 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (par
+  252: ,{"stream_name":"stderr","time":3652.443309536,"data":"During handling of the above exception, another exception occurred:\n"}
+  254: ,{"stream_name":"stderr","time":3652.443315442,"data":"Traceback (most recent call last):\n"}
+  260: ,{"stream_name":"stderr","time":3652.443326567,"data":"litellm.llms.openai.common_utils.OpenAIError: Error code: 400 - {'error': {'message': \"This model's maximum context length is 32768 tokens. However, you requested 16384 output tokens and your prompt contains at least 16385 input tokens, for a total of at least 32769 tokens. Please reduce the length of the input prompt or the number of request
+  262: ,{"stream_name":"stderr","time":3652.443330961,"data":"During handling of the above exception, another exception occurred:\n"}
+  264: ,{"stream_name":"stderr","time":3652.443334434,"data":"Traceback (most recent call last):\n"}
+  299: ,{"stream_name":"stderr","time":3652.443409096,"data":" return await acompletion(\n"}
+  307: ,{"stream_name":"stderr","time":3652.443423761,"data":" raise exception_type(\n"}
+  309: ,{"stream_name":"stderr","time":3652.443427275,"data":" File \"/usr/local/lib/python3.12/dist-packages/litellm/litellm_core_utils/exception_mapping_utils.py\", line 2456, in exception_type\n"}
+  311: ,{"stream_name":"stderr","time":3652.443433045,"data":" File \"/usr/local/lib/python3.12/dist-packages/litellm/litellm_core_utils/exception_mapping_utils.py\", line 400, in exception_type\n"}
+  313: ,{"stream_name":"stderr","time":3652.443436904,"data":"litellm.exceptions.ContextWindowExceededError: litellm.ContextWindowExceededError: litellm.BadRequestError: ContextWindowExceededError: OpenAIException - This model's maximum context length is 32768 tokens. However, you requested 16384 output tokens and your prompt contains at least 16385 input tokens, for a total of at least 32769 tokens. Ple
+  314: ,{"stream_name":"stderr","time":3652.606751629,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox ac63b580-c92, creating venv without pip: Command '['/tmp/swegemma_sandbox_ac63b580-c92_91do3oik/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  316: ,{"stream_name":"stderr","time":3652.606775264,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox ac63b580-c92, creating venv without pip: Command '['/tmp/swegemma_sandbox_ac63b580-c92_91do3oik/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  317: ,{"stream_name":"stderr","time":3655.005905994,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 8581ca45-022, creating venv without pip: Command '['/tmp/swegemma_sandbox_8581ca45-022_rllkpce8/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  319: ,{"stream_name":"stderr","time":3655.005933231,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 8581ca45-022, creating venv without pip: Command '['/tmp/swegemma_sandbox_8581ca45-022_rllkpce8/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  320: ,{"stream_name":"stdout","time":3655.079181989,"data":"{\"tasks_completed_or_failed\": 12, \"resolved_count\": 4, \"score_estimate\": 0.3333333333333333, \"score_ci95_wilson\": [0.13811783989736134, 0.609382412602386]}\n"}
+  321: ,{"stream_name":"stdout","time":3655.079199268,"data":"Benchmark task 13/30: rich_3043 (Textualize/rich)\n"}
+  322: ,{"stream_name":"stderr","time":3765.359770041,"data":"WARNING:adk_eval_core.plugins.retry_plugin:Non-retryable model error: ContextWindowExceededError: litellm.ContextWindowExceededError: litellm.BadRequestError: ContextWindowExceededError: OpenAIException - This model's maximum context length is 32768 tokens. However, you requested 16384 output tokens and your prompt contains at least 16385 inpu
+  324: ,{"stream_name":"stderr","time":3765.359805513,"data":"WARNING:adk_eval_core.plugins.retry_plugin:Non-retryable model error: ContextWindowExceededError: litellm.ContextWindowExceededError: litellm.BadRequestError: ContextWindowExceededError: OpenAIException - This model's maximum context length is 32768 tokens. However, you requested 16384 output tokens and your prompt contains at least 16385 inpu
+  325: ,{"stream_name":"stderr","time":3765.367810042,"data":"ERROR:swegemma.harness.agent_runner:Error during sandbox execution for task rich_3043\n"}
+  326: ,{"stream_name":"stderr","time":3765.367827662,"data":"Traceback (most recent call last):\n"}
+  338: ,{"stream_name":"stderr","time":3765.367852457,"data":" return cast(LegacyAPIResponse[R], await func(*args, **kwargs))\n"}
+  341: ,{"stream_name":"stderr","time":3765.367858281,"data":" return await self._post(\n"}
+  344: ,{"stream_name":"stderr","time":3765.367864417,"data":" return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)\n"}
+  348: ,{"stream_name":"stderr","time":3765.367872887,"data":"openai.BadRequestError: Error code: 400 - {'error': {'message': \"This model's maximum context length is 32768 tokens. However, you requested 16384 output tokens and your prompt contains at least 16385 input tokens, for a total of at least 32769 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (par
+  350: ,{"stream_name":"stderr","time":3765.367877171,"data":"During handling of the above exception, another exception occurred:\n"}
+  352: ,{"stream_name":"stderr","time":3765.367889396,"data":"Traceback (most recent call last):\n"}
+  358: ,{"stream_name":"stderr","time":3765.367900737,"data":"litellm.llms.openai.common_utils.OpenAIError: Error code: 400 - {'error': {'message': \"This model's maximum context length is 32768 tokens. However, you requested 16384 output tokens and your prompt contains at least 16385 input tokens, for a total of at least 32769 tokens. Please reduce the length of the input prompt or the number of request
+  360: ,{"stream_name":"stderr","time":3765.367905101,"data":"During handling of the above exception, another exception occurred:\n"}
+  362: ,{"stream_name":"stderr","time":3765.367908838,"data":"Traceback (most recent call last):\n"}
+  397: ,{"stream_name":"stderr","time":3765.367978893,"data":" return await acompletion(\n"}
+  405: ,{"stream_name":"stderr","time":3765.367997753,"data":" raise exception_type(\n"}
+  407: ,{"stream_name":"stderr","time":3765.368001267,"data":" File \"/usr/local/lib/python3.12/dist-packages/litellm/litellm_core_utils/exception_mapping_utils.py\", line 2456, in exception_type\n"}
+  409: ,{"stream_name":"stderr","time":3765.368007198,"data":" File \"/usr/local/lib/python3.12/dist-packages/litellm/litellm_core_utils/exception_mapping_utils.py\", line 400, in exception_type\n"}
+  411: ,{"stream_name":"stderr","time":3765.368011187,"data":"litellm.exceptions.ContextWindowExceededError: litellm.ContextWindowExceededError: litellm.BadRequestError: ContextWindowExceededError: OpenAIException - This model's maximum context length is 32768 tokens. However, you requested 16384 output tokens and your prompt contains at least 16385 input tokens, for a total of at least 32769 tokens. Ple
+  413: ,{"stream_name":"stderr","time":3765.368015449,"data":"ERROR:swegemma.harness.agent_runner:Error during sandbox execution for task rich_3043\n"}
+  414: ,{"stream_name":"stderr","time":3765.36801733,"data":"Traceback (most recent call last):\n"}
+  426: ,{"stream_name":"stderr","time":3765.368040282,"data":" return cast(LegacyAPIResponse[R], await func(*args, **kwargs))\n"}
+  429: ,{"stream_name":"stderr","time":3765.368046277,"data":" return await self._post(\n"}
+  432: ,{"stream_name":"stderr","time":3765.368051767,"data":" return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)\n"}
+  436: ,{"stream_name":"stderr","time":3765.36806154,"data":"openai.BadRequestError: Error code: 400 - {'error': {'message': \"This model's maximum context length is 32768 tokens. However, you requested 16384 output tokens and your prompt contains at least 16385 input tokens, for a total of at least 32769 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (para
+  438: ,{"stream_name":"stderr","time":3765.368065813,"data":"During handling of the above exception, another exception occurred:\n"}
+  440: ,{"stream_name":"stderr","time":3765.368069292,"data":"Traceback (most recent call last):\n"}
+  446: ,{"stream_name":"stderr","time":3765.36808042,"data":"litellm.llms.openai.common_utils.OpenAIError: Error code: 400 - {'error': {'message': \"This model's maximum context length is 32768 tokens. However, you requested 16384 output tokens and your prompt contains at least 16385 input tokens, for a total of at least 32769 tokens. Please reduce the length of the input prompt or the number of requeste
+  448: ,{"stream_name":"stderr","time":3765.368084701,"data":"During handling of the above exception, another exception occurred:\n"}
+  450: ,{"stream_name":"stderr","time":3765.368088324,"data":"Traceback (most recent call last):\n"}
+  485: ,{"stream_name":"stderr","time":3765.368157158,"data":" return await acompletion(\n"}
+  493: ,{"stream_name":"stderr","time":3765.368174074,"data":" raise exception_type(\n"}
+  495: ,{"stream_name":"stderr","time":3765.368177578,"data":" File \"/usr/local/lib/python3.12/dist-packages/litellm/litellm_core_utils/exception_mapping_utils.py\", line 2456, in exception_type\n"}
+  497: ,{"stream_name":"stderr","time":3765.368181454,"data":" File \"/usr/local/lib/python3.12/dist-packages/litellm/litellm_core_utils/exception_mapping_utils.py\", line 400, in exception_type\n"}
+  499: ,{"stream_name":"stderr","time":3765.36818533,"data":"litellm.exceptions.ContextWindowExceededError: litellm.ContextWindowExceededError: litellm.BadRequestError: ContextWindowExceededError: OpenAIException - This model's maximum context length is 32768 tokens. However, you requested 16384 output tokens and your prompt contains at least 16385 input tokens, for a total of at least 32769 tokens. Plea
+  500: ,{"stream_name":"stderr","time":3765.380816179,"data":"WARNING:swegemma.harness.agent_runner:Task rich_3043 completed without explicit submit_patch call and no working tree modifications.\n"}
+  502: ,{"stream_name":"stderr","time":3765.380834415,"data":"WARNING:swegemma.harness.agent_runner:Task rich_3043 completed without explicit submit_patch call and no working tree modifications.\n"}
+  503: ,{"stream_name":"stderr","time":3765.541748557,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox c5b95749-31d, creating venv without pip: Command '['/tmp/swegemma_sandbox_c5b95749-31d_20r8ci4l/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  505: ,{"stream_name":"stderr","time":3765.541771054,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox c5b95749-31d, creating venv without pip: Command '['/tmp/swegemma_sandbox_c5b95749-31d_20r8ci4l/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  506: ,{"stream_name":"stdout","time":3765.610302903,"data":"{\"tasks_completed_or_failed\": 13, \"resolved_count\": 4, \"score_estimate\": 0.3076923076923077, \"score_ci95_wilson\": [0.12680497161618087, 0.5763111218666236]}\n"}
+  507: ,{"stream_name":"stdout","time":3765.610318778,"data":"Benchmark task 14/30: rich_3105 (Textualize/rich)\n"}
+  508: ,{"stream_name":"stderr","time":3808.542811516,"data":"WARNING:adk_eval_core.plugins.retry_plugin:Non-retryable model error: ContextWindowExceededError: litellm.ContextWindowExceededError: litellm.BadRequestError: ContextWindowExceededError: OpenAIException - This model's maximum context length is 32768 tokens. However, you requested 16384 output tokens and your prompt contains at least 16385 inpu
+  510: ,{"stream_name":"stderr","time":3808.542858748,"data":"WARNING:adk_eval_core.plugins.retry_plugin:Non-retryable model error: ContextWindowExceededError: litellm.ContextWindowExceededError: litellm.BadRequestError: ContextWindowExceededError: OpenAIException - This model's maximum context length is 32768 tokens. However, you requested 16384 output tokens and your prompt contains at least 16385 inpu
+  511: ,{"stream_name":"stderr","time":3808.550474914,"data":"ERROR:swegemma.harness.agent_runner:Error during sandbox execution for task rich_3105\n"}
+  512: ,{"stream_name":"stderr","time":3808.550493319,"data":"Traceback (most recent call last):\n"}
+  524: ,{"stream_name":"stderr","time":3808.550524216,"data":" return cast(LegacyAPIResponse[R], await func(*args, **kwargs))\n"}
+  527: ,{"stream_name":"stderr","time":3808.550529884,"data":" return await self._post(\n"}
+  530: ,{"stream_name":"stderr","time":3808.550535418,"data":" return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)\n"}
+  534: ,{"stream_name":"stderr","time":3808.550543724,"data":"openai.BadRequestError: Error code: 400 - {'error': {'message': \"This model's maximum context length is 32768 tokens. However, you requested 16384 output tokens and your prompt contains at least 16385 input tokens, for a total of at least 32769 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (par
+  536: ,{"stream_name":"stderr","time":3808.550555939,"data":"During handling of the above exception, another exception occurred:\n"}
+  538: ,{"stream_name":"stderr","time":3808.550559463,"data":"Traceback (most recent call last):\n"}
+  544: ,{"stream_name":"stderr","time":3808.550570406,"data":"litellm.llms.openai.common_utils.OpenAIError: Error code: 400 - {'error': {'message': \"This model's maximum context length is 32768 tokens. However, you requested 16384 output tokens and your prompt contains at least 16385 input tokens, for a total of at least 32769 tokens. Please reduce the length of the input prompt or the number of request
+  546: ,{"stream_name":"stderr","time":3808.550574726,"data":"During handling of the above exception, another exception occurred:\n"}
+  548: ,{"stream_name":"stderr","time":3808.550578288,"data":"Traceback (most recent call last):\n"}
+  583: ,{"stream_name":"stderr","time":3808.550645737,"data":" return await acompletion(\n"}
+  591: ,{"stream_name":"stderr","time":3808.550662649,"data":" raise exception_type(\n"}
+  593: ,{"stream_name":"stderr","time":3808.550666046,"data":" File \"/usr/local/lib/python3.12/dist-packages/litellm/litellm_core_utils/exception_mapping_utils.py\", line 2456, in exception_type\n"}
+  595: ,{"stream_name":"stderr","time":3808.550669741,"data":" File \"/usr/local/lib/python3.12/dist-packages/litellm/litellm_core_utils/exception_mapping_utils.py\", line 400, in exception_type\n"}
+  597: ,{"stream_name":"stderr","time":3808.550673481,"data":"litellm.exceptions.ContextWindowExceededError: litellm.ContextWindowExceededError: litellm.BadRequestError: ContextWindowExceededError: OpenAIException - This model's maximum context length is 32768 tokens. However, you requested 16384 output tokens and your prompt contains at least 16385 input tokens, for a total of at least 32769 tokens. Ple
+  599: ,{"stream_name":"stderr","time":3808.550677702,"data":"ERROR:swegemma.harness.agent_runner:Error during sandbox execution for task rich_3105\n"}
+  600: ,{"stream_name":"stderr","time":3808.550679625,"data":"Traceback (most recent call last):\n"}
+  612: ,{"stream_name":"stderr","time":3808.550701987,"data":" return cast(LegacyAPIResponse[R], await func(*args, **kwargs))\n"}
+  615: ,{"stream_name":"stderr","time":3808.550708001,"data":" return await self._post(\n"}
+  618: ,{"stream_name":"stderr","time":3808.550715735,"data":" return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)\n"}
+  622: ,{"stream_name":"stderr","time":3808.550723156,"data":"openai.BadRequestError: Error code: 400 - {'error': {'message': \"This model's maximum context length is 32768 tokens. However, you requested 16384 output tokens and your prompt contains at least 16385 input tokens, for a total of at least 32769 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (par
+  624: ,{"stream_name":"stderr","time":3808.550727282,"data":"During handling of the above exception, another exception occurred:\n"}
+  626: ,{"stream_name":"stderr","time":3808.550730729,"data":"Traceback (most recent call last):\n"}
+  632: ,{"stream_name":"stderr","time":3808.550741525,"data":"litellm.llms.openai.common_utils.OpenAIError: Error code: 400 - {'error': {'message': \"This model's maximum context length is 32768 tokens. However, you requested 16384 output tokens and your prompt contains at least 16385 input tokens, for a total of at least 32769 tokens. Please reduce the length of the input prompt or the number of request
+  634: ,{"stream_name":"stderr","time":3808.550745755,"data":"During handling of the above exception, another exception occurred:\n"}
+  636: ,{"stream_name":"stderr","time":3808.550749195,"data":"Traceback (most recent call last):\n"}
+  671: ,{"stream_name":"stderr","time":3808.550817872,"data":" return await acompletion(\n"}
+  679: ,{"stream_name":"stderr","time":3808.550832338,"data":" raise exception_type(\n"}
+  681: ,{"stream_name":"stderr","time":3808.550835711,"data":" File \"/usr/local/lib/python3.12/dist-packages/litellm/litellm_core_utils/exception_mapping_utils.py\", line 2456, in exception_type\n"}
+  683: ,{"stream_name":"stderr","time":3808.550839421,"data":" File \"/usr/local/lib/python3.12/dist-packages/litellm/litellm_core_utils/exception_mapping_utils.py\", line 400, in exception_type\n"}
+  685: ,{"stream_name":"stderr","time":3808.550843227,"data":"litellm.exceptions.ContextWindowExceededError: litellm.ContextWindowExceededError: litellm.BadRequestError: ContextWindowExceededError: OpenAIException - This model's maximum context length is 32768 tokens. However, you requested 16384 output tokens and your prompt contains at least 16385 input tokens, for a total of at least 32769 tokens. Ple
+  686: ,{"stream_name":"stderr","time":3808.563694915,"data":"WARNING:swegemma.harness.agent_runner:Task rich_3105 completed without explicit submit_patch call and no working tree modifications.\n"}
+  688: ,{"stream_name":"stderr","time":3808.563706067,"data":"WARNING:swegemma.harness.agent_runner:Task rich_3105 completed without explicit submit_patch call and no working tree modifications.\n"}
+  689: ,{"stream_name":"stderr","time":3808.725692435,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 7b31e588-61c, creating venv without pip: Command '['/tmp/swegemma_sandbox_7b31e588-61c_gitb4kd3/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  691: ,{"stream_name":"stderr","time":3808.725723712,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 7b31e588-61c, creating venv without pip: Command '['/tmp/swegemma_sandbox_7b31e588-61c_gitb4kd3/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  692: ,{"stream_name":"stdout","time":3808.792293657,"data":"{\"tasks_completed_or_failed\": 14, \"resolved_count\": 4, \"score_estimate\": 0.2857142857142857, \"score_ci95_wilson\": [0.11721187910109099, 0.5464954117248438]}\n"}
+  693: ,{"stream_name":"stdout","time":3808.792310974,"data":"Benchmark task 15/30: fastapi_14873 (fastapi/fastapi)\n"}
+  694: ,{"stream_name":"stderr","time":4130.343164647,"data":"WARNING:swegemma.harness.agent_runner:Task fastapi_14873 agent timed out.\n"}
+  696: ,{"stream_name":"stderr","time":4130.343225727,"data":"WARNING:swegemma.harness.agent_runner:Task fastapi_14873 agent timed out.\n"}
+  697: ,{"stream_name":"stderr","time":4130.570446999,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox c96e0fe6-52f, creating venv without pip: Command '['/tmp/swegemma_sandbox_c96e0fe6-52f_7ukugg6h/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  699: ,{"stream_name":"stderr","time":4130.570475633,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox c96e0fe6-52f, creating venv without pip: Command '['/tmp/swegemma_sandbox_c96e0fe6-52f_7ukugg6h/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  700: ,{"stream_name":"stderr","time":4133.944909841,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 5586358c-470, creating venv without pip: Command '['/tmp/swegemma_sandbox_5586358c-470_o93x0nc0/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  702: ,{"stream_name":"stderr","time":4133.944940693,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 5586358c-470, creating venv without pip: Command '['/tmp/swegemma_sandbox_5586358c-470_o93x0nc0/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  703: ,{"stream_name":"stdout","time":4134.018188538,"data":"{\"tasks_completed_or_failed\": 15, \"resolved_count\": 5, \"score_estimate\": 0.3333333333333333, \"score_ci95_wilson\": [0.15176100694691236, 0.5828687484878701]}\n"}
+  704: ,{"stream_name":"stdout","time":4134.018207927,"data":"Benchmark task 16/30: fastapi_15030 (fastapi/fastapi)\n"}
+  705: ,{"stream_name":"stderr","time":4455.652873045,"data":"WARNING:swegemma.harness.agent_runner:Task fastapi_15030 agent timed out.\n"}
+  707: ,{"stream_name":"stderr","time":4455.652910941,"data":"WARNING:swegemma.harness.agent_runner:Task fastapi_15030 agent timed out.\n"}
+  708: ,{"stream_name":"stderr","time":4455.676926966,"data":"WARNING:swegemma.harness.agent_runner:Task fastapi_15030 completed without explicit submit_patch call and no working tree modifications.\n"}
+  710: ,{"stream_name":"stderr","time":4455.676956772,"data":"WARNING:swegemma.harness.agent_runner:Task fastapi_15030 completed without explicit submit_patch call and no working tree modifications.\n"}
+  711: ,{"stream_name":"stderr","time":4455.917793383,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox f0685559-3a4, creating venv without pip: Command '['/tmp/swegemma_sandbox_f0685559-3a4_88b3wejd/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  713: ,{"stream_name":"stderr","time":4455.91781695,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox f0685559-3a4, creating venv without pip: Command '['/tmp/swegemma_sandbox_f0685559-3a4_88b3wejd/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  714: ,{"stream_name":"stdout","time":4455.988198411,"data":"{\"tasks_completed_or_failed\": 16, \"resolved_count\": 5, \"score_estimate\": 0.3125, \"score_ci95_wilson\": [0.14164435051961052, 0.5559606813326594]}\n"}
+  715: ,{"stream_name":"stdout","time":4455.988219553,"data":"Benchmark task 17/30: fastapi_15588 (fastapi/fastapi)\n"}
+  716: ,{"stream_name":"stderr","time":4777.055107694,"data":"WARNING:swegemma.harness.agent_runner:Task fastapi_15588 agent timed out.\n"}
+  718: ,{"stream_name":"stderr","time":4777.055146555,"data":"WARNING:swegemma.harness.agent_runner:Task fastapi_15588 agent timed out.\n"}
+  719: ,{"stream_name":"stderr","time":4777.294376735,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 9413cbf5-462, creating venv without pip: Command '['/tmp/swegemma_sandbox_9413cbf5-462_10eyynpv/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  721: ,{"stream_name":"stderr","time":4777.294403625,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 9413cbf5-462, creating venv without pip: Command '['/tmp/swegemma_sandbox_9413cbf5-462_10eyynpv/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  722: ,{"stream_name":"stderr","time":4781.494801744,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox e4c42f64-96c, creating venv without pip: Command '['/tmp/swegemma_sandbox_e4c42f64-96c_6guikldk/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  724: ,{"stream_name":"stderr","time":4781.494829383,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox e4c42f64-96c, creating venv without pip: Command '['/tmp/swegemma_sandbox_e4c42f64-96c_6guikldk/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  725: ,{"stream_name":"stdout","time":4781.567059679,"data":"{\"tasks_completed_or_failed\": 17, \"resolved_count\": 5, \"score_estimate\": 0.29411764705882354, \"score_ci95_wilson\": [0.132797938655564, 0.5313353332621391]}\n"}
+  726: ,{"stream_name":"stdout","time":4781.567079762,"data":"Benchmark task 18/30: rich_3006 (Textualize/rich)\n"}
+  727: ,{"stream_name":"stderr","time":4983.775276212,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 435b2286-608, creating venv without pip: Command '['/tmp/swegemma_sandbox_435b2286-608_fn1qc8_v/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  729: ,{"stream_name":"stderr","time":4983.775310824,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 435b2286-608, creating venv without pip: Command '['/tmp/swegemma_sandbox_435b2286-608_fn1qc8_v/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  730: ,{"stream_name":"stderr","time":4986.137322229,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 147e673d-c7a, creating venv without pip: Command '['/tmp/swegemma_sandbox_147e673d-c7a_bskus8p8/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  732: ,{"stream_name":"stderr","time":4986.13735124,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 147e673d-c7a, creating venv without pip: Command '['/tmp/swegemma_sandbox_147e673d-c7a_bskus8p8/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  733: ,{"stream_name":"stdout","time":4986.210661911,"data":"{\"tasks_completed_or_failed\": 18, \"resolved_count\": 6, \"score_estimate\": 0.3333333333333333, \"score_ci95_wilson\": [0.1627855436366286, 0.5625093065574964]}\n"}
+  734: ,{"stream_name":"stdout","time":4986.210685742,"data":"Benchmark task 19/30: fastapi_14186 (fastapi/fastapi)\n"}
+  735: ,{"stream_name":"stderr","time":5212.18902356,"data":"WARNING:adk_eval_core.plugins.retry_plugin:Non-retryable model error: ContextWindowExceededError: litellm.ContextWindowExceededError: litellm.BadRequestError: ContextWindowExceededError: OpenAIException - This model's maximum context length is 32768 tokens. However, you requested 16384 output tokens and your prompt contains at least 16385 input
+  737: ,{"stream_name":"stderr","time":5212.189074056,"data":"WARNING:adk_eval_core.plugins.retry_plugin:Non-retryable model error: ContextWindowExceededError: litellm.ContextWindowExceededError: litellm.BadRequestError: ContextWindowExceededError: OpenAIException - This model's maximum context length is 32768 tokens. However, you requested 16384 output tokens and your prompt contains at least 16385 inpu
+  738: ,{"stream_name":"stderr","time":5212.213228519,"data":"ERROR:swegemma.harness.agent_runner:Error during sandbox execution for task fastapi_14186\n"}
+  739: ,{"stream_name":"stderr","time":5212.213246739,"data":"Traceback (most recent call last):\n"}
+  751: ,{"stream_name":"stderr","time":5212.21333283,"data":" return cast(LegacyAPIResponse[R], await func(*args, **kwargs))\n"}
+  754: ,{"stream_name":"stderr","time":5212.213338805,"data":" return await self._post(\n"}
+  757: ,{"stream_name":"stderr","time":5212.213344334,"data":" return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)\n"}
+  761: ,{"stream_name":"stderr","time":5212.21336227,"data":"openai.BadRequestError: Error code: 400 - {'error': {'message': \"This model's maximum context length is 32768 tokens. However, you requested 16384 output tokens and your prompt contains at least 16385 input tokens, for a total of at least 32769 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (para
+  763: ,{"stream_name":"stderr","time":5212.213367181,"data":"During handling of the above exception, another exception occurred:\n"}
+  765: ,{"stream_name":"stderr","time":5212.213370827,"data":"Traceback (most recent call last):\n"}
+  771: ,{"stream_name":"stderr","time":5212.213382202,"data":"litellm.llms.openai.common_utils.OpenAIError: Error code: 400 - {'error': {'message': \"This model's maximum context length is 32768 tokens. However, you requested 16384 output tokens and your prompt contains at least 16385 input tokens, for a total of at least 32769 tokens. Please reduce the length of the input prompt or the number of request
+  773: ,{"stream_name":"stderr","time":5212.213386518,"data":"During handling of the above exception, another exception occurred:\n"}
+  775: ,{"stream_name":"stderr","time":5212.213390072,"data":"Traceback (most recent call last):\n"}
+  810: ,{"stream_name":"stderr","time":5212.213459627,"data":" return await acompletion(\n"}
+  818: ,{"stream_name":"stderr","time":5212.213477041,"data":" raise exception_type(\n"}
+  820: ,{"stream_name":"stderr","time":5212.213480566,"data":" File \"/usr/local/lib/python3.12/dist-packages/litellm/litellm_core_utils/exception_mapping_utils.py\", line 2456, in exception_type\n"}
+  822: ,{"stream_name":"stderr","time":5212.213484278,"data":" File \"/usr/local/lib/python3.12/dist-packages/litellm/litellm_core_utils/exception_mapping_utils.py\", line 400, in exception_type\n"}
+  824: ,{"stream_name":"stderr","time":5212.213488273,"data":"litellm.exceptions.ContextWindowExceededError: litellm.ContextWindowExceededError: litellm.BadRequestError: ContextWindowExceededError: OpenAIException - This model's maximum context length is 32768 tokens. However, you requested 16384 output tokens and your prompt contains at least 16385 input tokens, for a total of at least 32769 tokens. Ple
+  826: ,{"stream_name":"stderr","time":5212.213492544,"data":"ERROR:swegemma.harness.agent_runner:Error during sandbox execution for task fastapi_14186\n"}
+  827: ,{"stream_name":"stderr","time":5212.213494424,"data":"Traceback (most recent call last):\n"}
+  839: ,{"stream_name":"stderr","time":5212.213525924,"data":" return cast(LegacyAPIResponse[R], await func(*args, **kwargs))\n"}
+  842: ,{"stream_name":"stderr","time":5212.213532152,"data":" return await self._post(\n"}
+  845: ,{"stream_name":"stderr","time":5212.213537557,"data":" return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)\n"}
+  849: ,{"stream_name":"stderr","time":5212.21354525,"data":"openai.BadRequestError: Error code: 400 - {'error': {'message': \"This model's maximum context length is 32768 tokens. However, you requested 16384 output tokens and your prompt contains at least 16385 input tokens, for a total of at least 32769 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (para
+  851: ,{"stream_name":"stderr","time":5212.213549506,"data":"During handling of the above exception, another exception occurred:\n"}
+  853: ,{"stream_name":"stderr","time":5212.21355298,"data":"Traceback (most recent call last):\n"}
+  859: ,{"stream_name":"stderr","time":5212.213564055,"data":"litellm.llms.openai.common_utils.OpenAIError: Error code: 400 - {'error': {'message': \"This model's maximum context length is 32768 tokens. However, you requested 16384 output tokens and your prompt contains at least 16385 input tokens, for a total of at least 32769 tokens. Please reduce the length of the input prompt or the number of request
+  861: ,{"stream_name":"stderr","time":5212.213571471,"data":"During handling of the above exception, another exception occurred:\n"}
+  863: ,{"stream_name":"stderr","time":5212.213575071,"data":"Traceback (most recent call last):\n"}
+  898: ,{"stream_name":"stderr","time":5212.213645656,"data":" return await acompletion(\n"}
+  906: ,{"stream_name":"stderr","time":5212.213660405,"data":" raise exception_type(\n"}
+  908: ,{"stream_name":"stderr","time":5212.213663856,"data":" File \"/usr/local/lib/python3.12/dist-packages/litellm/litellm_core_utils/exception_mapping_utils.py\", line 2456, in exception_type\n"}
+  910: ,{"stream_name":"stderr","time":5212.213667546,"data":" File \"/usr/local/lib/python3.12/dist-packages/litellm/litellm_core_utils/exception_mapping_utils.py\", line 400, in exception_type\n"}
+  912: ,{"stream_name":"stderr","time":5212.213671531,"data":"litellm.exceptions.ContextWindowExceededError: litellm.ContextWindowExceededError: litellm.BadRequestError: ContextWindowExceededError: OpenAIException - This model's maximum context length is 32768 tokens. However, you requested 16384 output tokens and your prompt contains at least 16385 input tokens, for a total of at least 32769 tokens. Ple
+  913: ,{"stream_name":"stderr","time":5212.449414439,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox a3387de4-711, creating venv without pip: Command '['/tmp/swegemma_sandbox_a3387de4-711_zi5hxasg/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  915: ,{"stream_name":"stderr","time":5212.449438558,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox a3387de4-711, creating venv without pip: Command '['/tmp/swegemma_sandbox_a3387de4-711_zi5hxasg/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  916: ,{"stream_name":"stderr","time":5215.832522531,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 9f13d360-3bd, creating venv without pip: Command '['/tmp/swegemma_sandbox_9f13d360-3bd_r0fglfjd/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  918: ,{"stream_name":"stderr","time":5215.832560483,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 9f13d360-3bd, creating venv without pip: Command '['/tmp/swegemma_sandbox_9f13d360-3bd_r0fglfjd/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  919: ,{"stream_name":"stdout","time":5215.905799547,"data":"{\"tasks_completed_or_failed\": 19, \"resolved_count\": 6, \"score_estimate\": 0.3157894736842105, \"score_ci95_wilson\": [0.15364171004428598, 0.5398998982493537]}\n"}
+  920: ,{"stream_name":"stdout","time":5215.905818436,"data":"Benchmark task 20/30: rich_3882 (Textualize/rich)\n"}
+  921: ,{"stream_name":"stderr","time":5441.450361289,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 564c3f2a-77b, creating venv without pip: Command '['/tmp/swegemma_sandbox_564c3f2a-77b_hqnrykn9/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  923: ,{"stream_name":"stderr","time":5441.450394105,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 564c3f2a-77b, creating venv without pip: Command '['/tmp/swegemma_sandbox_564c3f2a-77b_hqnrykn9/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  924: ,{"stream_name":"stderr","time":5443.823281731,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 2749f8f5-b49, creating venv without pip: Command '['/tmp/swegemma_sandbox_2749f8f5-b49_7ti6eqop/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  926: ,{"stream_name":"stderr","time":5443.823309408,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 2749f8f5-b49, creating venv without pip: Command '['/tmp/swegemma_sandbox_2749f8f5-b49_7ti6eqop/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  927: ,{"stream_name":"stdout","time":5443.896649981,"data":"{\"tasks_completed_or_failed\": 20, \"resolved_count\": 7, \"score_estimate\": 0.35, \"score_ci95_wilson\": [0.18118954786794464, 0.5671494897805354]}\n"}
+  928: ,{"stream_name":"stdout","time":5443.89666782,"data":"Benchmark task 21/30: fastapi_14459 (fastapi/fastapi)\n"}
+  929: ,{"stream_name":"stderr","time":5763.488409917,"data":"WARNING:swegemma.harness.agent_runner:Task fastapi_14459 agent timed out.\n"}
+  931: ,{"stream_name":"stderr","time":5763.488440662,"data":"WARNING:swegemma.harness.agent_runner:Task fastapi_14459 agent timed out.\n"}
+  932: ,{"stream_name":"stderr","time":5763.489089534,"data":"WARNING:swegemma.harness.agent_runner:Task fastapi_14459 completed without explicit submit_patch call and no working tree modifications.\n"}
+  934: ,{"stream_name":"stderr","time":5763.489111151,"data":"WARNING:swegemma.harness.agent_runner:Task fastapi_14459 completed without explicit submit_patch call and no working tree modifications.\n"}
+  935: ,{"stream_name":"stderr","time":5763.713077261,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 23619461-7c7, creating venv without pip: Command '['/tmp/swegemma_sandbox_23619461-7c7_ddt5sthf/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  937: ,{"stream_name":"stderr","time":5763.71310025,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 23619461-7c7, creating venv without pip: Command '['/tmp/swegemma_sandbox_23619461-7c7_ddt5sthf/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  938: ,{"stream_name":"stdout","time":5763.781386346,"data":"{\"tasks_completed_or_failed\": 21, \"resolved_count\": 7, \"score_estimate\": 0.3333333333333333, \"score_ci95_wilson\": [0.17194536432683688, 0.5462692434278971]}\n"}
+  939: ,{"stream_name":"stdout","time":5763.781405734,"data":"Benchmark task 22/30: requests_6757 (psf/requests)\n"}
+  940: ,{"stream_name":"stderr","time":5975.237177915,"data":"WARNING:swegemma.harness.agent_runner:Task requests_6757 agent exceeded turns budget.\n"}
+  942: ,{"stream_name":"stderr","time":5975.237211304,"data":"WARNING:swegemma.harness.agent_runner:Task requests_6757 agent exceeded turns budget.\n"}
+  943: ,{"stream_name":"stderr","time":5975.386362889,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox eec7e37d-700, creating venv without pip: Command '['/tmp/swegemma_sandbox_eec7e37d-700_l8qnvafz/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  945: ,{"stream_name":"stderr","time":5975.386390778,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox eec7e37d-700, creating venv without pip: Command '['/tmp/swegemma_sandbox_eec7e37d-700_l8qnvafz/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  946: ,{"stream_name":"stdout","time":5975.455851679,"data":"{\"tasks_completed_or_failed\": 22, \"resolved_count\": 7, \"score_estimate\": 0.3181818181818182, \"score_ci95_wilson\": [0.1636038735469248, 0.5268177721716065]}\n"}
+  947: ,{"stream_name":"stdout","time":5975.455869178,"data":"Benchmark task 23/30: fastapi_14262 (fastapi/fastapi)\n"}
+  948: ,{"stream_name":"stderr","time":6295.774493375,"data":"WARNING:swegemma.harness.agent_runner:Task fastapi_14262 agent timed out.\n"}
+  950: ,{"stream_name":"stderr","time":6295.774535465,"data":"WARNING:swegemma.harness.agent_runner:Task fastapi_14262 agent timed out.\n"}
+  951: ,{"stream_name":"stderr","time":6296.012091248,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 20a27560-b26, creating venv without pip: Command '['/tmp/swegemma_sandbox_20a27560-b26_ojrqesx7/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  953: ,{"stream_name":"stderr","time":6296.012117721,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 20a27560-b26, creating venv without pip: Command '['/tmp/swegemma_sandbox_20a27560-b26_ojrqesx7/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  954: ,{"stream_name":"stderr","time":6299.326382434,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox a8f897b9-289, creating venv without pip: Command '['/tmp/swegemma_sandbox_a8f897b9-289_0c5zttd0/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  956: ,{"stream_name":"stderr","time":6299.326408245,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox a8f897b9-289, creating venv without pip: Command '['/tmp/swegemma_sandbox_a8f897b9-289_0c5zttd0/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  957: ,{"stream_name":"stdout","time":6299.399665912,"data":"{\"tasks_completed_or_failed\": 23, \"resolved_count\": 7, \"score_estimate\": 0.30434782608695654, \"score_ci95_wilson\": [0.15603828020972454, 0.5086612906057261]}\n"}
+  958: ,{"stream_name":"stdout","time":6299.399694601,"data":"Benchmark task 24/30: rich_2725 (Textualize/rich)\n"}
+  959: ,{"stream_name":"stderr","time":6455.444132209,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 61e0fbd4-eb1, creating venv without pip: Command '['/tmp/swegemma_sandbox_61e0fbd4-eb1_qsevngj8/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  961: ,{"stream_name":"stderr","time":6455.444166648,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 61e0fbd4-eb1, creating venv without pip: Command '['/tmp/swegemma_sandbox_61e0fbd4-eb1_qsevngj8/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  962: ,{"stream_name":"stderr","time":6457.888085717,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox ac7d8e28-ac1, creating venv without pip: Command '['/tmp/swegemma_sandbox_ac7d8e28-ac1_5ayjpi1n/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  964: ,{"stream_name":"stderr","time":6457.888114559,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox ac7d8e28-ac1, creating venv without pip: Command '['/tmp/swegemma_sandbox_ac7d8e28-ac1_5ayjpi1n/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  965: ,{"stream_name":"stdout","time":6457.957429073,"data":"{\"tasks_completed_or_failed\": 24, \"resolved_count\": 8, \"score_estimate\": 0.3333333333333333, \"score_ci95_wilson\": [0.17971978688379642, 0.5329404050591954]}\n"}
+  966: ,{"stream_name":"stdout","time":6457.95744905,"data":"Benchmark task 25/30: requests_7309 (psf/requests)\n"}
+  967: ,{"stream_name":"stderr","time":6685.627543353,"data":"WARNING:adk_eval_core.plugins.retry_plugin:Non-retryable model error: ContextWindowExceededError: litellm.ContextWindowExceededError: litellm.BadRequestError: ContextWindowExceededError: OpenAIException - This model's maximum context length is 32768 tokens. However, you requested 16384 output tokens and your prompt contains at least 16385 inpu
+  969: ,{"stream_name":"stderr","time":6685.627596932,"data":"WARNING:adk_eval_core.plugins.retry_plugin:Non-retryable model error: ContextWindowExceededError: litellm.ContextWindowExceededError: litellm.BadRequestError: ContextWindowExceededError: OpenAIException - This model's maximum context length is 32768 tokens. However, you requested 16384 output tokens and your prompt contains at least 16385 inpu
+  970: ,{"stream_name":"stderr","time":6685.638716101,"data":"ERROR:swegemma.harness.agent_runner:Error during sandbox execution for task requests_7309\n"}
+  971: ,{"stream_name":"stderr","time":6685.638736284,"data":"Traceback (most recent call last):\n"}
+  983: ,{"stream_name":"stderr","time":6685.638772306,"data":" return cast(LegacyAPIResponse[R], await func(*args, **kwargs))\n"}
+  986: ,{"stream_name":"stderr","time":6685.638778122,"data":" return await self._post(\n"}
+  989: ,{"stream_name":"stderr","time":6685.638783666,"data":" return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)\n"}
+  993: ,{"stream_name":"stderr","time":6685.638792181,"data":"openai.BadRequestError: Error code: 400 - {'error': {'message': \"This model's maximum context length is 32768 tokens. However, you requested 16384 output tokens and your prompt contains at least 16385 input tokens, for a total of at least 32769 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (par
+  995: ,{"stream_name":"stderr","time":6685.638796691,"data":"During handling of the above exception, another exception occurred:\n"}
+  997: ,{"stream_name":"stderr","time":6685.638800317,"data":"Traceback (most recent call last):\n"}
+  1003: ,{"stream_name":"stderr","time":6685.638811397,"data":"litellm.llms.openai.common_utils.OpenAIError: Error code: 400 - {'error': {'message': \"This model's maximum context length is 32768 tokens. However, you requested 16384 output tokens and your prompt contains at least 16385 input tokens, for a total of at least 32769 tokens. Please reduce the length of the input prompt or the number of request
+  1005: ,{"stream_name":"stderr","time":6685.638817981,"data":"During handling of the above exception, another exception occurred:\n"}
+  1007: ,{"stream_name":"stderr","time":6685.638821469,"data":"Traceback (most recent call last):\n"}
+  1042: ,{"stream_name":"stderr","time":6685.638889982,"data":" return await acompletion(\n"}
+  1050: ,{"stream_name":"stderr","time":6685.638911814,"data":" raise exception_type(\n"}
+  1052: ,{"stream_name":"stderr","time":6685.638915344,"data":" File \"/usr/local/lib/python3.12/dist-packages/litellm/litellm_core_utils/exception_mapping_utils.py\", line 2456, in exception_type\n"}
+  1054: ,{"stream_name":"stderr","time":6685.638919121,"data":" File \"/usr/local/lib/python3.12/dist-packages/litellm/litellm_core_utils/exception_mapping_utils.py\", line 400, in exception_type\n"}
+  1056: ,{"stream_name":"stderr","time":6685.638923038,"data":"litellm.exceptions.ContextWindowExceededError: litellm.ContextWindowExceededError: litellm.BadRequestError: ContextWindowExceededError: OpenAIException - This model's maximum context length is 32768 tokens. However, you requested 16384 output tokens and your prompt contains at least 16385 input tokens, for a total of at least 32769 tokens. Ple
+  1058: ,{"stream_name":"stderr","time":6685.638929322,"data":"ERROR:swegemma.harness.agent_runner:Error during sandbox execution for task requests_7309\n"}
+  1059: ,{"stream_name":"stderr","time":6685.638931214,"data":"Traceback (most recent call last):\n"}
+  1071: ,{"stream_name":"stderr","time":6685.638953709,"data":" return cast(LegacyAPIResponse[R], await func(*args, **kwargs))\n"}
+  1074: ,{"stream_name":"stderr","time":6685.638959768,"data":" return await self._post(\n"}
+  1077: ,{"stream_name":"stderr","time":6685.63896524,"data":" return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)\n"}
+  1081: ,{"stream_name":"stderr","time":6685.6389728,"data":"openai.BadRequestError: Error code: 400 - {'error': {'message': \"This model's maximum context length is 32768 tokens. However, you requested 16384 output tokens and your prompt contains at least 16385 input tokens, for a total of at least 32769 tokens. Please reduce the length of the input prompt or the number of requested output tokens. (param
+  1083: ,{"stream_name":"stderr","time":6685.638977155,"data":"During handling of the above exception, another exception occurred:\n"}
+  1085: ,{"stream_name":"stderr","time":6685.638982578,"data":"Traceback (most recent call last):\n"}
+  1091: ,{"stream_name":"stderr","time":6685.638993645,"data":"litellm.llms.openai.common_utils.OpenAIError: Error code: 400 - {'error': {'message': \"This model's maximum context length is 32768 tokens. However, you requested 16384 output tokens and your prompt contains at least 16385 input tokens, for a total of at least 32769 tokens. Please reduce the length of the input prompt or the number of request
+  1093: ,{"stream_name":"stderr","time":6685.63899801,"data":"During handling of the above exception, another exception occurred:\n"}
+  1095: ,{"stream_name":"stderr","time":6685.639001473,"data":"Traceback (most recent call last):\n"}
+  1130: ,{"stream_name":"stderr","time":6685.639069102,"data":" return await acompletion(\n"}
+  1138: ,{"stream_name":"stderr","time":6685.639083782,"data":" raise exception_type(\n"}
+  1140: ,{"stream_name":"stderr","time":6685.63908726,"data":" File \"/usr/local/lib/python3.12/dist-packages/litellm/litellm_core_utils/exception_mapping_utils.py\", line 2456, in exception_type\n"}
+  1142: ,{"stream_name":"stderr","time":6685.6390953,"data":" File \"/usr/local/lib/python3.12/dist-packages/litellm/litellm_core_utils/exception_mapping_utils.py\", line 400, in exception_type\n"}
+  1144: ,{"stream_name":"stderr","time":6685.639099093,"data":"litellm.exceptions.ContextWindowExceededError: litellm.ContextWindowExceededError: litellm.BadRequestError: ContextWindowExceededError: OpenAIException - This model's maximum context length is 32768 tokens. However, you requested 16384 output tokens and your prompt contains at least 16385 input tokens, for a total of at least 32769 tokens. Ple
+  1145: ,{"stream_name":"stderr","time":6685.788906608,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox ce6cccc7-5c9, creating venv without pip: Command '['/tmp/swegemma_sandbox_ce6cccc7-5c9_sq7btpni/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  1147: ,{"stream_name":"stderr","time":6685.788928372,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox ce6cccc7-5c9, creating venv without pip: Command '['/tmp/swegemma_sandbox_ce6cccc7-5c9_sq7btpni/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  1148: ,{"stream_name":"stderr","time":6688.176056906,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 0149da5a-554, creating venv without pip: Command '['/tmp/swegemma_sandbox_0149da5a-554_69x1w710/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  1150: ,{"stream_name":"stderr","time":6688.176082568,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 0149da5a-554, creating venv without pip: Command '['/tmp/swegemma_sandbox_0149da5a-554_69x1w710/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  1151: ,{"stream_name":"stdout","time":6688.250384648,"data":"{\"tasks_completed_or_failed\": 25, \"resolved_count\": 8, \"score_estimate\": 0.32, \"score_ci95_wilson\": [0.17204987516891146, 0.5159008626542329]}\n"}
+  1152: ,{"stream_name":"stdout","time":6688.250402405,"data":"Benchmark task 26/30: fastapi_14482 (fastapi/fastapi)\n"}
+  1153: ,{"stream_name":"stderr","time":7007.884749447,"data":"WARNING:swegemma.harness.agent_runner:Task fastapi_14482 agent timed out.\n"}
+  1155: ,{"stream_name":"stderr","time":7007.884797518,"data":"WARNING:swegemma.harness.agent_runner:Task fastapi_14482 agent timed out.\n"}
+  1156: ,{"stream_name":"stderr","time":7008.127325968,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 5606aeac-b2c, creating venv without pip: Command '['/tmp/swegemma_sandbox_5606aeac-b2c_g_yrh9yu/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  1158: ,{"stream_name":"stderr","time":7008.127349869,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 5606aeac-b2c, creating venv without pip: Command '['/tmp/swegemma_sandbox_5606aeac-b2c_g_yrh9yu/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  1159: ,{"stream_name":"stderr","time":7011.444582495,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox ba2b6235-834, creating venv without pip: Command '['/tmp/swegemma_sandbox_ba2b6235-834_hkk3b4wr/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  1161: ,{"stream_name":"stderr","time":7011.444621014,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox ba2b6235-834, creating venv without pip: Command '['/tmp/swegemma_sandbox_ba2b6235-834_hkk3b4wr/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  1162: ,{"stream_name":"stdout","time":7011.517929153,"data":"{\"tasks_completed_or_failed\": 26, \"resolved_count\": 8, \"score_estimate\": 0.3076923076923077, \"score_ci95_wilson\": [0.16501120939792674, 0.49988611514231246]}\n"}
+  1163: ,{"stream_name":"stdout","time":7011.517950656,"data":"Benchmark task 27/30: fastapi_15745 (fastapi/fastapi)\n"}
+  1164: ,{"stream_name":"stderr","time":7333.638174209,"data":"WARNING:swegemma.harness.agent_runner:Task fastapi_15745 agent timed out.\n"}
+  1166: ,{"stream_name":"stderr","time":7333.638215937,"data":"WARNING:swegemma.harness.agent_runner:Task fastapi_15745 agent timed out.\n"}
+  1167: ,{"stream_name":"stderr","time":7333.63886319,"data":"WARNING:swegemma.harness.agent_runner:Task fastapi_15745 completed without explicit submit_patch call and no working tree modifications.\n"}
+  1169: ,{"stream_name":"stderr","time":7333.63888834,"data":"WARNING:swegemma.harness.agent_runner:Task fastapi_15745 completed without explicit submit_patch call and no working tree modifications.\n"}
+  1170: ,{"stream_name":"stderr","time":7333.877823315,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 1b685ceb-688, creating venv without pip: Command '['/tmp/swegemma_sandbox_1b685ceb-688_umu4owf5/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  1172: ,{"stream_name":"stderr","time":7333.877846367,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 1b685ceb-688, creating venv without pip: Command '['/tmp/swegemma_sandbox_1b685ceb-688_umu4owf5/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  1173: ,{"stream_name":"stdout","time":7333.950181592,"data":"{\"tasks_completed_or_failed\": 27, \"resolved_count\": 8, \"score_estimate\": 0.2962962962962963, \"score_ci95_wilson\": [0.15852853317647564, 0.4848103338083759]}\n"}
+  1174: ,{"stream_name":"stdout","time":7333.950201969,"data":"Benchmark task 28/30: fastapi_14458 (fastapi/fastapi)\n"}
+  1175: ,{"stream_name":"stderr","time":7653.92110211,"data":"WARNING:swegemma.harness.agent_runner:Task fastapi_14458 agent timed out.\n"}
+  1177: ,{"stream_name":"stderr","time":7653.921141466,"data":"WARNING:swegemma.harness.agent_runner:Task fastapi_14458 agent timed out.\n"}
+  1178: ,{"stream_name":"stderr","time":7654.161179741,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 0b8e41d8-6fe, creating venv without pip: Command '['/tmp/swegemma_sandbox_0b8e41d8-6fe_tkwua987/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  1180: ,{"stream_name":"stderr","time":7654.161204972,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 0b8e41d8-6fe, creating venv without pip: Command '['/tmp/swegemma_sandbox_0b8e41d8-6fe_tkwua987/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  1181: ,{"stream_name":"stderr","time":7657.365312606,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox ff012588-cc3, creating venv without pip: Command '['/tmp/swegemma_sandbox_ff012588-cc3_1mx58lzw/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  1183: ,{"stream_name":"stderr","time":7657.365349123,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox ff012588-cc3, creating venv without pip: Command '['/tmp/swegemma_sandbox_ff012588-cc3_1mx58lzw/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  1184: ,{"stream_name":"stdout","time":7657.438928179,"data":"{\"tasks_completed_or_failed\": 28, \"resolved_count\": 9, \"score_estimate\": 0.32142857142857145, \"score_ci95_wilson\": [0.1793304754342074, 0.5066149544436882]}\n"}
+  1185: ,{"stream_name":"stdout","time":7657.43894934,"data":"Benchmark task 29/30: fastapi_14077 (fastapi/fastapi)\n"}
+  1186: ,{"stream_name":"stderr","time":7790.49722858,"data":"WARNING:swegemma.harness.agent_runner:Task fastapi_14077 agent exceeded turns budget.\n"}
+  1188: ,{"stream_name":"stderr","time":7790.497279625,"data":"WARNING:swegemma.harness.agent_runner:Task fastapi_14077 agent exceeded turns budget.\n"}
+  1189: ,{"stream_name":"stderr","time":7790.726543493,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox fa02857d-115, creating venv without pip: Command '['/tmp/swegemma_sandbox_fa02857d-115_4r78_hwp/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  1191: ,{"stream_name":"stderr","time":7790.726568809,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox fa02857d-115, creating venv without pip: Command '['/tmp/swegemma_sandbox_fa02857d-115_4r78_hwp/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  1192: ,{"stream_name":"stderr","time":7793.799265735,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox da5a9c86-9ef, creating venv without pip: Command '['/tmp/swegemma_sandbox_da5a9c86-9ef_3m5dxg7y/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  1194: ,{"stream_name":"stderr","time":7793.799298409,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox da5a9c86-9ef, creating venv without pip: Command '['/tmp/swegemma_sandbox_da5a9c86-9ef_3m5dxg7y/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  1195: ,{"stream_name":"stdout","time":7793.869637996,"data":"{\"tasks_completed_or_failed\": 29, \"resolved_count\": 10, \"score_estimate\": 0.3448275862068966, \"score_ci95_wilson\": [0.19940508749190486, 0.52655223492844]}\n"}
+  1196: ,{"stream_name":"stdout","time":7793.869663897,"data":"Benchmark task 30/30: httpx_3672 (encode/httpx)\n"}
+  1197: ,{"stream_name":"stderr","time":8109.241145274,"data":"WARNING:swegemma.harness.agent_runner:Task httpx_3672 agent timed out.\n"}
+  1199: ,{"stream_name":"stderr","time":8109.241183478,"data":"WARNING:swegemma.harness.agent_runner:Task httpx_3672 agent timed out.\n"}
+  1200: ,{"stream_name":"stderr","time":8109.251489326,"data":"WARNING:swegemma.harness.agent_runner:Task httpx_3672 completed without explicit submit_patch call and no working tree modifications.\n"}
+  1202: ,{"stream_name":"stderr","time":8109.251512106,"data":"WARNING:swegemma.harness.agent_runner:Task httpx_3672 completed without explicit submit_patch call and no working tree modifications.\n"}
+  1203: ,{"stream_name":"stdout","time":8109.269894956,"data":"{\"tasks_completed_or_failed\": 30, \"resolved_count\": 10, \"score_estimate\": 0.3333333333333333, \"score_ci95_wilson\": [0.19230295526846194, 0.5122027418616973]}\n"}
+  1208: ,{"stream_name":"stdout","time":8109.269931221,"data":" \"resolved_count\": 10,\n"}
+  1264: ,{"stream_name":"stdout","time":8109.270034343,"data":" \"resolved\": true,\n"}
+  1266: ,{"stream_name":"stdout","time":8109.27003792,"data":" \"patch_chars\": 499,\n"}
+  1267: ,{"stream_name":"stdout","time":8109.270039707,"data":" \"tool_calls\": 22,\n"}
+  1276: ,{"stream_name":"stdout","time":8109.270055833,"data":" \"localized\": false\n"}
+  1281: ,{"stream_name":"stdout","time":8109.270064747,"data":" \"resolved\": false,\n"}
+  1283: ,{"stream_name":"stdout","time":8109.270069443,"data":" \"patch_chars\": 0,\n"}
+  1284: ,{"stream_name":"stdout","time":8109.270071194,"data":" \"tool_calls\": 20,\n"}
+  1292: ,{"stream_name":"stdout","time":8109.270087712,"data":" \"localized\": false\n"}
+  1297: ,{"stream_name":"stdout","time":8109.270096667,"data":" \"resolved\": false,\n"}
+  1299: ,{"stream_name":"stdout","time":8109.270100203,"data":" \"patch_chars\": 0,\n"}
+  1300: ,{"stream_name":"stdout","time":8109.270101963,"data":" \"tool_calls\": 29,\n"}
+  1307: ,{"stream_name":"stdout","time":8109.270114672,"data":" \"localized\": false\n"}
+  1312: ,{"stream_name":"stdout","time":8109.270123412,"data":" \"resolved\": true,\n"}
+  1314: ,{"stream_name":"stdout","time":8109.270126923,"data":" \"patch_chars\": 767,\n"}
+  1315: ,{"stream_name":"stdout","time":8109.270128698,"data":" \"tool_calls\": 10,\n"}
+  1324: ,{"stream_name":"stdout","time":8109.270144447,"data":" \"localized\": true\n"}
+  1329: ,{"stream_name":"stdout","time":8109.270153281,"data":" \"resolved\": false,\n"}
+  1331: ,{"stream_name":"stdout","time":8109.270161003,"data":" \"patch_chars\": 0,\n"}
+  1332: ,{"stream_name":"stdout","time":8109.270162754,"data":" \"tool_calls\": 30,\n"}
+  1339: ,{"stream_name":"stdout","time":8109.270177044,"data":" \"localized\": false\n"}
+  1344: ,{"stream_name":"stdout","time":8109.270186056,"data":" \"resolved\": false,\n"}
+  1346: ,{"stream_name":"stdout","time":8109.2701896,"data":" \"patch_chars\": 0,\n"}
+  1347: ,{"stream_name":"stdout","time":8109.270191339,"data":" \"tool_calls\": 27,\n"}
+  1354: ,{"stream_name":"stdout","time":8109.270204899,"data":" \"localized\": false\n"}
+  1359: ,{"stream_name":"stdout","time":8109.270213912,"data":" \"resolved\": false,\n"}
+  1361: ,{"stream_name":"stdout","time":8109.270217627,"data":" \"patch_chars\": 560,\n"}
+  1362: ,{"stream_name":"stdout","time":8109.270219371,"data":" \"tool_calls\": 14,\n"}
+  1372: ,{"stream_name":"stdout","time":8109.270240276,"data":" \"localized\": true\n"}
+  1377: ,{"stream_name":"stdout","time":8109.270270139,"data":" \"resolved\": true,\n"}
+  1379: ,{"stream_name":"stdout","time":8109.270275674,"data":" \"patch_chars\": 529,\n"}
+  1380: ,{"stream_name":"stdout","time":8109.270277398,"data":" \"tool_calls\": 26,\n"}
+  1389: ,{"stream_name":"stdout","time":8109.270293213,"data":" \"localized\": true\n"}
+  1394: ,{"stream_name":"stdout","time":8109.27030187,"data":" \"resolved\": false,\n"}
+  1396: ,{"stream_name":"stdout","time":8109.270305372,"data":" \"patch_chars\": 900,\n"}
+  1397: ,{"stream_name":"stdout","time":8109.270307097,"data":" \"tool_calls\": 18,\n"}
+  1406: ,{"stream_name":"stdout","time":8109.270322554,"data":" \"localized\": true\n"}
+  1411: ,{"stream_name":"stdout","time":8109.270331092,"data":" \"resolved\": true,\n"}
+  1413: ,{"stream_name":"stdout","time":8109.270334555,"data":" \"patch_chars\": 595,\n"}
+  1414: ,{"stream_name":"stdout","time":8109.270336269,"data":" \"tool_calls\": 13,\n"}
+  1423: ,{"stream_name":"stdout","time":8109.270354121,"data":" \"localized\": true\n"}
+  1428: ,{"stream_name":"stdout","time":8109.270362696,"data":" \"resolved\": false,\n"}
+  1430: ,{"stream_name":"stdout","time":8109.270373118,"data":" \"patch_chars\": 745,\n"}
+  1431: ,{"stream_name":"stdout","time":8109.270374845,"data":" \"tool_calls\": 14,\n"}
+  1440: ,{"stream_name":"stdout","time":8109.270390425,"data":" \"localized\": true\n"}
+  1445: ,{"stream_name":"stdout","time":8109.270399014,"data":" \"resolved\": false,\n"}
+  1447: ,{"stream_name":"stdout","time":8109.270402895,"data":" \"patch_chars\": 1156,\n"}
+  1448: ,{"stream_name":"stdout","time":8109.270404695,"data":" \"tool_calls\": 4,\n"}
+  1457: ,{"stream_name":"stdout","time":8109.270420229,"data":" \"localized\": true\n"}
+  1462: ,{"stream_name":"stdout","time":8109.270430883,"data":" \"resolved\": false,\n"}
+  1464: ,{"stream_name":"stdout","time":8109.270434291,"data":" \"patch_chars\": 0,\n"}
+  1465: ,{"stream_name":"stdout","time":8109.270436003,"data":" \"tool_calls\": 8,\n"}
+  1472: ,{"stream_name":"stdout","time":8109.270448252,"data":" \"localized\": false\n"}
+  1477: ,{"stream_name":"stdout","time":8109.270456932,"data":" \"resolved\": false,\n"}
+  1479: ,{"stream_name":"stdout","time":8109.270460447,"data":" \"patch_chars\": 0,\n"}
+  1480: ,{"stream_name":"stdout","time":8109.270462165,"data":" \"tool_calls\": 7,\n"}
+  1487: ,{"stream_name":"stdout","time":8109.270474419,"data":" \"localized\": false\n"}
+  1492: ,{"stream_name":"stdout","time":8109.270483218,"data":" \"resolved\": true,\n"}
+  1494: ,{"stream_name":"stdout","time":8109.27048674,"data":" \"patch_chars\": 1681,\n"}
+  1495: ,{"stream_name":"stdout","time":8109.270488471,"data":" \"tool_calls\": 30,\n"}
+  1504: ,{"stream_name":"stdout","time":8109.270506105,"data":" \"localized\": true\n"}
+  1509: ,{"stream_name":"stdout","time":8109.270514743,"data":" \"resolved\": false,\n"}
+  1511: ,{"stream_name":"stdout","time":8109.270518179,"data":" \"patch_chars\": 0,\n"}
+  1512: ,{"stream_name":"stdout","time":8109.270519921,"data":" \"tool_calls\": 9,\n"}
+  1522: ,{"stream_name":"stdout","time":8109.270537287,"data":" \"localized\": false\n"}
+  1527: ,{"stream_name":"stdout","time":8109.270545969,"data":" \"resolved\": false,\n"}
+  1529: ,{"stream_name":"stdout","time":8109.270549408,"data":" \"patch_chars\": 1356,\n"}
+  1530: ,{"stream_name":"stdout","time":8109.270551392,"data":" \"tool_calls\": 14,\n"}
+  1539: ,{"stream_name":"stdout","time":8109.270566938,"data":" \"localized\": true\n"}
+  1544: ,{"stream_name":"stdout","time":8109.270577426,"data":" \"resolved\": true,\n"}
+  1546: ,{"stream_name":"stdout","time":8109.270580866,"data":" \"patch_chars\": 558,\n"}
+  1547: ,{"stream_name":"stdout","time":8109.270582669,"data":" \"tool_calls\": 21,\n"}
+  1556: ,{"stream_name":"stdout","time":8109.270598303,"data":" \"localized\": true\n"}
+  1561: ,{"stream_name":"stdout","time":8109.270606795,"data":" \"resolved\": false,\n"}
+  1563: ,{"stream_name":"stdout","time":8109.2706103,"data":" \"patch_chars\": 292,\n"}
+  1564: ,{"stream_name":"stdout","time":8109.270612028,"data":" \"tool_calls\": 4,\n"}
+  1582: ,{"stream_name":"stdout","time":8109.270643508,"data":" \"localized\": true\n"}
+  1587: ,{"stream_name":"stdout","time":8109.270654313,"data":" \"resolved\": true,\n"}
+  1589: ,{"stream_name":"stdout","time":8109.270657778,"data":" \"patch_chars\": 503,\n"}
+  1590: ,{"stream_name":"stdout","time":8109.270659506,"data":" \"tool_calls\": 27,\n"}
+  1599: ,{"stream_name":"stdout","time":8109.270674942,"data":" \"localized\": true\n"}
+  1604: ,{"stream_name":"stdout","time":8109.270683548,"data":" \"resolved\": false,\n"}
+  1606: ,{"stream_name":"stdout","time":8109.270687031,"data":" \"patch_chars\": 0,\n"}
+  1607: ,{"stream_name":"stdout","time":8109.270688769,"data":" \"tool_calls\": 8,\n"}
+  1616: ,{"stream_name":"stdout","time":8109.270705802,"data":" \"localized\": false\n"}
+  1621: ,{"stream_name":"stdout","time":8109.270714403,"data":" \"resolved\": false,\n"}
+  1623: ,{"stream_name":"stdout","time":8109.270717899,"data":" \"patch_chars\": 0,\n"}
+  1624: ,{"stream_name":"stdout","time":8109.270719627,"data":" \"tool_calls\": 12,\n"}
+  1632: ,{"stream_name":"stdout","time":8109.270735439,"data":" \"localized\": false\n"}
+  1637: ,{"stream_name":"stdout","time":8109.270744082,"data":" \"resolved\": false,\n"}
+  1639: ,{"stream_name":"stdout","time":8109.270747523,"data":" \"patch_chars\": 500,\n"}
+  1640: ,{"stream_name":"stdout","time":8109.270749234,"data":" \"tool_calls\": 26,\n"}
+  1649: ,{"stream_name":"stdout","time":8109.270764873,"data":" \"fastapi/exceptions.py\",\n"}
+  1655: ,{"stream_name":"stdout","time":8109.270775215,"data":" \"localized\": true\n"}
+  1660: ,{"stream_name":"stdout","time":8109.270783835,"data":" \"resolved\": true,\n"}
+  1662: ,{"stream_name":"stdout","time":8109.270787296,"data":" \"patch_chars\": 609,\n"}
+  1663: ,{"stream_name":"stdout","time":8109.270789004,"data":" \"tool_calls\": 8,\n"}
+  1672: ,{"stream_name":"stdout","time":8109.270806376,"data":" \"localized\": true\n"}
+  1677: ,{"stream_name":"stdout","time":8109.270815015,"data":" \"resolved\": false,\n"}
+  1679: ,{"stream_name":"stdout","time":8109.27081845,"data":" \"patch_chars\": 692,\n"}
+  1680: ,{"stream_name":"stdout","time":8109.270820157,"data":" \"tool_calls\": 21,\n"}
+  1689: ,{"stream_name":"stdout","time":8109.270835906,"data":" \"localized\": true\n"}
+  1694: ,{"stream_name":"stdout","time":8109.270844539,"data":" \"resolved\": false,\n"}
+  1696: ,{"stream_name":"stdout","time":8109.270847998,"data":" \"patch_chars\": 1678,\n"}
+  1697: ,{"stream_name":"stdout","time":8109.270849703,"data":" \"tool_calls\": 20,\n"}
+  1707: ,{"stream_name":"stdout","time":8109.270866953,"data":" \"localized\": true\n"}
+  1712: ,{"stream_name":"stdout","time":8109.270877577,"data":" \"resolved\": false,\n"}
+  1714: ,{"stream_name":"stdout","time":8109.270881153,"data":" \"patch_chars\": 0,\n"}
+  1715: ,{"stream_name":"stdout","time":8109.270882955,"data":" \"tool_calls\": 3,\n"}
+  1724: ,{"stream_name":"stdout","time":8109.270898616,"data":" \"localized\": false\n"}
+  1729: ,{"stream_name":"stdout","time":8109.270910428,"data":" \"resolved\": true,\n"}
+  1731: ,{"stream_name":"stdout","time":8109.27091417,"data":" \"patch_chars\": 1361,\n"}
+  1732: ,{"stream_name":"stdout","time":8109.270915905,"data":" \"tool_calls\": 18,\n"}
+  1741: ,{"stream_name":"stdout","time":8109.270931402,"data":" \"localized\": true\n"}
+  1746: ,{"stream_name":"stdout","time":8109.27093989,"data":" \"resolved\": true,\n"}
+  1748: ,{"stream_name":"stdout","time":8109.270943315,"data":" \"patch_chars\": 2443,\n"}
+  1749: ,{"stream_name":"stdout","time":8109.270945035,"data":" \"tool_calls\": 16,\n"}
+  1753: ,{"stream_name":"stdout","time":8109.270954123,"data":" \"fastapi/exception_handlers.py\",\n"}
+  1758: ,{"stream_name":"stdout","time":8109.270963189,"data":" \"fastapi/exception_handlers.py\",\n"}
+  1761: ,{"stream_name":"stdout","time":8109.270968284,"data":" \"localized\": true\n"}
+  1766: ,{"stream_name":"stdout","time":8109.270976906,"data":" \"resolved\": false,\n"}
+  1768: ,{"stream_name":"stdout","time":8109.270980622,"data":" \"patch_chars\": 0,\n"}
+  1769: ,{"stream_name":"stdout","time":8109.270982381,"data":" \"tool_calls\": 18,\n"}
+  1782: ,{"stream_name":"stdout","time":8109.271004943,"data":" \"localized\": false\n"}
+  1785: ,{"stream_name":"stdout","time":8109.271009927,"data":" \"localization_hits\": 18,\n"}
+  1791: ,{"stream_name":"stderr","time":8114.482431991,"data":"/usr/local/lib/python3.12/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+  1793: ,{"stream_name":"stderr","time":8114.701802394,"data":"/usr/local/lib/python3.12/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+
+## last 40 lines
+    ,{"stream_name":"stdout","time":8109.270966663,"data":"      ],\n"}
+    ,{"stream_name":"stdout","time":8109.270968284,"data":"      \"localized\": true\n"}
+    ,{"stream_name":"stdout","time":8109.270970052,"data":"    },\n"}
+    ,{"stream_name":"stdout","time":8109.270971669,"data":"    {\n"}
+    ,{"stream_name":"stdout","time":8109.270973306,"data":"      \"task_id\": \"httpx_3672\",\n"}
+    ,{"stream_name":"stdout","time":8109.270975099,"data":"      \"repo\": \"encode/httpx\",\n"}
+    ,{"stream_name":"stdout","time":8109.270976906,"data":"      \"resolved\": false,\n"}
+    ,{"stream_name":"stdout","time":8109.27097864,"data":"      \"test_exit_code\": -1,\n"}
+    ,{"stream_name":"stdout","time":8109.270980622,"data":"      \"patch_chars\": 0,\n"}
+    ,{"stream_name":"stdout","time":8109.270982381,"data":"      \"tool_calls\": 18,\n"}
+    ,{"stream_name":"stdout","time":8109.270984182,"data":"      \"duration_seconds\": 315.59446930000104,\n"}
+    ,{"stream_name":"stdout","time":8109.270985921,"data":"      \"touched_files\": [],\n"}
+    ,{"stream_name":"stdout","time":8109.270987648,"data":"      \"touched_tests\": false,\n"}
+    ,{"stream_name":"stdout","time":8109.270989371,"data":"      \"gold_fixable_files\": [\n"}
+    ,{"stream_name":"stdout","time":8109.270991137,"data":"        \"src/ahttpx/_parsers.py\",\n"}
+    ,{"stream_name":"stdout","time":8109.27099284,"data":"        \"src/ahttpx/_pool.py\",\n"}
+    ,{"stream_name":"stdout","time":8109.270994584,"data":"        \"src/ahttpx/_server.py\",\n"}
+    ,{"stream_name":"stdout","time":8109.270996326,"data":"        \"src/httpx/_network.py\",\n"}
+    ,{"stream_name":"stdout","time":8109.270998135,"data":"        \"src/httpx/_parsers.py\",\n"}
+    ,{"stream_name":"stdout","time":8109.27099986,"data":"        \"src/httpx/_pool.py\",\n"}
+    ,{"stream_name":"stdout","time":8109.271001592,"data":"        \"src/httpx/_server.py\"\n"}
+    ,{"stream_name":"stdout","time":8109.271003323,"data":"      ],\n"}
+    ,{"stream_name":"stdout","time":8109.271004943,"data":"      \"localized\": false\n"}
+    ,{"stream_name":"stdout","time":8109.271006649,"data":"    }\n"}
+    ,{"stream_name":"stdout","time":8109.271008297,"data":"  ],\n"}
+    ,{"stream_name":"stdout","time":8109.271009927,"data":"  \"localization_hits\": 18,\n"}
+    ,{"stream_name":"stdout","time":8109.27101173,"data":"  \"tasks_with_empty_patch\": 11,\n"}
+    ,{"stream_name":"stdout","time":8109.271013512,"data":"  \"tasks_touching_tests\": 0,\n"}
+    ,{"stream_name":"stdout","time":8109.27101529,"data":"  \"official_submission\": false,\n"}
+    ,{"stream_name":"stdout","time":8109.271017127,"data":"  \"score_scope\": \"seeded stratified public development sample; not a leaderboard score\"\n"}
+    ,{"stream_name":"stdout","time":8109.271019115,"data":"}\n"}
+    ,{"stream_name":"stderr","time":8114.482431991,"data":"/usr/local/lib/python3.12/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+    ,{"stream_name":"stderr","time":8114.482453675,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+    ,{"stream_name":"stderr","time":8114.701802394,"data":"/usr/local/lib/python3.12/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+    ,{"stream_name":"stderr","time":8114.701821768,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+    ,{"stream_name":"stderr","time":8115.598418757,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+    ,{"stream_name":"stderr","time":8115.999083021,"data":"[NbConvertApp] Writing 1594312 bytes to __notebook__.ipynb\n"}
+    ,{"stream_name":"stderr","time":8118.75833614,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+    ,{"stream_name":"stderr","time":8119.772240027,"data":"[NbConvertApp] Writing 1347965 bytes to __results__.html\n"}
+    ]

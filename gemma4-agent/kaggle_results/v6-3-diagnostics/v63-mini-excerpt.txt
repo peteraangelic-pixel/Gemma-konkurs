@@ -1,0 +1,147 @@
+# v63-mini.log
+- total lines: 178 | operational matches: 59
+
+## first 40 lines
+    [{"stream_name":"stderr","time":10.110162372,"data":"/usr/local/lib/python3.12/dist-packages/nbformat/__init__.py:96: MissingIDFieldWarning: Cell is missing an id field, this will become a hard error in future nbformat versions. You may want to use `normalize()` on your notebooks before validations (available since nbformat 5.1.4). Previous versions of nbformat are fixing this issue transparently,
+    ,{"stream_name":"stderr","time":10.110207215,"data":"  validate(nb)\n"}
+    ,{"stream_name":"stderr","time":11.480481508,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+    ,{"stream_name":"stderr","time":11.480510381,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+    ,{"stream_name":"stderr","time":11.480513468,"data":"0.00s - to python to disable frozen modules.\n"}
+    ,{"stream_name":"stderr","time":11.480515798,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+    ,{"stream_name":"stderr","time":12.247953064,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+    ,{"stream_name":"stderr","time":12.247978024,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+    ,{"stream_name":"stderr","time":12.2479807,"data":"0.00s - to python to disable frozen modules.\n"}
+    ,{"stream_name":"stderr","time":12.247982917,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+    ,{"stream_name":"stdout","time":13.934221248,"data":"Pinned Kaggle Python runtime: 3.12.13\n"}
+    ,{"stream_name":"stdout","time":13.934245835,"data":"Installing 41 offline wheels from competition wheelhouse...\n"}
+    ,{"stream_name":"stdout","time":75.171265822,"data":"Offline wheelhouse installation complete.\n"}
+    ,{"stream_name":"stdout","time":111.661897385,"data":"Submission SHA-256: abf22bac2c67c639342f56e890fd77cb36c91811d07cf1c239c84ef28fa1216e\n"}
+    ,{"stream_name":"stdout","time":111.661924027,"data":"Public development tasks available: 129\n"}
+    ,{"stream_name":"stdout","time":111.661927678,"data":"Seeded stratified sample (4 tasks, seed=20261009): {'Textualize/rich': 3, 'fastapi/fastapi': 1}\n"}
+    ,{"stream_name":"stdout","time":111.661930422,"data":"Selected task IDs: rich_3105, rich_3934, rich_3006, fastapi_14487\n"}
+    ,{"stream_name":"stdout","time":125.300290193,"data":"Visible GPUs (4): ['NVIDIA L4', 'NVIDIA L4', 'NVIDIA L4', 'NVIDIA L4']\n"}
+    ,{"stream_name":"stdout","time":537.624618958,"data":"vLLM server started on http://127.0.0.1:8000/v1 (tensor parallelism=4).\n"}
+    ,{"stream_name":"stderr","time":537.815205107,"data":"/usr/local/lib/python3.12/dist-packages/google/adk/features/_feature_decorator.py:72: UserWarning: [EXPERIMENTAL] feature FeatureName.AGENT_CONFIG is enabled.\n"}
+    ,{"stream_name":"stderr","time":537.81522877,"data":"  check_feature_enabled()\n"}
+    ,{"stream_name":"stderr","time":537.815232084,"data":"/tmp/ipykernel_65/2428886316.py:58: UserWarning: [EXPERIMENTAL] EventsCompactionConfig: This feature is experimental and may change or be removed in future versions without notice. It may introduce breaking changes at any time.\n"}
+    ,{"stream_name":"stderr","time":537.815235866,"data":"  events_compaction_config=EventsCompactionConfig(\n"}
+    ,{"stream_name":"stderr","time":537.81523871,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox b5e5501c-62c, creating venv without pip: Command '['/tmp/swegemma_sandbox_b5e5501c-62c_0_mt4vxp/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+    ,{"stream_name":"stderr","time":537.815241637,"data":"\n"}
+    ,{"stream_name":"stderr","time":537.815243846,"data":"/usr/local/lib/python3.12/dist-packages/google/adk/features/_feature_decorator.py:72: UserWarning: [EXPERIMENTAL] feature FeatureName.AGENT_CONFIG is enabled.\n"}
+    ,{"stream_name":"stderr","time":537.815258496,"data":"  check_feature_enabled()\n"}
+    ,{"stream_name":"stderr","time":537.815260627,"data":"/tmp/ipykernel_65/2428886316.py:58: UserWarning: [EXPERIMENTAL] EventsCompactionConfig: This feature is experimental and may change or be removed in future versions without notice. It may introduce breaking changes at any time.\n"}
+    ,{"stream_name":"stderr","time":537.8152628079999,"data":"  events_compaction_config=EventsCompactionConfig(\n"}
+    ,{"stream_name":"stderr","time":537.81526461,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox b5e5501c-62c, creating venv without pip: Command '['/tmp/swegemma_sandbox_b5e5501c-62c_0_mt4vxp/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+    ,{"stream_name":"stdout","time":537.823287541,"data":"Diagnostics: gold map loaded for 129 published tasks\n"}
+    ,{"stream_name":"stdout","time":537.823303563,"data":"Benchmark task 1/4: rich_3105 (Textualize/rich)\n"}
+    ,{"stream_name":"stderr","time":855.621779268,"data":"WARNING:swegemma.harness.agent_runner:Task rich_3105 agent timed out.\n"}
+    ,{"stream_name":"stderr","time":855.621826283,"data":"\n"}
+    ,{"stream_name":"stderr","time":855.621830189,"data":"WARNING:swegemma.harness.agent_runner:Task rich_3105 agent timed out.\n"}
+    ,{"stream_name":"stderr","time":855.635862009,"data":"WARNING:swegemma.harness.agent_runner:Task rich_3105 completed without explicit submit_patch call and no working tree modifications.\n"}
+    ,{"stream_name":"stderr","time":855.63588908,"data":"\n"}
+    ,{"stream_name":"stderr","time":855.635892868,"data":"WARNING:swegemma.harness.agent_runner:Task rich_3105 completed without explicit submit_patch call and no working tree modifications.\n"}
+    ,{"stream_name":"stderr","time":855.812411925,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 79f4b8f4-3d9, creating venv without pip: Command '['/tmp/swegemma_sandbox_79f4b8f4-3d9_svflkik_/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+    ,{"stream_name":"stderr","time":855.812439457,"data":"\n"}
+
+## operational matches
+  1: [{"stream_name":"stderr","time":10.110162372,"data":"/usr/local/lib/python3.12/dist-packages/nbformat/__init__.py:96: MissingIDFieldWarning: Cell is missing an id field, this will become a hard error in future nbformat versions. You may want to use `normalize()` on your notebooks before validations (available since nbformat 5.1.4). Previous versions of nbformat are fixing this issue transparently,
+  3: ,{"stream_name":"stderr","time":11.480481508,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+  7: ,{"stream_name":"stderr","time":12.247953064,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+  20: ,{"stream_name":"stderr","time":537.815205107,"data":"/usr/local/lib/python3.12/dist-packages/google/adk/features/_feature_decorator.py:72: UserWarning: [EXPERIMENTAL] feature FeatureName.AGENT_CONFIG is enabled.\n"}
+  22: ,{"stream_name":"stderr","time":537.815232084,"data":"/tmp/ipykernel_65/2428886316.py:58: UserWarning: [EXPERIMENTAL] EventsCompactionConfig: This feature is experimental and may change or be removed in future versions without notice. It may introduce breaking changes at any time.\n"}
+  24: ,{"stream_name":"stderr","time":537.81523871,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox b5e5501c-62c, creating venv without pip: Command '['/tmp/swegemma_sandbox_b5e5501c-62c_0_mt4vxp/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  26: ,{"stream_name":"stderr","time":537.815243846,"data":"/usr/local/lib/python3.12/dist-packages/google/adk/features/_feature_decorator.py:72: UserWarning: [EXPERIMENTAL] feature FeatureName.AGENT_CONFIG is enabled.\n"}
+  28: ,{"stream_name":"stderr","time":537.815260627,"data":"/tmp/ipykernel_65/2428886316.py:58: UserWarning: [EXPERIMENTAL] EventsCompactionConfig: This feature is experimental and may change or be removed in future versions without notice. It may introduce breaking changes at any time.\n"}
+  30: ,{"stream_name":"stderr","time":537.81526461,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox b5e5501c-62c, creating venv without pip: Command '['/tmp/swegemma_sandbox_b5e5501c-62c_0_mt4vxp/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  32: ,{"stream_name":"stdout","time":537.823303563,"data":"Benchmark task 1/4: rich_3105 (Textualize/rich)\n"}
+  33: ,{"stream_name":"stderr","time":855.621779268,"data":"WARNING:swegemma.harness.agent_runner:Task rich_3105 agent timed out.\n"}
+  35: ,{"stream_name":"stderr","time":855.621830189,"data":"WARNING:swegemma.harness.agent_runner:Task rich_3105 agent timed out.\n"}
+  36: ,{"stream_name":"stderr","time":855.635862009,"data":"WARNING:swegemma.harness.agent_runner:Task rich_3105 completed without explicit submit_patch call and no working tree modifications.\n"}
+  38: ,{"stream_name":"stderr","time":855.635892868,"data":"WARNING:swegemma.harness.agent_runner:Task rich_3105 completed without explicit submit_patch call and no working tree modifications.\n"}
+  39: ,{"stream_name":"stderr","time":855.812411925,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 79f4b8f4-3d9, creating venv without pip: Command '['/tmp/swegemma_sandbox_79f4b8f4-3d9_svflkik_/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  41: ,{"stream_name":"stderr","time":855.812443728,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 79f4b8f4-3d9, creating venv without pip: Command '['/tmp/swegemma_sandbox_79f4b8f4-3d9_svflkik_/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  42: ,{"stream_name":"stdout","time":855.865202514,"data":"{\"tasks_completed_or_failed\": 1, \"resolved_count\": 0, \"score_estimate\": 0.0, \"score_ci95_wilson\": [0.0, 0.7934567085261071]}\n"}
+  43: ,{"stream_name":"stdout","time":855.8652263,"data":"Benchmark task 2/4: rich_3934 (Textualize/rich)\n"}
+  44: ,{"stream_name":"stderr","time":1173.293748108,"data":"WARNING:swegemma.harness.agent_runner:Task rich_3934 agent timed out.\n"}
+  46: ,{"stream_name":"stderr","time":1173.293790898,"data":"WARNING:swegemma.harness.agent_runner:Task rich_3934 agent timed out.\n"}
+  47: ,{"stream_name":"stderr","time":1173.307064428,"data":"WARNING:swegemma.harness.agent_runner:Task rich_3934 completed without explicit submit_patch call and no working tree modifications.\n"}
+  49: ,{"stream_name":"stderr","time":1173.307105069,"data":"WARNING:swegemma.harness.agent_runner:Task rich_3934 completed without explicit submit_patch call and no working tree modifications.\n"}
+  50: ,{"stream_name":"stderr","time":1173.46800711,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox e3ec90fa-5ae, creating venv without pip: Command '['/tmp/swegemma_sandbox_e3ec90fa-5ae_06xj8rk3/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  52: ,{"stream_name":"stderr","time":1173.468051913,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox e3ec90fa-5ae, creating venv without pip: Command '['/tmp/swegemma_sandbox_e3ec90fa-5ae_06xj8rk3/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  53: ,{"stream_name":"stdout","time":1173.536647597,"data":"{\"tasks_completed_or_failed\": 2, \"resolved_count\": 0, \"score_estimate\": 0.0, \"score_ci95_wilson\": [0.0, 0.6576280471103807]}\n"}
+  54: ,{"stream_name":"stdout","time":1173.536674504,"data":"Benchmark task 3/4: rich_3006 (Textualize/rich)\n"}
+  55: ,{"stream_name":"stderr","time":1490.983662994,"data":"WARNING:swegemma.harness.agent_runner:Task rich_3006 agent timed out.\n"}
+  57: ,{"stream_name":"stderr","time":1490.98370576,"data":"WARNING:swegemma.harness.agent_runner:Task rich_3006 agent timed out.\n"}
+  58: ,{"stream_name":"stderr","time":1490.996993046,"data":"WARNING:swegemma.harness.agent_runner:Task rich_3006 completed without explicit submit_patch call and no working tree modifications.\n"}
+  60: ,{"stream_name":"stderr","time":1490.997035192,"data":"WARNING:swegemma.harness.agent_runner:Task rich_3006 completed without explicit submit_patch call and no working tree modifications.\n"}
+  61: ,{"stream_name":"stderr","time":1491.157414428,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 11cad235-e09, creating venv without pip: Command '['/tmp/swegemma_sandbox_11cad235-e09_l4_trb5e/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  63: ,{"stream_name":"stderr","time":1491.157450431,"data":"WARNING:swegemma.sandbox.subprocess:ensurepip unavailable in sandbox 11cad235-e09, creating venv without pip: Command '['/tmp/swegemma_sandbox_11cad235-e09_l4_trb5e/venv/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"}
+  64: ,{"stream_name":"stdout","time":1491.226176907,"data":"{\"tasks_completed_or_failed\": 3, \"resolved_count\": 0, \"score_estimate\": 0.0, \"score_ci95_wilson\": [0.0, 0.5615060804490177]}\n"}
+  65: ,{"stream_name":"stdout","time":1491.22620672,"data":"Benchmark task 4/4: fastapi_14487 (fastapi/fastapi)\n"}
+  66: ,{"stream_name":"stderr","time":1811.170372607,"data":"WARNING:swegemma.harness.agent_runner:Task fastapi_14487 agent timed out.\n"}
+  68: ,{"stream_name":"stderr","time":1811.170432771,"data":"WARNING:swegemma.harness.agent_runner:Task fastapi_14487 agent timed out.\n"}
+  69: ,{"stream_name":"stderr","time":1811.191666656,"data":"WARNING:swegemma.harness.agent_runner:Task fastapi_14487 completed without explicit submit_patch call and no working tree modifications.\n"}
+  71: ,{"stream_name":"stderr","time":1811.191689504,"data":"WARNING:swegemma.harness.agent_runner:Task fastapi_14487 completed without explicit submit_patch call and no working tree modifications.\n"}
+  72: ,{"stream_name":"stdout","time":1811.288881926,"data":"{\"tasks_completed_or_failed\": 4, \"resolved_count\": 0, \"score_estimate\": 0.0, \"score_ci95_wilson\": [0.0, 0.48990002040399916]}\n"}
+  77: ,{"stream_name":"stdout","time":1811.288920816,"data":" \"resolved_count\": 0,\n"}
+  105: ,{"stream_name":"stdout","time":1811.288971565,"data":" \"resolved\": false,\n"}
+  107: ,{"stream_name":"stdout","time":1811.288975112,"data":" \"patch_chars\": 0,\n"}
+  108: ,{"stream_name":"stdout","time":1811.288976954,"data":" \"tool_calls\": 22,\n"}
+  115: ,{"stream_name":"stdout","time":1811.288989323,"data":" \"localized\": false\n"}
+  120: ,{"stream_name":"stdout","time":1811.289000976,"data":" \"resolved\": false,\n"}
+  122: ,{"stream_name":"stdout","time":1811.289004477,"data":" \"patch_chars\": 0,\n"}
+  123: ,{"stream_name":"stdout","time":1811.289006209,"data":" \"tool_calls\": 15,\n"}
+  131: ,{"stream_name":"stdout","time":1811.289020262,"data":" \"localized\": false\n"}
+  136: ,{"stream_name":"stdout","time":1811.289029034,"data":" \"resolved\": false,\n"}
+  138: ,{"stream_name":"stdout","time":1811.289032457,"data":" \"patch_chars\": 0,\n"}
+  139: ,{"stream_name":"stdout","time":1811.289034146,"data":" \"tool_calls\": 4,\n"}
+  146: ,{"stream_name":"stdout","time":1811.289046565,"data":" \"localized\": false\n"}
+  151: ,{"stream_name":"stdout","time":1811.289056251,"data":" \"resolved\": false,\n"}
+  153: ,{"stream_name":"stdout","time":1811.289059672,"data":" \"patch_chars\": 0,\n"}
+  154: ,{"stream_name":"stdout","time":1811.289061366,"data":" \"tool_calls\": 26,\n"}
+  161: ,{"stream_name":"stdout","time":1811.289075573,"data":" \"localized\": false\n"}
+  164: ,{"stream_name":"stdout","time":1811.289080625,"data":" \"localization_hits\": 0,\n"}
+  170: ,{"stream_name":"stderr","time":1816.464057924,"data":"/usr/local/lib/python3.12/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+  172: ,{"stream_name":"stderr","time":1816.680620006,"data":"/usr/local/lib/python3.12/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+
+## last 40 lines
+    ,{"stream_name":"stdout","time":1811.289034146,"data":"      \"tool_calls\": 4,\n"}
+    ,{"stream_name":"stdout","time":1811.289036017,"data":"      \"duration_seconds\": 317.68634027200005,\n"}
+    ,{"stream_name":"stdout","time":1811.289037812,"data":"      \"touched_files\": [],\n"}
+    ,{"stream_name":"stdout","time":1811.289039548,"data":"      \"touched_tests\": false,\n"}
+    ,{"stream_name":"stdout","time":1811.289041292,"data":"      \"gold_fixable_files\": [\n"}
+    ,{"stream_name":"stdout","time":1811.289043028,"data":"        \"rich/repr.py\"\n"}
+    ,{"stream_name":"stdout","time":1811.289044766,"data":"      ],\n"}
+    ,{"stream_name":"stdout","time":1811.289046565,"data":"      \"localized\": false\n"}
+    ,{"stream_name":"stdout","time":1811.289048271,"data":"    },\n"}
+    ,{"stream_name":"stdout","time":1811.289050052,"data":"    {\n"}
+    ,{"stream_name":"stdout","time":1811.289052562,"data":"      \"task_id\": \"fastapi_14487\",\n"}
+    ,{"stream_name":"stdout","time":1811.289054472,"data":"      \"repo\": \"fastapi/fastapi\",\n"}
+    ,{"stream_name":"stdout","time":1811.289056251,"data":"      \"resolved\": false,\n"}
+    ,{"stream_name":"stdout","time":1811.289057973,"data":"      \"test_exit_code\": -1,\n"}
+    ,{"stream_name":"stdout","time":1811.289059672,"data":"      \"patch_chars\": 0,\n"}
+    ,{"stream_name":"stdout","time":1811.289061366,"data":"      \"tool_calls\": 26,\n"}
+    ,{"stream_name":"stdout","time":1811.289063085,"data":"      \"duration_seconds\": 320.2607697000001,\n"}
+    ,{"stream_name":"stdout","time":1811.289064997,"data":"      \"touched_files\": [],\n"}
+    ,{"stream_name":"stdout","time":1811.28906674,"data":"      \"touched_tests\": false,\n"}
+    ,{"stream_name":"stdout","time":1811.289068478,"data":"      \"gold_fixable_files\": [\n"}
+    ,{"stream_name":"stdout","time":1811.289071975,"data":"        \"docs_src/handling_errors/tutorial004.py\"\n"}
+    ,{"stream_name":"stdout","time":1811.289073926,"data":"      ],\n"}
+    ,{"stream_name":"stdout","time":1811.289075573,"data":"      \"localized\": false\n"}
+    ,{"stream_name":"stdout","time":1811.289077283,"data":"    }\n"}
+    ,{"stream_name":"stdout","time":1811.289078908,"data":"  ],\n"}
+    ,{"stream_name":"stdout","time":1811.289080625,"data":"  \"localization_hits\": 0,\n"}
+    ,{"stream_name":"stdout","time":1811.289082429,"data":"  \"tasks_with_empty_patch\": 4,\n"}
+    ,{"stream_name":"stdout","time":1811.28908423,"data":"  \"tasks_touching_tests\": 0,\n"}
+    ,{"stream_name":"stdout","time":1811.28908603,"data":"  \"official_submission\": false,\n"}
+    ,{"stream_name":"stdout","time":1811.289087869,"data":"  \"score_scope\": \"seeded stratified public development sample; not a leaderboard score\"\n"}
+    ,{"stream_name":"stdout","time":1811.289089847,"data":"}\n"}
+    ,{"stream_name":"stderr","time":1816.464057924,"data":"/usr/local/lib/python3.12/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+    ,{"stream_name":"stderr","time":1816.464084554,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+    ,{"stream_name":"stderr","time":1816.680620006,"data":"/usr/local/lib/python3.12/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+    ,{"stream_name":"stderr","time":1816.680640732,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+    ,{"stream_name":"stderr","time":1817.766249157,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+    ,{"stream_name":"stderr","time":1818.095983366,"data":"[NbConvertApp] Writing 231194 bytes to __notebook__.ipynb\n"}
+    ,{"stream_name":"stderr","time":1820.90023457,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+    ,{"stream_name":"stderr","time":1821.841051284,"data":"[NbConvertApp] Writing 494866 bytes to __results__.html\n"}
+    ]
