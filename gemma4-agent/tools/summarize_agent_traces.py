@@ -125,7 +125,15 @@ def as_seconds(value: object) -> float | None:
     return None
 
 
-def summarise(trace_path: Path) -> dict:
+def kernel_name(trace_path: Path, root: Path) -> str:
+    """Name the kernel a trace came from; four tasks ran in BOTH matrices and their behaviours
+    differ wildly (rich_3105: 22 calls/315 s in the mini-screen vs 7 calls/43 s in the full run),
+    so a summary without the origin is ambiguous - caught on 2026-10-13 after the first run."""
+    rel = trace_path.relative_to(root)
+    return rel.parts[0] if len(rel.parts) > 1 else "<unknown>"
+
+
+def summarise(trace_path: Path, root: Path) -> dict:
     data = json.loads(trace_path.read_text(encoding="utf-8", errors="replace"))
     events, container = find_events(data)
     infos = [event_info(event) for event in events]
@@ -167,6 +175,7 @@ def summarise(trace_path: Path) -> dict:
                 submits.append(dict(entry))
 
     return {
+        "kernel": kernel_name(trace_path, root),
         "task": trace_path.stem.replace("trace_", ""),
         "events": len(events),
         "container_key": container,
@@ -211,7 +220,7 @@ def main() -> int:
     census_acc: dict = {}
     for path in trace_files:
         try:
-            summaries.append(summarise(path))
+            summaries.append(summarise(path, args.traces_dir))
         except Exception as exc:  # noqa: BLE001 - a broken trace must not hide the rest
             failures.append({"trace": path.name, "error": f"{type(exc).__name__}: {exc}"[:200]})
         try:
@@ -237,7 +246,7 @@ def main() -> int:
     print(f"traces summarised: {len(summaries)} | failures: {len(failures)}")
     for row in summaries[:32]:
         first = row["first_write_call"]
-        print(f"  {row['task']:18} events={row['events']:>3} dur={row['duration_s']}s "
+        print(f"  {row['kernel']}/{row['task']:18} events={row['events']:>3} dur={row['duration_s']}s "
               f"tools={list(row['tool_counts'])[:4]} first_write={first['tool'] if first else None}"
               f"@{first.get('t') if first else '-'} submits={len(row['submit_patch_calls'])}")
     return 0
