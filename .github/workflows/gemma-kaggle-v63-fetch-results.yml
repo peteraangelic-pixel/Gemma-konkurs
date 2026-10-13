@@ -1,0 +1,98 @@
+# Recovers the V6.3 30-task screening results when the benchmark run itself succeeded but its
+# "commit results" step failed. Pure file transfer: downloads the run artifact that the benchmark
+# workflow already uploaded, writes a transfer record and commits both with the safe pattern.
+# No GPU, no Kaggle jobs, no submission.
+#
+# Why this is needed: run 38330672815 finished the kernel at 03:30 (2026-10-13) and failed only in
+# the commit step, and this sandbox cannot download GitHub artifacts (the blob host is outside the
+# allowed network). The artifact gemma-v63-benchmark-38330672815 (3,220 B) holds exactly the two
+# files the quality gates read.
+#
+# Nothing runs until gemma4-agent/kaggle_smoke/v63-fetch.trigger is pushed.
+
+name: Gemma V6.3 fetch benchmark results
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - arena/c4eeb067-gemma-konkurs
+    paths:
+      - gemma4-agent/kaggle_smoke/v63-fetch.trigger
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: v63-fetch.trigger-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout session branch
+        uses: actions/checkout@v4
+        with:
+          ref: arena/c4eeb067-gemma-konkurs
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Download the benchmark summary artifact from the completed run
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 38330672815
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: gemma-v63-benchmark-38330672815
+          path: fetched-v63-benchmark
+
+      - name: Stage the results and write the transfer record
+        run: |
+          set -euo pipefail
+          echo "--- artifact contents ---"
+          find fetched-v63-benchmark -type f -printf '%s %p\n' 2>/dev/null || echo "artifact not downloaded"
+          mkdir -p gemma4-agent/kaggle_results/v6-3-benchmark
+          for name in run.json agent_benchmark_result.json; do
+            if [ -f "fetched-v63-benchmark/$name" ]; then
+              cp "fetched-v63-benchmark/$name" "gemma4-agent/kaggle_results/v6-3-benchmark/$name"
+            else
+              echo "WARNING: fetched-v63-benchmark/$name is missing"
+            fi
+          done
+          python3 gemma4-agent/tools/summarize_fetched_screening.py \
+            --dir gemma4-agent/kaggle_results/v6-3-benchmark \
+            --out gemma4-agent/kaggle_results/v6-3-benchmark/fetch_summary.txt
+
+      - name: Commit fetched results with the safe pattern
+        if: always()
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin "$GITHUB_REF_NAME"
+          # SAFE PATTERN - the same fix as the other workflows (2026-10-13). The old
+          # 'git reset --soft origin/<branch>' left the INDEX on the job's own older checkout and
+          # silently reverted every commit pushed while the job ran. Copy outputs aside, take the
+          # REMOTE tree, then re-apply only those outputs.
+          rm -rf /tmp/keep && mkdir -p /tmp/keep
+          cp -r gemma4-agent/kaggle_results/v6-3-benchmark /tmp/keep/ 2>/dev/null || true
+          git reset --hard "origin/$GITHUB_REF_NAME"
+          mkdir -p gemma4-agent/kaggle_results
+          cp -r /tmp/keep/v6-3-benchmark gemma4-agent/kaggle_results/ 2>/dev/null || true
+          git add gemma4-agent/kaggle_results/v6-3-benchmark 2>/dev/null || true
+          python3 gemma4-agent/tools/compare_screenings.py || true
+          git add gemma4-agent/kaggle_results/screening_history.md || true
+          git rm -q --ignore-unmatch gemma4-agent/kaggle_smoke/v63-fetch.trigger
+          if [ -z "$(git diff --cached --name-only)" ]; then
+            echo "Nothing to commit: no fetched files and no history change."
+            exit 0
+          fi
+          git commit -m "chore(gemma): record the fetched V6.3 30-task benchmark results [skip ci]"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
