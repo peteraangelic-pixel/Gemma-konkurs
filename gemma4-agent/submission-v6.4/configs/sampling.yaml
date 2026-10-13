@@ -1,0 +1,13 @@
+# Evidence-based sampling for gemma-4-31b-it-qat-w4a16-ct (see DIAGNOSIS.md):
+# - thinking ON and thought summaries ON: disabling summaries cost a peer ablation
+#   ~12 points of resolution rate (51/129 -> 35/129); disabling thinking cost ~22 points.
+# - temperature 0.4 tied with 1.0 and beat 0.2/0.0 in the same ablation.
+# - 16384 output tokens matches the harness guidance for a 4096 thinking budget, so an
+#   edit call cannot be truncated by the token limit mid-tool-call.
+temperature: 0.4
+top_p: 0.95
+top_k: 40
+max_output_tokens: 16384
+thinking_config:
+  thinking_budget: 4096
+  include_thoughts: true
