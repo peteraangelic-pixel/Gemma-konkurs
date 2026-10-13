@@ -1,0 +1,104 @@
+# V6.4 read-only trace summaries: after the mini-screen kernel finishes, download its outputs
+# (read-only), extract the per-task operational traces and compute the M5 metrics
+# (write coverage, repository-edit coverage, first-edit call index, consecutive-run lengths).
+#
+# Reads the kernel reference from the committed run.json instead of hardcoding slug/version - the
+# V6.3 version hardcoded two refs and had to be edited by hand.
+# The raw trace_*.json files are deliberately NOT committed; only the summaries are.
+# Nothing runs until gemma4-agent/kaggle_smoke/v64-traces.trigger is pushed.
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - arena/c4eeb067-gemma-konkurs
+    paths:
+      - gemma4-agent/kaggle_smoke/v64-traces.trigger
+
+permissions:
+  contents: write
+
+concurrency:
+  group: v64-traces.trigger-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  traces:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: Checkout session branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Kaggle CLI
+        run: python -m pip install --disable-pip-version-check --quiet kaggle
+
+      - name: Configure Kaggle credentials
+        env:
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "$KAGGLE_API_TOKEN" ]; then
+            echo "Repository Actions secret KAGGLE_API_TOKEN is missing."
+            exit 1
+          fi
+          mkdir -p "$HOME/.kaggle"
+          printf '%s' "$KAGGLE_API_TOKEN" | tr -d '\r\n' > "$HOME/.kaggle/access_token"
+          chmod 600 "$HOME/.kaggle/access_token"
+          echo "Kaggle CLI configured; token value was not logged."
+
+      - name: Download kernel outputs (read-only) and summarise traces
+        run: |
+          set -euo pipefail
+          RUN_JSON=gemma4-agent/kaggle_results/v6-4-miniscreen/run.json
+          if [ ! -s "$RUN_JSON" ]; then
+            echo "No run.json yet - the mini-screen has not recorded its kernel reference."
+            exit 1
+          fi
+          REF=$(python3 -c "import json;print(json.load(open('$RUN_JSON'))['kernel_ref'])")
+          echo "kernel reference from run.json: $REF"
+          mkdir -p "$RUNNER_TEMP/v64-traces"
+          python -m kaggle kernels output "$REF" -p "$RUNNER_TEMP/v64-traces/$(basename "$REF")" \
+            || echo "output fetch failed for $REF (recorded as-is)"
+          find "$RUNNER_TEMP/v64-traces" -name 'trace_*.json' -printf '%10s  %p\n' | head -40
+          python3 gemma4-agent/tools/summarize_agent_traces.py \
+            --traces-dir "$RUNNER_TEMP/v64-traces" \
+            --out gemma4-agent/kaggle_results/v6-4-miniscreen/traces
+          echo "--- aggregate ---"
+          cat gemma4-agent/kaggle_results/v6-4-miniscreen/traces/trace-aggregate.md
+
+      - name: Commit trace summaries with the safe pattern
+        if: always()
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin "$GITHUB_REF_NAME"
+          # SAFE PATTERN - see the other workflows (2026-10-13 incident).
+          rm -rf /tmp/keep && mkdir -p /tmp/keep
+          cp -r gemma4-agent/kaggle_results/v6-4-miniscreen /tmp/keep/ 2>/dev/null || true
+          git reset --hard "origin/$GITHUB_REF_NAME"
+          mkdir -p gemma4-agent/kaggle_results
+          cp -r /tmp/keep/v6-4-miniscreen gemma4-agent/kaggle_results/ 2>/dev/null || true
+          # keep raw traces out of git, exactly as in V6.3
+          rm -f gemma4-agent/kaggle_results/v6-4-miniscreen/traces/trace_*.json
+          git add -f gemma4-agent/kaggle_results/v6-4-miniscreen/traces 2>/dev/null || true
+          git rm -q --ignore-unmatch gemma4-agent/kaggle_smoke/v64-traces.trigger
+          if [ -z "$(git diff --cached --name-only)" ]; then
+            echo "Nothing to commit: no trace summaries were produced."
+            exit 0
+          fi
+          git commit -m "chore(gemma): record V6.4 mini-screen trace summaries [skip ci]"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
+
+      - name: Verify documentation consistency (CI95 intervals against recorded JSON)
+        if: always()
+        run: python3 gemma4-agent/tools/check_docs_consistency.py
