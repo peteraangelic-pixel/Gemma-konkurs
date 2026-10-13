@@ -10,6 +10,7 @@ dla przebiegów po dodaniu diagnostyki per zadanie (V6.1, V6.2).
 | V5 | **10/30** | [19.2 %, 51.2 %] | 6 | 1 | 9 | 0 | 0 | — | 232.7 s |
 | V6.1 | **6/30** | [9.5 %, 37.3 %] | 7 | 1 | 17 | 9 | 0 | 15/30 | 275.4 s |
 | V6.2 | **9/30** | [16.7 %, 47.9 %] | 8 | 2 | 17 | 0 | 1 | 20/30 | 272.4 s |
+| V6.3-mini | **0/4** | [0.0 %, 49.0 %] | 4 | 0 | 4 | 0 | 0 | 0/4 | 318.4 s |
 
 ## Zmiany statusu między kolejnymi kandydatami
 
@@ -17,6 +18,7 @@ dla przebiegów po dodaniu diagnostyki per zadanie (V6.1, V6.2).
 - V4 → V5: +1 (rich_2725), -2 (fastapi_14851, fastapi_14873)
 - V5 → V6.1: +0 (—), -4 (rich_3043, rich_3518, rich_3882, rich_3894)
 - V6.1 → V6.2: +4 (fastapi_14873, rich_3518, rich_3882, rich_3894), -1 (rich_3006)
+- V6.2 → V6.3-mini: +0 (—), -9 (fastapi_14077, fastapi_14458, fastapi_14873, requests_6644, rich_2725, rich_3518, rich_3718, rich_3882, rich_3894)
 
 ### V6.1: zadania z plikami-śmieciami w diffie
 
@@ -43,10 +45,15 @@ dla przebiegów po dodaniu diagnostyki per zadanie (V6.1, V6.2).
 
 - rich_3934, fastapi_14851, fastapi_14266, rich_3105, rich_3006, fastapi_14186, requests_6757, fastapi_15745
 
+### V6.3-mini: puste drzewa (4)
+
+- rich_3105, rich_3934, rich_3006, fastapi_14487
+
 ## Bramki jakości V6.3 (pre-registered 2026-10-12, przed przebiegiem)
 
 Bramki są **osobne od liczby rozwiązanych zadań** i nie przesuwa się ich po zobaczeniu wyniku.
 
+- **V6.3-mini**: G1 brak plików-śmieci: PASS (0); G2 brak przedwczesnych submisji bez edycji: PASS (0); G3 zero diffów wyłącznie dokumentacyjnych: PASS (0); G4 cel: puste drzewa <= 4 (jest 4); wynik zgłaszany osobno: 0/4 CI95 [0.0 %, 49.0 %]
 
 ## Reguły interpretacji (wyuczone na tych przebiegach)
 

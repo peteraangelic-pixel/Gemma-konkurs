@@ -1,0 +1,43 @@
+{
+  "created_utc": "2026-10-13T00:59:06+00:00",
+  "status": "complete",
+  "submission_sha256": "abf22bac2c67c639342f56e890fd77cb36c91811d07cf1c239c84ef28fa1216e",
+  "fixed_task_id": "rich_3105",
+  "task_count_requested": 4,
+  "sample_seed": 20261009,
+  "kernel_timeout_seconds": 14700,
+  "model": "gemma-4-31b-it-qat-w4a16-ct",
+  "machine_shape": "NvidiaL4",
+  "docker_image": "gcr.io/kaggle-private-byod/python@sha256:37c64f7dd9c54116ecd1bcc88817c5469b88387388fade02bfa8bf3fc647d461",
+  "docker_image_pinning_type": "original",
+  "python_runtime_expected": "3.12",
+  "private_notebook": true,
+  "internet_enabled": false,
+  "competition_submission_created": false,
+  "gpu_quota_used": null,
+  "gpu_quota_usage_status": "unconfirmed",
+  "kaggle_running_status_observed": true,
+  "updated_utc": "2026-10-13T01:30:36+00:00",
+  "kernel_ref": "petersharps/gemma-agent-benchmark-abf22bac-20261013-005906",
+  "kernel_url": "https://www.kaggle.com/code/petersharps/gemma-agent-benchmark-abf22bac-20261013-005906",
+  "push_exit_code": 0,
+  "gpu_requested": true,
+  "kaggle_status": "KernelWorkerStatus.COMPLETE",
+  "result": {
+    "tasks_completed_or_failed": 4,
+    "task_count_selected": 4,
+    "resolved_count": 0,
+    "score_estimate": 0.0,
+    "score_ci95_wilson": [
+      0.0,
+      0.48990002040399916
+    ],
+    "benchmark_wall_seconds": 1273.6321640690003,
+    "task_ids": [
+      "rich_3105",
+      "rich_3934",
+      "rich_3006",
+      "fastapi_14487"
+    ]
+  }
+}

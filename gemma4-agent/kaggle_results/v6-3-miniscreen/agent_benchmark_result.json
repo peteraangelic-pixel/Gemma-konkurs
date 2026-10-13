@@ -1,0 +1,97 @@
+{
+  "task_count_requested": 4,
+  "task_count_selected": 4,
+  "tasks_completed_or_failed": 4,
+  "resolved_count": 0,
+  "score_estimate": 0.0,
+  "score_ci95_wilson": [
+    0.0,
+    0.48990002040399916
+  ],
+  "per_task_max_time_minutes": 5.25,
+  "mean_task_duration_seconds": 318.39988029950007,
+  "total_task_duration_seconds": 1273.5995211980003,
+  "benchmark_wall_seconds": 1273.6321640690003,
+  "model": "gemma-4-31b-it-qat-w4a16-ct",
+  "visible_gpu_count": 4,
+  "submission_sha256": "abf22bac2c67c639342f56e890fd77cb36c91811d07cf1c239c84ef28fa1216e",
+  "sample_seed": 20261009,
+  "repo_counts": {
+    "Textualize/rich": 3,
+    "fastapi/fastapi": 1
+  },
+  "task_ids": [
+    "rich_3105",
+    "rich_3934",
+    "rich_3006",
+    "fastapi_14487"
+  ],
+  "tasks": [
+    {
+      "task_id": "rich_3105",
+      "repo": "Textualize/rich",
+      "resolved": false,
+      "test_exit_code": -1,
+      "patch_chars": 0,
+      "tool_calls": 22,
+      "duration_seconds": 317.984147002,
+      "touched_files": [],
+      "touched_tests": false,
+      "gold_fixable_files": [
+        "rich/_export_format.py"
+      ],
+      "localized": false
+    },
+    {
+      "task_id": "rich_3934",
+      "repo": "Textualize/rich",
+      "resolved": false,
+      "test_exit_code": -1,
+      "patch_chars": 0,
+      "tool_calls": 15,
+      "duration_seconds": 317.66826422400004,
+      "touched_files": [],
+      "touched_tests": false,
+      "gold_fixable_files": [
+        "rich/live.py",
+        "rich/live_render.py"
+      ],
+      "localized": false
+    },
+    {
+      "task_id": "rich_3006",
+      "repo": "Textualize/rich",
+      "resolved": false,
+      "test_exit_code": -1,
+      "patch_chars": 0,
+      "tool_calls": 4,
+      "duration_seconds": 317.68634027200005,
+      "touched_files": [],
+      "touched_tests": false,
+      "gold_fixable_files": [
+        "rich/repr.py"
+      ],
+      "localized": false
+    },
+    {
+      "task_id": "fastapi_14487",
+      "repo": "fastapi/fastapi",
+      "resolved": false,
+      "test_exit_code": -1,
+      "patch_chars": 0,
+      "tool_calls": 26,
+      "duration_seconds": 320.2607697000001,
+      "touched_files": [],
+      "touched_tests": false,
+      "gold_fixable_files": [
+        "docs_src/handling_errors/tutorial004.py"
+      ],
+      "localized": false
+    }
+  ],
+  "localization_hits": 0,
+  "tasks_with_empty_patch": 4,
+  "tasks_touching_tests": 0,
+  "official_submission": false,
+  "score_scope": "seeded stratified public development sample; not a leaderboard score"
+}

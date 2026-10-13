@@ -25,20 +25,6 @@ gałęzi `arena/6d081d52-gemma-konkurs`). Zasady:
 - **17 sesji kończących się na zegarze pozostaje osobnym, nierozwiązanym celem** — V6.3 go nie
   adresuje i nie udajemy, że adresuje.
 
-## Tożsamość artefaktów (weryfikowalna)
-
-| przebieg | archiwum | SHA-256 |
-| --- | --- | --- |
-| mini-screen 4 zadań | `submission-v6.zip` (build V6.3) | `abf22bac2c67c639342f56e890fd77cb36c91811d07cf1c239c84ef28fa1216e` |
-| pełny screening 30 zadań | `submission-v6.zip` (build V6.3 + korekta prozy) | `650e1dba10c5b269c616a670255c3a585a57d750ce0f8428581ae65ea528f5c4` |
-
-Różnica między tymi buildami to **wyłącznie proza promptu** — 11 zmienionych linii (poprawione
-„45 tool calls" → 30, usunięte zduplikowane zdanie w kroku 6, dwa punkty sklejone kontynuacją
-linii w źródle Pythona rozdzielone). Zweryfikowane `difflib.unified_diff` na zawartości obu
-ZIP-ów: **żadna reguła, próg, bajt skryptu ani konfiguracja się nie zmieniły**, więc wynik
-mini-screenu opisuje ten sam mechanizm, który mierzy pełny przebieg. Powód poprawki: przegląd
-własnego promptu wykrył, że tekst obiecywał budżet 45 wywołań, gdy harness tnie na 30.
-
 ## Bramki (hard) — raportowane per przebieg
 
 | bramka | definicja operacyjna | próg |
@@ -77,29 +63,6 @@ własnego promptu wykrył, że tekst obiecywał budżet 45 wywołań, gdy harnes
 4. Pełny przebieg: **żadnej deklaracji przewagi nad V5** przy n=30. Sukces = G1–G3 zaliczone
    + wynik nie gorszy niż V5 o więcej niż 2 zadania. Porażka = którakolwiek z G1–G3 złamana
    → wracamy do projektowania, nie do wysyłki.
-
-## Reguła decyzyjna o submissji — zapisana 2026-10-13 01:05 UTC, PRZED wynikami V6.3
-
-Użytkownik upoważnił sesję: „zrób submission z tej wersji, jeśli uznasz to za stosowne".
-Żeby to upoważnienie nie zamieniło się w uznaniowość po fakcie, próg jest **zamrożony tutaj**:
-
-Submissja V6.3 (`submission-v6.zip`, SHA-256 `650e1dba10c5b269c616a670255c3a585a57d750ce0f8428581ae65ea528f5c4`,
-komunikat „V63", plik stagingowany jako `submission.zip`) **następuje wtedy i tylko wtedy, gdy**:
-
-1. mini-screen: G1 = G2 = G3 = 0 na wszystkich 4 zadaniach;
-2. pełny screening: G1 = G2 = G3 = 0;
-3. pełny screening: rozwiązane ≥ **9/30** (czyli nie gorzej niż V6.2 i w granicy jednego zadania od V5);
-4. slot dzienny wolny (brak submissji w ciągu 24 h — pilnuje `submit_kaggle_v63_once.py`);
-5. `--require-gates v6-3-miniscreen,v6-3-benchmark` przechodzi (bramka jest wbudowana w uploader,
-   więc warunki 1–2 nie mogą zostać pominięte przez pomyłkę).
-
-**Jeśli któryś punkt nie przejdzie — submissji NIE MA**, niezależnie od tego, jak dobre wydają się
-inne liczby. Uzasadnienie merytoryczne submissji (przy spełnionych warunkach): obecny wynik
-oficjalny 0.03 pochodzi z artefaktu V4, który na tej samej próbce produkował 6 pustych drzew;
-V6.3 usuwa dwie zmierzone klasy zer (sesja bez edycji, diff z plików-śmieci) i podnosi trafienia
-lokalizatora, więc oczekiwana wartość na ukrytym zbiorze jest wyższa niż V4 — nawet jeśli próbka
-publiczna tego nie rozstrzyga przy n=30. **Nie twierdzę, że V6.3 pobije V5**; twierdzę, że jest
-pierwszym kandydatem bez zmierzonej klasy zer, a to jest jedyna dźwignia, jaką mamy.
 
 ## Kiedy w ogóle rozważać oficjalną submissję
 
