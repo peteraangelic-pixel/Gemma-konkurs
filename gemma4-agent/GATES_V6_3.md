@@ -106,7 +106,17 @@ ale jego krok commitu wyników padł — liczby odzyskano z artefaktu runu osobn
 
 **Bramki: G1 PASS (0), G2 FAIL (3), G3 PASS (0).** Cel G4 (≤4 puste drzewa) chybiony (11).
 
-### Decyzja: NIE WYSYŁAMY V6.3
+#### Diagnoza wykonana (read-only, bez GPU) — `ANALYSIS_V6_3_MECHANISMS.md`
+
+Po decyzji o braku submissji wykonano dokładnie to, o co prosił recenzent: odczyt logów i ścieżek
+wykonania z **zakończonych** kerneli (bez nowego GPU). Wynik: 11 pustych drzew to **cztery różne
+mechanizmy**, nie jeden — 7 zadań nigdy nie próbuje edycji, 1 pętli nieudane `edit_file` (9 wywołań
+na jednym pliku), 2 wyczerpuje 60 tur pętlą `submit_patch` (48 i 5 wywołań), 1 pisze poza
+repozytorium (`/tmp/locate.py`). Mediana pierwszej edycji w zadaniach rozwiązanych: 179 s z 315 s.
+Wnioski dla V6.4 (wczesny zapis, `submit_patch` raz, upadek na `write_file`, zakaz zapisu poza repo)
+są w tym dokumencie i **nie zostały uruchomione**.
+
+## Decyzja: NIE WYSYŁAMY V6.3
 
 Reguła decyzyjna zapisana wyżej (01:05 UTC, **przed** wynikami) wymaga G1–G3 = 0 w **obu** przebiegach.
 G2 = 3 → warunek niespełniony → **submissji nie ma**. Decyzja jest mechaniczna i nie przesuwam progu po
