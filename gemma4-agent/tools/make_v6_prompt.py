@@ -167,6 +167,11 @@ V64C_EDITS = [
      '- If by tool call 4 the tree still has no intended edit, stop reading and investigating: open the top locator candidate and make the smallest sensible issue-related change. No placeholder edits - a sincere wrong guess beats finishing with nothing.'),
 ]
 
+V64D_EDITS = [
+    ('- **Apart from the single locator heredoc in step 2, never create a file to help yourself, and never write outside the repository.** That one heredoc writes `/tmp/locate.py` and the issue text, and it is the only exception; everything else you write must be an edit inside `/workspace`. Measured: one session spent 280 s writing `/tmp/locate.py` instead of editing the repository and scored zero. If you feel the need to create a helper file, that is your signal to edit the top candidate instead.',
+     '- **Scratch files are never your answer.** The single `/tmp/locate.py` heredoc in step 2 is the only file you may create before your first edit. After the fix is already on disk you may write a repro script under `/tmp` to check it, but the repository diff is the only thing graded - measured: one session spent 280 s writing `/tmp/locate.py` instead of editing and scored zero, while another wrote `/tmp/repro.py` only after its edit and passed. Never use bare filenames (they land in `/workspace`), and never write anywhere except `/tmp` and `/workspace`.'),
+]
+
 def apply_post_edits(prompt: str) -> str:
     for old, new in POST_EDITS:
         assert old in prompt, "missing anchor: " + old[:60]
@@ -185,6 +190,12 @@ def apply_post_edits(prompt: str) -> str:
     # *intended* change, and the ban is what makes "intended" enforceable rather than decorative.
     for old, new in V64C_EDITS:
         assert old in prompt, "missing V64C anchor: " + old[:60]
+        prompt = prompt.replace(old, new, 1)
+    # V64D: the blanket ban on helper files also forbade a pattern that a RESOLVED task used
+    # (rich_3006 wrote /tmp/repro.py after its edit and passed). Narrowed to what the evidence
+    # supports: scratch material may not be the answer and may not exist before the first edit.
+    for old, new in V64D_EDITS:
+        assert old in prompt, "missing V64D anchor: " + old[:60]
         prompt = prompt.replace(old, new, 1)
     return prompt
 

@@ -13,7 +13,7 @@ diagnozy kerneli V6.3 (`ANALYSIS_V6_3_MECHANISMS.md`):
 | **M1** „No reading without writing” — pierwsze wywołanie po przeczytaniu pierwszego pliku to próba edycji; jeśli do wywołania 6 nie ma edycji, następne wywołanie **musi** być `edit_file`/`write_file` | brak jakiejkolwiek próby edycji | 7/30 sesji bez edycji; jedna zużyła 31 wywołań na `run_command`/`read_file`; dwie skończyły same po 41 s i 108 s; mediana pierwszej edycji 179 s z 315 s |
 | **M2** „If an `edit_file` call does not change the file, do not repeat it” — jedna inna kotwica, potem `write_file` całego pliku | pętla nieudanych edycji | `fastapi_15030`: 9 wywołań `edit_file` pod rząd (212–307 s), diff nadal 0 znaków |
 | **M3** „`submit_patch()` … at most once” — powtórzenie submitu to sygnał do edycji, nie do ponawiania | pętla submitu zjadająca limit tur | `requests_6757` 48 wywołań, `fastapi_14077` 44, `rich_3894` 42 → wszystkie trzy padły na limicie 60 tur |
-| **M4** „Never create a file to help yourself, and never write outside the repository” | zapis poza repozytorium | `fastapi_15745`: `write_file` → `/tmp/locate.py` o 279,8 s; w ścieżkach widać też `/tmp/repro.py` |
+| **M4** „Scratch files are never your answer” — przed pierwszą edycją wolno tylko heredok lokalizatora; po edycji skrypt `repro` w `/tmp` jest dozwolony, ale oceniany jest wyłącznie diff w repo | plik-pomocnik zamiast edycji | `fastapi_15745`: `write_file` → `/tmp/locate.py` o 279,8 s, zero edycji (pusty patch); **kontrprzykład**: `rich_3006` napisał `/tmp/repro.py` *po* edycji i zdał — reguła NIE może tego zabraniać |
 
 ### Piąta zmiana (scalona z pracy drugiej gałęzi) — usunięcie narzędzia `submit_patch`
 
@@ -79,7 +79,7 @@ eksperyment (wymóg recenzji) i nie jest tu mieszana.
 
 | element | wartość |
 | --- | --- |
-| archiwum | `gemma4-agent/submission-v6.zip`, **13 401 B**, sha256 `f4e1edcb055d960896736939541cdda8d4f2219d2f7c69fbbd474e0ddd51501d` |
+| archiwum | `gemma4-agent/submission-v6.zip`, **13 427 B**, sha256 `b5db88b8d393e92dc03ef8de7e97af42370e033b91d7ed4b3a25a38d771e2603` |
 | odtwarzalność | dwa kolejne buildy = ten sam hash (stały znacznik ZIP 1980-01-01); kontrola negatywna: podmiana jednej reguły wywala build |
 | prompt | 18 966 znaków (V6.3: 17 603); wobec V6.3: **+4 linie reguł, przepisana proza o submicie** (dokładnie cztery reguły; jedna linia zmieniona: „optional” → „optional, and you may call it at most once”) |
 | lokalizator | `tools/locate.py` `fe25b200fa52e100…` **bez zmian**, bajt w bajt taki sam w ZIP i w repo |
@@ -91,6 +91,42 @@ eksperyment (wymóg recenzji) i nie jest tu mieszana.
 V6.3 — to celowe (V6.3 nie jest kandydatem do wysyłki: G2 = 3). Archiwum V6.3 jest zamrożone
 w historii (`3ee7dd2`) i nadal zapięte pinem w `submit_kaggle_v63_once.py`; gdyby ktoś odpalił tamten
 workflow, uploader odmówi z `archive_hash_mismatch` (exit 2) — czyli bezpiecznie, nie wysyłkowo.
+
+
+## Ile dokładnie różni się moja wersja od paczki drugiej gałęzi (stan: 2026-10-13 09:20 UTC)
+
+Odpowiedź krótka: **dzielą nas dwa mechanizmy z czterech i dwa zadania z 30 — ale to różnica
+w pokryciu mechanizmów, nie w wyniku. Żadna z wersji nie była mierzona, więc żadna nie jest
+„lepsza" w sensie wyniku; jest lepsza w sensie tego, ile zmierzonych przyczyn zer adresuje.**
+
+| mechanizm (puste drzewa w V6.3) | ich paczka `0cc04c08` | mój kandydat `b5db88b8` |
+| --- | --- | --- |
+| **M1** brak próby edycji — 7/30 | **TAK** (termin call 4 + zakaz atrapy) | **TAK** (ich brzmienie, przyjęte) |
+| **M2** pętla nieudanych `edit_file` — 1/30 (`fastapi_15030`, 9 wywołań) | **nie** — brak jakiejkolwiek reguły ratunkowej | **TAK** (inna kotwica, potem `write_file` całego pliku) |
+| **M3** pętla `submit_patch` — 2/30 | **TAK** (narzędzie usunięte) | **TAK** (to samo) |
+| **M4** plik-pomocnik zamiast edycji — 1/30 (`fastapi_15745`) | **nie** — reguła wprost pozwala na inne pliki w `/tmp` („If any other scratch file is needed, put it under `/tmp`"), czyli dopuszcza zachowanie, które opróżniło to zadanie | **TAK**, ale wąsko: zakaz tylko *zastępowania* edycji plikiem; po edycji `repro` w `/tmp` jest dozwolony |
+| **pokrycie pustych drzew** | **9/11** | **11/11** |
+| różnica w zadaniach | — | **2/30 = 6,7 pp próbki** były gwarantowanymi zerami z przyczyn, których ich wersja nie adresuje |
+
+**Co to daje, a czego nie daje:** 6,7 pp to udział zadań, które w V6.3 spłonęły na mechanizmach M2/M4 —
+to **górna granica** potencjalnej korzyści, nie prognoza wyniku. Nie mamy dowodu, że zamknięcie
+mechanizmu zamienia się w punkt: V6.3 miał o jedno rozwiązanie więcej niż V6.2 przy jednocześnie
+**większej** liczbie zer, więc samo „mniej zer" nie przełożyło się wtedy na wynik.
+
+**Czego nie wolno mi przypisać sobie:** termin call 4 z zakazem atrapy to **ich** pomysł
+i najlepsza pojedyncza zmiana w tej paczce; bez niego moja wersja stałaby na progu call 6/8.
+Przyjąłem go w całości, z podpisem w `GATES_V6_4.md` i w historii commitów.
+
+**Gdzie ich wersja jest lepsza lub równa:** prompt jest o ~1,5 tys. znaku krótszy (17 888 vs 19 378,
++8,3 % u mnie — koszt nieistotny dla modelu, ale to ich zaleta), ich builder ma równoważne strażniki
+(dokładny zbiór narzędzi, budżety, CRC, determinizm), a ich łagodniejsza reguła o plikach
+tymczasowych **okazała się mieć rację**: dopuszcza wzorzec, którego użyło rozwiązane `rich_3006`.
+Właśnie dlatego **zaweziłem swoją regułę M4** zamiast ją zostawiać w formie zakazu — ich wersja
+wskazała koszt, którego nie zmierzyłem przed wypchnięciem.
+
+**Różnica netto, w jednym zdaniu:** mój kandydat adresuje 4 z 4 zmierzonych mechanizmów, ich 2 z 4;
+przy czym gdyby ich paczkę uzupełnić o regułę M2 i wąską wersję M4, byłaby równoważna. Różnica jest
+więc w pracy włożonej w diagnozę, nie w jakości samego pomysłu na V6.4.
 
 ## Bramki (hard — bez zmian wobec V6.3)
 

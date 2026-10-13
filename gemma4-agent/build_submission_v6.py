@@ -227,8 +227,8 @@ def validate_tree(submission_dir: Path) -> list[Path]:
         "No reading without writing, and no dummy edits": "M1 - sessions that never attempt an edit",
         "If an `edit_file` call does not change the file, do not repeat it.": "M2 - edit loop",
         "There is no submit tool": "M3 - the submit tool was removed after 42-48 call loops",
-        "Apart from the single locator heredoc in step 2, never create a file to help yourself":
-            "M4 - writes outside the repository (with the locator exception stated)",
+        "Scratch files are never your answer":
+            "M4 - scratch files may not replace the edit (narrowed after rich_3006 passed using /tmp/repro.py)",
     }
     for phrase, label in v64_rules.items():
         if prose.count(phrase) != 1:
@@ -237,7 +237,8 @@ def validate_tree(submission_dir: Path) -> list[Path]:
         "31 calls": "M1 measurement",
         "nine consecutive": "M2 measurement",
         "48 times": "M3 measurement",
-        "280 s": "M4 measurement",
+        "280 s": "M4 measurement (a scratch file replacing the edit)",
+        "/tmp/repro.py": "M4 counter-example (a scratch file after the edit, in a passed task)",
     }.items():
         if number not in prose:
             fail(f"prompts/system.md lost the V6.4 measurement ({label}): {number!r}")
