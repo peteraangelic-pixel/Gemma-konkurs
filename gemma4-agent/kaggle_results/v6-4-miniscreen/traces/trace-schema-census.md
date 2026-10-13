@@ -1,0 +1,60 @@
+# Trace schema census (keys and types only - no model text)
+
+traces read: 6 | parse failures: 0
+
+| key path | occurrences | types | max string length |
+| --- | --- | --- | --- |
+| `agent` | 6 | dict | 0 |
+| `agent.name` | 6 | str | 13 |
+| `agent.version` | 6 | str | 3 |
+| `final_metrics` | 6 | dict | 0 |
+| `final_metrics.total_cached_tokens` | 6 | int | 0 |
+| `final_metrics.total_completion_tokens` | 6 | int | 0 |
+| `final_metrics.total_prompt_tokens` | 6 | int | 0 |
+| `final_metrics.total_steps` | 6 | int | 0 |
+| `final_metrics.total_tokens` | 6 | int | 0 |
+| `schema_version` | 6 | str | 9 |
+| `steps` | 6 | list | 0 |
+| `steps[].extra` | 142 | dict | 0 |
+| `steps[].extra.author` | 142 | str | 21 |
+| `steps[].extra.elapsed_s` | 142 | float | 0 |
+| `steps[].extra.event_type` | 138 | str | 18 |
+| `steps[].extra.timestamp` | 142 | float | 0 |
+| `steps[].llm_call_count` | 127 | int | 0 |
+| `steps[].message` | 138 | str | 19309 |
+| `steps[].metrics` | 125 | dict | 0 |
+| `steps[].metrics.cached_tokens` | 125 | int | 0 |
+| `steps[].metrics.completion_tokens` | 125 | int | 0 |
+| `steps[].metrics.prompt_tokens` | 125 | int | 0 |
+| `steps[].metrics.total_tokens` | 125 | int | 0 |
+| `steps[].model_name` | 127 | str | 71 |
+| `steps[].observation` | 121 | dict | 0 |
+| `steps[].observation.content` | 121 | str | 7346 |
+| `steps[].observation.extra` | 121 | dict | 0 |
+| `steps[].observation.extra.author` | 121 | str | 21 |
+| `steps[].observation.extra.elapsed_s` | 121 | float | 0 |
+| `steps[].observation.extra.timestamp` | 121 | float | 0 |
+| `steps[].observation.extra.tool_name` | 121 | str | 11 |
+| `steps[].source` | 142 | str | 6 |
+| `steps[].step_id` | 142 | int | 0 |
+| `steps[].tool_calls` | 121 | list | 0 |
+| `steps[].tool_calls[].arguments` | 121 | dict | 0 |
+| `steps[].tool_calls[].arguments.@deprecated(\n",allow_multiple` | 1 | bool | 0 |
+| `steps[].tool_calls[].arguments.command` | 81 | str | 11801 |
+| `steps[].tool_calls[].arguments.end_line` | 10 | int | 0 |
+| `steps[].tool_calls[].arguments.filepath` | 40 | str | 39 |
+| `steps[].tool_calls[].arguments.new_string` | 14 | str | 903 |
+| `steps[].tool_calls[].arguments.old_string` | 13 | str | 494 |
+| `steps[].tool_calls[].arguments.start_line` | 15 | int | 0 |
+| `steps[].tool_calls[].extra` | 121 | dict | 0 |
+| `steps[].tool_calls[].extra.author` | 121 | str | 21 |
+| `steps[].tool_calls[].extra.elapsed_s` | 121 | float | 0 |
+| `steps[].tool_calls[].extra.model_version` | 121 | str | 71 |
+| `steps[].tool_calls[].extra.timestamp` | 121 | float | 0 |
+| `steps[].tool_calls[].extra.usage` | 4 | dict | 0 |
+| `steps[].tool_calls[].extra.usage.cached_tokens` | 4 | int | 0 |
+| `steps[].tool_calls[].extra.usage.completion_tokens` | 4 | int | 0 |
+| `steps[].tool_calls[].extra.usage.prompt_tokens` | 4 | int | 0 |
+| `steps[].tool_calls[].extra.usage.total_tokens` | 4 | int | 0 |
+| `steps[].tool_calls[].function_name` | 121 | str | 11 |
+| `steps[].tool_calls[].tool_call_id` | 121 | str | 7 |
