@@ -204,6 +204,43 @@ Baseline dla **dokładnie tych 6 zadań** w V6.3 (policzony z `trace-operations.
    kolejnych reguł.
 7. **E5 nadal obowiązuje**: mini-screen nie jest prognozą wyniku; rozstrzyga pełny przebieg.
 
+## Wynik mini-screenu — dopisane **po** przebiegu (2026-10-13, 12:03 UTC)
+
+Wszystko poniżej pochodzi z artefaktów: `kaggle_results/v6-4-miniscreen/agent_benchmark_result.json`,
+`run.json` i `traces/trace-operations.json`. Werdykt P1-P5 policzył
+`tools/analyze_v64_miniscreen.py`; pełny opis: `ANALYSIS_V6_4_MINISCREEN.md`.
+
+- **Wynik:** 1/6 rozwiązanych (tylko `fastapi_14077`, kontrola), CI95 [3,0 %, 56,4 %] przy n=6 —
+  **nie jest to prognoza wyniku** (E5). Średni czas zadania 289,9 s, kernel
+  `petersharps/gemma-agent-benchmark-aaea34e4-20261013-111908`.
+- **Zmiana wobec V6.3 na tych samych 6 zadaniach: +0 / −0 rozwiązań**; puste drzewa 5 → 3.
+- **Mechanizmy zmierzone jako naprawione:** M2 (`fastapi_15030`: 9 kolejnych edycji → 2, patch
+  0 → 1348 B), M3 (`requests_6757`: 48 `submit_patch` → 0, patch 0 → 377 B; `fastapi_14077`
+  pozostaje rozwiązany przy 0 submissjach).
+- **Mechanizmy nienaprawione:** termin pierwszej edycji w call 4 — **0/6** (cel ≥ 4/6), mediana
+  pierwszej edycji w repo call 7 (baseline 8); trzy sesje bez jakiejkolwiek edycji.
+- **Werdykt pre-rejestracji:** P1 **NARUSZONE** (0/6), P2 **NARUSZONE** (3/6), P3 SPEŁNIONE (0
+  wywołań `submit_patch`), P4 SPEŁNIONE (seria 2 < 3), P5 SPEŁNIONE. **Klauzula falsyfikacji
+  zadziałała** (P1 ≤ 2/6 i P2 > 1/6) — zgodnie z E6 kolejna dźwignia **nie może być kolejną regułą
+  promptu**.
+- **Bramki jakości:** G1 = 0 (`setup.py` z `requests_6757` to prawdziwy plik repozytorium, nie
+  śmieć), **G2 = 1** (`rich_3105`: 106,9 s, puste drzewo — tym razem nie przez przedwczesną
+  submissję, lecz przez dobrowolne zakończenie), G3 = 0, G4 = 3 puste (nie bramkuje).
+- **Skutek dla submissji:** zamrożona reguła wymaga G1-G3 = 0 w **obu** przebiegach. Mini ma G2 = 1,
+  więc **V6.4 jest wykluczony z wysłania** — niezależnie od pełnego przebiegu. Reguła zostaje
+  nienaruszona po zobaczeniu wyniku; to trzeci raz, kiedy zadziałała (V6.3 mini G2=0 → V6.3 pełny
+  G2=3 → V6.4 mini G2=1).
+- **Nowa diagnoza (wchodzi do V6.5):** pozostałe zera to sesje **uwięzione w rozpoznaniu** —
+  `rich_3105` 15 × `run_command` w 107 s i koniec z własnej woli; `rich_3043` (322,7 s) i
+  `fastapi_15745` (336,7 s, 10 × `read_file fastapi/routing.py`) kończą na zegarze bez edycji.
+  Jawny termin „edytuj do call 4" był w prompcie i został zignorowany w 6/6. Wniosek: to nie brak
+  wiedzy, tylko kolejność działań — potrzebny mechanizm wymuszający edycję (architektura/budżet),
+  a nie kolejne zdanie w prompcie.
+- **Co przechodzi do V6.5:** reguły M2 i M3 (zmierzone: usuwają pętle i zamieniają puste drzewa
+  w patche), reguła M4 w wersji potwierdzonej śladami, brak `submit_patch`. Pełny przebieg 30 zadań
+  dla V6.4 pozostaje **nieuruchomiony** — czeka na Twoją decyzję, bo nie może już prowadzić do
+  submissji tej wersji.
+
 ## Plan przebiegów — **wymaga Twojego zatwierdzenia; nic nie zostało uruchomione**
 
 1. **Mini-screen 6 zadań mechanizmowych:** `rich_3105` (M1 szybki), `rich_3043` (M1 średni),

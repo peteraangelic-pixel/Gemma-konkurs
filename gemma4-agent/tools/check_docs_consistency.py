@@ -29,7 +29,8 @@ ROOT = Path(__file__).resolve().parents[2]
 RESULTS = ROOT / "gemma4-agent" / "kaggle_results"
 CANDIDATES = [("V3", "v3-benchmark"), ("V4", "v4-benchmark"), ("V5", "v5-benchmark"),
               ("V6.1", "v6-1-benchmark"), ("V6.2", "v6-benchmark"),
-              ("V6.3-mini", "v6-3-miniscreen"), ("V6.3", "v6-3-benchmark")]
+              ("V6.3-mini", "v6-3-miniscreen"), ("V6.3", "v6-3-benchmark"),
+               ("V6.4-mini", "v6-4-miniscreen")]
 # prose rounds intervals to one decimal place (19.23 -> "19.2"), so allow half of the
 # last digit plus epsilon; candidates differ by >= 1 pp, so this stays discriminating.
 TOLERANCE = 0.06  # percentage points
