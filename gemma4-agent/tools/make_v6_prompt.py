@@ -52,7 +52,7 @@ EDIT_STEP = """5. **Edit minimally and correctly.**
    - **Documentation is not a fix.** A markdown change under `docs/` can never change test outcomes. If the issue is about behaviour and the best candidate you have is such a file, open the source module it documents instead (or the next source candidate from the ranking). A docs edit may accompany the fix, never replace it. The only exception is an issue that is explicitly about the documentation itself.
    - Files under `docs_src/`, `examples/` or `tutorials/` are executable code that some projects import in their tests (FastAPI does): editing those can fix behaviour, so treat them as source."""
 
-VERIFY_STEP = """6. **Verify cheaply, once, or not at all.** If you have a relevant test file and calls to spare, spend a single call on syntax plus the narrowest test target, always bounded:"""
+VERIFY_STEP = """6. **Verify cheaply, once, or not at all.**"""
 
 SUBMIT_STEP = """7. **Final check, then decide whether to submit at all.**
    `cd /workspace && git status --porcelain && git diff --stat`
@@ -71,14 +71,16 @@ POST_EDITS = [
         "An **empty patch is a guaranteed zero**, while a plausible, minimal patch has a real chance of passing. Therefore: **never end a session without a real edit on disk** - the harness captures the working-tree diff even if you never call `submit_patch()`, and it ends the session when you do call it. A session that runs out of time with an unrelated or empty diff scores zero just the same.",
     ),
     (
+        "- You have roughly 5 minutes of wall clock and a budget of about 45 tool calls, but on this hardware each model call costs about 10 seconds, so **every tool call is expensive**. A good run uses only 12-20 calls.",
+        "- You have roughly 5 minutes of wall clock and a budget of about 30 tool calls (the ceiling a 5.25-minute session can actually reach), and on this hardware each model call costs about 10 seconds, so **every tool call is expensive**. A good run uses only 12-20 calls.",
+    ),
+    (
         "- Pace by call count: after ~12 calls you should already have a candidate edit; after ~20 calls stop searching; after ~30 calls submit immediately with whatever you have.",
         "- **Hard edit deadline.** The graded artifact is the diff in `/workspace`: the harness extracts it even when you never call `submit_patch()`, so the only guaranteed zero is a tree you never edited. The locator is one call; an edit must exist on disk by call 8; stop searching by call 14; submit by call 18. A session that dies on the clock with an empty tree scores zero no matter how good the analysis was.",
     ),
     (
         "   - Implement precisely what the issue describes: same names, same exception types, same message wording, all mentioned edge cases, sane types and return values, project code style. If the issue describes invalid input, reject it with the exception type named or implied.",
-        "   - Make the first edit as soon as you have a plausible target and refine it with further `edit_file` calls; do not batch a large rewrite into one risky step.\
-   - Keep the diff small. Measured on these tasks: every resolved session produced a diff under 1900 characters (most under 1500), while every diff over 2000 characters failed. Fix the reported behaviour and nothing else.\
-   - Implement precisely what the issue describes: same names, same exception types, same message wording, all mentioned edge cases, sane types and return values, project code style. If the issue describes invalid input, reject it with the exception type named or implied.",
+        "   - Make the first edit as soon as you have a plausible target and refine it with further `edit_file` calls; do not batch a large rewrite into one risky step.\n   - Keep the diff small. Measured on these tasks: every resolved session produced a diff under 1900 characters (most under 1500), while every diff over 2000 characters failed. Fix the reported behaviour and nothing else.\n   - Implement precisely what the issue describes: same names, same exception types, same message wording, all mentioned edge cases, sane types and return values, project code style. If the issue describes invalid input, reject it with the exception type named or implied.",
     ),
     (
         "   `cd /workspace && python -c \"import ast;ast.parse(open('pkg/mod.py').read())\" && timeout 90 python -m pytest tests/test_mod.py -q 2>&1 | tail -20`",
@@ -90,8 +92,7 @@ POST_EDITS = [
     ),
     (
         "- If you cannot identify the defect with confidence, pick the most plausible location from your search results and implement the smallest change that matches the issue's wording, even untested. A partial or speculative fix costs nothing and can pass; an empty diff cannot.",
-        "- If you cannot identify the defect with confidence, pick the most plausible location from your search results and implement the smallest change that matches the issue's wording, even untested. A partial or speculative fix costs nothing and can pass; an empty diff cannot.\
-- If by call 10 the tree still has no edit, stop reading and investigating: open the top locator candidate and make the smallest sensible change - a wrong guess still beats submitting nothing.",
+        "- If you cannot identify the defect with confidence, pick the most plausible location from your search results and implement the smallest change that matches the issue's wording, even untested. A partial or speculative fix costs nothing and can pass; an empty diff cannot.\n- If by call 10 the tree still has no edit, stop reading and investigating: open the top locator candidate and make the smallest sensible change - a wrong guess still beats submitting nothing.",
     ),
 ]
 

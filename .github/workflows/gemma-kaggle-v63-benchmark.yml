@@ -112,16 +112,26 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git fetch origin "$GITHUB_REF_NAME"
-          # Rebase-free (the V6.2 run failed here while other commits were landing on the
-          # branch): keep the worktree, move the branch pointer to the remote tip, then commit
-          # only the result files.
-          git reset --soft "origin/$GITHUB_REF_NAME"
-          git add gemma4-agent/kaggle_results/v6-3-benchmark/run.json                   gemma4-agent/kaggle_results/v6-3-benchmark/agent_benchmark_result.json                   gemma4-agent/kaggle_results/screening_history.md
-          if [ -z "$(git diff --cached --name-only)" ]; then
-            echo "No benchmark result files were produced."
-            exit 0
-          fi
+          # SAFE PATTERN - fixed 2026-10-13, after it destroyed this branch once.
+          # The previous 'git reset --soft origin/<branch>' moves HEAD but leaves the INDEX on
+          # this job's own, older checkout, so the results commit rebuilt the OLD tree and
+          # silently reverted every commit pushed while the kernel ran: on 2026-10-13 it deleted
+          # the guarded submitter and the submit workflow, dropped the packer guards and reset
+          # submission-v6.zip from 650e1dba back to abf22bac (see GATES_V6_3.md).
+          # Safe order: take the REMOTE tree first, then re-apply only this run's outputs.
+          rm -rf /tmp/keep && mkdir -p /tmp/keep
+          cp -r gemma4-agent/kaggle_results/v6-3-benchmark /tmp/keep/ 2>/dev/null || true
+          git reset --hard "origin/$GITHUB_REF_NAME"
+          mkdir -p gemma4-agent/kaggle_results
+          cp -r /tmp/keep/v6-3-benchmark gemma4-agent/kaggle_results/ 2>/dev/null || true
+          git add gemma4-agent/kaggle_results/v6-3-benchmark 2>/dev/null || true
           python gemma4-agent/tools/compare_screenings.py || true
           git add gemma4-agent/kaggle_results/screening_history.md || true
+          # the trigger file exists exactly while a run has not consumed it yet
+          git rm -q --ignore-unmatch gemma4-agent/kaggle_smoke/v63-benchmark.trigger
+          if [ -z "$(git diff --cached --name-only)" ]; then
+            echo "No result files were produced; nothing to commit."
+            exit 0
+          fi
           git commit -m "chore(gemma): record Run private same-seed 30-task V6.3 benchmark [skip ci]"
           git push origin "HEAD:${GITHUB_REF_NAME}"

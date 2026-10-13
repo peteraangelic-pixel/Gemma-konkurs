@@ -199,6 +199,19 @@ def validate_tree(submission_dir: Path) -> list[Path]:
     if len(prompt_text) > MAX_PROMPT_CHARS:
         fail(f"prompts/system.md is {len(prompt_text)} chars (> {MAX_PROMPT_CHARS}); "
              "keep the prompt lean so no step gets skipped.")
+    # V6.3 prompt-quality guards (three real defects shipped once: a stale call budget, a
+    # duplicated sentence and two bullets glued together by a Python line continuation).
+    prose = prompt_text.split("## Locator script", 1)[0]
+    if "45 tool calls" in prose:
+        fail("prompts/system.md quotes the stale 45-call budget; the harness cap is 30.")
+    if prose.count("narrowest test target, always bounded:") != 1:
+        fail("prompts/system.md has a duplicated verification sentence.")
+    if "\\n" in prose:
+        fail("prompts/system.md contains a literal backslash-n outside the script block; "
+             "a source line continuation probably glued two bullets together.")
+    for marker in ("- Keep the diff small", "- If by call 10"):
+        if not any(line.strip().startswith(marker) for line in prose.splitlines()):
+            fail(f"prompts/system.md lost the line break before {marker!r} (bullets are glued).")
     if "submit_patch" not in prompt_text:
         fail("prompts/system.md lost the submit instructions.")
     if "as your final action" in prompt_text:
@@ -214,11 +227,21 @@ def validate_tree(submission_dir: Path) -> list[Path]:
     return [path for path in paths if path.is_file()]
 
 
+# A fixed entry timestamp makes the archive reproducible: the same tree always yields the same
+# sha256. Found the hard way on 2026-10-13 - a no-op rebuild produced 4ed7221e while the tested
+# archive was 650e1dba, with byte-identical contents and only prompts/system.md's mtime differing,
+# which would have made the submitter's integrity pin meaningless.
+ZIP_DATE_TIME = (1980, 1, 1, 0, 0, 0)
+
+
 def build_zip(output: Path, files: list[Path], submission_dir: Path) -> None:
     output.parent.mkdir(parents=True, exist_ok=True)
     with zipfile.ZipFile(output, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
         for path in files:
-            archive.write(path, arcname=path.relative_to(submission_dir).as_posix())
+            info = zipfile.ZipInfo(path.relative_to(submission_dir).as_posix(), ZIP_DATE_TIME)
+            info.compress_type = zipfile.ZIP_DEFLATED
+            info.external_attr = 0o644 << 16
+            archive.writestr(info, path.read_bytes())
 
     with zipfile.ZipFile(output, "r") as archive:
         names = archive.namelist()

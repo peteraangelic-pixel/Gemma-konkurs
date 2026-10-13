@@ -1,0 +1,122 @@
+name: Official Kaggle V6.3 submission
+
+# Guarded, one-shot upload of the V6.3 archive. Nothing runs until
+# gemma4-agent/kaggle_smoke/v63-official-submit.trigger is pushed (or this workflow is
+# dispatched manually), so merging these files cannot consume the daily submission slot.
+#
+# The uploader refuses to send anything unless the pre-registered gates (G1 zero scratch files,
+# G2 zero premature submits without an edit, G3 zero docs-only diffs) pass for BOTH the V6.3
+# mini-screen and the full V6.3 screening - see gemma4-agent/GATES_V6_3.md and the gate check in
+# tools/submit_kaggle_v63_once.py. One submission per day; the receipt is committed back.
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - arena/c4eeb067-gemma-konkurs
+    paths:
+      - gemma4-agent/kaggle_smoke/v63-official-submit.trigger
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gemma-v63-official-submit-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  submit-v63:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout session branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Kaggle CLI
+        run: python -m pip install --disable-pip-version-check --quiet kaggle
+
+      - name: Configure Kaggle credentials
+        env:
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "$KAGGLE_API_TOKEN" ]; then
+            echo "Repository Actions secret KAGGLE_API_TOKEN is missing."
+            exit 1
+          fi
+          mkdir -p "$HOME/.kaggle"
+          printf '%s' "$KAGGLE_API_TOKEN" | tr -d '\r\n' > "$HOME/.kaggle/access_token"
+          chmod 600 "$HOME/.kaggle/access_token"
+          echo "Kaggle CLI configured; token value was not logged."
+
+      - name: Prepare V6.3 archive with Kaggle's required filename
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v63-upload"
+          cp gemma4-agent/submission-v6.zip "$RUNNER_TEMP/v63-upload/submission.zip"
+          echo "V6.3 archive staged as submission.zip; other version archives were not modified."
+
+      - name: Submit verified V6.3 once, only if the pre-registered gates passed
+        env:
+          KAGGLE_USERNAME: petersharps
+        run: |
+          python gemma4-agent/tools/submit_kaggle_v63_once.py \
+            --archive "$RUNNER_TEMP/v63-upload/submission.zip" \
+            --require-gates v6-3-miniscreen,v6-3-benchmark \
+            --result-json gemma4-agent/kaggle_results/v6-3-official-submission.json
+
+      - name: Show submission receipt
+        if: always()
+        run: |
+          if [ -f gemma4-agent/kaggle_results/v6-3-official-submission.json ]; then
+            cat gemma4-agent/kaggle_results/v6-3-official-submission.json
+          else
+            echo "No submission receipt was produced."
+          fi
+
+      - name: Upload submission receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gemma-v63-official-submission-${{ github.run_id }}
+          path: gemma4-agent/kaggle_results/v6-3-official-submission.json
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Commit submission receipt to this branch
+        if: always()
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin "$GITHUB_REF_NAME"
+          # SAFE PATTERN - fixed 2026-10-13, after it destroyed this branch once.
+          # The previous 'git reset --soft origin/<branch>' moves HEAD but leaves the INDEX on
+          # this job's own, older checkout, so the results commit rebuilt the OLD tree and
+          # silently reverted every commit pushed while the kernel ran: on 2026-10-13 it deleted
+          # the guarded submitter and the submit workflow, dropped the packer guards and reset
+          # submission-v6.zip from 650e1dba back to abf22bac (see GATES_V6_3.md).
+          # Safe order: take the REMOTE tree first, then re-apply only this run's outputs.
+          rm -rf /tmp/keep && mkdir -p /tmp/keep
+          cp -r gemma4-agent/kaggle_results/v6-3-official-submission.json /tmp/keep/ 2>/dev/null || true
+          git reset --hard "origin/$GITHUB_REF_NAME"
+          mkdir -p gemma4-agent/kaggle_results
+          cp -r /tmp/keep/v6-3-official-submission.json gemma4-agent/kaggle_results/ 2>/dev/null || true
+          git add gemma4-agent/kaggle_results/v6-3-official-submission.json 2>/dev/null || true
+          python gemma4-agent/tools/compare_screenings.py || true
+          git add gemma4-agent/kaggle_results/screening_history.md || true
+          # the trigger file exists exactly while a run has not consumed it yet
+          git rm -q --ignore-unmatch gemma4-agent/kaggle_smoke/v63-official-submit.trigger
+          if [ -z "$(git diff --cached --name-only)" ]; then
+            echo "No result files were produced; nothing to commit."
+            exit 0
+          fi
+          git commit -m "chore(gemma): record official V6.3 submission receipt [skip ci]"
+          git push origin "HEAD:${GITHUB_REF_NAME}"

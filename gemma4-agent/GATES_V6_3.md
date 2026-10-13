@@ -25,6 +25,28 @@ gałęzi `arena/6d081d52-gemma-konkurs`). Zasady:
 - **17 sesji kończących się na zegarze pozostaje osobnym, nierozwiązanym celem** — V6.3 go nie
   adresuje i nie udajemy, że adresuje.
 
+## Tożsamość artefaktów (weryfikowalna)
+
+| przebieg | archiwum | SHA-256 |
+| --- | --- | --- |
+| mini-screen 4 zadań | `submission-v6.zip` (V6.3, proza przed korektą) | `abf22bac2c67c639342f56e890fd77cb36c91811d07cf1c239c84ef28fa1216e` |
+| pełny screening 30 zadań | `submission-v6.zip` (V6.3 + korekta prozy) | `650e1dba10c5b269c616a670255c3a585a57d750ce0f8428581ae65ea528f5c4` |
+| **kanoniczny, odtwarzalny build** (pin submittera) | ten sam plik co wyżej, treść 5/5 identyczna | **`ea80bc16017c9ec92163fdd6533146106a41bf7b69d048cfa292cb21187070c3`** |
+
+Uwaga o determinizmie (znalezione 2026-10-13): ZIP zapisywał czas modyfikacji `prompts/system.md`,
+więc **każdy przebudowanie zmieniało SHA bez zmiany treści** — no-op rebuild dał `4ed7221e…` przy
+`650e1dba…`, przy identycznej zawartości wszystkich 5 plików (zweryfikowane `diff -rq`). Pin SHA na
+takim archiwum niczego by nie pilnował, więc packer ustawia teraz stały znacznik `1980-01-01` dla
+wszystkich wpisów: dwa kolejne buildy dają `ea80bc16…`, a treść archiwum jest bit w bit ta sama, co
+w pełnym przebiegu (dowód: rozpakowanie i `diff -rq` wobec `650e1dba…` — bez różnic).
+
+Różnica między tymi buildami to **wyłącznie proza promptu** — 11 zmienionych linii (poprawione
+„45 tool calls" → 30, usunięte zduplikowane zdanie w kroku 6, dwa punkty sklejone kontynuacją
+linii w źródle Pythona rozdzielone). Zweryfikowane `difflib.unified_diff` na zawartości obu
+ZIP-ów: **żadna reguła, próg, bajt skryptu ani konfiguracja się nie zmieniły**, więc wynik
+mini-screenu opisuje ten sam mechanizm, który mierzy pełny przebieg. Powód poprawki: przegląd
+własnego promptu wykrył, że tekst obiecywał budżet 45 wywołań, gdy harness tnie na 30.
+
 ## Bramki (hard) — raportowane per przebieg
 
 | bramka | definicja operacyjna | próg |
@@ -63,6 +85,102 @@ gałęzi `arena/6d081d52-gemma-konkurs`). Zasady:
 4. Pełny przebieg: **żadnej deklaracji przewagi nad V5** przy n=30. Sukces = G1–G3 zaliczone
    + wynik nie gorszy niż V5 o więcej niż 2 zadania. Porażka = którakolwiek z G1–G3 złamana
    → wracamy do projektowania, nie do wysyłki.
+
+## Incydent 2026-10-13: commit workflow cofnął pracę na branchu (naprawione)
+
+Commit wyników mini-screenu (`49ee5e0`, autor `github-actions[bot]`) **skasował** z branchu:
+`tools/submit_kaggle_v63_once.py`, `.github/workflows/gemma-kaggle-v63-official-submit.yml`,
+strażniki w `build_submission_v6.py`, poprawki w `tools/make_v6_prompt.py` i cofnął
+`submission-v6.zip` do buildy `abf22bac…`.
+
+**Mechanizm (błąd w moim workflow, nie w GitHubie):** krok „Commit … summary to this branch" robił
+`git fetch` + `git reset --soft origin/$GITHUB_REF_NAME` + `git add <pliki wyników>` + `git commit`.
+`reset --soft` przenosi **tylko** wskaźnik HEAD, a indeks zostaje na drzewie z momentu checkoutu tego
+jobu (`1d30a11`, sprzed commitów, które doszły w trakcie działania kernela), więc commit wyników
+odtworzył **stare** drzewo plus pliki wyników i tym samym wycofał wszystko, co zostało wypchnięte
+w międzyczasie. To ten sam błąd, który 2026-10-12 przewrócił krok commitu V6.2 — wtedy uznałem go za
+problem `pull --rebase`, a „naprawa" (`reset --soft`) była gorsza od choroby.
+
+**Naprawa:** wszystkie workflow (v6, v62-fetch, v63-mini, v63-benchmark, v63-submit) mają teraz
+bezpieczną kolejność: `git fetch` → skopiowanie wyników do `/tmp/keep` → `git reset --hard
+origin/$GITHUB_REF_NAME` (drzewo **z remote**) → wklejenie wyników z `/tmp/keep` → regeneracja
+historii → `git rm` pliku-trigger → commit i push. Weryfikacja: brak wykonywalnego `reset --soft`
+w repo, wszystkie pliki YAML parsują się poprawnie.
+
+**Odtworzenie po takim cofnięciu** (jeśli zajdzie ponownie — kolejny commit wyników pełnego
+przebiegu powstanie jeszcze ze starego kroku, bo job czyta plik w momencie startu):
+
+```
+git fetch origin arena/c4eeb067-gemma-konkurs
+
+git checkout COMMIT_SHA -- gemma4-agent/build_submission_v6.py gemma4-agent/tools/make_v6_prompt.py \
+    gemma4-agent/tools/submit_kaggle_v63_once.py gemma4-agent/submission-v6/prompts/system.md \
+    gemma4-agent/GATES_V6_3.md .github/workflows/gemma-kaggle-v63-official-submit.yml
+
+python3 gemma4-agent/build_submission_v6.py           # odbudowa kanonicznego archiwum
+sha256sum gemma4-agent/submission-v6.zip              # oczekiwane ea80bc16017c9ec9…
+python3 gemma4-agent/tools/check_docs_consistency.py  # spójność przedziałów CI95
+```
+
+gdzie `COMMIT_SHA` to commit ratunkowy opisany w historii (pierwszy po incydencie, zawierający
+wszystkie wymienione pliki). **Uwaga:** przy odtwarzaniu nigdy nie dodawaj z powrotem plików
+`kaggle_smoke/*.trigger` — ich wypchnięcie odpala workflow.
+
+## Przebieg zdarzeń V6.3 — zapis faktów, nie interpretacji
+
+| kiedy (UTC) | co się stało |
+| --- | --- |
+| 00:58:53 | start mini-screenu (`38329901183`, commit `1d30a11`, archiwum `abf22bac…`) |
+| 01:05–01:08 | commit `1c5fd55`: 4 poprawki prozy + **przypadkowe odpalenie pełnego przebiegu** (patrz niżej) |
+| 01:08:12 | start pełnego screeningu `38330672815` (commit `1c5fd55`, archiwum `650e1dba…`, 30 zadań) |
+| 01:30:36 | koniec mini-screenu: **0/4 rozwiązanych, 4/4 puste drzewa, 4/4 śmierci na zegarze (średnio 318.4 s)**, G1–G3 czyste |
+| 01:31 | commit wyników `49ee5e0` cofa pracę na branchu (incydent wyżej) |
+
+### Wynik mini-screenu i co obalił
+
+- **G1–G3: PASS** (pliki-śmieci 0, przedwczesne submisje 0, diffy wyłącznie dokumentacyjne 0).
+- **O1 OBALONE**: `rich_3105` i `rich_3934` nadal kończą z pustym drzewem. Reguła (a) usuwa
+  przedwczesną submissję (V6.2: 5 wywołań/119 s i 10/266 s), ale **nie zamienia jej na edycję** —
+  sesje trwają teraz do zegara (22 wywołania/318 s i 15/318 s) i wciąż nie powstaje żaden diff.
+  Zysk punktowy na tych dwóch zadaniach: **zero, tak jak w V6.2**.
+- **O2 SPEŁNIONE**: `fastapi_14487` nie produkuje diffu dokumentacyjnego — produkuje pusty
+  (26 wywołań, 320 s). Bramka mechanizmu zaliczona, wyniku brak.
+- **O3 SPEŁNIONE**: `rich_3006` nadal pada na zegarze (4 wywołania/318 s — identycznie jak w V6.2).
+- `trafienia lokalizatora 0/4` **nie** dowodzą porażki lokalizatora: przy pustym patchu nie ma pliku,
+  w który mógłby trafić — pole jest funkcją patcha, nie osobnym pomiarem.
+
+### Błąd proceduralny po mojej stronie
+
+Plik-trigger pełnego przebiegu powstał w tym samym commicie co poprawki prozy i wszedł do repo przez
+`git add -A`. **Jego wypchnięcie automatycznie odpaliło pełny screening w 01:08 — przed poznaniem
+wyniku mini-screenu** (01:30), mimo że opis commita `1c5fd55` twierdził, że trigger nie jest jeszcze
+wypychany. Zapisana procedura mówiła: pełny przebieg tylko po zaliczeniu G1–G3 **albo** po wyjaśnieniu
+porażki. Formalnie G1–G3 są zaliczone, więc przebieg nie jest nieuprawniony — ale **nie został
+uzależniony od wyniku mini-screenu**, jak zakładano. Reguła operacyjna: plik-trigger nigdy nie wchodzi
+w `git add -A`; osobny commit zawierający wyłącznie trigger.
+
+## Reguła decyzyjna o submissji — zapisana 2026-10-13 01:05 UTC, PRZED wynikami V6.3
+
+Użytkownik upoważnił sesję: „zrób submission z tej wersji, jeśli uznasz to za stosowne".
+Żeby to upoważnienie nie zamieniło się w uznaniowość po fakcie, próg jest **zamrożony tutaj**:
+
+Submissja V6.3 (`submission-v6.zip`, SHA-256 `650e1dba10c5b269c616a670255c3a585a57d750ce0f8428581ae65ea528f5c4`,
+komunikat „V63", plik stagingowany jako `submission.zip`) **następuje wtedy i tylko wtedy, gdy**:
+
+1. mini-screen: G1 = G2 = G3 = 0 na wszystkich 4 zadaniach;
+2. pełny screening: G1 = G2 = G3 = 0;
+3. pełny screening: rozwiązane ≥ **9/30** (czyli nie gorzej niż V6.2 i w granicy jednego zadania od V5);
+4. slot dzienny wolny (brak submissji w ciągu 24 h — pilnuje `submit_kaggle_v63_once.py`);
+5. `--require-gates v6-3-miniscreen,v6-3-benchmark` przechodzi (bramka jest wbudowana w uploader,
+   więc warunki 1–2 nie mogą zostać pominięte przez pomyłkę).
+
+**Jeśli któryś punkt nie przejdzie — submissji NIE MA**, niezależnie od tego, jak dobre wydają się
+inne liczby. Uzasadnienie merytoryczne submissji (przy spełnionych warunkach): obecny wynik
+oficjalny 0.03 pochodzi z artefaktu V4, który na tej samej próbce produkował 6 pustych drzew;
+V6.3 usuwa dwie zmierzone klasy zer (sesja bez edycji, diff z plików-śmieci) i podnosi trafienia
+lokalizatora, więc oczekiwana wartość na ukrytym zbiorze jest wyższa niż V4 — nawet jeśli próbka
+publiczna tego nie rozstrzyga przy n=30. **Nie twierdzę, że V6.3 pobije V5**; twierdzę, że jest
+pierwszym kandydatem bez zmierzonej klasy zer, a to jest jedyna dźwignia, jaką mamy.
 
 ## Kiedy w ogóle rozważać oficjalną submissję
 
