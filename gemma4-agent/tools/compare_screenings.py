@@ -74,12 +74,14 @@ def stats(path: Path) -> dict | None:
         raise SystemExit(f"{path}: stored CI {stored} disagrees with recomputed [{low:.4f}, {high:.4f}]")
     return {
         "total": len(tasks),
+        "ids": [r.get("task_id") for r in tasks],
         "ci95": [round(low * 100, 1), round(high * 100, 1)],
         "resolved": len(resolved),
         "resolved_ids": resolved,
         "empty": len(empty),
         "empty_ids": empty,
         "clock_deaths": len(clock),
+        "clock_ids": clock,
         "scratch": len(scratch_tasks),
         "scratch_ids": scratch_tasks,
         "scratch_only": len(scratch_only),
@@ -107,8 +109,9 @@ def main() -> int:
     lines = [
         "# Historia screeningów: co każdy wynik zmienił",
         "",
-        "Te same 30 zadań i seed 20261009 w każdym przebiegu. Kolumny diagnostyczne istnieją tylko",
-        "dla przebiegów po dodaniu diagnostyki per zadanie (V6.1, V6.2).",
+        "Pełne przebiegi: te same 30 zadań i seed 20261009. Mini-screen V6.3 to 4 zadania z tej",
+        "samej próbki (diagnozowane przypadki), więc jego wiersz czyta się jako test mechanizmu,",
+        "nie jako oszacowanie wyniku. Kolumny diagnostyczne istnieją dopiero od V6.1.",
         "",
         "| kandydat | rozwiązane | CI95 Wilsona | puste drzewa (zero edycji) | z tego przedwczesne | śmierci na zegarze | pliki-śmieci | tylko dokumentacja | trafienia lokalizatora | średni czas |",
         "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |",
@@ -120,12 +123,19 @@ def main() -> int:
             f"| [{s['ci95'][0]} %, {s['ci95'][1]} %] | {s['empty']} | {s['premature_empty']} "
             f"| {s['clock_deaths']} | {s['scratch']} | {s['docs_only']} | {loc} | {s['mean_seconds']} s |")
 
-    lines += ["", "## Zmiany statusu między kolejnymi kandydatami", ""]
+    lines += ["", "## Zmiany statusu między kolejnymi kandydatami", "",
+              "Porównanie liczy się **wyłącznie na zadaniach wspólnych** — inaczej mini-screen",
+              "zaraportowałby jako straty zadania, których w ogóle nie uruchamiał.", ""]
     for (tag_a, a), (tag_b, b) in zip(present, present[1:]):
-        gained = sorted(set(b["resolved_ids"]) - set(a["resolved_ids"]))
-        lost = sorted(set(a["resolved_ids"]) - set(b["resolved_ids"]))
+        shared = set(a["ids"]) & set(b["ids"])
+        note = ""
+        if len(shared) < max(a["total"], b["total"]):
+            note = (f" — na {len(shared)} wspólnych zadaniach "
+                    f"({tag_a}: {a['total']}, {tag_b}: {b['total']} uruchomionych)")
+        gained = sorted((set(b["resolved_ids"]) & shared) - set(a["resolved_ids"]))
+        lost = sorted((set(a["resolved_ids"]) & shared) - set(b["resolved_ids"]))
         lines.append(f"- {tag_a} → {tag_b}: +{len(gained)} ({', '.join(gained) or '—'}), "
-                     f"-{len(lost)} ({', '.join(lost) or '—'})")
+                     f"-{len(lost)} ({', '.join(lost) or '—'}){note}")
 
     for tag, s in present:
         if s["scratch"]:
@@ -152,6 +162,29 @@ def main() -> int:
                      f"({s_['docs_only']}); G4 cel: puste drzewa <= 4 (jest {s_['empty']}); "
                      f"wynik zgłaszany osobno: {s_['resolved']}/{s_['total']} "
                      f"CI95 [{s_['ci95'][0]} %, {s_['ci95'][1]} %]")
+
+    mini = dict(present).get("V6.3-mini")
+    if mini:
+        o1 = ("rich_3105" not in mini["empty_ids"] and "rich_3934" not in mini["empty_ids"]
+              and mini["premature_empty"] == 0)
+        o2 = "fastapi_14487" not in mini["docs_only_ids"]
+        o3 = "rich_3006" in mini["clock_ids"]
+        lines += ["", "## Werdykt pre-registered oczekiwań (V6.3-mini)", "",
+                  "Zapisane w GATES_V6_3.md **przed** przebiegiem; werdykt liczony maszynowo z JSON-a.", ""]
+        lines.append(f"- **O1** `rich_3105` i `rich_3934` kończą z edycją na dysku (nie pustym drzewem) "
+                     f"i G2 = 0: **{'SPEŁNIONE' if o1 else 'OBALONE'}** — puste drzewa "
+                     f"{', '.join(i for i in ('rich_3105', 'rich_3934') if i in mini['empty_ids']) or 'brak'}, "
+                     f"przedwczesne {mini['premature_empty']}")
+        lines.append(f"- **O2** `fastapi_14487` bez diffu wyłącznie dokumentacyjnego: "
+                     f"**{'SPEŁNIONE' if o2 else 'OBALONE'}** (docs-only: {mini['docs_only']})")
+        lines.append(f"- **O3** `rich_3006` (kontrola) nadal pada na zegarze: "
+                     f"**{'SPEŁNIONE' if o3 else 'OBALONE'}** — gdyby został rozwiązany, byłby to sygnał szumu, "
+                     f"nie sukcesu zmian (a)/(c)")
+        lines.append("")
+        lines.append("Skutek OBALONEGO O1: zmiana (a) usuwa przedwczesną submissję bez edycji "
+                     "(G2 = 0), ale **nie zamienia jej na edycję** — te sesje nadal kończą z pustym "
+                     "drzewem, tyle że po wyczerpaniu zegara. Zysk punktowy na tych zadaniach: nadal zero. "
+                     "Bezpośredni zapis tego wniosku: GATES_V6_3.md, sekcja o przebiegu zdarzeń.")
 
     lines += [
         "",

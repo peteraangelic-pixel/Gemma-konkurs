@@ -1,7 +1,8 @@
 # Historia screeningów: co każdy wynik zmienił
 
-Te same 30 zadań i seed 20261009 w każdym przebiegu. Kolumny diagnostyczne istnieją tylko
-dla przebiegów po dodaniu diagnostyki per zadanie (V6.1, V6.2).
+Pełne przebiegi: te same 30 zadań i seed 20261009. Mini-screen V6.3 to 4 zadania z tej
+samej próbki (diagnozowane przypadki), więc jego wiersz czyta się jako test mechanizmu,
+nie jako oszacowanie wyniku. Kolumny diagnostyczne istnieją dopiero od V6.1.
 
 | kandydat | rozwiązane | CI95 Wilsona | puste drzewa (zero edycji) | z tego przedwczesne | śmierci na zegarze | pliki-śmieci | tylko dokumentacja | trafienia lokalizatora | średni czas |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -14,11 +15,14 @@ dla przebiegów po dodaniu diagnostyki per zadanie (V6.1, V6.2).
 
 ## Zmiany statusu między kolejnymi kandydatami
 
+Porównanie liczy się **wyłącznie na zadaniach wspólnych** — inaczej mini-screen
+zaraportowałby jako straty zadania, których w ogóle nie uruchamiał.
+
 - V3 → V4: +0 (—), -0 (—)
 - V4 → V5: +1 (rich_2725), -2 (fastapi_14851, fastapi_14873)
 - V5 → V6.1: +0 (—), -4 (rich_3043, rich_3518, rich_3882, rich_3894)
 - V6.1 → V6.2: +4 (fastapi_14873, rich_3518, rich_3882, rich_3894), -1 (rich_3006)
-- V6.2 → V6.3-mini: +0 (—), -9 (fastapi_14077, fastapi_14458, fastapi_14873, requests_6644, rich_2725, rich_3518, rich_3718, rich_3882, rich_3894)
+- V6.2 → V6.3-mini: +0 (—), -0 (—) — na 4 wspólnych zadaniach (V6.2: 30, V6.3-mini: 4 uruchomionych)
 
 ### V6.1: zadania z plikami-śmieciami w diffie
 
@@ -54,6 +58,16 @@ dla przebiegów po dodaniu diagnostyki per zadanie (V6.1, V6.2).
 Bramki są **osobne od liczby rozwiązanych zadań** i nie przesuwa się ich po zobaczeniu wyniku.
 
 - **V6.3-mini**: G1 brak plików-śmieci: PASS (0); G2 brak przedwczesnych submisji bez edycji: PASS (0); G3 zero diffów wyłącznie dokumentacyjnych: PASS (0); G4 cel: puste drzewa <= 4 (jest 4); wynik zgłaszany osobno: 0/4 CI95 [0.0 %, 49.0 %]
+
+## Werdykt pre-registered oczekiwań (V6.3-mini)
+
+Zapisane w GATES_V6_3.md **przed** przebiegiem; werdykt liczony maszynowo z JSON-a.
+
+- **O1** `rich_3105` i `rich_3934` kończą z edycją na dysku (nie pustym drzewem) i G2 = 0: **OBALONE** — puste drzewa rich_3105, rich_3934, przedwczesne 0
+- **O2** `fastapi_14487` bez diffu wyłącznie dokumentacyjnego: **SPEŁNIONE** (docs-only: 0)
+- **O3** `rich_3006` (kontrola) nadal pada na zegarze: **SPEŁNIONE** — gdyby został rozwiązany, byłby to sygnał szumu, nie sukcesu zmian (a)/(c)
+
+Skutek OBALONEGO O1: zmiana (a) usuwa przedwczesną submissję bez edycji (G2 = 0), ale **nie zamienia jej na edycję** — te sesje nadal kończą z pustym drzewem, tyle że po wyczerpaniu zegara. Zysk punktowy na tych zadaniach: nadal zero. Bezpośredni zapis tego wniosku: GATES_V6_3.md, sekcja o przebiegu zdarzeń.
 
 ## Reguły interpretacji (wyuczone na tych przebiegach)
 
