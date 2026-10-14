@@ -182,6 +182,7 @@ def analyse(traces_dir: Path, focus: list[str], out: Path | None, max_obs: int =
         print(f"no trace_*.json under {traces_dir}")
         return 1
     command_heads: Counter = Counter()
+    stats = Counter()
     lines: list[str] = ["# What the agent actually ran (raw V6.4 kernel traces)", "",
                         f"Traces read: {len(files)}. Tool arguments and short observation heads only; "
                         "no model prose.", ""]
@@ -194,8 +195,13 @@ def analyse(traces_dir: Path, focus: list[str], out: Path | None, max_obs: int =
         for event in events:
             found: list[dict] = []
             extract_calls(event, found)
-            calls.extend(found or [])
-            observations.append(extract_observation(event))
+            if not found:
+                continue  # an event without a call carries no result to pair; appending it here
+                          # shifted every later pairing by one (caught by inspecting requests_6757,
+                          # whose "edit" results were actually grep outputs)
+            observation = extract_observation(event)
+            calls.extend(found)
+            observations.extend([observation] * len(found))
         if not calls:
             lines.append(f"- `{task}`: no tool calls parsed (container `{container}`, {len(events)} events)")
             continue
@@ -204,7 +210,19 @@ def analyse(traces_dir: Path, focus: list[str], out: Path | None, max_obs: int =
         for index, call in enumerate(calls):
             tool, summary, command = summarise_call(call)
             if command:
-                command_heads[leader(command)] += 1
+                head = leader(command)
+                command_heads[head] += 1
+                if head == "#":
+                    stats["comment_only_commands"] += 1
+            if tool == "read_file" and isinstance(call["args"].get("start_line"), int) \
+                    and call["args"]["start_line"] > 800:
+                stats["read_file_beyond_line_800"] += 1
+            if tool in EDIT_TOOLS:
+                observation = observations[index] if index < len(observations) else ""
+                if any(marker in observation.lower() for marker in ERROR_MARKERS):
+                    stats["edit_calls_with_error_like_result"] += 1
+                if '\"occurrences\"' in observation or '"status": "ok"' in observation:
+                    stats["edit_calls_with_ok_result"] += 1
             if first_edit_index is None and tool in EDIT_TOOLS:
                 first_edit_index = index
             rows.append(f"  {index + 1:2}. {tool}: {summary}")
@@ -216,7 +234,11 @@ def analyse(traces_dir: Path, focus: list[str], out: Path | None, max_obs: int =
         pre_edit = f" | pre-edit calls: {first_edit_index}" if first_edit_index is not None else " | NO EDIT"
         per_task[task] = rows
         task_index[task] = pre_edit
-    lines += ["", "## Command-head histogram (first token of every `run_command`)", ""]
+    lines += ["", "## Headline counters", ""]
+    for name in ("edit_calls_with_ok_result", "edit_calls_with_error_like_result",
+                 "comment_only_commands", "read_file_beyond_line_800"):
+        lines.append(f"- `{name}`: {stats.get(name, 0)}")
+    lines += ["", "## Command-head histogram (first informative token of every `run_command`)", ""]
     for head, count in command_heads.most_common(30):
         lines.append(f"- `{head}`: {count}")
     lines += ["", "## Per-task call lists", ""]
