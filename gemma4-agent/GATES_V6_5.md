@@ -86,3 +86,9 @@ porównanie z V6.3/V6.4 na tych samych 30 zadaniach i decyzja o submissji wg reg
 
 **V6.5 nie ma submittera** — zgodnie z regułą z V6.4 powstanie on dopiero w commicie z decyzją
 o wysłaniu, z pinem `cb847599…`, żeby nie dało się wysłać niczego przypadkiem.
+
+## 2026-10-14 — status planu (bez zmian progów, przesunięty termin)
+
+Przebieg V6.5 z 02:45 UTC nie powstał (wyczerpany tygodniowy limit GPU; szczegóły i dowody w
+`ANALYSIS_2026-10-14_QUOTA.md`). Ponowienie po resecie kwoty (sobota 2026-10-17 00:00 UTC).
+Q1–Q3 i falsyfikator z tego pliku pozostają zamrożone i nie były jeszcze mierzone.

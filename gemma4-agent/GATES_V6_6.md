@@ -93,3 +93,12 @@ przez V4 (`0,03`, G2 = 1). Jeśli żaden kandydat nie osiągnie G2 = 0, decyzja 
 należy do Ciebie i musi być zapisana razem z powodem — mechanizm jawnego wyjątku jest już
 zaimplementowany w `submit_kaggle_v64_once.py` (wymaga zapisu powodu w dokumentacji bramek,
 inaczej odmawia wysłania).
+
+## 2026-10-14 — status planu (bez zmian progów, przesunięty termin)
+
+Oba przebiegi z 02:45 UTC **nie powstały**: tygodniowy limit GPU (30 h) był wyczerpany, a CLI
+zwróciło kod 0 przy komunikacie „Maximum weekly GPU quota of 30.00 hours reached" (pełny łańcuch
+dowodowy: `ANALYSIS_2026-10-14_QUOTA.md`). **Werdykty R1–R4 nie zostały wydane — brak danych, nie
+brak dowodów na poprawę.** Ponowienie obu przebiegów: po resecie kwoty (sobota 2026-10-17 00:00 UTC
+= 02:00 czasu polskiego), rozsunięte w czasie ok. 10 minut. Narzędzie od tej pory weryfikuje, że
+kernel naprawdę powstał, i nazywa wyczerpaną kwotę po imieniu w `run.json`.

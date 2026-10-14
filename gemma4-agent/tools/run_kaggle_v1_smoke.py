@@ -736,6 +736,28 @@ def main() -> int:
                 # job log with the actual CLI message was not readable from the session sandbox.
                 state["push_stdout_tail"] = (pushed.stdout or "")[-1200:]
                 state["push_stderr_tail"] = (pushed.stderr or "")[-600:]
+                # The CLI prints push failures on stdout and still exits 0. On 2026-10-14 the
+                # message "Kernel push error: Maximum weekly GPU quota of 30.00 hours reached."
+                # came back with push_exit_code 0, so the tool believed in a kernel that Kaggle
+                # had refused to create and polled a 404 for four minutes. Treat explicit push
+                # errors as immediate, named outcomes instead of probing.
+                push_text = ((pushed.stdout or "") + "\n" + (pushed.stderr or "")).lower()
+                if "quota" in push_text and "reached" in push_text:
+                    state.update({
+                        "status": "gpu_quota_exceeded",
+                        "error": ("Kaggle refused the push: weekly GPU quota exhausted. The quota "
+                                  "resets weekly on Saturday at 00:00 UTC; re-fire after that."),
+                        "gpu_quota_usage_status": "exhausted_per_kaggle_push_message",
+                    })
+                    update_state(outdir, state)
+                    return 7
+                if "kernel push error" in push_text:
+                    state.update({
+                        "status": "push_rejected_by_kaggle",
+                        "error": "Kaggle answered the push with a kernel push error; see push_stdout_tail.",
+                    })
+                    update_state(outdir, state)
+                    return 7
                 if pushed.returncode != 0:
                     state["push_warning"] = (
                         f"Kaggle CLI returned exit code {pushed.returncode}; checking whether the run was created."

@@ -67,7 +67,23 @@ def kernel_state(ref: str) -> str:
     match = STATE_RE.search(text)
     if match:
         return match.group(1).upper()
+    # 404 / "Permission 'kernels.get' was denied" means the reference does not resolve right now.
+    # That is not API flakiness and must not consume the transient-failure budget: on 2026-10-14
+    # five such answers were counted as "status API failures" and produced a misleading record.
+    if "404" in text or "Not Found" in text or "kernels.get" in text:
+        return "NOT_FOUND"
     return "UNKNOWN" if code == 0 else "API_FAIL"
+
+
+def files_probe(ref: str) -> tuple[int, str]:
+    """Ask the data endpoint, not the status endpoint, whether the kernel is reachable.
+
+    The two endpoints disagree in practice: on 2026-10-14 `kernels status` answered 404 for a
+    reference whose `kernels files` replied normally (empty, but with exit 0). Transfer endpoints
+    are therefore the better liveness probe.
+    """
+    code, stdout, stderr = kaggle(["kernels", "files", ref], timeout=90)
+    return code, f"{stdout}\n{stderr}".strip()
 
 
 def read_record(outdir: Path) -> dict:
@@ -106,7 +122,9 @@ def main() -> int:
                    "fetch_started_utc": utc_now(), "submission_created": False})
     deadline = time.monotonic() + args.max_wait_minutes * 60
     failures = 0
+    not_found = 0
     last_state = "UNKNOWN"
+    NOT_FOUND_LIMIT = 6  # six polls x the interval: patient enough for a push race, not for hours
 
     while time.monotonic() < deadline:
         state = kernel_state(ref)
@@ -123,6 +141,25 @@ def main() -> int:
             time.sleep(min(300, args.poll_interval_seconds * failures))  # back off
             continue
         failures = 0
+        if state == "NOT_FOUND":
+            not_found += 1
+            code, files_text = files_probe(ref)
+            print(f"[{utc_now()}] status 404 ({not_found}/{NOT_FOUND_LIMIT}); files probe exit={code} "
+                  f"output={files_text[:120]!r}")
+            if code == 0 and files_text:
+                print("    the data endpoint answered: downloading without a status reading")
+                last_state = "UNKNOWN_BUT_REACHABLE"
+                break
+            if not_found >= NOT_FOUND_LIMIT:
+                record.update({"status": "kernel_never_appeared", "kaggle_status": "NOT_FOUND",
+                               "detail": ("the reference never resolved: status answered 404 and the "
+                                          "files endpoint returned nothing for it"),
+                               "last_raw_cli_output": LAST_RAW["text"], "fetched_utc": utc_now()})
+                write_record(args.outdir, record)
+                print("kernel reference never appeared; nothing to fetch", file=sys.stderr)
+                return 3
+            time.sleep(max(30, args.poll_interval_seconds))
+            continue
         if state != last_state:
             print(f"[{utc_now()}] kernel state: {state}")
             print(f"    raw: {LAST_RAW['text'][:200]!r}")
@@ -151,7 +188,7 @@ def main() -> int:
     target.mkdir(parents=True, exist_ok=True)
     code, stdout, stderr = kaggle(["kernels", "output", ref, "-p", str(target), "--force"], timeout=900)
     if code != 0:
-        record.update({"status": "output_download_failed", "kaggle_status": "COMPLETE",
+        record.update({"status": "output_download_failed", "kaggle_status": last_state,
                        "detail": (stderr or stdout or "unknown error").strip()[:300],
                        "fetched_utc": utc_now()})
         write_record(args.outdir, record)
