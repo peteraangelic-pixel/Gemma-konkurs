@@ -1,6 +1,6 @@
 {
-  "created_utc": "2026-10-14T02:45:22+00:00",
-  "status": "status_poll_failed",
+  "created_utc": "2026-10-14T03:03:00+00:00",
+  "status": "kernel_not_found_after_push",
   "submission_sha256": "cb847599fd64937c6781111ae221912400ec51f4319dfef09c87c5d1f3aceecd",
   "fixed_task_id": "fastapi_15588",
   "task_count_requested": 30,
@@ -17,11 +17,14 @@
   "gpu_quota_used": null,
   "gpu_quota_usage_status": "unconfirmed",
   "kaggle_running_status_observed": false,
-  "updated_utc": "2026-10-14T02:49:28+00:00",
-  "kernel_ref": "petersharps/gemma-agent-benchmark-cb847599-20261014-024522",
-  "kernel_url": "https://www.kaggle.com/code/petersharps/gemma-agent-benchmark-cb847599-20261014-024522",
+  "updated_utc": "2026-10-14T03:05:05+00:00",
+  "kernel_ref": "petersharps/gemma-agent-benchmark-cb847599-20261014-030300",
+  "kernel_url": "https://www.kaggle.com/code/petersharps/gemma-agent-benchmark-cb847599-20261014-030300",
   "push_exit_code": 0,
+  "push_stdout_tail": "Kernel push error: Maximum weekly GPU quota of 30.00 hours reached.\n",
+  "push_stderr_tail": "",
   "gpu_requested": true,
-  "status_api_errors": 5,
-  "error": "Five consecutive Kaggle status API calls failed."
+  "push_verified": false,
+  "push_probe_raw": "404 Client Error: Not Found for url: https://api.kaggle.com/v1/kernels.KernelsApiService/GetKernelSessionStatus",
+  "error": "The push reported exit code 0 but `kernels status` never returned a KernelWorkerStatus for this reference; refusing to poll for hours."
 }
