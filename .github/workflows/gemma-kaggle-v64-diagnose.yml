@@ -70,7 +70,7 @@ jobs:
             || echo "output fetch failed for $REF (recorded as-is)"
           echo "--- files downloaded ---"
           find "$RUNNER_TEMP/v64-raw" -maxdepth 2 -type f -printf '%10s  %p\n' | sort -k2 | head -40
-          FOCUS="fastapi_14851,fastapi_14487,requests_6757,fastapi_14297,fastapi_14303,rich_3052,requests_7309,fastapi_14953,fastapi_15030,fastapi_14186,fastapi_14262"
+          FOCUS="fastapi_14851,fastapi_14487,requests_6757,fastapi_14297,fastapi_14303,rich_3052,requests_7309,fastapi_14953,fastapi_15030,fastapi_14186,fastapi_14262,fastapi_15588,fastapi_15745,rich_3043,httpx_3672,fastapi_14266,fastapi_14459,rich_3934,rich_3105,fastapi_14873,requests_6644"
           python3 gemma4-agent/tools/diagnose_agent_commands.py \
             --traces-dir "$RUNNER_TEMP/v64-raw" \
             --focus "$FOCUS" \

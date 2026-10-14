@@ -225,8 +225,18 @@ def analyse(traces_dir: Path, focus: list[str], out: Path | None, max_obs: int =
                     stats["edit_calls_with_ok_result"] += 1
             if first_edit_index is None and tool in EDIT_TOOLS:
                 first_edit_index = index
+            # A write outside the repository root is refused by the harness (proved by the
+            # FileWriteError observations), so these calls are counted and their results are always
+            # shown - the first report hid them behind --focus and left the V6.6 premise unverified.
+            outside = False
+            if tool == "write_file":
+                path = str(call["args"].get("filepath") or call["args"].get("path") or "")
+                if path.startswith("/") or path.startswith(".."):
+                    outside = True
+                    stats["write_file_outside_workspace"] += 1
+                    stats["write_file_outside_workspace:" + path] += 1
             rows.append(f"  {index + 1:2}. {tool}: {summary}")
-            if task in focus and tool in EDIT_TOOLS:
+            if (task in focus and tool in EDIT_TOOLS) or outside:
                 observation = observations[index] if index < len(observations) else ""
                 head = " ".join(observation.split())[:max_obs]
                 flagged = any(marker in observation.lower() for marker in ERROR_MARKERS)
@@ -236,7 +246,8 @@ def analyse(traces_dir: Path, focus: list[str], out: Path | None, max_obs: int =
         task_index[task] = pre_edit
     lines += ["", "## Headline counters", ""]
     for name in ("edit_calls_with_ok_result", "edit_calls_with_error_like_result",
-                 "comment_only_commands", "read_file_beyond_line_800"):
+                 "comment_only_commands", "read_file_beyond_line_800",
+                 "write_file_outside_workspace"):
         lines.append(f"- `{name}`: {stats.get(name, 0)}")
     lines += ["", "## Command-head histogram (first informative token of every `run_command`)", ""]
     for head, count in command_heads.most_common(30):
