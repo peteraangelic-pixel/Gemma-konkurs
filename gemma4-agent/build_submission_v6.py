@@ -338,6 +338,8 @@ def validate_tree(submission_dir: Path) -> list[Path]:
          "V6.7 measurement (the rendered docs page vs the graded example)"),
         ("Finish the issue, not the search",
          "V6.7 measurement (all 8 right-file failures exhausted budget or clock)"),
+        ("the tool confirmed both with a diff",
+         "V6.7 measurement (a successful edit to a discarded file is invisible)"),
     )
     if variant == "v67":
         for phrase, label in V67_REQUIRED:
