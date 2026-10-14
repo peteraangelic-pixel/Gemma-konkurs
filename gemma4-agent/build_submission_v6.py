@@ -106,10 +106,21 @@ def validate_tree(submission_dir: Path) -> list[Path]:
         relative = path.relative_to(submission_dir)
         if relative.is_absolute() or ".." in relative.parts:
             fail(f"Unsafe submission path: {relative}")
+        # A stray interpreter cache is skipped rather than fatal: it is git-ignored, so it can never
+        # reach a CI-built archive, but it broke a local rebuild of V6.6 once (the frozen zip was
+        # still reproducible from a clean tree). Every other unknown suffix stays fatal.
+        if "__pycache__" in relative.parts or path.suffix.lower() == ".pyc":
+            continue
         if path.suffix.lower() not in ALLOWED_SUFFIXES:
             fail(f"Unsupported submission file extension: {relative}")
 
-    files = {path.relative_to(submission_dir).as_posix() for path in paths if path.is_file()}
+    files = {
+        path.relative_to(submission_dir).as_posix()
+        for path in paths
+        if path.is_file()
+        and "__pycache__" not in path.relative_to(submission_dir).parts
+        and path.suffix.lower() != ".pyc"
+    }
     missing = sorted(REQUIRED_FILES - files)
     if missing:
         fail("Missing required V6 files: " + ", ".join(missing))
@@ -361,7 +372,12 @@ def validate_tree(submission_dir: Path) -> list[Path]:
         print("YAML syntax: parsed successfully with PyYAML (custom !include tags accepted).")
     else:
         print("YAML syntax: PyYAML not installed; structural checks only.")
-    return [path for path in paths if path.is_file()]
+    return [
+        path for path in paths
+        if path.is_file()
+        and "__pycache__" not in path.relative_to(submission_dir).parts
+        and path.suffix.lower() != ".pyc"
+    ]
 
 
 # A fixed entry timestamp makes the archive reproducible: the same tree always yields the same
