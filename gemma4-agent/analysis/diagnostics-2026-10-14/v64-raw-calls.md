@@ -9,6 +9,7 @@ Traces read: 30. Tool arguments and short observation heads only; no model prose
 - `edit_calls_with_error_like_result`: 49
 - `comment_only_commands`: 32
 - `read_file_beyond_line_800`: 29
+- `write_file_outside_workspace`: 9
 
 ## Command-head histogram (first informative token of every `run_command`)
 
@@ -417,6 +418,7 @@ Traces read: 30. Tool arguments and short observation heads only; no model prose
    9. read_file: filepath=fastapi/routing.py, end_line=230
   10. run_command: command=sed '213,250p'
   11. edit_file: filepath=fastapi/routing.py, old_string_len=1218, new_string_len=1217
+      -> obs[ok-ish]: {"status": "ok", "filepath": "fastapi/routing.py", "occurrences": 1, "strategy": "exact", "diff": "--- a/fastapi/routing.py\n+++ b/fastapi/routing.py\n@@ -952,16 +952,6 @@\n ),\n ] = Default(generate_unique_id),\n ) -> N
   12. run_command: command=grep "on_startup"
   13. run_command: command=grep "on_startup"
   14. run_command: command=grep "on_startup"
@@ -489,6 +491,7 @@ Traces read: 30. Tool arguments and short observation heads only; no model prose
    1. run_command: command=cd /workspace
    2. run_command: command=cd /workspace
    3. write_file: filepath=/tmp/locate.py, content_len=7271
+      -> obs[ERROR-LIKE]: {"status": "error", "error_type": "FileWriteError", "error_message": "Path traversal detected: '/tmp/locate.py' escapes workspace root."}
 ```
 
 ### fastapi_15745 | pre-edit calls: 1
@@ -496,6 +499,7 @@ Traces read: 30. Tool arguments and short observation heads only; no model prose
 ```
    1. run_command: command=cd /workspace
    2. write_file: filepath=/tmp/locate.py, content_len=7874
+      -> obs[ERROR-LIKE]: {"status": "error", "error_type": "FileWriteError", "error_message": "Path traversal detected: '/tmp/locate.py' escapes workspace root."}
    3. run_command: command=cd /workspace
 ```
 
@@ -505,6 +509,7 @@ Traces read: 30. Tool arguments and short observation heads only; no model prose
    1. run_command: command=cd /workspace
    2. run_command: command=ls /workspace
    3. write_file: filepath=/tmp/locate.py, content_len=7824
+      -> obs[ERROR-LIKE]: {"status": "error", "error_type": "FileWriteError", "error_message": "Path traversal detected: '/tmp/locate.py' escapes workspace root."}
    4. run_command: command=cd /workspace
    5. run_command: command=grep "class
    6. run_command: command=find src/httpx
@@ -528,6 +533,7 @@ Traces read: 30. Tool arguments and short observation heads only; no model prose
    9. run_command: command=cd /workspace
   10. read_file: filepath=src/requests/models.py, start_line=1, end_line=50
   11. edit_file: filepath=src/requests/models.py, old_string_len=85, new_string_len=163
+      -> obs[ok-ish]: {"status": "ok", "filepath": "src/requests/models.py", "occurrences": 1, "strategy": "exact", "diff": "--- a/src/requests/models.py\n+++ b/src/requests/models.py\n@@ -466,6 +466,8 @@\n # Bare domains aren't valid URLs.\n
   12. run_command: command=cd /workspace
   13. run_command: command=cd /workspace
   14. run_command: command=cd /workspace
@@ -587,6 +593,7 @@ Traces read: 30. Tool arguments and short observation heads only; no model prose
    5. run_command: command=cd /workspace
    6. edit_file: filepath=rich/table.py, old_string_len=705, new_string_len=705
    7. write_file: filepath=/tmp/repro.py, content_len=733
+      -> obs[ERROR-LIKE]: {"status": "error", "error_type": "FileWriteError", "error_message": "Path traversal detected: '/tmp/repro.py' escapes workspace root."}
    8. run_command: command=cat >
    9. run_command: command=grep "class
   10. read_file: filepath=rich/box.py, start_line=16
@@ -633,6 +640,7 @@ Traces read: 30. Tool arguments and short observation heads only; no model prose
    2. run_command: command=cd /workspace
    3. run_command: command=cd /workspace
    4. write_file: filepath=/tmp/locate.py, content_len=7824
+      -> obs[ERROR-LIKE]: {"status": "error", "error_type": "FileWriteError", "error_message": "Path traversal detected: '/tmp/locate.py' escapes workspace root."}
 ```
 
 ### rich_3052 | pre-edit calls: 3
@@ -818,6 +826,7 @@ Traces read: 30. Tool arguments and short observation heads only; no model prose
    7. read_file: filepath=rich/_inspect.py, start_line=100, end_line=115
    8. read_file: filepath=rich/_inspect.py, start_line=240, end_line=260
    9. write_file: filepath=/tmp/repro.py, content_len=825
+      -> obs[ERROR-LIKE]: {"status": "error", "error_type": "FileWriteError", "error_message": "Path traversal detected: '/tmp/repro.py' escapes workspace root."}
   10. run_command: command=cat >
   11. run_command: command=cat >
   12. run_command: command=ls /workspace
