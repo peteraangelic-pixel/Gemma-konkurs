@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import shutil
 import subprocess
 import sys
@@ -26,8 +27,12 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
+# Kaggle prints e.g. 'petersharps/<kernel> has status "KernelWorkerStatus.RUNNING"'. The prefix
+# matters: matching a bare "ERROR" anywhere in the output treated a CLI *error message* as a
+# finished-with-failure kernel and aborted a 3-hour wait after one second (2026-10-14 bug).
+STATE_RE = re.compile(r"KernelWorkerStatus\.(\w+)", re.IGNORECASE)
 TERMINAL_OK = ("COMPLETE",)
-TERMINAL_BAD = ("ERROR", "CANCEL", "CANCELLED")
+TERMINAL_BAD = ("ERROR", "CANCELED", "CANCELLED", "FAILED")
 MAX_TRANSIENT_FAILURES = 12  # the reason this tool exists: 5 was too few
 
 
@@ -46,12 +51,22 @@ def kaggle(args: list[str], timeout: int = 180) -> tuple[int | None, str, str]:
     return completed.returncode, completed.stdout, completed.stderr
 
 
+LAST_RAW = {"text": ""}
+
+
 def kernel_state(ref: str) -> str:
+    """Return a normalised state, or API_FAIL when the call itself failed.
+
+    Only text of the form KernelWorkerStatus.<STATE> counts as a state; anything else from a
+    non-zero exit is an API failure to retry, and anything else from a zero exit is UNKNOWN
+    (still retried, with the raw text kept for the audit trail).
+    """
     code, stdout, stderr = kaggle(["kernels", "status", ref], timeout=90)
-    text = f"{stdout}\n{stderr}".upper()
-    for state in TERMINAL_OK + TERMINAL_BAD + ("RUNNING", "QUEUED"):
-        if state in text:
-            return state
+    text = f"{stdout}\n{stderr}".strip()
+    LAST_RAW["text"] = text[:400]
+    match = STATE_RE.search(text)
+    if match:
+        return match.group(1).upper()
     return "UNKNOWN" if code == 0 else "API_FAIL"
 
 
@@ -98,9 +113,11 @@ def main() -> int:
         if state == "API_FAIL":
             failures += 1
             print(f"[{utc_now()}] status API failure {failures}/{MAX_TRANSIENT_FAILURES}")
+            print(f"    raw: {LAST_RAW['text'][:200]!r}")
             if failures >= MAX_TRANSIENT_FAILURES:
                 record.update({"status": "fetch_status_api_failed", "kaggle_status": last_state,
-                               "detail": f"{failures} consecutive status API failures"})
+                               "detail": f"{failures} consecutive status API failures",
+                               "last_raw_cli_output": LAST_RAW["text"]})
                 write_record(args.outdir, record)
                 return 3
             time.sleep(min(300, args.poll_interval_seconds * failures))  # back off
@@ -108,18 +125,21 @@ def main() -> int:
         failures = 0
         if state != last_state:
             print(f"[{utc_now()}] kernel state: {state}")
+            print(f"    raw: {LAST_RAW['text'][:200]!r}")
             last_state = state
         if state in TERMINAL_OK:
             break
         if state in TERMINAL_BAD:
-            record.update({"status": "kernel_failed", "kaggle_status": state, "fetched_utc": utc_now()})
+            record.update({"status": "kernel_failed", "kaggle_status": state, "fetched_utc": utc_now(),
+                           "last_raw_cli_output": LAST_RAW["text"]})
             write_record(args.outdir, record)
             print(f"kernel reported {state}; nothing to download", file=sys.stderr)
             return 2
         time.sleep(max(30, args.poll_interval_seconds))
     else:
         record.update({"status": "fetch_timeout", "kaggle_status": last_state,
-                       "waited_minutes": args.max_wait_minutes, "fetched_utc": utc_now()})
+                       "waited_minutes": args.max_wait_minutes, "fetched_utc": utc_now(),
+                       "last_raw_cli_output": LAST_RAW["text"]})
         write_record(args.outdir, record)
         print(f"timed out after {args.max_wait_minutes} min in state {last_state}", file=sys.stderr)
         return 3

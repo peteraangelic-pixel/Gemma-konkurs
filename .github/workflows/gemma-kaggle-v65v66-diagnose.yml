@@ -1,0 +1,116 @@
+# V6.5/V6.6 kernel diagnostics: capture the RAW Kaggle CLI output to a file in the repository.
+#
+# Why: both benchmark workflows died with "Five consecutive Kaggle status API calls failed" and the
+# recovery fetch aborted in one second on a status string containing ERROR - and the job logs are
+# not readable from the session sandbox. This workflow prints the raw output of `kernels list`,
+# `kernels status` and `kernels files` for both references into a committed text file, so the actual
+# cause (API outage vs a genuinely failed kernel vs a CLI quirk) can be read from the repository
+# instead of guessed.
+#
+# Read-only: no kernel is started, stopped or modified; no competition submission is created.
+# Nothing runs until gemma4-agent/kaggle_smoke/v65v66-diagnose.trigger is pushed.
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - arena/c4eeb067-gemma-konkurs
+    paths:
+      - gemma4-agent/kaggle_smoke/v65v66-diagnose.trigger
+
+permissions:
+  contents: write
+
+concurrency:
+  group: v65v66-diagnose.trigger-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout session branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Kaggle CLI and record its version
+        run: |
+          python -m pip install --disable-pip-version-check --quiet kaggle
+          python -m pip show kaggle | sed -n '1,3p'
+
+      - name: Configure Kaggle credentials
+        env:
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "$KAGGLE_API_TOKEN" ]; then
+            echo "Repository Actions secret KAGGLE_API_TOKEN is missing."
+            exit 1
+          fi
+          mkdir -p "$HOME/.kaggle"
+          printf '%s' "$KAGGLE_API_TOKEN" | tr -d '\r\n' > "$HOME/.kaggle/access_token"
+          chmod 600 "$HOME/.kaggle/access_token"
+          echo "Kaggle CLI configured; token value was not logged."
+
+      - name: Capture raw CLI output for both kernel references
+        env:
+          KAGGLE_USERNAME: petersharps
+        run: |
+          set -uo pipefail
+          OUT=gemma4-agent/kaggle_results/v65v66-diagnostics/raw-cli.txt
+          mkdir -p "$(dirname "$OUT")"
+          {
+            echo "# Raw Kaggle CLI capture"
+            echo "utc: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            echo "kaggle CLI: $(python3 -m pip show kaggle 2>/dev/null | sed -n 's/^Version: //p' | head -1)"
+            echo
+            echo "## kernels list --mine --page-size 30"
+            python3 -m kaggle kernels list --mine --page-size 30 2>&1 | head -60
+            echo "list_exit=$?"
+            echo
+            for REF in \
+              petersharps/gemma-agent-benchmark-cb847599-20261014-024522 \
+              petersharps/gemma-agent-benchmark-b6686c53-20261014-024548 ; do
+              echo "## kernels status $REF"
+              python3 -m kaggle kernels status "$REF" 2>&1
+              echo "status_exit=$?"
+              echo
+              echo "## kernels files $REF"
+              python3 -m kaggle kernels files "$REF" 2>&1 | head -20
+              echo "files_exit=$?"
+              echo
+            done
+          } > "$OUT" 2>&1
+          echo "--- captured file ---"
+          cat "$OUT"
+
+      - name: Commit the raw capture with the safe pattern
+        if: always()
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin "$GITHUB_REF_NAME"
+          rm -rf /tmp/keep && mkdir -p /tmp/keep
+          cp -r gemma4-agent/kaggle_results/v65v66-diagnostics /tmp/keep/ 2>/dev/null || true
+          git reset --hard "origin/$GITHUB_REF_NAME"
+          mkdir -p gemma4-agent/kaggle_results/v65v66-diagnostics
+          # copy CONTENTS, not the directory: a plain `cp -r src dst` nests when dst already exists
+          # (that bug put run.json into v6-5-benchmark/v6-5-benchmark/ in commit e385c69)
+          cp -r /tmp/keep/v65v66-diagnostics/. gemma4-agent/kaggle_results/v65v66-diagnostics/ 2>/dev/null || true
+          git add gemma4-agent/kaggle_results/v65v66-diagnostics 2>/dev/null || true
+          git rm -q --ignore-unmatch gemma4-agent/kaggle_smoke/v65v66-diagnose.trigger
+          if [ -z "$(git diff --cached --name-only)" ]; then
+            echo "Nothing to commit."
+            exit 0
+          fi
+          git commit -m "chore(gemma): raw Kaggle CLI capture for the V6.5/V6.6 kernels [skip ci]"
+          git push origin "HEAD:${GITHUB_REF_NAME}"

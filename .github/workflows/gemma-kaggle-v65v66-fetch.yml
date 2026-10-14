@@ -59,6 +59,8 @@ jobs:
 
       - name: Wait for and fetch the V6.5 kernel outputs (read-only)
         continue-on-error: true
+        env:
+          KAGGLE_USERNAME: petersharps
         run: |
           python3 gemma4-agent/tools/fetch_kernel_outputs.py \
             --outdir gemma4-agent/kaggle_results/v6-5-benchmark \
@@ -68,6 +70,8 @@ jobs:
 
       - name: Wait for and fetch the V6.6 kernel outputs (read-only)
         continue-on-error: true
+        env:
+          KAGGLE_USERNAME: petersharps
         run: |
           python3 gemma4-agent/tools/fetch_kernel_outputs.py \
             --outdir gemma4-agent/kaggle_results/v6-6-benchmark \
@@ -124,7 +128,10 @@ jobs:
           git reset --hard "origin/$GITHUB_REF_NAME"
           mkdir -p gemma4-agent/kaggle_results
           for FOLDER in v6-5-benchmark v6-6-benchmark; do
-            cp -r "/tmp/keep/$FOLDER" "gemma4-agent/kaggle_results/$FOLDER" 2>/dev/null || true
+            # copy CONTENTS, not the directory: `cp -r src dst` nests when dst exists, which put
+            # run.json into v6-5-benchmark/v6-5-benchmark/ in the first fetch commit (38503321606)
+            mkdir -p "gemma4-agent/kaggle_results/$FOLDER"
+            cp -r "/tmp/keep/$FOLDER/." "gemma4-agent/kaggle_results/$FOLDER/" 2>/dev/null || true
             # raw traces stay out of git; only the summaries are committed (same rule as V6.3/V6.4)
             rm -f "gemma4-agent/kaggle_results/$FOLDER/traces/trace_*.json"
             git add -f "gemma4-agent/kaggle_results/$FOLDER" 2>/dev/null || true
