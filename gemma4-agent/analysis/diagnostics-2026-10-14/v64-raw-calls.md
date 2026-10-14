@@ -3,7 +3,14 @@
 Traces read: 30. Tool arguments and short observation heads only; no model prose.
 
 
-## Command-head histogram (first token of every `run_command`)
+## Headline counters
+
+- `edit_calls_with_ok_result`: 41
+- `edit_calls_with_error_like_result`: 49
+- `comment_only_commands`: 32
+- `read_file_beyond_line_800`: 29
+
+## Command-head histogram (first informative token of every `run_command`)
 
 - `grep`: 133
 - `git`: 63
@@ -66,7 +73,7 @@ Traces read: 30. Tool arguments and short observation heads only; no model prose
    2. run_command: command=python3 /tmp/locate.py
    3. run_command: command=echo "🐛
    4. write_file: filepath=/tmp/issue.txt, content_len=1001
-      -> obs[ok-ish]: {"status": "ok", "stdout": "", "stderr": "", "exit_code": 0}
+      -> obs[ERROR-LIKE]: {"status": "error", "error_type": "FileWriteError", "error_message": "Path traversal detected: '/tmp/issue.txt' escapes workspace root."}
    5. run_command: command=grep "pydantic.v1"
    6. read_file: filepath=fastapi/_compat/v1.py
    7. run_command: command=python3 "import
@@ -74,7 +81,7 @@ Traces read: 30. Tool arguments and short observation heads only; no model prose
    9. run_command: command=grep "from
   10. read_file: filepath=fastapi/encoders.py
   11. edit_file: filepath=fastapi/_compat/v1.py, old_string_len=233, new_string_len=350
-      -> obs[ok-ish]: {"status": "ok", "stdout": "./fastapi/_compat/shared.py:from fastapi._compat import v1\n./fastapi/_compat/main.py:from fastapi._compat import v1\n./fastapi/encoders.py:from fastapi._compat import v1\n./tests/test_get_mod
+      -> obs[ok-ish]: {"status": "ok", "filepath": "fastapi/_compat/v1.py", "occurrences": 1, "strategy": "exact", "diff": "--- a/fastapi/_compat/v1.py\n+++ b/fastapi/_compat/v1.py\n@@ -16,11 +16,14 @@\n from fastapi._compat import shared\n f
   12. read_file: filepath=fastapi/_compat/v1.py, start_line=70, end_line=120
 ```
 
@@ -91,32 +98,32 @@ Traces read: 30. Tool arguments and short observation heads only; no model prose
    8. read_file: filepath=fastapi/param_functions.py, start_line=2221, end_line=2260
    9. read_file: filepath=fastapi/param_functions.py, start_line=2261, end_line=2300
   10. edit_file: filepath=fastapi/params.py, old_string_len=93, new_string_len=120
-      -> obs[ok-ish]: {"status": "ok", "filepath": "fastapi/param_functions.py", "content": "def Depends( # noqa: N802\n dependency: Annotated[\n Optional[Callable[..., Any]],\n Doc(\n \"\"\"\n A \"dependable\" callable (like a function).\n\n
+      -> obs[ok-ish]: {"status": "ok", "filepath": "fastapi/params.py", "occurrences": 1, "strategy": "exact", "diff": "--- a/fastapi/params.py\n+++ b/fastapi/params.py\n@@ -766,6 +766,7 @@\n class Depends:\n dependency: Optional[Callable[...
   11. edit_file: filepath=fastapi/param_functions.py, old_string_len=592, new_string_len=1072
-      -> obs[ok-ish]: {"status": "ok", "filepath": "fastapi/param_functions.py", "content": " ```python\n from typing import Annotated\n\n from fastapi import Depends, FastAPI\n\n app = FastAPI()\n\n\n async def common_parameters(q: str | Non
+      -> obs[ERROR-LIKE]: {"status": "error", "error_type": "FileEditError", "error_message": "Target string occurs 2 times in fastapi/param_functions.py. Please provide more surrounding context."}
   12. read_file: filepath=fastapi/param_functions.py, start_line=2221, end_line=2250
   13. edit_file: filepath=fastapi/param_functions.py, old_string_len=926, new_string_len=1406
-      -> obs[ERROR-LIKE]: {"status": "error", "error_type": "FileEditError", "error_message": "Target string occurs 2 times in fastapi/param_functions.py. Please provide more surrounding context."}
+      -> obs[ok-ish]: {"status": "ok", "filepath": "fastapi/param_functions.py", "occurrences": 1, "strategy": "exact", "diff": "--- a/fastapi/param_functions.py\n+++ b/fastapi/param_functions.py\n@@ -2245,6 +2245,19 @@\n \"\"\"\n ),\n ] = Tr
   14. edit_file: filepath=fastapi/param_functions.py, old_string_len=69, new_string_len=82
-      -> obs[ok-ish]: {"status": "ok", "filepath": "fastapi/param_functions.py", "content": "def Depends( # noqa: N802\n dependency: Annotated[\n Optional[Callable[..., Any]],\n Doc(\n \"\"\"\n A \"dependable\" callable (like a function).\n\n
+      -> obs[ok-ish]: {"status": "ok", "filepath": "fastapi/param_functions.py", "occurrences": 1, "strategy": "exact", "diff": "--- a/fastapi/param_functions.py\n+++ b/fastapi/param_functions.py\n@@ -2288,7 +2288,7 @@\n return commons\n ```\
   15. run_command: command=grep "params.Depends"
   16. run_command: command=grep "class
   17. run_command: command=find fastapi/dependencies
   18. run_command: command=grep "class
   19. read_file: filepath=fastapi/dependencies/models.py
   20. edit_file: filepath=fastapi/dependencies/models.py, old_string_len=147, new_string_len=175
-      -> obs[ok-ish]: {"status": "ok", "stdout": "15:class Dependant:\n", "stderr": "", "exit_code": 0}
+      -> obs[ok-ish]: {"status": "ok", "filepath": "fastapi/dependencies/models.py", "occurrences": 1, "strategy": "unescaped", "diff": "--- a/fastapi/dependencies/models.py\n+++ b/fastapi/dependencies/models.py\n@@ -30,6 +30,7 @@\n security_
   21. read_file: filepath=fastapi/dependencies/utils.py, start_line=300, end_line=400
   22. run_command: command=grep "Dependant("
   23. read_file: filepath=fastapi/dependencies/utils.py, start_line=140, end_line=250
   24. run_command: command=grep "get_dependant("
   25. read_file: filepath=fastapi/dependencies/utils.py, start_line=240, end_line=300
   26. edit_file: filepath=fastapi/dependencies/utils.py, old_string_len=369, new_string_len=420
-      -> obs[ok-ish]: {"status": "ok", "stdout": "fastapi/dependencies/utils.py: return get_dependant(\nfastapi/dependencies/utils.py:def get_dependant(\nfastapi/dependencies/utils.py: sub_dependant = get_dependant(\nfastapi/dependencies/util
-  27. edit_file: filepath=fastapi/dependencies/utils.py, old_string_len=289, new_string_len=341
-      -> obs[ERROR-LIKE]: {"status": "ok", "filepath": "fastapi/dependencies/utils.py", "content": ") -> Dependant:\n dependant = Dependant(\n call=call,\n name=name,\n path=path,\n security_scopes=security_scopes,\n use_cache=use_cache,\n )\n pa
-  28. edit_file: filepath=fastapi/dependencies/utils.py, old_string_len=444, new_string_len=476
       -> obs[ok-ish]: {"status": "ok", "filepath": "fastapi/dependencies/utils.py", "occurrences": 1, "strategy": "unescaped", "diff": "--- a/fastapi/dependencies/utils.py\n+++ b/fastapi/dependencies/utils.py\n@@ -237,6 +237,7 @@\n name: Opti
+  27. edit_file: filepath=fastapi/dependencies/utils.py, old_string_len=289, new_string_len=341
+      -> obs[ok-ish]: {"status": "ok", "filepath": "fastapi/dependencies/utils.py", "occurrences": 1, "strategy": "unescaped", "diff": "--- a/fastapi/dependencies/utils.py\n+++ b/fastapi/dependencies/utils.py\n@@ -278,6 +278,7 @@\n name=param
+  28. edit_file: filepath=fastapi/dependencies/utils.py, old_string_len=444, new_string_len=476
+      -> obs[ok-ish]: {"status": "ok", "filepath": "fastapi/dependencies/utils.py", "occurrences": 1, "strategy": "unescaped", "diff": "--- a/fastapi/dependencies/utils.py\n+++ b/fastapi/dependencies/utils.py\n@@ -158,6 +158,7 @@\n body_param
   29. run_command: command=grep "solve_dependencies"
   30. read_file: filepath=fastapi/dependencies/utils.py, start_line=580, end_line=700
   31. get_status: (no recognised args)
@@ -166,7 +173,7 @@ Traces read: 30. Tool arguments and short observation heads only; no model prose
    3. read_file: filepath=fastapi/_compat/shared.py
    4. read_file: filepath=fastapi/_compat/v2.py, start_line=1, end_line=50
    5. edit_file: filepath=fastapi/_compat/v2.py, old_string_len=351, new_string_len=599
-      -> obs[ERROR-LIKE]: {"status": "ok", "filepath": "fastapi/_compat/shared.py", "content": "import sys\nimport types\nimport typing\nfrom collections import deque\nfrom dataclasses import is_dataclass\nfrom typing import (\n Any,\n Deque,\n F
+      -> obs[ok-ish]: {"status": "ok", "filepath": "fastapi/_compat/v2.py", "occurrences": 1, "strategy": "exact", "diff": "--- a/fastapi/_compat/v2.py\n+++ b/fastapi/_compat/v2.py\n@@ -370,7 +370,13 @@\n \n \n def serialize_sequence_value(*,
    6. run_command: command=grep "ModelField"
    7. read_file: filepath=fastapi/_compat/v2.py, start_line=60, end_line=70
    8. run_command: command=cat >
@@ -201,10 +208,10 @@ Traces read: 30. Tool arguments and short observation heads only; no model prose
    2. read_file: filepath=fastapi/dependencies/utils.py, start_line=890, end_line=920
    3. read_file: filepath=fastapi/dependencies/utils.py, start_line=850, end_line=905
    4. write_file: filepath=/tmp/repro.py, content_len=971
-      -> obs[ERROR-LIKE]: {"status": "ok", "filepath": "fastapi/dependencies/utils.py", "content": " assert isinstance(value, sequence_types) # type: ignore[arg-type]\n results: List[Union[bytes, str]] = []\n\n async def process_fn(\n fn: Callabl
+      -> obs[ERROR-LIKE]: {"status": "error", "error_type": "FileWriteError", "error_message": "Path traversal detected: '/tmp/repro.py' escapes workspace root."}
    5. run_command: command=cat >
    6. edit_file: filepath=fastapi/dependencies/utils.py, old_string_len=172, new_string_len=332
-      -> obs[ERROR-LIKE]: {"status": "error", "error_type": "FileWriteError", "error_message": "Path traversal detected: '/tmp/repro.py' escapes workspace root."}
+      -> obs[ok-ish]: {"status": "ok", "filepath": "fastapi/dependencies/utils.py", "occurrences": 1, "strategy": "exact", "diff": "--- a/fastapi/dependencies/utils.py\n+++ b/fastapi/dependencies/utils.py\n@@ -903,9 +903,13 @@\n if value is n
    7. run_command: command=python3 /tmp/repro.py
    8. run_command: command=grep "received_body.items()"
    9. run_command: command=grep "_extract_"
@@ -226,18 +233,18 @@ Traces read: 30. Tool arguments and short observation heads only; no model prose
   25. read_file: filepath=fastapi/dependencies/utils.py, start_line=1, end_line=50
   26. run_command: command=grep "ImmutableMultiDict"
   27. edit_file: filepath=fastapi/dependencies/utils.py, new_string_len=548
-      -> obs[ok-ish]: {"status": "ok", "stdout": "723:def _get_multidict_value(\n", "stderr": "", "exit_code": 0, "budget_warning": "Only 7 tool call(s) remaining (23/30 used). Finalize your edits and call submit_patch soon."}
+      -> obs[ERROR-LIKE]: {"error": "Invoking `edit_file()` failed as the following mandatory input parameters are not present:\nold_string\nYou could retry calling this tool, but it is IMPORTANT for you to provide all the mandatory parameters."}
   28. read_file: filepath=fastapi/dependencies/utils.py, start_line=790, end_line=800
   29. edit_file: filepath=fastapi/dependencies/utils.py, new_string_len=536
-      -> obs[ERROR-LIKE]: {"status": "ok", "filepath": "fastapi/dependencies/utils.py", "content": "import dataclasses\nimport inspect\nfrom contextlib import AsyncExitStack, contextmanager\nfrom copy import copy, deepcopy\nfrom dataclasses impor
+      -> obs[ERROR-LIKE]: {"error": "Invoking `edit_file()` failed as the following mandatory input parameters are not present:\nold_string\nYou could retry calling this tool, but it is IMPORTANT for you to provide all the mandatory parameters."}
   30. edit_file: filepath=fastapi/dependencies/utils.py, new_string_len=536
-      -> obs[ok-ish]: {"status": "ok", "stdout": " ImmutableMultiDict,\n if is_sequence_field(field) and isinstance(values, (ImmutableMultiDict, Headers)):\n", "stderr": "", "exit_code": 0, "budget_warning": "Only 4 tool call(s) remaining (26
+      -> obs[ERROR-LIKE]: {"error": "Invoking `edit_file()` failed as the following mandatory input parameters are not present:\nold_string\nYou could retry calling this tool, but it is IMPORTANT for you to provide all the mandatory parameters."}
   31. edit_file: filepath=fastapi/dependencies/utils.py, new_string_len=536
       -> obs[ERROR-LIKE]: {"error": "Invoking `edit_file()` failed as the following mandatory input parameters are not present:\nold_string\nYou could retry calling this tool, but it is IMPORTANT for you to provide all the mandatory parameters."}
   32. edit_file: filepath=fastapi/dependencies/utils.py, new_string_len=536
-      -> obs[ok-ish]: {"status": "ok", "filepath": "fastapi/dependencies/utils.py", "content": " params_to_process[field.name] = value\n processed_keys.add(alias or field.alias)\n processed_keys.add(field.name)\n\n for key, value in received_
-  33. edit_file: filepath=fastapi/dependencies/utils.py, old_string_len=127, new_string_len=522
       -> obs[ERROR-LIKE]: {"error": "Invoking `edit_file()` failed as the following mandatory input parameters are not present:\nold_string\nYou could retry calling this tool, but it is IMPORTANT for you to provide all the mandatory parameters."}
+  33. edit_file: filepath=fastapi/dependencies/utils.py, old_string_len=127, new_string_len=522
+      -> obs[ok-ish]: {"status": "ok", "filepath": "fastapi/dependencies/utils.py", "occurrences": 1, "strategy": "exact", "diff": "--- a/fastapi/dependencies/utils.py\n+++ b/fastapi/dependencies/utils.py\n@@ -791,9 +791,18 @@\n processed_key
   34. run_command: command=git status
   35. run_command: command=git status
 ```
@@ -355,7 +362,7 @@ Traces read: 30. Tool arguments and short observation heads only; no model prose
   29. run_command: command=grep "validation
   30. run_command: command=grep "RequestValidationError"
   31. edit_file: filepath=docs/en/docs/tutorial/handling-errors.md, old_string_len=79, new_string_len=221
-      -> obs[ERROR-LIKE]: {"status": "error", "error_type": "CommandError", "error_message": "", "details": {"stdout": "", "stderr": "", "exit_code": 1}, "budget_warning": "Only 1 tool call(s) remaining (29/30 used). Finalize your edits and call 
+      -> obs[ERROR-LIKE]: {"status": "error", "error_type": "BudgetExceeded", "error_message": "Tool call budget exhausted (30 calls)"}
 ```
 
 ### fastapi_14851 | pre-edit calls: 31
@@ -393,7 +400,7 @@ Traces read: 30. Tool arguments and short observation heads only; no model prose
   30. run_command: command=cd /workspace
   31. run_command: command=cd /workspace
   32. edit_file: filepath=fastapi/routing.py, old_string_len=145, new_string_len=438
-      -> obs[ok-ish]: {"status": "ok", "stdout": "509: on_startup: Annotated[\n971: on_startup=on_startup,\n", "stderr": "", "exit_code": 0, "budget_warning": "Only 0 tool call(s) remaining (30/30 used). Finalize your edits and call submit_pa
+      -> obs[ERROR-LIKE]: {"status": "error", "error_type": "BudgetExceeded", "error_message": "Tool call budget exhausted (30 calls)"}
 ```
 
 ### fastapi_14873 | pre-edit calls: 10
@@ -430,7 +437,7 @@ Traces read: 30. Tool arguments and short observation heads only; no model prose
    9. run_command: command=grep "format"
   10. run_command: command=grep '"format":
   11. edit_file: filepath=fastapi/datastructures.py, old_string_len=53, new_string_len=81
-      -> obs[ok-ish]: {"status": "ok", "stdout": "72: \"1XX\": \"Information\",\n226: path: str = route.path_format\n534: paths.setdefault(route.path_format, {}).update(path)\n553: webhook_paths.setdefault(webhook.path_format, {}).update(path
+      -> obs[ok-ish]: {"status": "ok", "filepath": "fastapi/datastructures.py", "occurrences": 1, "strategy": "exact", "diff": "--- a/fastapi/datastructures.py\n+++ b/fastapi/datastructures.py\n@@ -139,7 +139,7 @@\n def __get_pydantic_json_sc
   12. run_command: command=grep "binary"
   13. run_command: command=grep "contentMediaType"
   14. read_file: filepath=fastapi/openapi/models.py, start_line=170, end_line=190
@@ -452,7 +459,7 @@ Traces read: 30. Tool arguments and short observation heads only; no model prose
   30. read_file: filepath=fastapi/_compat/v2.py, start_line=231, end_line=260
   31. read_file: filepath=fastapi/datastructures.py
   32. edit_file: filepath=fastapi/datastructures.py, old_string_len=35, new_string_len=63
-      -> obs[ok-ish]: {"status": "ok", "filepath": "fastapi/_compat/v2.py", "content": " fields: Sequence[ModelField],\n model_name_map: ModelNameMap,\n separate_input_output_schemas: bool = True,\n) -> tuple[\n dict[tuple[ModelField, Literal
+      -> obs[ERROR-LIKE]: {"status": "error", "error_type": "BudgetExceeded", "error_message": "Tool call budget exhausted (30 calls)"}
   33. edit_file: filepath=fastapi/datastructures.py, old_string_len=35, new_string_len=63
       -> obs[ERROR-LIKE]: {"status": "error", "error_type": "BudgetExceeded", "error_message": "Tool call budget exhausted (30 calls)"}
 ```
@@ -465,12 +472,12 @@ Traces read: 30. Tool arguments and short observation heads only; no model prose
    3. read_file: filepath=fastapi/responses.py
    4. read_file: filepath=fastapi/__init__.py
    5. edit_file: filepath=fastapi/responses.py, old_string_len=960, new_string_len=1606
-      -> obs[ERROR-LIKE]: {"status": "ok", "filepath": "fastapi/responses.py", "content": "from typing import Any\n\nfrom fastapi.exceptions import FastAPIDeprecationWarning\nfrom starlette.responses import FileResponse as FileResponse # noqa\nfr
+      -> obs[ok-ish]: {"status": "ok", "filepath": "fastapi/responses.py", "occurrences": 1, "strategy": "exact", "diff": "--- a/fastapi/responses.py\n+++ b/fastapi/responses.py\n@@ -78,7 +78,31 @@\n \"\"\"\n \n def render(self, content: Any)
    6. edit_file: filepath=fastapi/responses.py, old_string_len=962, new_string_len=1588
-      -> obs[ok-ish]: {"status": "ok", "filepath": "fastapi/__init__.py", "content": "\"\"\"FastAPI framework, high performance, easy to learn, fast to code, ready for production\"\"\"\n\n__version__ = \"0.134.0\"\n\nfrom starlette import sta
+      -> obs[ok-ish]: {"status": "ok", "filepath": "fastapi/responses.py", "occurrences": 1, "strategy": "exact", "diff": "--- a/fastapi/responses.py\n+++ b/fastapi/responses.py\n@@ -78,10 +78,34 @@\n \"\"\"\n \n def render(self, content: Any
    7. read_file: filepath=fastapi/responses.py, start_line=80
    8. edit_file: filepath=fastapi/responses.py, old_string_len=2231, new_string_len=1588
-      -> obs[ok-ish]: {"status": "ok", "filepath": "fastapi/responses.py", "occurrences": 1, "strategy": "exact", "diff": "--- a/fastapi/responses.py\n+++ b/fastapi/responses.py\n@@ -78,10 +78,34 @@\n \"\"\"\n \n def render(self, content: Any
+      -> obs[ok-ish]: {"status": "ok", "filepath": "fastapi/responses.py", "occurrences": 1, "strategy": "regex", "diff": "--- a/fastapi/responses.py\n+++ b/fastapi/responses.py\n@@ -106,27 +106,3 @@\n media_type=\"text/event-stream\",\n )\n 
    9. read_file: filepath=fastapi/responses.py, start_line=80
   10. read_file: filepath=fastapi/__init__.py
   11. run_command: command=cd /workspace
@@ -539,9 +546,9 @@ Traces read: 30. Tool arguments and short observation heads only; no model prose
    3. run_command: command=cat requirements-dev.txt
    4. run_command: command=grep "urllib3"
    5. edit_file: filepath=tox.ini, old_string_len=61, new_string_len=74
-      -> obs[ok-ish]: {"status": "ok", "stdout": "-e .[socks]\npytest>=2.8.0,<9\npytest-cov\npytest-httpbin==2.0.0\nhttpbin~=0.10.0\ntrustme\nwheel\n", "stderr": "", "exit_code": 0}
+      -> obs[ok-ish]: {"status": "ok", "filepath": "tox.ini", "occurrences": 1, "strategy": "exact", "diff": "--- a/tox.ini\n+++ b/tox.ini\n@@ -1,5 +1,5 @@\n [tox]\n-envlist = py{38,39,310,311,312}-{default, use_chardet_on_py3}\n+envlist = py
    6. edit_file: filepath=tox.ini, old_string_len=83, new_string_len=158
-      -> obs[ERROR-LIKE]: {"status": "ok", "stdout": "./src/requests/__init__.py:43:import urllib3\n./src/requests/__init__.py:58:def check_compatibility(urllib3_version, chardet_version, charset_normalizer_version):\n./src/requests/__init__.py:5
+      -> obs[ok-ish]: {"status": "ok", "filepath": "tox.ini", "occurrences": 1, "strategy": "exact", "diff": "--- a/tox.ini\n+++ b/tox.ini\n@@ -16,3 +16,9 @@\n security\n socks\n use_chardet_on_py3\n+\n+[testenv:urllib3_126]\n+deps = \n+ -rre
    7. run_command: command=cat tox.ini
    8. run_command: command=cat pyproject.toml
    9. run_command: command=cat setup.py
@@ -556,9 +563,9 @@ Traces read: 30. Tool arguments and short observation heads only; no model prose
    3. run_command: command=grep "_parse_content_type_header"
    4. read_file: filepath=src/requests/utils.py, start_line=504, end_line=545
    5. edit_file: filepath=src/requests/utils.py, old_string_len=308, new_string_len=275
-      -> obs[ok-ish]: {"status": "ok", "stdout": "504:def _parse_content_type_header(header):\n541: content_type, params = _parse_content_type_header(content_type)\n", "stderr": "", "exit_code": 0}
+      -> obs[ok-ish]: {"status": "ok", "filepath": "src/requests/utils.py", "occurrences": 1, "strategy": "exact", "diff": "--- a/src/requests/utils.py\n+++ b/src/requests/utils.py\n@@ -517,12 +517,11 @@\n for param in params:\n param = param
    6. write_file: filepath=/tmp/repro.py, content_len=952
-      -> obs[ok-ish]: {"status": "ok", "filepath": "src/requests/utils.py", "content": "def _parse_content_type_header(header):\n \"\"\"Returns content type and parameters from given header\n\n :param header: string\n :return: tuple containin
+      -> obs[ERROR-LIKE]: {"status": "error", "error_type": "FileWriteError", "error_message": "Path traversal detected: '/tmp/repro.py' escapes workspace root."}
    7. run_command: command=cat >
    8. read_file: filepath=src/requests/utils.py, start_line=500, end_line=530
    9. run_command: command=export PYTHONPATH=$PYTHONPATH:/workspace/src
@@ -635,21 +642,21 @@ Traces read: 30. Tool arguments and short observation heads only; no model prose
    2. read_file: filepath=rich/prompt.py
    3. read_file: filepath=rich/prompt.py, start_line=151
    4. edit_file: filepath=rich/prompt.py, old_string_len=658, new_string_len=740
-      -> obs[ERROR-LIKE]: {"status": "ok", "filepath": "rich/prompt.py", "content": "from typing import Any, Generic, List, Optional, TextIO, TypeVar, Union, overload\n\nfrom . import get_console\nfrom .console import Console\nfrom .text import T
-   5. edit_file: filepath=rich/prompt.py, old_string_len=412, new_string_len=449
-      -> obs[ERROR-LIKE]: {"status": "ok", "filepath": "rich/prompt.py", "content": " \"\"\"\n return Text(f\"({default})\", \"prompt.default\")\n\n def make_prompt(self, default: DefaultType) -> Text:\n \"\"\"Make prompt text.\n\n Args:\n defaul
-   6. edit_file: filepath=rich/prompt.py, old_string_len=362, new_string_len=399
       -> obs[ok-ish]: {"status": "ok", "filepath": "rich/prompt.py", "occurrences": 1, "strategy": "exact", "diff": "--- a/rich/prompt.py\n+++ b/rich/prompt.py\n@@ -59,6 +59,7 @@\n choices: Optional[List[str]] = None,\n show_default: bool = T
-   7. edit_file: filepath=rich/prompt.py, old_string_len=1446, new_string_len=1625
+   5. edit_file: filepath=rich/prompt.py, old_string_len=412, new_string_len=449
       -> obs[ok-ish]: {"status": "ok", "filepath": "rich/prompt.py", "occurrences": 1, "strategy": "exact", "diff": "--- a/rich/prompt.py\n+++ b/rich/prompt.py\n@@ -85,6 +85,7 @@\n choices: Optional[List[str]] = None,\n show_default: bool = T
-   8. edit_file: filepath=rich/prompt.py, old_string_len=348, new_string_len=458
+   6. edit_file: filepath=rich/prompt.py, old_string_len=362, new_string_len=399
       -> obs[ok-ish]: {"status": "ok", "filepath": "rich/prompt.py", "occurrences": 1, "strategy": "exact", "diff": "--- a/rich/prompt.py\n+++ b/rich/prompt.py\n@@ -102,6 +102,7 @@\n choices: Optional[List[str]] = None,\n show_default: bool =
+   7. edit_file: filepath=rich/prompt.py, old_string_len=1446, new_string_len=1625
+      -> obs[ok-ish]: {"status": "ok", "filepath": "rich/prompt.py", "occurrences": 1, "strategy": "unescaped", "diff": "--- a/rich/prompt.py\n+++ b/rich/prompt.py\n@@ -117,6 +117,7 @@\n choices: Optional[List[str]] = None,\n show_default: bo
+   8. edit_file: filepath=rich/prompt.py, old_string_len=348, new_string_len=458
+      -> obs[ok-ish]: {"status": "ok", "filepath": "rich/prompt.py", "occurrences": 1, "strategy": "unescaped", "diff": "--- a/rich/prompt.py\n+++ b/rich/prompt.py\n@@ -219,7 +219,9 @@\n bool: True if choice was valid, otherwise False.\n \"\"
    9. run_command: command=find tests
   10. read_file: filepath=tests/test_prompt.py
   11. run_command: command=cat >
   12. read_file: filepath=rich/prompt.py, start_line=1, end_line=120
   13. edit_file: filepath=rich/prompt.py, old_string_len=172, new_string_len=267
-      -> obs[ok-ish]: {"status": "ok", "stdout": "Case-insensitive test passed!\nCase-sensitive test passed!\nAll tests passed!\n", "stderr": "", "exit_code": 0}
+      -> obs[ok-ish]: {"status": "ok", "filepath": "rich/prompt.py", "occurrences": 1, "strategy": "unescaped", "diff": "--- a/rich/prompt.py\n+++ b/rich/prompt.py\n@@ -38,6 +38,7 @@\n choices (List[str], optional): A list of valid choices. D
   14. run_command: command=git diff
 ```
 
