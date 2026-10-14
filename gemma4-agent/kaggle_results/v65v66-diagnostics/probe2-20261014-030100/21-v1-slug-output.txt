@@ -1,0 +1,2 @@
+Kernel log downloaded to /home/runner/work/_temp/v1out/gemma-push-probe-20261014.log 
+output_exit=0

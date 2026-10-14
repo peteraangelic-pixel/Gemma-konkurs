@@ -1,0 +1,2 @@
+petersharps/gemma-push-probe-20261014 has status "KernelWorkerStatus.COMPLETE"
+status_exit=0
