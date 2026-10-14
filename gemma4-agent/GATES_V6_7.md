@@ -124,3 +124,33 @@ V6_VARIANT=v67 python3 gemma4-agent/tools/make_v6_prompt.py
 python3 gemma4-agent/build_submission_v6.py --source-dir gemma4-agent/submission-v6.7
 python3 gemma4-agent/tools/negative_controls_v6.py --variant v67
 ```
+
+## Pre-registracja oczekiwań (zapisana przed przebiegiem)
+
+Przebieg: workflow `gemma-kaggle-v67-benchmark.yml` (gotowy), ten sam zestaw 30 zadań i ten sam
+seed `20261009` co V3/V4/V5/V6.1–V6.4, więc porównanie jest 1:1. Start dopiero po pushu
+`gemma4-agent/kaggle_smoke/v67-benchmark.trigger` — plik **nie istnieje**, workflow sam nic nie robi.
+
+| # | predykcja (mierzalna) | V6.4 (referencja) | próg dla V6.7 |
+| --- | --- | --- | --- |
+| R1 | odrzucone zapisy poza repo, licznik `write_file_outside_workspace` z surowych śladów | **9** | **0** |
+| R2 | puste drzewa (`patch_chars = 0`) | 11 | **≤ 7** |
+| R3 | bramki jakości: G1, G3 | 0, 0 | **0, 0** |
+| R4 | bramka G2 (puste drzewo i sesja < 280 s) | 3 | **≤ 1** |
+| R5 | `comment_only_commands` z surowych śladów | 32 | **< 32** |
+| R6 | rozwiązane zadania | 10/30 | **≥ 11** (najsłabsza predykcja, kierunkowa) |
+
+R1 jest predykcją mechanizmową i nie zależy od score: jeśli reguła 4 nie działa, licznik zostanie
+> 0 i dźwignia jest obalona niezależnie od wyniku. R6 jest celowo słabe — reguły 1–7 naprawiają
+marnotrawstwo, nie jakość łatek, więc „więcej rozwiązanych" nie jest tym, co V6.7 obiecuje.
+
+Polecenia po przebiegu:
+
+```
+python3 gemma4-agent/tools/analyze_v65_v66.py --folder v6-7-benchmark --tag V6.7 \
+    --reference v6-4-benchmark --expect-solved 11 \
+    --out gemma4-agent/kaggle_results/v6-7-benchmark/verdict.md
+```
+
+Do liczników R1/R5 potrzebny jest surowy ślad nowego kernela: workflow diagnostyczny
+(`gemma-kaggle-v64-diagnose.yml`) wskazany na nowy kernel — bez tego R1/R5 zostają niezmierzone.
