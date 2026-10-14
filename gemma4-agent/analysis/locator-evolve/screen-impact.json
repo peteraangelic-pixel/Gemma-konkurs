@@ -1,0 +1,420 @@
+{
+  "baseline": {
+    "k1": 1.2,
+    "b": 0.75,
+    "path_bonus": 1.5,
+    "defined_bonus": 4.0,
+    "exact_bonus": 6.0,
+    "test_penalty": 0.5,
+    "import_factor": 1.0,
+    "q_ident_piece": 3.0,
+    "q_full_ident": 4.0,
+    "q_plain": 1.0
+  },
+  "evolved": {
+    "k1": 0.8840137564604451,
+    "b": 0.2,
+    "path_bonus": 3.832617223410782,
+    "defined_bonus": 3.5845356329236306,
+    "exact_bonus": 3.633898589111457,
+    "test_penalty": 0.16499659767916297,
+    "import_factor": 0.7050251732361117,
+    "q_ident_piece": 1.5195620948340227,
+    "q_full_ident": 2.4426874578217013,
+    "q_plain": 0.1
+  },
+  "summary": {
+    "P": {
+      "tasks": 10,
+      "improved": 1,
+      "worsened": 0,
+      "top3_before": 9,
+      "top3_after": 9
+    },
+    "N": {
+      "tasks": 11,
+      "improved": 3,
+      "worsened": 2,
+      "top3_before": 6,
+      "top3_after": 7
+    },
+    "R": {
+      "tasks": 8,
+      "improved": 2,
+      "worsened": 0,
+      "top3_before": 5,
+      "top3_after": 5
+    },
+    "W": {
+      "tasks": 1,
+      "improved": 1,
+      "worsened": 0,
+      "top3_before": 0,
+      "top3_after": 0
+    }
+  },
+  "tasks": [
+    {
+      "task": "fastapi_14266",
+      "bucket": "N",
+      "resolved": false,
+      "gold": [
+        "fastapi/dependencies/utils.py"
+      ],
+      "baseline_rank": 97,
+      "evolved_rank": 36,
+      "delta": "\u2191 o 61"
+    },
+    {
+      "task": "fastapi_14459",
+      "bucket": "N",
+      "resolved": false,
+      "gold": [
+        "fastapi/dependencies/models.py",
+        "fastapi/dependencies/utils.py",
+        "fastapi/openapi/utils.py"
+      ],
+      "baseline_rank": 5,
+      "evolved_rank": 3,
+      "delta": "\u2191 o 2"
+    },
+    {
+      "task": "fastapi_14487",
+      "bucket": "N",
+      "resolved": false,
+      "gold": [
+        "docs_src/handling_errors/tutorial004.py"
+      ],
+      "baseline_rank": 16,
+      "evolved_rank": 23,
+      "delta": "\u2193 o 7"
+    },
+    {
+      "task": "fastapi_14851",
+      "bucket": "N",
+      "resolved": false,
+      "gold": [
+        "fastapi/routing.py"
+      ],
+      "baseline_rank": 1,
+      "evolved_rank": 1,
+      "delta": "bez zmian"
+    },
+    {
+      "task": "fastapi_15588",
+      "bucket": "N",
+      "resolved": false,
+      "gold": [
+        "fastapi/sse.py"
+      ],
+      "baseline_rank": 2,
+      "evolved_rank": 2,
+      "delta": "bez zmian"
+    },
+    {
+      "task": "fastapi_15745",
+      "bucket": "N",
+      "resolved": false,
+      "gold": [
+        "fastapi/applications.py",
+        "fastapi/openapi/utils.py",
+        "fastapi/routing.py"
+      ],
+      "baseline_rank": 1,
+      "evolved_rank": 1,
+      "delta": "bez zmian"
+    },
+    {
+      "task": "httpx_3672",
+      "bucket": "N",
+      "resolved": false,
+      "gold": [
+        "src/ahttpx/_parsers.py",
+        "src/ahttpx/_pool.py",
+        "src/ahttpx/_server.py",
+        "src/httpx/_network.py",
+        "src/httpx/_parsers.py",
+        "src/httpx/_pool.py",
+        "src/httpx/_server.py"
+      ],
+      "baseline_rank": 1,
+      "evolved_rank": 1,
+      "delta": "bez zmian"
+    },
+    {
+      "task": "requests_6757",
+      "bucket": "N",
+      "resolved": false,
+      "gold": [
+        "src/requests/compat.py",
+        "src/requests/utils.py"
+      ],
+      "baseline_rank": 1,
+      "evolved_rank": 1,
+      "delta": "bez zmian"
+    },
+    {
+      "task": "rich_3043",
+      "bucket": "N",
+      "resolved": false,
+      "gold": [
+        "rich/_export_format.py"
+      ],
+      "baseline_rank": 14,
+      "evolved_rank": 9,
+      "delta": "\u2191 o 5"
+    },
+    {
+      "task": "rich_3105",
+      "bucket": "N",
+      "resolved": false,
+      "gold": [
+        "rich/_export_format.py"
+      ],
+      "baseline_rank": 37,
+      "evolved_rank": 41,
+      "delta": "\u2193 o 4"
+    },
+    {
+      "task": "rich_3934",
+      "bucket": "N",
+      "resolved": false,
+      "gold": [
+        "rich/live.py",
+        "rich/live_render.py"
+      ],
+      "baseline_rank": 1,
+      "evolved_rank": 1,
+      "delta": "bez zmian"
+    },
+    {
+      "task": "fastapi_14077",
+      "bucket": "P",
+      "resolved": true,
+      "gold": [
+        "fastapi/exception_handlers.py",
+        "fastapi/openapi/utils.py"
+      ],
+      "baseline_rank": 3,
+      "evolved_rank": 3,
+      "delta": "bez zmian"
+    },
+    {
+      "task": "fastapi_14458",
+      "bucket": "P",
+      "resolved": true,
+      "gold": [
+        "fastapi/dependencies/models.py"
+      ],
+      "baseline_rank": 1,
+      "evolved_rank": 1,
+      "delta": "bez zmian"
+    },
+    {
+      "task": "fastapi_14873",
+      "bucket": "P",
+      "resolved": true,
+      "gold": [
+        "fastapi/routing.py"
+      ],
+      "baseline_rank": 1,
+      "evolved_rank": 1,
+      "delta": "bez zmian"
+    },
+    {
+      "task": "requests_6644",
+      "bucket": "P",
+      "resolved": true,
+      "gold": [
+        "src/requests/adapters.py"
+      ],
+      "baseline_rank": 1,
+      "evolved_rank": 1,
+      "delta": "bez zmian"
+    },
+    {
+      "task": "rich_2725",
+      "bucket": "P",
+      "resolved": true,
+      "gold": [
+        "rich/table.py"
+      ],
+      "baseline_rank": 3,
+      "evolved_rank": 3,
+      "delta": "bez zmian"
+    },
+    {
+      "task": "rich_3006",
+      "bucket": "P",
+      "resolved": true,
+      "gold": [
+        "rich/repr.py"
+      ],
+      "baseline_rank": 10,
+      "evolved_rank": 4,
+      "delta": "\u2191 o 6"
+    },
+    {
+      "task": "rich_3518",
+      "bucket": "P",
+      "resolved": true,
+      "gold": [
+        "rich/table.py"
+      ],
+      "baseline_rank": 1,
+      "evolved_rank": 1,
+      "delta": "bez zmian"
+    },
+    {
+      "task": "rich_3718",
+      "bucket": "P",
+      "resolved": true,
+      "gold": [
+        "rich/panel.py"
+      ],
+      "baseline_rank": 1,
+      "evolved_rank": 1,
+      "delta": "bez zmian"
+    },
+    {
+      "task": "rich_3882",
+      "bucket": "P",
+      "resolved": true,
+      "gold": [
+        "rich/prompt.py"
+      ],
+      "baseline_rank": 1,
+      "evolved_rank": 1,
+      "delta": "bez zmian"
+    },
+    {
+      "task": "rich_3894",
+      "bucket": "P",
+      "resolved": true,
+      "gold": [
+        "rich/_inspect.py"
+      ],
+      "baseline_rank": 1,
+      "evolved_rank": 1,
+      "delta": "bez zmian"
+    },
+    {
+      "task": "fastapi_14186",
+      "bucket": "R",
+      "resolved": false,
+      "gold": [
+        "fastapi/_compat/__init__.py",
+        "fastapi/_compat/main.py",
+        "fastapi/_compat/may_v1.py",
+        "fastapi/_compat/shared.py",
+        "fastapi/_compat/v1.py",
+        "fastapi/_compat/v2.py",
+        "fastapi/dependencies/utils.py",
+        "fastapi/encoders.py",
+        "fastapi/temp_pydantic_v1_params.py",
+        "fastapi/utils.py"
+      ],
+      "baseline_rank": 4,
+      "evolved_rank": 4,
+      "delta": "bez zmian"
+    },
+    {
+      "task": "fastapi_14262",
+      "bucket": "R",
+      "resolved": false,
+      "gold": [
+        "fastapi/dependencies/models.py",
+        "fastapi/dependencies/utils.py",
+        "fastapi/exceptions.py",
+        "fastapi/param_functions.py",
+        "fastapi/params.py",
+        "fastapi/routing.py",
+        "fastapi/types.py"
+      ],
+      "baseline_rank": 1,
+      "evolved_rank": 1,
+      "delta": "bez zmian"
+    },
+    {
+      "task": "fastapi_14297",
+      "bucket": "R",
+      "resolved": false,
+      "gold": [
+        "fastapi/_compat/v2.py"
+      ],
+      "baseline_rank": 1,
+      "evolved_rank": 1,
+      "delta": "bez zmian"
+    },
+    {
+      "task": "fastapi_14303",
+      "bucket": "R",
+      "resolved": false,
+      "gold": [
+        "fastapi/dependencies/utils.py"
+      ],
+      "baseline_rank": 1,
+      "evolved_rank": 1,
+      "delta": "bez zmian"
+    },
+    {
+      "task": "fastapi_14953",
+      "bucket": "R",
+      "resolved": false,
+      "gold": [
+        "fastapi/_compat/v2.py",
+        "fastapi/datastructures.py"
+      ],
+      "baseline_rank": 8,
+      "evolved_rank": 7,
+      "delta": "\u2191 o 1"
+    },
+    {
+      "task": "fastapi_15030",
+      "bucket": "R",
+      "resolved": false,
+      "gold": [
+        "fastapi/openapi/utils.py",
+        "fastapi/responses.py",
+        "fastapi/routing.py",
+        "fastapi/sse.py"
+      ],
+      "baseline_rank": 32,
+      "evolved_rank": 12,
+      "delta": "\u2191 o 20"
+    },
+    {
+      "task": "requests_7309",
+      "bucket": "R",
+      "resolved": false,
+      "gold": [
+        "src/requests/utils.py"
+      ],
+      "baseline_rank": 1,
+      "evolved_rank": 1,
+      "delta": "bez zmian"
+    },
+    {
+      "task": "rich_3052",
+      "bucket": "R",
+      "resolved": false,
+      "gold": [
+        "rich/prompt.py"
+      ],
+      "baseline_rank": 1,
+      "evolved_rank": 1,
+      "delta": "bez zmian"
+    },
+    {
+      "task": "fastapi_14482",
+      "bucket": "W",
+      "resolved": false,
+      "gold": [
+        "fastapi/_compat/v2.py"
+      ],
+      "baseline_rank": 63,
+      "evolved_rank": 48,
+      "delta": "\u2191 o 15"
+    }
+  ]
+}

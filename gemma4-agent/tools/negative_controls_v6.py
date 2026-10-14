@@ -30,6 +30,24 @@ PACKER = AGENT / "build_submission_v6.py"
 
 # (name, anchor that must exist, replacement)
 CONTROLS: dict[str, list[tuple[str, str, str]]] = {
+    "v68": [
+        ("V6.8 guard: dev recall of the evolved locator",
+         "top 3 for 67% of them, in the top 5 for 74%", "top 3 for 66% of them, in the top 5 for 73%"),
+        ("V6.8 guard: held-out validation set",
+         "104 tasks from four repositories", "some tasks from other repositories"),
+        ("V6.8 guard: the validation statement",
+         "the recall improvement is not a tuning artefact", "the script is better"),
+        ("V6.8 guard: updated read-narrowly recall",
+         "covers 56% of tasks, the top two 59%, the top three 67%",
+         "covers 48% of tasks, the top two 52%, the top three 66%"),
+        ("V6.8 guard: stale 188-task figure",
+         "and on 104 tasks", "and on 188 tasks"),
+        ("V6.8 guard: the embedded script must be the evolved one",
+         "# EVOLVED 2026", "# hand-tuned"),
+        ("V6.8 guard: locator form borrowed from another variant",
+         "cd /workspace && cat > /tmp/locate.py <<'LOCATE_PY'",
+         "cd /workspace && python3 -c \"$(cat <<'LOCATE_PY'"),
+    ],
     "v67": [
         ("V6.7 guard: ceiling refusal",
          "Tool call budget exhausted (30 calls)", "the tool call ceiling"),
@@ -71,8 +89,8 @@ def main() -> int:
     args = parser.parse_args()
     variant = args.variant
     source = AGENT / f"submission-v6.{variant[-1]}"
-    if variant == "v67":
-        source = AGENT / "submission-v6.7"
+    if variant in ("v67", "v68"):
+        source = AGENT / f"submission-v6.{variant[-1]}"
     archive = AGENT / f"submission-v6.{variant[-1]}.zip"
     if not source.is_dir():
         print(f"missing source tree: {source}", file=sys.stderr)

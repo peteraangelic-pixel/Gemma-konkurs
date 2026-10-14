@@ -91,7 +91,8 @@ def optional_yaml_parse(path: Path):
 def validate_tree(submission_dir: Path) -> list[Path]:
     submission_dir = submission_dir.resolve()
     # Derived from the directory name so a mis-typed --source-dir cannot package the wrong text.
-    variant = ("v67" if "6.7" in submission_dir.name
+    variant = ("v68" if "6.8" in submission_dir.name
+               else "v67" if "6.7" in submission_dir.name
                else "v66" if "6.6" in submission_dir.name
                else "v65" if "6.5" in submission_dir.name else "v64")
     if not submission_dir.is_dir():
@@ -214,12 +215,14 @@ def validate_tree(submission_dir: Path) -> list[Path]:
         "v65": ("cat > /tmp/locate.py <<'LOCATE_PY'", "python3 /tmp/locate.py --root . --top 8"),
         "v66": ("python3 -c \"$(cat <<'LOCATE_PY'", "\" --root . --top 8 <<'ISSUE_EOF'"),
         "v67": ("cat > /tmp/locate.py <<'LOCATE_PY'", "python3 /tmp/locate.py --root . --top 8"),
+        "v68": ("cat > /tmp/locate.py <<'LOCATE_PY'", "python3 /tmp/locate.py --root . --top 8"),
     }
     locator_banned = {
         "v64": ("python3 -c \"$(cat <<'LOCATE_PY'",),
         "v65": ("python3 -c \"$(cat <<'LOCATE_PY'",),
         "v66": ("cat > /tmp/locate.py", "python3 /tmp/locate.py"),
         "v67": ("python3 -c \"$(cat <<'LOCATE_PY'",),
+        "v68": ("python3 -c \"$(cat <<'LOCATE_PY'",),
     }
     for phrase in locator_banned[variant]:
         if phrase in prompt_text:
@@ -362,6 +365,30 @@ def validate_tree(submission_dir: Path) -> list[Path]:
         for phrase, label in V67_REQUIRED:
             if phrase in prose:
                 fail(f"{variant} archive contains V6.7-only text ({label}); variants are mixed up.")
+    # ---- V6.8 lever (the only arm that changes the locator itself) -----------------------------
+    V68_REQUIRED = (
+        ("top 3 for 67% of them, in the top 5 for 74%",
+         "V6.8 measurement (dev recall of the evolved locator)"),
+        ("104 tasks from four repositories",
+         "V6.8 measurement (the held-out validation set of the evolved locator)"),
+        ("the recall improvement is not a tuning artefact",
+         "V6.8 statement of the validation that backs the numbers"),
+        ("covers 56% of tasks, the top two 59%, the top three 67%",
+         "V6.8 updated read-narrowly recall line"),
+    )
+    if variant == "v68":
+        for phrase, label in V68_REQUIRED:
+            if phrase not in prose:
+                fail(f"V6.8 prompt lost {label}: {phrase!r}")
+        if "188 tasks" in prose:
+            fail("V6.8 prompt still quotes the old 188-task holdout figure.")
+        # the evolved script must be the one in the archive, not a leftover copy
+        if "EVOLVED 2026" not in prompt_text:
+            fail("V6.8 prompt embeds a locator without the EVOLVED header; rebake it.")
+    else:
+        for phrase, label in V68_REQUIRED:
+            if phrase in prose:
+                fail(f"{variant} archive contains V6.8-only text ({label}); variants are mixed up.")
     if "as your final action" in prompt_text:
         fail("prompts/system.md still carries the V5 tail that contradicts the optional-submit rule.")
 
@@ -416,7 +443,9 @@ def main() -> int:
                              "source directory is the V6.5 tree")
     args = parser.parse_args()
     if args.output is None:
-        if "6.7" in args.source_dir.name:
+        if "6.8" in args.source_dir.name:
+            args.output = BASE_DIR / "submission-v6.8.zip"
+        elif "6.7" in args.source_dir.name:
             args.output = BASE_DIR / "submission-v6.7.zip"
         elif "6.6" in args.source_dir.name:
             args.output = BASE_DIR / "submission-v6.6.zip"

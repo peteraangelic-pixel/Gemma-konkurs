@@ -1,0 +1,12 @@
+{
+  "k1": 1.2,
+  "b": 0.75,
+  "path_bonus": 1.5,
+  "defined_bonus": 4.0,
+  "exact_bonus": 6.0,
+  "test_penalty": 0.5,
+  "import_factor": 1.0,
+  "q_ident_piece": 3.0,
+  "q_full_ident": 4.0,
+  "q_plain": 1.0
+}

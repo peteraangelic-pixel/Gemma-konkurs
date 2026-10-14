@@ -41,7 +41,9 @@ VARIANT = os.environ.get("V6_VARIANT", "v64")
 V65_DIR = ROOT / "gemma4-agent" / "submission-v6.5"
 V66_DIR = ROOT / "gemma4-agent" / "submission-v6.6"
 V67_DIR = ROOT / "gemma4-agent" / "submission-v6.7"
-VARIANT_DIR = {"v64": V6_DIR, "v65": V65_DIR, "v66": V66_DIR, "v67": V67_DIR}[VARIANT]
+V68_DIR = ROOT / "gemma4-agent" / "submission-v6.8"
+VARIANT_DIR = {"v64": V6_DIR, "v65": V65_DIR, "v66": V66_DIR, "v67": V67_DIR,
+               "v68": V68_DIR}[VARIANT]
 OUT = VARIANT_DIR / "prompts" / "system.md"
 LOCATOR = VARIANT_DIR / "tools" / "locate.py"
 
@@ -350,6 +352,31 @@ V67_EDITS = [
 ]
 
 
+# V6.8 (2026-10-14): the locator's ten hand-picked constants, replaced by a population search over
+# the 128 published dev tasks with gold patches and validated on 104 held-out tasks from four
+# repositories outside the dev set (tools/evolve_locator.py, analysis/locator-evolve/validation.md).
+# One lever only: the script at the end of the prompt is the evolved one, and the sentences that
+# quote its measured recall are updated to the numbers measured for THAT file. Nothing else changes.
+V68_EDITS = [
+    (
+        "The script below was verified on 128 published tasks (the fixable source file lands in "
+        "the top 3 for 66% of them, in the top 5 for 73%) and on 188 tasks from repositories "
+        "outside that set (65% and 72%), against ~15% for a plain first grep.",
+        "The script below was verified on 128 published tasks (the fixable source file lands in "
+        "the top 3 for 67% of them, in the top 5 for 74%) and on 104 tasks from four repositories "
+        "outside that set (74% and 84%), against ~15% for a plain first grep. Its scoring "
+        "constants were fitted by a population search against those 128 tasks and re-measured on "
+        "the held-out 104, so the recall improvement is not a tuning artefact.",
+    ),
+    (
+        "Measured recall of the locator: opening only the top hit covers 48% of tasks, the top two "
+        "52%, the top three 66%",
+        "Measured recall of the locator: opening only the top hit covers 56% of tasks, the top two "
+        "59%, the top three 67%",
+    ),
+]
+
+
 def apply_post_edits(prompt: str) -> str:
     for old, new in POST_EDITS:
         assert old in prompt, "missing anchor: " + old[:60]
@@ -397,6 +424,10 @@ def apply_post_edits(prompt: str) -> str:
         for old, new in V67_EDITS:
             assert old in prompt, "missing V67 anchor: " + old[:60]
             assert old not in new or new.startswith(old), "V67 edit must append, not replace"
+            prompt = prompt.replace(old, new, 1)
+    if VARIANT == "v68":
+        for old, new in V68_EDITS:
+            assert old in prompt, "missing V68 anchor: " + old[:60]
             prompt = prompt.replace(old, new, 1)
     return prompt
 
