@@ -40,7 +40,8 @@ DEFAULT_OUT = V6_DIR / "prompts" / "system.md"
 VARIANT = os.environ.get("V6_VARIANT", "v64")
 V65_DIR = ROOT / "gemma4-agent" / "submission-v6.5"
 V66_DIR = ROOT / "gemma4-agent" / "submission-v6.6"
-VARIANT_DIR = {"v64": V6_DIR, "v65": V65_DIR, "v66": V66_DIR}[VARIANT]
+V67_DIR = ROOT / "gemma4-agent" / "submission-v6.7"
+VARIANT_DIR = {"v64": V6_DIR, "v65": V65_DIR, "v66": V66_DIR, "v67": V67_DIR}[VARIANT]
 OUT = VARIANT_DIR / "prompts" / "system.md"
 LOCATOR = VARIANT_DIR / "tools" / "locate.py"
 
@@ -256,6 +257,97 @@ V66_EDITS = [
         "finished script as the work, and every one of them scored zero.",
     ),
 ]
+# V6.7 (2026-10-14): the raw-call diagnosis of the full V6.4 run (analysis/diagnostics-2026-10-14/
+# v64-raw-calls.md) read the actual tool calls instead of the committed summaries and found that a
+# large part of the run's waste was not strategy at all - it was our own prompt contradicting the
+# harness tool contract. Each rule below is pinned to one counted measurement from that report.
+V67_EDITS = [
+    # A. The 30-call ceiling REFUSES work instead of warning, and comment-only shell calls burned
+    #    32 calls across the run (8 of them in fastapi_14297's last stretch).
+    (
+        "A good run uses only 12-20 calls.",
+        "A good run uses only 12-20 calls. The ceiling does not warn you, it refuses the work: on "
+        "the last run two sessions reached call 31 with the tree still untouched and the answer to "
+        "their first `edit_file` was `Tool call budget exhausted (30 calls)` - the tree stayed "
+        "empty and both scored zero. Treat call 20 as the point after which only the fix matters. "
+        "Thirty-two calls across that run were `run_command` lines whose entire content was a "
+        "shell comment (`# Final`, `# Done.`, eight of them in one session); a comment does not "
+        "end a session, does not change a file and does not score: to finish, write your final "
+        "message with no tool call.",
+    ),
+    # B. 29 reads asked for line numbers past the end of the file; fastapi_14851 read lines
+    #    4470-4520 of a ~1000-line file six times.
+    (
+        "- Do not narrate, do not call `get_status`, do not repeat a call that already failed, do "
+        "not explore outside `/workspace`.",
+        "- Do not narrate, do not call `get_status`, do not repeat a call that already failed, do "
+        "not explore outside `/workspace`. `read_file` returns the whole file when you omit "
+        "`start_line` and `end_line`, so omit them unless you have seen the numbers in a `grep -n` "
+        "result: 29 reads in the last run asked for lines past the end of the file (one session "
+        "asked six times for lines 4470-4520 of a file about 1000 lines long) and learned nothing.",
+    ),
+    # C. The harness refuses `write_file` outside the workspace root, while this prompt sends
+    #    scratch material to /tmp; three sessions (fastapi_14186, fastapi_14303, requests_7309)
+    #    lost calls to that contradiction. The shell inside run_command is not restricted.
+    (
+        "Always give a scratch file an absolute `/tmp/...` path; `write_file` and shell "
+        "redirection are both fine for that, and `/tmp` never appears in the diff.",
+        "Always give a scratch file an absolute `/tmp/...` path; `write_file` and shell "
+        "redirection are both fine for that, and `/tmp` never appears in the diff. "
+        "**Correction from the raw tool calls of the last full run: shell redirection is fine, "
+        "`write_file` is not** - it refuses any path outside the workspace root with "
+        "`Path traversal detected: '/tmp/repro.py' escapes workspace root.`, and three sessions "
+        "lost calls to that. Deliver every scratch file as a `cat > /tmp/... <<'EOF'` heredoc "
+        "inside a `run_command` call, exactly like the locator command above; `write_file` is for "
+        "repository files only.",
+    ),
+    # D. fastapi_14262 got `Target string occurs 2 times in fastapi/param_functions.py`.
+    (
+        "- Use `edit_file` with a short `old_string` copied exactly from the code you just read.",
+        "- Use `edit_file` with a short `old_string` copied exactly from the code you just read. "
+        "If it answers `Target string occurs 2 times ...`, never resend the same string: extend it "
+        "with the surrounding lines until the match is unique.",
+    ),
+    # E. requests_6757: two successful `edit_file` calls in tox.ini (the tool returned both diffs),
+    #    graded tree still empty - a discarded file makes a successful edit invisible.
+    (
+        "- Never modify `tests/`, `test_*.py`, `*_test.py`, `conftest.py`, `pytest.ini`, "
+        "`pyproject.toml`, `tox.ini`, `setup.cfg`: the grader resets them and such edits are "
+        "discarded.",
+        "- Never modify `tests/`, `test_*.py`, `*_test.py`, `conftest.py`, `pytest.ini`, "
+        "`pyproject.toml`, `tox.ini`, `setup.cfg`: the grader resets them and such edits are "
+        "discarded. Measured on the last run: one session made two `edit_file` calls in `tox.ini`, "
+        "the tool confirmed both with a diff, and the graded tree was still empty. If your only "
+        "change sits in `tox.ini`, `setup.cfg`, `pyproject.toml` or a test file, you have not "
+        "started: the fix that counts belongs in the importable source (`src/...` or the package "
+        "directory), even when the issue talks about dependencies or packaging.",
+    ),
+    # F. fastapi_14487 spent all 30 calls inside the rendered docs page; the graded file was the
+    #    runnable example under docs_src/.
+    (
+        "The only exception is an issue that is explicitly about the documentation itself.",
+        "The only exception is an issue that is explicitly about the documentation itself. When "
+        "that exception applies, the fix still belongs in the runnable example under `docs_src/`, "
+        "not the rendered page under `docs/en/`: on the last run a session spent all 30 calls "
+        "rewriting `docs/en/docs/tutorial/handling-errors.md`, was refused its first edit by the "
+        "call ceiling, and the graded file was `docs_src/handling_errors/tutorial004.py`.",
+    ),
+    # G. All 8 sessions of the run that edited a correct file and still failed had used 30 calls or
+    #    run past 315 s (or both) with the fix incomplete - finishing the issue beats searching.
+    (
+        "- Keep the diff small. Measured on these tasks: every resolved session produced a diff "
+        "under 1900 characters (most under 1500), while every diff over 2000 characters failed. "
+        "Fix the reported behaviour and nothing else.",
+        "- Keep the diff small. Measured on these tasks: every resolved session produced a diff "
+        "under 1900 characters (most under 1500), while every diff over 2000 characters failed. "
+        "Fix the reported behaviour and nothing else.\n"
+        "   - **Finish the issue, not the search.** All eight sessions of the last run that edited "
+        "a correct file and still failed had used 30 calls or run past 315 seconds, or both, with "
+        "the fix unfinished. After the first edit, re-read the issue and cover every case it names "
+        "- identifier, message, edge case - with one small edit per gap; only then verify. An "
+        "incomplete fix and an empty tree score the same.",
+    ),
+]
 
 
 def apply_post_edits(prompt: str) -> str:
@@ -300,6 +392,11 @@ def apply_post_edits(prompt: str) -> str:
     if VARIANT == "v66":
         for old, new in V66_EDITS:
             assert old in prompt, "missing V66 anchor: " + old[:60]
+            prompt = prompt.replace(old, new, 1)
+    if VARIANT == "v67":
+        for old, new in V67_EDITS:
+            assert old in prompt, "missing V67 anchor: " + old[:60]
+            assert old not in new or new.startswith(old), "V67 edit must append, not replace"
             prompt = prompt.replace(old, new, 1)
     return prompt
 

@@ -91,7 +91,8 @@ def optional_yaml_parse(path: Path):
 def validate_tree(submission_dir: Path) -> list[Path]:
     submission_dir = submission_dir.resolve()
     # Derived from the directory name so a mis-typed --source-dir cannot package the wrong text.
-    variant = ("v66" if "6.6" in submission_dir.name
+    variant = ("v67" if "6.7" in submission_dir.name
+               else "v66" if "6.6" in submission_dir.name
                else "v65" if "6.5" in submission_dir.name else "v64")
     if not submission_dir.is_dir():
         fail(f"Missing submission source directory: {submission_dir}")
@@ -201,11 +202,13 @@ def validate_tree(submission_dir: Path) -> list[Path]:
         "v64": ("cat > /tmp/locate.py <<'LOCATE_PY'", "python3 /tmp/locate.py --root . --top 8"),
         "v65": ("cat > /tmp/locate.py <<'LOCATE_PY'", "python3 /tmp/locate.py --root . --top 8"),
         "v66": ("python3 -c \"$(cat <<'LOCATE_PY'", "\" --root . --top 8 <<'ISSUE_EOF'"),
+        "v67": ("cat > /tmp/locate.py <<'LOCATE_PY'", "python3 /tmp/locate.py --root . --top 8"),
     }
     locator_banned = {
         "v64": ("python3 -c \"$(cat <<'LOCATE_PY'",),
         "v65": ("python3 -c \"$(cat <<'LOCATE_PY'",),
         "v66": ("cat > /tmp/locate.py", "python3 /tmp/locate.py"),
+        "v67": ("python3 -c \"$(cat <<'LOCATE_PY'",),
     }
     for phrase in locator_banned[variant]:
         if phrase in prompt_text:
@@ -321,6 +324,31 @@ def validate_tree(submission_dir: Path) -> list[Path]:
         for phrase, label in V66_REQUIRED:
             if phrase in prose:
                 fail(f"{variant} archive contains V6.6-only text ({label}); variants are mixed up.")
+    # ---- V6.7 lever (harness-contract compliance; single lever, so no other variant may carry it)
+    # Every phrase is one counted measurement from analysis/diagnostics-2026-10-14/v64-raw-calls.md,
+    # the report built from the RAW tool calls of the full V6.4 run.
+    V67_REQUIRED = (
+        ("Tool call budget exhausted (30 calls)",
+         "V6.7 measurement (the ceiling refused the first edit of two sessions)"),
+        ("Path traversal detected: '/tmp/repro.py' escapes workspace root.",
+         "V6.7 measurement (write_file cannot leave the workspace; 3 sessions)"),
+        ("lines 4470-4520", "V6.7 measurement (29 reads past the end of the file)"),
+        ("Target string occurs 2 times", "V6.7 measurement (the edit-uniqueness refusal)"),
+        ("docs_src/handling_errors/tutorial004.py",
+         "V6.7 measurement (the rendered docs page vs the graded example)"),
+        ("Finish the issue, not the search",
+         "V6.7 measurement (all 8 right-file failures exhausted budget or clock)"),
+    )
+    if variant == "v67":
+        for phrase, label in V67_REQUIRED:
+            if phrase not in prose:
+                fail(f"V6.7 prompt lost {label}: {phrase!r}")
+        if "Thirty-two calls across that run" not in prose:
+            fail("V6.7 prompt lost the comment-only command count.")
+    else:
+        for phrase, label in V67_REQUIRED:
+            if phrase in prose:
+                fail(f"{variant} archive contains V6.7-only text ({label}); variants are mixed up.")
     if "as your final action" in prompt_text:
         fail("prompts/system.md still carries the V5 tail that contradicts the optional-submit rule.")
 
@@ -370,7 +398,9 @@ def main() -> int:
                              "source directory is the V6.5 tree")
     args = parser.parse_args()
     if args.output is None:
-        if "6.6" in args.source_dir.name:
+        if "6.7" in args.source_dir.name:
+            args.output = BASE_DIR / "submission-v6.7.zip"
+        elif "6.6" in args.source_dir.name:
             args.output = BASE_DIR / "submission-v6.6.zip"
         elif "6.5" in args.source_dir.name:
             args.output = BASE_DIR / "submission-v6.5.zip"
