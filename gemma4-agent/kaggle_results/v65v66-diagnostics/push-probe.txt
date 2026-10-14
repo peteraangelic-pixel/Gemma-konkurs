@@ -1,0 +1,11 @@
+# Push probe (CPU-only, no GPU quota)
+utc: 2026-10-14T02:57:33Z
+ref: petersharps/gemma-push-probe-20261014-025733
+
+## kernels push --path /home/runner/work/_temp/probe
+Your kernel title does not resolve to the specified id. This may result in surprising behavior. We suggest making your title something that resolves to the specified id. See https://en.wikipedia.org/wiki/Clean_URL#Slug for more information on how slugs are determined.
+Kernel version 1 successfully pushed.  Please check progress at https://www.kaggle.com/code/petersharps/gemma-push-probe-20261014
+push_exit=0
+
+## kernels status petersharps/gemma-push-probe-20261014-025733 (after 45 s)
+Cannot access kernel 'petersharps/gemma-push-probe-20261014-025733' (Permission 'kernels.get' was denied). The most likely cause is a wrong kernel slug. The benchmark_task_slug returned by get_benchmark_leaderboard differs from the actual kernel slug — use the slug from the notebook URL (kaggle.com/code/owner/KERNEL-SLUG), not from the leaderboard. It can also occur if the notebook is private.
