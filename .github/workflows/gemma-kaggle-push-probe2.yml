@@ -1,0 +1,179 @@
+# Push-mechanism probe v2: three questions that decide the recovery path.
+#
+# v1 finding (committed at gemma4-agent/kaggle_results/v65v66-diagnostics/push-probe.txt):
+# a CPU-only push reported `push_exit=0` and "Kernel version 1 successfully pushed", but the CLI
+# warned "Your kernel title does not resolve to the specified id" and gave the notebook URL
+# https://www.kaggle.com/code/petersharps/gemma-push-probe-20261014 - the slug came out of the
+# TITLE, not out of the id in kernel-metadata.json. `kernels status` on the id then answered
+# Permission 'kernels.get' was denied. v1's capture was truncated mid-run, so three questions stay
+# open. v2 answers them, still CPU-only (enable_gpu: false, no quota, no competition data):
+#
+#   Q1 Does a push whose title slugifies to exactly the id resolve? (Is the fix simply the title?)
+#   Q2 Is the kernel created by v1 reachable under its title-derived slug
+#      petersharps/gemma-push-probe-20261014? (Do mismatched-title pushes live on, just elsewhere?)
+#   Q3 Do the two vanished benchmark kernels exist at all - and did the pushes create anything?
+#      `kernels list --mine --sort-by dateCreated` puts brand-new kernels first even when their
+#      title is blank, which is exactly the "surprising behavior" the warning hints at.
+#
+# Every command writes its own file with its own exit marker, then everything is concatenated: v1
+# died part-way and a single stream lost the tail. Nothing runs until a trigger file is pushed.
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - arena/c4eeb067-gemma-konkurs
+    paths:
+      - gemma4-agent/kaggle_smoke/push-probe2.trigger
+
+permissions:
+  contents: write
+
+concurrency:
+  group: push-probe-v2-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  probe2:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - name: Checkout session branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Kaggle CLI and show its version
+        run: |
+          python -m pip install --disable-pip-version-check --quiet kaggle
+          python -m kaggle --version 2>&1 | head -3
+
+      - name: Configure Kaggle credentials
+        env:
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "$KAGGLE_API_TOKEN" ]; then
+            echo "Repository Actions secret KAGGLE_API_TOKEN is missing."
+            exit 1
+          fi
+          mkdir -p "$HOME/.kaggle"
+          printf '%s' "$KAGGLE_API_TOKEN" | tr -d '\r\n' > "$HOME/.kaggle/access_token"
+          chmod 600 "$HOME/.kaggle/access_token"
+          echo "Kaggle CLI configured; token value was not logged."
+
+      - name: Run the probe battery (CPU only, no GPU quota)
+        env:
+          KAGGLE_USERNAME: petersharps
+        shell: bash
+        run: |
+          set +e
+          trap 'echo "TRAP: shell exiting with $? at line $LINENO"' EXIT
+          STAMP=$(date -u +%Y%m%d-%H%M%S)
+          REF_A="petersharps/gemma-push-probe-p2-$STAMP"
+          WORK="$RUNNER_TEMP/probe2-$STAMP"
+          OUTDIR=gemma4-agent/kaggle_results/v65v66-diagnostics/probe2-$STAMP
+          mkdir -p "$WORK" "$OUTDIR"
+          echo "stamp=$STAMP" > "$OUTDIR/00-meta.txt"
+          echo "probe_ref=$REF_A" >> "$OUTDIR/00-meta.txt"
+          echo "utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$OUTDIR/00-meta.txt"
+
+          # Build a probe whose TITLE slugifies to exactly the id (Q1).
+          python3 - "$WORK" "$STAMP" <<'PY' > "$OUTDIR/01-build.txt" 2>&1
+          import json, sys
+          from pathlib import Path
+          work, stamp = Path(sys.argv[1]), sys.argv[2]
+          title = "Gemma push probe p2 " + stamp[:8] + " " + stamp[9:]
+          slug = "gemma-push-probe-p2-" + stamp
+          notebook = {
+            "cells": [{
+              "cell_type": "code", "execution_count": None, "metadata": {}, "outputs": [],
+              "source": ["print('push probe v2 ok')"],
+            }],
+            "metadata": {"kernelspec": {"display_name": "Python 3", "language": "python",
+                                        "name": "python3"},
+                         "language_info": {"name": "python", "version": "3.11"}},
+            "nbformat": 4, "nbformat_minor": 5,
+          }
+          (work / "probe.ipynb").write_text(json.dumps(notebook), encoding="utf-8")
+          (work / "kernel-metadata.json").write_text(json.dumps({
+            "id": "petersharps/" + slug, "title": title,
+            "code_file": "probe.ipynb", "language": "python", "kernel_type": "notebook",
+            "is_private": True, "enable_gpu": False, "enable_tpu": False,
+            "enable_internet": False, "dataset_sources": [], "competition_sources": [],
+            "kernel_sources": [], "model_sources": [],
+          }, indent=2) + "\n", encoding="utf-8")
+          print("title:", repr(title))
+          print("id   :", "petersharps/" + slug)
+          print("slug(title):", "-".join(title.lower().split()))
+          PY
+          echo "exit=$?" >> "$OUTDIR/01-build.txt"
+
+          # Q1: push, then ask for the status BY ID.
+          python3 -m kaggle kernels push --path "$WORK" > "$OUTDIR/10-push.txt" 2>&1
+          echo "push_exit=$?" >> "$OUTDIR/10-push.txt"
+          sleep 40
+          python3 -m kaggle kernels status "$REF_A" > "$OUTDIR/11-status-by-id.txt" 2>&1
+          echo "status_exit=$?" >> "$OUTDIR/11-status-by-id.txt"
+
+          # Q2: the kernel v1 created lives (if at all) under its title-derived slug.
+          python3 -m kaggle kernels status petersharps/gemma-push-probe-20261014 \
+            > "$OUTDIR/20-v1-slug-status.txt" 2>&1
+          echo "status_exit=$?" >> "$OUTDIR/20-v1-slug-status.txt"
+          python3 -m kaggle kernels output petersharps/gemma-push-probe-20261014 --path "$RUNNER_TEMP/v1out" \
+            > "$OUTDIR/21-v1-slug-output.txt" 2>&1
+          echo "output_exit=$?" >> "$OUTDIR/21-v1-slug-output.txt"
+
+          # Q3a: what did our two pushes create? Newest first, CSV, no title filter applied.
+          python3 -m kaggle kernels list --mine --sort-by dateCreated --page-size 50 --csv \
+            > "$OUTDIR/30-list-by-created.csv" 2>&1
+          echo "list_exit=$?" >> "$OUTDIR/30-list-by-created.csv"
+
+          # Q3b: are the two benchmark kernels reachable by any means we have?
+          for R in \
+            petersharps/gemma-agent-benchmark-cb847599-20261014-024522 \
+            petersharps/gemma-agent-benchmark-b6686c53-20261014-024548 ; do
+            NAME=$(basename "$R")
+            python3 -m kaggle kernels status "$R" > "$OUTDIR/40-status-$NAME.txt" 2>&1
+            echo "status_exit=$?" >> "$OUTDIR/40-status-$NAME.txt"
+            python3 -m kaggle kernels files "$R" > "$OUTDIR/41-files-$NAME.txt" 2>&1
+            echo "files_exit=$?" >> "$OUTDIR/41-files-$NAME.txt"
+          done
+
+          # Concatenate in order into one readable capture.
+          FINAL=gemma4-agent/kaggle_results/v65v66-diagnostics/push-probe2.txt
+          for f in $(ls "$OUTDIR" | sort); do
+            echo "===== $f ====="
+            cat "$OUTDIR/$f"
+            echo
+          done > "$FINAL" 2>&1
+          echo "--- capture follows ---"
+          cat "$FINAL"
+
+      - name: Commit the probe capture with the safe pattern
+        if: always()
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin "$GITHUB_REF_NAME"
+          rm -rf /tmp/keep && mkdir -p /tmp/keep
+          cp -r gemma4-agent/kaggle_results/v65v66-diagnostics /tmp/keep/ 2>/dev/null || true
+          git reset --hard "origin/$GITHUB_REF_NAME"
+          mkdir -p gemma4-agent/kaggle_results/v65v66-diagnostics
+          cp -r /tmp/keep/v65v66-diagnostics/. gemma4-agent/kaggle_results/v65v66-diagnostics/ 2>/dev/null || true
+          git add gemma4-agent/kaggle_results/v65v66-diagnostics
+          git rm -q --ignore-unmatch gemma4-agent/kaggle_smoke/push-probe.trigger \
+                                   gemma4-agent/kaggle_smoke/push-probe2.trigger
+          if [ -z "$(git diff --cached --name-only)" ]; then
+            echo "Nothing to commit."
+            exit 0
+          fi
+          git commit -m "chore(gemma): push-probe v2 capture (title/id slug rule, reachability of the vanished kernels) [skip ci]"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
