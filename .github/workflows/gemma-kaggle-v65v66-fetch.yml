@@ -1,0 +1,144 @@
+# V6.5 and V6.6 recovery fetch: the two benchmark workflows of 2026-10-14 pushed their kernels
+# successfully (push_exit_code: 0) and then died at the status-polling step - "Five consecutive
+# Kaggle status API calls failed" - while both polled at once. The GPU work was never affected.
+#
+# This workflow re-attaches to both kernels by the references already recorded in their run.json,
+# waits for completion (patiently, tolerating transient API failures), downloads the outputs
+# read-only, summarises the operational traces, evaluates the pre-registered expectations R1-R4
+# mechanically and commits everything. No GPU work, no competition submission.
+#
+# Nothing runs until gemma4-agent/kaggle_smoke/v65v66-fetch.trigger is pushed.
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - arena/c4eeb067-gemma-konkurs
+    paths:
+      - gemma4-agent/kaggle_smoke/v65v66-fetch.trigger
+
+permissions:
+  contents: write
+
+concurrency:
+  group: v65v66-fetch.trigger-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Checkout session branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Kaggle CLI
+        run: python -m pip install --disable-pip-version-check --quiet kaggle
+
+      - name: Configure Kaggle credentials
+        env:
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "$KAGGLE_API_TOKEN" ]; then
+            echo "Repository Actions secret KAGGLE_API_TOKEN is missing."
+            exit 1
+          fi
+          mkdir -p "$HOME/.kaggle"
+          printf '%s' "$KAGGLE_API_TOKEN" | tr -d '\r\n' > "$HOME/.kaggle/access_token"
+          chmod 600 "$HOME/.kaggle/access_token"
+          echo "Kaggle CLI configured; token value was not logged."
+
+      - name: Wait for and fetch the V6.5 kernel outputs (read-only)
+        continue-on-error: true
+        run: |
+          python3 gemma4-agent/tools/fetch_kernel_outputs.py \
+            --outdir gemma4-agent/kaggle_results/v6-5-benchmark \
+            --workdir "$RUNNER_TEMP/fetch" \
+            --max-wait-minutes 240 \
+            --poll-interval-seconds 90
+
+      - name: Wait for and fetch the V6.6 kernel outputs (read-only)
+        continue-on-error: true
+        run: |
+          python3 gemma4-agent/tools/fetch_kernel_outputs.py \
+            --outdir gemma4-agent/kaggle_results/v6-6-benchmark \
+            --workdir "$RUNNER_TEMP/fetch" \
+            --max-wait-minutes 240 \
+            --poll-interval-seconds 90
+
+      - name: Summarise operational traces for both runs (read-only analysis)
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          for FOLDER in v6-5-benchmark v6-6-benchmark; do
+            echo "=== traces $FOLDER ==="
+            if [ -d "$RUNNER_TEMP/fetch" ] && ls "$RUNNER_TEMP/fetch"/*/trace_*.json "$RUNNER_TEMP/fetch"/*/*/trace_*.json >/dev/null 2>&1; then
+              python3 gemma4-agent/tools/summarize_agent_traces.py \
+                --traces-dir "$RUNNER_TEMP/fetch" \
+                --out "gemma4-agent/kaggle_results/$FOLDER/traces"
+              cat "gemma4-agent/kaggle_results/$FOLDER/traces/trace-aggregate.md" || true
+            else
+              echo "no trace files downloaded for $FOLDER"
+            fi
+          done
+
+      - name: Evaluate the pre-registered expectations mechanically
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          python3 gemma4-agent/tools/analyze_v65_v66.py \
+            --folder v6-5-benchmark --tag "V6.5" --reference v6-4-benchmark \
+            --expect-first-edit-call-4 12 --expect-solved 9 \
+            --out gemma4-agent/kaggle_results/v6-5-benchmark/verdict.md || true
+          python3 gemma4-agent/tools/analyze_v65_v66.py \
+            --folder v6-6-benchmark --tag "V6.6" --reference v6-4-benchmark \
+            --expect-solved 11 --expect-only-outside-writes 0 \
+            --out gemma4-agent/kaggle_results/v6-6-benchmark/verdict.md || true
+          for F in v6-5-benchmark v6-6-benchmark; do
+            if [ -f "gemma4-agent/kaggle_results/$F/verdict.md" ]; then
+              echo "--- $F ---"; cat "gemma4-agent/kaggle_results/$F/verdict.md"
+            fi
+          done
+
+      - name: Commit fetched results with the safe pattern
+        if: always()
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin "$GITHUB_REF_NAME"
+          # SAFE PATTERN - see the other workflows (2026-10-13 incident).
+          rm -rf /tmp/keep && mkdir -p /tmp/keep
+          for FOLDER in v6-5-benchmark v6-6-benchmark; do
+            cp -r "gemma4-agent/kaggle_results/$FOLDER" "/tmp/keep/$FOLDER" 2>/dev/null || true
+          done
+          git reset --hard "origin/$GITHUB_REF_NAME"
+          mkdir -p gemma4-agent/kaggle_results
+          for FOLDER in v6-5-benchmark v6-6-benchmark; do
+            cp -r "/tmp/keep/$FOLDER" "gemma4-agent/kaggle_results/$FOLDER" 2>/dev/null || true
+            # raw traces stay out of git; only the summaries are committed (same rule as V6.3/V6.4)
+            rm -f "gemma4-agent/kaggle_results/$FOLDER/traces/trace_*.json"
+            git add -f "gemma4-agent/kaggle_results/$FOLDER" 2>/dev/null || true
+          done
+          python3 gemma4-agent/tools/compare_screenings.py || true
+          git add gemma4-agent/kaggle_results/screening_history.md || true
+          git rm -q --ignore-unmatch gemma4-agent/kaggle_smoke/v65v66-fetch.trigger
+          if [ -z "$(git diff --cached --name-only)" ]; then
+            echo "Nothing to commit: no fetched files."
+            exit 0
+          fi
+          git commit -m "chore(gemma): fetch V6.5/V6.6 kernel outputs and evaluate R1-R4 [skip ci]"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
+
+      - name: Verify documentation consistency (CI95 intervals against recorded JSON)
+        if: always()
+        run: python3 gemma4-agent/tools/check_docs_consistency.py
