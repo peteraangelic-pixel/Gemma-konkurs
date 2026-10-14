@@ -1,0 +1,496 @@
+{
+  "locator": "gemma4-agent/submission-v6.6/tools/locate.py",
+  "sample_size": 30,
+  "table": {
+    "P resolved": {
+      "1": 7,
+      "6-10": 1,
+      "2-3": 2
+    },
+    "N no edit": {
+      "1": 5,
+      "miss": 4,
+      "2-3": 1,
+      "4-5": 1
+    },
+    "R gold file edited, failed": {
+      "6-10": 1,
+      "1": 5,
+      "miss": 1,
+      "4-5": 1
+    },
+    "W wrong file edited": {
+      "miss": 1
+    }
+  },
+  "rows": [
+    {
+      "task_id": "requests_6644",
+      "repo": "psf/requests",
+      "bucket": "P resolved",
+      "gold_rank": 1,
+      "rank_bucket": "1",
+      "gold": [
+        "src/requests/adapters.py"
+      ],
+      "top3": [
+        "src/requests/adapters.py",
+        "tests/test_requests.py",
+        "src/requests/models.py"
+      ]
+    },
+    {
+      "task_id": "rich_3934",
+      "repo": "Textualize/rich",
+      "bucket": "N no edit",
+      "gold_rank": 1,
+      "rank_bucket": "1",
+      "gold": [
+        "rich/live.py",
+        "rich/live_render.py"
+      ],
+      "top3": [
+        "rich/live.py",
+        "rich/console.py",
+        "rich/live_render.py"
+      ]
+    },
+    {
+      "task_id": "fastapi_14851",
+      "repo": "fastapi/fastapi",
+      "bucket": "N no edit",
+      "gold_rank": 1,
+      "rank_bucket": "1",
+      "gold": [
+        "fastapi/routing.py"
+      ],
+      "top3": [
+        "fastapi/routing.py",
+        "fastapi/__init__.py",
+        "fastapi/applications.py"
+      ]
+    },
+    {
+      "task_id": "rich_3718",
+      "repo": "Textualize/rich",
+      "bucket": "P resolved",
+      "gold_rank": 1,
+      "rank_bucket": "1",
+      "gold": [
+        "rich/panel.py"
+      ],
+      "top3": [
+        "rich/panel.py",
+        "rich/text.py",
+        "rich/console.py"
+      ]
+    },
+    {
+      "task_id": "fastapi_14266",
+      "repo": "fastapi/fastapi",
+      "bucket": "N no edit",
+      "gold_rank": null,
+      "rank_bucket": "miss",
+      "gold": [
+        "fastapi/dependencies/utils.py"
+      ],
+      "top3": [
+        "scripts/people.py",
+        "fastapi/__init__.py",
+        "scripts/notify_translations.py"
+      ]
+    },
+    {
+      "task_id": "fastapi_14487",
+      "repo": "fastapi/fastapi",
+      "bucket": "N no edit",
+      "gold_rank": null,
+      "rank_bucket": "miss",
+      "gold": [
+        "docs_src/handling_errors/tutorial004.py"
+      ],
+      "top3": [
+        "fastapi/routing.py",
+        "fastapi/__init__.py",
+        "fastapi/applications.py"
+      ]
+    },
+    {
+      "task_id": "fastapi_14953",
+      "repo": "fastapi/fastapi",
+      "bucket": "R gold file edited, failed",
+      "gold_rank": 8,
+      "rank_bucket": "6-10",
+      "gold": [
+        "docs_src/json_base64_bytes/tutorial001_py310.py",
+        "fastapi/_compat/v2.py",
+        "fastapi/datastructures.py"
+      ],
+      "top3": [
+        "fastapi/openapi/models.py",
+        "fastapi/__init__.py",
+        "fastapi/_compat/shared.py"
+      ]
+    },
+    {
+      "task_id": "rich_3518",
+      "repo": "Textualize/rich",
+      "bucket": "P resolved",
+      "gold_rank": 1,
+      "rank_bucket": "1",
+      "gold": [
+        "rich/table.py"
+      ],
+      "top3": [
+        "rich/table.py",
+        "rich/text.py",
+        "rich/progress.py"
+      ]
+    },
+    {
+      "task_id": "fastapi_14297",
+      "repo": "fastapi/fastapi",
+      "bucket": "R gold file edited, failed",
+      "gold_rank": 1,
+      "rank_bucket": "1",
+      "gold": [
+        "fastapi/_compat/v2.py"
+      ],
+      "top3": [
+        "fastapi/_compat/v2.py",
+        "fastapi/__init__.py",
+        "fastapi/_compat/main.py"
+      ]
+    },
+    {
+      "task_id": "rich_3894",
+      "repo": "Textualize/rich",
+      "bucket": "P resolved",
+      "gold_rank": 1,
+      "rank_bucket": "1",
+      "gold": [
+        "rich/_inspect.py"
+      ],
+      "top3": [
+        "rich/_inspect.py",
+        "rich/console.py",
+        "rich/__init__.py"
+      ]
+    },
+    {
+      "task_id": "fastapi_14303",
+      "repo": "fastapi/fastapi",
+      "bucket": "R gold file edited, failed",
+      "gold_rank": 1,
+      "rank_bucket": "1",
+      "gold": [
+        "fastapi/dependencies/utils.py"
+      ],
+      "top3": [
+        "fastapi/dependencies/utils.py",
+        "fastapi/__init__.py",
+        "fastapi/param_functions.py"
+      ]
+    },
+    {
+      "task_id": "rich_3052",
+      "repo": "Textualize/rich",
+      "bucket": "R gold file edited, failed",
+      "gold_rank": 1,
+      "rank_bucket": "1",
+      "gold": [
+        "rich/prompt.py"
+      ],
+      "top3": [
+        "rich/prompt.py",
+        "rich/console.py",
+        "tests/test_prompt.py"
+      ]
+    },
+    {
+      "task_id": "rich_3043",
+      "repo": "Textualize/rich",
+      "bucket": "N no edit",
+      "gold_rank": null,
+      "rank_bucket": "miss",
+      "gold": [
+        "rich/_export_format.py"
+      ],
+      "top3": [
+        "rich/console.py",
+        "rich/text.py",
+        "rich/style.py"
+      ]
+    },
+    {
+      "task_id": "rich_3105",
+      "repo": "Textualize/rich",
+      "bucket": "N no edit",
+      "gold_rank": null,
+      "rank_bucket": "miss",
+      "gold": [
+        "rich/_export_format.py"
+      ],
+      "top3": [
+        "rich/progress.py",
+        "rich/console.py",
+        "benchmarks/snippets.py"
+      ]
+    },
+    {
+      "task_id": "fastapi_14873",
+      "repo": "fastapi/fastapi",
+      "bucket": "P resolved",
+      "gold_rank": 1,
+      "rank_bucket": "1",
+      "gold": [
+        "fastapi/routing.py"
+      ],
+      "top3": [
+        "fastapi/routing.py",
+        "fastapi/__init__.py",
+        "fastapi/applications.py"
+      ]
+    },
+    {
+      "task_id": "fastapi_15030",
+      "repo": "fastapi/fastapi",
+      "bucket": "R gold file edited, failed",
+      "gold_rank": null,
+      "rank_bucket": "miss",
+      "gold": [
+        "docs_src/server_sent_events/tutorial001_py310.py",
+        "docs_src/server_sent_events/tutorial002_py310.py",
+        "docs_src/server_sent_events/tutorial003_py310.py"
+      ],
+      "top3": [
+        "docs_src/dataclasses_/tutorial002_py310.py",
+        "fastapi/__init__.py",
+        "fastapi/openapi/models.py"
+      ]
+    },
+    {
+      "task_id": "fastapi_15588",
+      "repo": "fastapi/fastapi",
+      "bucket": "N no edit",
+      "gold_rank": 2,
+      "rank_bucket": "2-3",
+      "gold": [
+        "fastapi/sse.py"
+      ],
+      "top3": [
+        "scripts/notify_translations.py",
+        "fastapi/sse.py",
+        "fastapi/openapi/models.py"
+      ]
+    },
+    {
+      "task_id": "rich_3006",
+      "repo": "Textualize/rich",
+      "bucket": "P resolved",
+      "gold_rank": 10,
+      "rank_bucket": "6-10",
+      "gold": [
+        "rich/repr.py"
+      ],
+      "top3": [
+        "rich/text.py",
+        "rich/color.py",
+        "rich/style.py"
+      ]
+    },
+    {
+      "task_id": "fastapi_14186",
+      "repo": "fastapi/fastapi",
+      "bucket": "R gold file edited, failed",
+      "gold_rank": 4,
+      "rank_bucket": "4-5",
+      "gold": [
+        "fastapi/_compat/__init__.py",
+        "fastapi/_compat/main.py",
+        "fastapi/_compat/may_v1.py"
+      ],
+      "top3": [
+        "scripts/contributors.py",
+        "fastapi/__init__.py",
+        "scripts/sponsors.py"
+      ]
+    },
+    {
+      "task_id": "rich_3882",
+      "repo": "Textualize/rich",
+      "bucket": "P resolved",
+      "gold_rank": 1,
+      "rank_bucket": "1",
+      "gold": [
+        "rich/prompt.py"
+      ],
+      "top3": [
+        "rich/prompt.py",
+        "rich/progress.py",
+        "rich/console.py"
+      ]
+    },
+    {
+      "task_id": "fastapi_14459",
+      "repo": "fastapi/fastapi",
+      "bucket": "N no edit",
+      "gold_rank": 5,
+      "rank_bucket": "4-5",
+      "gold": [
+        "fastapi/dependencies/models.py",
+        "fastapi/dependencies/utils.py",
+        "fastapi/openapi/utils.py"
+      ],
+      "top3": [
+        "fastapi/security/oauth2.py",
+        "fastapi/__init__.py",
+        "fastapi/openapi/models.py"
+      ]
+    },
+    {
+      "task_id": "requests_6757",
+      "repo": "psf/requests",
+      "bucket": "N no edit",
+      "gold_rank": 1,
+      "rank_bucket": "1",
+      "gold": [
+        "src/requests/compat.py",
+        "src/requests/utils.py"
+      ],
+      "top3": [
+        "src/requests/utils.py",
+        "src/requests/adapters.py",
+        "src/requests/sessions.py"
+      ]
+    },
+    {
+      "task_id": "fastapi_14262",
+      "repo": "fastapi/fastapi",
+      "bucket": "R gold file edited, failed",
+      "gold_rank": 1,
+      "rank_bucket": "1",
+      "gold": [
+        "docs_src/dependencies/tutorial008e.py",
+        "docs_src/dependencies/tutorial008e_an.py",
+        "docs_src/dependencies/tutorial008e_an_py39.py"
+      ],
+      "top3": [
+        "fastapi/routing.py",
+        "fastapi/__init__.py",
+        "fastapi/security/oauth2.py"
+      ]
+    },
+    {
+      "task_id": "rich_2725",
+      "repo": "Textualize/rich",
+      "bucket": "P resolved",
+      "gold_rank": 3,
+      "rank_bucket": "2-3",
+      "gold": [
+        "rich/table.py"
+      ],
+      "top3": [
+        "rich/__main__.py",
+        "rich/text.py",
+        "rich/table.py"
+      ]
+    },
+    {
+      "task_id": "requests_7309",
+      "repo": "psf/requests",
+      "bucket": "R gold file edited, failed",
+      "gold_rank": 1,
+      "rank_bucket": "1",
+      "gold": [
+        "src/requests/utils.py"
+      ],
+      "top3": [
+        "src/requests/utils.py",
+        "tests/test_utils.py",
+        "src/requests/exceptions.py"
+      ]
+    },
+    {
+      "task_id": "fastapi_14482",
+      "repo": "fastapi/fastapi",
+      "bucket": "W wrong file edited",
+      "gold_rank": null,
+      "rank_bucket": "miss",
+      "gold": [
+        "fastapi/_compat/v2.py"
+      ],
+      "top3": [
+        "fastapi/utils.py",
+        "fastapi/openapi/models.py",
+        "fastapi/params.py"
+      ]
+    },
+    {
+      "task_id": "fastapi_15745",
+      "repo": "fastapi/fastapi",
+      "bucket": "N no edit",
+      "gold_rank": 1,
+      "rank_bucket": "1",
+      "gold": [
+        "docs_src/path_operation_advanced_configuration/tutorial002_py310.py",
+        "fastapi/applications.py",
+        "fastapi/openapi/utils.py"
+      ],
+      "top3": [
+        "fastapi/routing.py",
+        "scripts/docs.py",
+        "fastapi/__init__.py"
+      ]
+    },
+    {
+      "task_id": "fastapi_14458",
+      "repo": "fastapi/fastapi",
+      "bucket": "P resolved",
+      "gold_rank": 1,
+      "rank_bucket": "1",
+      "gold": [
+        "fastapi/dependencies/models.py"
+      ],
+      "top3": [
+        "fastapi/dependencies/models.py",
+        "fastapi/__init__.py",
+        "tests/test_dependency_class.py"
+      ]
+    },
+    {
+      "task_id": "fastapi_14077",
+      "repo": "fastapi/fastapi",
+      "bucket": "P resolved",
+      "gold_rank": 3,
+      "rank_bucket": "2-3",
+      "gold": [
+        "docs_src/handling_errors/tutorial005.py",
+        "fastapi/exception_handlers.py",
+        "fastapi/openapi/utils.py"
+      ],
+      "top3": [
+        "scripts/sponsors.py",
+        "fastapi/__init__.py",
+        "fastapi/exception_handlers.py"
+      ]
+    },
+    {
+      "task_id": "httpx_3672",
+      "repo": "encode/httpx",
+      "bucket": "N no edit",
+      "gold_rank": 1,
+      "rank_bucket": "1",
+      "gold": [
+        "src/ahttpx/_parsers.py",
+        "src/ahttpx/_pool.py",
+        "src/ahttpx/_server.py"
+      ],
+      "top3": [
+        "src/httpx/_parsers.py",
+        "src/ahttpx/_parsers.py",
+        "src/httpx/_pool.py"
+      ]
+    }
+  ]
+}
