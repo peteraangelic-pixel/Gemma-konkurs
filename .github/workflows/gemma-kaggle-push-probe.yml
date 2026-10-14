@@ -1,0 +1,145 @@
+# Push-mechanism probe: does `kaggle kernels push` actually create a kernel on this account?
+#
+# Why: on 2026-10-14 both benchmark workflows recorded push_exit_code 0, yet the kernels never
+# appeared in `kernels list --mine` and `kernels status` answered 404
+# (GetKernelSessionStatus: Not Found) for both references. Either the push silently fails, or the
+# GPU session is refused for a reason the CLI does not surface. This probe pushes a trivial
+# CPU-ONLY notebook (enable_gpu: false), which consumes no GPU quota, captures the raw push output
+# and then checks three ways whether the kernel exists. The result goes into a committed file.
+#
+# Read-only with respect to the competition: no submission, and the probe kernel touches no
+# competition data. Nothing runs until gemma4-agent/kaggle_smoke/push-probe.trigger is pushed.
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - arena/c4eeb067-gemma-konkurs
+    paths:
+      - gemma4-agent/kaggle_smoke/push-probe.trigger
+
+permissions:
+  contents: write
+
+concurrency:
+  group: push-probe.trigger-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - name: Checkout session branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Kaggle CLI
+        run: python -m pip install --disable-pip-version-check --quiet kaggle
+
+      - name: Configure Kaggle credentials
+        env:
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "$KAGGLE_API_TOKEN" ]; then
+            echo "Repository Actions secret KAGGLE_API_TOKEN is missing."
+            exit 1
+          fi
+          mkdir -p "$HOME/.kaggle"
+          printf '%s' "$KAGGLE_API_TOKEN" | tr -d '\r\n' > "$HOME/.kaggle/access_token"
+          chmod 600 "$HOME/.kaggle/access_token"
+          echo "Kaggle CLI configured; token value was not logged."
+
+      - name: Push a CPU-only probe kernel and record everything it says
+        env:
+          KAGGLE_USERNAME: petersharps
+        run: |
+          set -uo pipefail
+          STAMP=$(date -u +%Y%m%d-%H%M%S)
+          REF="petersharps/gemma-push-probe-$STAMP"
+          WORK="$RUNNER_TEMP/probe"
+          mkdir -p "$WORK"
+          python3 - "$WORK" "$REF" <<'PY'
+          import json, sys
+          from pathlib import Path
+          work, ref = Path(sys.argv[1]), sys.argv[2]
+          notebook = {
+            "cells": [{
+              "cell_type": "code", "execution_count": None, "metadata": {},
+              "outputs": [],
+              "source": ["print('push probe ok')"],
+            }],
+            "metadata": {"kernelspec": {"display_name": "Python 3", "language": "python",
+                                        "name": "python3"},
+                         "language_info": {"name": "python", "version": "3.11"}},
+            "nbformat": 4, "nbformat_minor": 5,
+          }
+          (work / "probe.ipynb").write_text(json.dumps(notebook), encoding="utf-8")
+          (work / "kernel-metadata.json").write_text(json.dumps({
+            "id": ref, "title": "Gemma push probe " + ref.rsplit("-", 2)[-2],
+            "code_file": "probe.ipynb", "language": "python", "kernel_type": "notebook",
+            "is_private": True, "enable_gpu": False, "enable_tpu": False,
+            "enable_internet": False, "dataset_sources": [], "competition_sources": [],
+            "kernel_sources": [], "model_sources": [],
+          }, indent=2) + "\n", encoding="utf-8")
+          print("probe kernel prepared for", ref)
+          PY
+          OUT=gemma4-agent/kaggle_results/v65v66-diagnostics/push-probe.txt
+          mkdir -p "$(dirname "$OUT")"
+          {
+            echo "# Push probe (CPU-only, no GPU quota)"
+            echo "utc: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            echo "ref: $REF"
+            echo
+            echo "## kernels push --path $WORK"
+            python3 -m kaggle kernels push --path "$WORK" 2>&1
+            echo "push_exit=$?"
+            echo
+            sleep 45
+            echo "## kernels status $REF (after 45 s)"
+            python3 -m kaggle kernels status "$REF" 2>&1
+            echo "status_exit=$?"
+            echo
+            echo "## kernels list --mine | grep -i probe"
+            python3 -m kaggle kernels list --mine --page-size 50 2>&1 | grep -i "probe" || echo "(no probe row in the listing)"
+            echo
+            echo "## kernels status of the two vanished benchmark kernels (still 404?)"
+            for R in \
+              petersharps/gemma-agent-benchmark-cb847599-20261014-024522 \
+              petersharps/gemma-agent-benchmark-b6686c53-20261014-024548 ; do
+              echo "-- $R"
+              python3 -m kaggle kernels status "$R" 2>&1
+              echo "status_exit=$?"
+            done
+          } > "$OUT" 2>&1
+          echo "--- captured ---"
+          cat "$OUT"
+
+      - name: Commit the probe capture with the safe pattern
+        if: always()
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin "$GITHUB_REF_NAME"
+          rm -rf /tmp/keep && mkdir -p /tmp/keep
+          cp -r gemma4-agent/kaggle_results/v65v66-diagnostics /tmp/keep/ 2>/dev/null || true
+          git reset --hard "origin/$GITHUB_REF_NAME"
+          mkdir -p gemma4-agent/kaggle_results/v65v66-diagnostics
+          cp -r /tmp/keep/v65v66-diagnostics/. gemma4-agent/kaggle_results/v65v66-diagnostics/ 2>/dev/null || true
+          git add gemma4-agent/kaggle_results/v65v66-diagnostics 2>/dev/null || true
+          git rm -q --ignore-unmatch gemma4-agent/kaggle_smoke/push-probe.trigger
+          if [ -z "$(git diff --cached --name-only)" ]; then
+            echo "Nothing to commit."
+            exit 0
+          fi
+          git commit -m "chore(gemma): push-probe capture (does kaggle kernels push create kernels at all) [skip ci]"
+          git push origin "HEAD:${GITHUB_REF_NAME}"

@@ -731,6 +731,11 @@ def main() -> int:
                     timeout=300,
                 )
                 state["push_exit_code"] = pushed.returncode
+                # Keep the tail of the raw push output in the committed record: on 2026-10-14 two
+                # runs recorded push_exit_code 0 while the kernel never appeared on Kaggle, and the
+                # job log with the actual CLI message was not readable from the session sandbox.
+                state["push_stdout_tail"] = (pushed.stdout or "")[-1200:]
+                state["push_stderr_tail"] = (pushed.stderr or "")[-600:]
                 if pushed.returncode != 0:
                     state["push_warning"] = (
                         f"Kaggle CLI returned exit code {pushed.returncode}; checking whether the run was created."
@@ -740,6 +745,35 @@ def main() -> int:
                 state["push_warning"] = f"Kaggle push response was inconclusive ({type(exc).__name__}); checking status."
             state.update({"status": "queued_or_starting", "gpu_requested": True, "gpu_quota_used": None})
             update_state(outdir, state)
+
+        # Verify the push actually materialised a kernel before starting the long poll.
+        # 2026-10-14: both V6.5 and V6.6 recorded push_exit_code 0, never appeared in
+        # `kernels list --mine`, and answered 404 ("KernelSessionStatus: Not Found") for an hour -
+        # the old code then spent its five tolerated failures and died with a misleading
+        # "status API failed" message after four minutes, as if the API were down.
+        probe_raw = ""
+        push_verified = False
+        for attempt in range(6):
+            try:
+                probe = kaggle_cli(["kernels", "status", kernel_ref], timeout=90)
+                probe_raw = ((probe.stdout or "") + "\n" + (probe.stderr or "")).strip()
+            except (OSError, subprocess.TimeoutExpired) as exc:
+                probe_raw = f"{type(exc).__name__} while probing the kernel"
+            if "KernelWorkerStatus" in probe_raw:
+                push_verified = True
+                break
+            time.sleep(20)
+        state["push_verified"] = push_verified
+        state["push_probe_raw"] = probe_raw[-400:]
+        if not push_verified:
+            state.update({
+                "status": "kernel_not_found_after_push",
+                "error": ("The push reported exit code 0 but `kernels status` never returned a "
+                          "KernelWorkerStatus for this reference; refusing to poll for hours."),
+            })
+            update_state(outdir, state)
+            return 6
+        update_state(outdir, state)
 
         deadline = time.monotonic() + max(1, args.max_wait_minutes) * 60
         final_status = "UNKNOWN"
@@ -753,7 +787,17 @@ def main() -> int:
                 consecutive_api_errors += 1
                 state["status_api_errors"] = consecutive_api_errors
                 if consecutive_api_errors >= 5:
-                    state.update({"status": "status_poll_failed", "error": "Five consecutive Kaggle status API calls failed."})
+                    raw = ((status_result.stdout if status_result else "") or "") + \
+                          ((status_result.stderr if status_result else "") or "")
+                    if "404" in raw or "Not Found" in raw:
+                        state.update({"status": "kernel_not_found_during_poll",
+                                      "error": "The kernel answered 404 while polling; it does not exist "
+                                               "on Kaggle under this reference.",
+                                      "poll_raw_last": raw.strip()[-300:]})
+                    else:
+                        state.update({"status": "status_poll_failed",
+                                      "error": "Five consecutive Kaggle status API calls failed.",
+                                      "poll_raw_last": raw.strip()[-300:]})
                     update_state(outdir, state)
                     return 3
             else:
