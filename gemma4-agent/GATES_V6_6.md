@@ -102,3 +102,24 @@ dowodowy: `ANALYSIS_2026-10-14_QUOTA.md`). **Werdykty R1–R4 nie zostały wydan
 brak dowodów na poprawę.** Ponowienie obu przebiegów: po resecie kwoty (sobota 2026-10-17 00:00 UTC
 = 02:00 czasu polskiego), rozsunięte w czasie ok. 10 minut. Narzędzie od tej pory weryfikuje, że
 kernel naprawdę powstał, i nazywa wyczerpaną kwotę po imieniu w `run.json`.
+
+---
+
+## Adnotacja 2026-10-14 (po surowym śladzie wywołań V6.4)
+
+Mechanizm opisany wyżej („cztery sesje napisały `/tmp/locate.py` i skończyły, jakby gotowy skrypt
+był pracą") **nie wystąpił w tej postaci**. Trzecia iteracja raportu z surowych wywołań
+(`gemma4-agent/analysis/diagnostics-2026-10-14/v64-raw-calls.md`, run `38599233973`, commit
+`7ad1066`, licznik `write_file_outside_workspace: 9`) pokazuje, że `write_file` **nie może** pisać
+poza katalogiem roboczym:
+
+```
+{"status": "error", "error_type": "FileWriteError",
+ "error_message": "Path traversal detected: '/tmp/locate.py' escapes workspace root."}
+```
+
+Wszystkie 9 takich wywołań w przebiegu V6.4 zostały odrzucone, a trzy z czterech sesji powyżej
+skończyły się natychmiast po odmowie — skrypt nigdy nie istniał, więc nie mógł zostać uznany za
+pracę. Dźwignia V6.6 (jedno polecenie inline, zero plików) pozostaje słuszna i nadal jest jedyną
+zmianą tego ramienia; zmienia się tylko uzasadnienie. Szczegóły i tabela 9 przypadków:
+`GATES_V6_7.md`.

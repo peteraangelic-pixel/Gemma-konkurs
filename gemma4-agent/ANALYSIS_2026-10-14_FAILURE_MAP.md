@@ -60,7 +60,17 @@ do zegara, ma potem ~139 s na dopracowanie i weryfikację — i rozwiązuje się
 | --- | --- | --- |
 | napisała **tylko** `/tmp/locate.py` i skończyła | 4 (`fastapi_15588`, `fastapi_15745`, `httpx_3672`, `rich_3043`) | pułapka lokalizatora; **adresuje ją V6.6**; 2 z nich miały gold na #1/#2 |
 | nie napisała nic, tylko czytała/komendowała | 4 (`fastapi_14266` 31 wyw., `fastapi_14459` 18, `rich_3934` 11, `rich_3105` 8 w 74 s — koniec z własnej woli) | `rich_3934` miał gold na **#1** i przeczytał cały budżet |
-| wywołała `edit_file`, ale **diff wyszedł pusty** | 3 (`fastapi_14851` → `fastapi/routing.py`, `fastapi_14487` → dokumentacja, `requests_6757` → `tox.ini` ×2) | edycja nie trafiła w drzewo: brak weryfikacji, że zmiana jest na dysku |
+| **pierwsza edycja odrzucona przez sufit 30 wywołań** (2 zadania) | 2 (`fastapi_14851` — próba na wywołaniu 32, `fastapi_14487` — na 31; `fastapi_14953` dostał ten sam błąd dwa razy) | surowy ślad: `{"status": "error", "error_type": "BudgetExceeded", "error_message": "Tool call budget exhausted (30 calls)"}` — to nie jest „edycja nie trafiła w drzewo", tylko edycja **nigdy nie została wykonana** |
+| **edycja pliku, który grader odrzuca** (1 zadanie) | 1 (`requests_6757` — dwa udane `edit_file` w `tox.ini`, każde potwierdzone diffem) | `tox.ini` jest resetowane przez grader (prompt mówi to od V6.4), więc udana edycja jest niewidoczna: drzewo zostało puste, a złote pliki to `src/requests/compat.py` i `src/requests/utils.py` |
+
+**Korekta 2026-10-14 (surowy ślad wywołań, `analysis/diagnostics-2026-10-14/v64-raw-calls.md`).**
+Pierwsza wersja tej tabeli opierała się na parowaniu wywołanie→wynik, które przesuwało się
+o jeden przy każdym zdarzeniu bez wywołania narzędzia; dlatego edycja w `requests_6757`
+wyglądała na zwróconą przez `grep`, a `fastapi_14851` na cudzy odczyt pliku. Po naprawie
+parowania (`ffbc55e`) trzy mechanizmy okazały się dwoma innymi niż opisane powyżej
+(wiersze zaktualizowane) — w tym dwa, których żaden wcześniejszy przebieg nie nazwał:
+sufit wywołań **odrzuca** pracę zamiast ostrzegać, a udana edycja pliku resetowanego
+przez grader jest niewidoczna. Oba mają reguły w V6.7 (`GATES_V6_7.md`).
 
 ## 5. Wynik negatywny, który zaoszczędził slot GPU (dźwignia L3, odrzucona)
 
