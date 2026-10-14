@@ -42,8 +42,10 @@ V65_DIR = ROOT / "gemma4-agent" / "submission-v6.5"
 V66_DIR = ROOT / "gemma4-agent" / "submission-v6.6"
 V67_DIR = ROOT / "gemma4-agent" / "submission-v6.7"
 V68_DIR = ROOT / "gemma4-agent" / "submission-v6.8"
+V69_DIR = ROOT / "gemma4-agent" / "submission-v6.9"
+V610_DIR = ROOT / "gemma4-agent" / "submission-v6.10"
 VARIANT_DIR = {"v64": V6_DIR, "v65": V65_DIR, "v66": V66_DIR, "v67": V67_DIR,
-               "v68": V68_DIR}[VARIANT]
+               "v68": V68_DIR, "v69": V69_DIR, "v610": V610_DIR}[VARIANT]
 OUT = VARIANT_DIR / "prompts" / "system.md"
 LOCATOR = VARIANT_DIR / "tools" / "locate.py"
 
@@ -429,6 +431,25 @@ def apply_post_edits(prompt: str) -> str:
         for old, new in V68_EDITS:
             assert old in prompt, "missing V68 anchor: " + old[:60]
             prompt = prompt.replace(old, new, 1)
+    if VARIANT == "v610":
+        # The candidate arm: harness-contract rules (V6.7) + the evolved locator (V6.8) + inline
+        # delivery (V6.6). Three levers, each measured separately before this arm existed; the
+        # combination exists because a submission slot, not a GPU hour, is the scarce resource.
+        for name, edits in (("V67", V67_EDITS), ("V68", V68_EDITS),
+                            # inline delivery only - the V6.6 justification sentence stays out, so
+                            # the "V6.6-only text" guard keeps protecting the other variants
+                            ("V66-invocation", V66_EDITS[:1])):
+            for old, new in edits:
+                assert old in prompt, f"missing {name} anchor in v610: " + old[:60]
+                prompt = prompt.replace(old, new, 1)
+    if VARIANT == "v69":
+        # The combination the other branch built locally and called "V6.7" (sha 0cd0d2bf...):
+        # V6.4 + the V6.5 edit framing + the V6.6 inline locator. Two levers in one arm, kept as a
+        # separate variant so a run of it is never confused with the single-lever arms.
+        for name, edits in (("V65", V65_EDITS), ("V66", V66_EDITS)):
+            for old, new in edits:
+                assert old in prompt, f"missing {name} anchor in v69: " + old[:60]
+                prompt = prompt.replace(old, new, 1)
     return prompt
 
 

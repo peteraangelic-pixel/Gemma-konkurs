@@ -80,18 +80,25 @@ Pełne tabele: `analysis/locator-evolve/validation.md`; ranking zwycięzcy:
 
 Oba naprawione; po naprawie kontrola zgodności pliku z pomiarem przechodzi w 100 %.
 
-## 4. Rekomendacja na sobotni reset (2026-10-17 00:00 UTC)
+## 4. Rekomendacja na sobotni reset (2026-10-17 00:00 UTC) — zaktualizowana po recenzji drugiej gałęzi
 
-Cztery ramiona po ~5,6 h rozliczeniowych = ~22,4 h z 30 h tygodnia:
+Cztery ramiona po ~5,6 h rozliczeniowych = ~22,4 h z 30 h tygodnia (zapas ~7,6 h na powtórkę):
 
-| kolejność | ramię | dźwignia | stan |
-| --- | --- | --- | --- |
-| 1 | **V6.5** | framing edycji („zrób edycję, nawet jeśli nie jesteś pewien") | gotowe, `cb847599…` |
-| 2 | **V6.7** | zgodność z kontraktem narzędzi (9/9 odrzuconych zapisów) | gotowe, `df7364e2…` |
-| 3 | **V6.8** | stałe lokalizatora z wyszukiwania populacyjnego | gotowe, `8c816fc8…` |
-| 4 | **V6.6** | lokalizator bez pliku scratch (inline) | gotowe, `b6686c53…`; **przesłanka skorygowana** |
+| kolejność | ramię | dźwignia | artefakt | bramki |
+| --- | --- | --- | --- | --- |
+| 1 | **V6.7** | reguły kontraktu narzędzi (9/9 odrzuconych zapisów) | `df7364e2…` | `GATES_V6_7.md` |
+| 2 | **V6.8** | stałe lokalizatora z wyszukiwania populacyjnego | `8c816fc8…` | `GATES_V6_8.md` |
+| 3 | **V6.5** | framing edycji | `cb847599…` | `GATES_V6_5.md` |
+| 4 | **V6.10** | kontrakt + ewoluowany lokalizator + inline (kandydat) | `523d43fb…` | `GATES_V6_10.md` |
 
-V6.6 zostaje w planie tylko dlatego, że usunięcie pliku scratch jest odporniejsze niż sama instrukcja
-(V6.7 reguła 4); jeśli wolisz zapas ~13 h na powtórkę przebiegu, można je pominąć — trzy ramiona to
-16,8 h. Ramiona łączone (np. V6.7 + V6.8 = kontrakt + ewoluowany lokalizator, kandydat na tydzień
-24.10) mają sens dopiero po osobnych pomiarach.
+Co zmieniło się wobec wersji z 18:30: **V6.6 wypada z czterech przebiegów** (jego dźwignia jest
+w V6.10 i w V6.9), a **V6.10 wchodzi jako kandydat** — bo rzadkim zasobem jest slot dobowy na
+zgłoszenie, nie godzina GPU. V6.9 (`c99f3d81…`) zostaje zbudowany i gotowy, ale **nie jest
+w pierwszej czwórce**: daje ten sam test kombinacji co V6.10 przy słabszej treści (bez kontraktu
+i bez ewoluowanego lokalizatora), więc ma sens dopiero, jeśli V6.10 wypadnie źle, a V6.5 i V6.6
+będą wyglądać dobrze.
+
+**Kolejność startów ma znaczenie:** V6.7 i V6.8 startują pierwsze (największa wartość informacyjna),
+V6.5 trzeci, V6.10 ostatni — jeśli po trzech przebiegach okaże się, że któryś z levers wyraźnie
+szkodzi, kandydata można jeszcze zbudować inaczej przed czwartym startem (koszt: jedna przebudowa
+bez GPU).

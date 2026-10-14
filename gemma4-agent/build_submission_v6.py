@@ -91,7 +91,9 @@ def optional_yaml_parse(path: Path):
 def validate_tree(submission_dir: Path) -> list[Path]:
     submission_dir = submission_dir.resolve()
     # Derived from the directory name so a mis-typed --source-dir cannot package the wrong text.
-    variant = ("v68" if "6.8" in submission_dir.name
+    variant = ("v610" if "6.10" in submission_dir.name
+               else "v69" if "6.9" in submission_dir.name
+               else "v68" if "6.8" in submission_dir.name
                else "v67" if "6.7" in submission_dir.name
                else "v66" if "6.6" in submission_dir.name
                else "v65" if "6.5" in submission_dir.name else "v64")
@@ -214,6 +216,8 @@ def validate_tree(submission_dir: Path) -> list[Path]:
         "v64": ("cat > /tmp/locate.py <<'LOCATE_PY'", "python3 /tmp/locate.py --root . --top 8"),
         "v65": ("cat > /tmp/locate.py <<'LOCATE_PY'", "python3 /tmp/locate.py --root . --top 8"),
         "v66": ("python3 -c \"$(cat <<'LOCATE_PY'", "\" --root . --top 8 <<'ISSUE_EOF'"),
+        "v69": ("python3 -c \"$(cat <<'LOCATE_PY'", "\" --root . --top 8 <<'ISSUE_EOF'"),
+        "v610": ("python3 -c \"$(cat <<'LOCATE_PY'", "\" --root . --top 8 <<'ISSUE_EOF'"),
         "v67": ("cat > /tmp/locate.py <<'LOCATE_PY'", "python3 /tmp/locate.py --root . --top 8"),
         "v68": ("cat > /tmp/locate.py <<'LOCATE_PY'", "python3 /tmp/locate.py --root . --top 8"),
     }
@@ -223,6 +227,8 @@ def validate_tree(submission_dir: Path) -> list[Path]:
         "v66": ("cat > /tmp/locate.py", "python3 /tmp/locate.py"),
         "v67": ("python3 -c \"$(cat <<'LOCATE_PY'",),
         "v68": ("python3 -c \"$(cat <<'LOCATE_PY'",),
+        "v69": ("cat > /tmp/locate.py", "python3 /tmp/locate.py"),
+        "v610": ("cat > /tmp/locate.py <<'LOCATE_PY'", "python3 /tmp/locate.py --root . --top 8"),
     }
     for phrase in locator_banned[variant]:
         if phrase in prompt_text:
@@ -318,7 +324,7 @@ def validate_tree(submission_dir: Path) -> list[Path]:
         for banned in ("once you are certain", "until you are sure", "wait until you know"):
             if banned in prose.lower():
                 fail(f"V6.5 prompt still asks the model to wait for certainty: {banned!r}")
-    else:
+    elif variant != "v69":
         for phrase, label in V65_REQUIRED:
             if phrase in prose:
                 fail(f"{variant} archive contains V6.5-only text ({label}); variants are mixed up.")
@@ -328,7 +334,7 @@ def validate_tree(submission_dir: Path) -> list[Path]:
         ("four sessions wrote `/tmp/locate.py` and then never edited the repository at all",
          "V6.6 measurement (the locator-file trap, from the full V6.4 run)"),
     )
-    if variant == "v66":
+    if variant in ("v66", "v69"):
         for phrase, label in V66_REQUIRED:
             if phrase not in prose:
                 fail(f"V6.6 prompt lost {label}: {phrase!r}")
@@ -361,7 +367,7 @@ def validate_tree(submission_dir: Path) -> list[Path]:
                 fail(f"V6.7 prompt lost {label}: {phrase!r}")
         if "Thirty-two calls across that run" not in prose:
             fail("V6.7 prompt lost the comment-only command count.")
-    else:
+    elif variant != "v610":
         for phrase, label in V67_REQUIRED:
             if phrase in prose:
                 fail(f"{variant} archive contains V6.7-only text ({label}); variants are mixed up.")
@@ -385,10 +391,35 @@ def validate_tree(submission_dir: Path) -> list[Path]:
         # the evolved script must be the one in the archive, not a leftover copy
         if "EVOLVED 2026" not in prompt_text:
             fail("V6.8 prompt embeds a locator without the EVOLVED header; rebake it.")
-    else:
+    elif variant != "v610":
         for phrase, label in V68_REQUIRED:
             if phrase in prose:
                 fail(f"{variant} archive contains V6.8-only text ({label}); variants are mixed up.")
+    # ---- V6.9: the deliberate two-lever arm (V6.5 framing + V6.6 inline locator) --------------
+    # Built so a run of the other branch's locally named "V6.7" is reproducible from our generator
+    # and can never be confused with our single-lever V6.7 (contract rules) or V6.6 (inline only).
+    if variant == "v610":
+        # the candidate: contract rules + evolved locator + inline delivery. No V6.5 framing here.
+        for phrase, label in (*V67_REQUIRED, *V68_REQUIRED):
+            if phrase not in prose:
+                fail(f"V6.10 prompt lost {label}: {phrase!r}")
+        for phrase, label in V65_REQUIRED:
+            if phrase in prose:
+                fail(f"V6.10 archive contains V6.5-only text ({label}); variants are mixed up.")
+        if "EVOLVED 2026" not in prompt_text:
+            fail("V6.10 prompt embeds a locator without the EVOLVED header; rebake it.")
+        if "LOCATE_PY" not in prompt_text:
+            fail("V6.10 prompt lost the LOCATE_PY heredoc entirely.")
+    if variant == "v69":
+        for phrase, label in (*V65_REQUIRED, *V66_REQUIRED):
+            if phrase not in prose:
+                fail(f"V6.9 prompt lost {label}: {phrase!r}")
+        for phrase, label in V67_REQUIRED:
+            if phrase in prose:
+                fail(f"V6.9 archive contains V6.7-only text ({label}); variants are mixed up.")
+        for phrase, label in V68_REQUIRED:
+            if phrase in prose:
+                fail(f"V6.9 archive contains V6.8-only text ({label}); variants are mixed up.")
     if "as your final action" in prompt_text:
         fail("prompts/system.md still carries the V5 tail that contradicts the optional-submit rule.")
 
@@ -443,7 +474,11 @@ def main() -> int:
                              "source directory is the V6.5 tree")
     args = parser.parse_args()
     if args.output is None:
-        if "6.8" in args.source_dir.name:
+        if "6.10" in args.source_dir.name:
+            args.output = BASE_DIR / "submission-v6.10.zip"
+        elif "6.9" in args.source_dir.name:
+            args.output = BASE_DIR / "submission-v6.9.zip"
+        elif "6.8" in args.source_dir.name:
             args.output = BASE_DIR / "submission-v6.8.zip"
         elif "6.7" in args.source_dir.name:
             args.output = BASE_DIR / "submission-v6.7.zip"

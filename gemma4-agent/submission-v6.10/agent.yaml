@@ -1,0 +1,22 @@
+# V6.4 offline candidate, based on the V6.3 configuration.
+# Isolated intervention: remove submit_patch so the agent cannot end a task prematurely,
+# and require an intended source/config edit by tool call 4 in prompts/system.md.
+# The documented harness working-tree fallback is relied on but is not end-to-end validated.
+# Model, remaining tools, eval limits, sampling settings, locator, and thinking budget match V6.3.
+agent_class: LlmAgent
+name: gemma4_locator_repair
+model: gemma-4-31b-it-qat-w4a16-ct
+description: A time-budgeted software-repair agent that localizes an issue with a measured deterministic locator and makes an early, minimal source edit; the harness captures the working-tree diff.
+instruction: !include prompts/system.md
+tools:
+  # Graph tools stay registered so an attempted call cannot break the ADK tool loop,
+  # but the instructions tell the agent not to use them (measured: no benefit).
+  - run_command
+  - read_file
+  - edit_file
+  - write_file
+  - get_status
+  - get_code_neighbors
+  - search_similar_code
+  - get_code_subgraph
+generate_content_config: !include configs/sampling.yaml

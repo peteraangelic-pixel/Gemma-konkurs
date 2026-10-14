@@ -30,6 +30,36 @@ PACKER = AGENT / "build_submission_v6.py"
 
 # (name, anchor that must exist, replacement)
 CONTROLS: dict[str, list[tuple[str, str, str]]] = {
+    "v69": [
+        ("V6.9 guard: framing lever present",
+         "make it even if you are not yet certain it is the right file", "make the edit"),
+        ("V6.9 guard: inline locator justification present",
+         "four sessions wrote `/tmp/locate.py`", "some sessions wrote a script"),
+        ("V6.9 guard: V6.7-contract text must be absent",
+         "The only exception is an issue that is explicitly about the documentation itself.",
+         "The only exception is an issue that is explicitly about the documentation itself. "
+         "On the last run two sessions reached call 31 with the tree untouched and the answer to "
+         "their first `edit_file` was `Tool call budget exhausted (30 calls)`."),
+        ("V6.9 guard: V6.8 text must be absent",
+         "top 3 for 66% of them, in the top 5 for 73%",
+         "top 3 for 67% of them, in the top 5 for 74%"),
+    ],
+    "v610": [
+        ("V6.10 guard: contract rule (ceiling)",
+         "Tool call budget exhausted (30 calls)", "the tool call ceiling"),
+        ("V6.10 guard: contract rule (write_file scope)",
+         "Path traversal detected: '/tmp/repro.py' escapes workspace root.", "the path is rejected"),
+        ("V6.10 guard: evolved locator recall line",
+         "top 3 for 67% of them, in the top 5 for 74%", "top 3 for 66% of them, in the top 5 for 73%"),
+        ("V6.10 guard: the embedded script is the evolved one",
+         "# EVOLVED 2026", "# hand-tuned"),
+        ("V6.10 guard: inline delivery",
+         "python3 -c \"$(cat <<'LOCATE_PY'", "python3 -c loc.py", "all"),
+        ("V6.10 guard: V6.5 framing must be absent",
+         "never create a dummy edit merely to satisfy the deadline",
+         "never create a dummy edit merely to satisfy the deadline. The first intended edit must be "
+         "on disk by tool call 4 - make it even if you are not yet certain it is the right file."),
+    ],
     "v68": [
         ("V6.8 guard: dev recall of the evolved locator",
          "top 3 for 67% of them, in the top 5 for 74%", "top 3 for 66% of them, in the top 5 for 73%"),
@@ -88,10 +118,10 @@ def main() -> int:
     parser.add_argument("--variant", default="v67", choices=sorted(CONTROLS))
     args = parser.parse_args()
     variant = args.variant
-    source = AGENT / f"submission-v6.{variant[-1]}"
-    if variant in ("v67", "v68"):
-        source = AGENT / f"submission-v6.{variant[-1]}"
-    archive = AGENT / f"submission-v6.{variant[-1]}.zip"
+    # variant id -> the directory suffix (v610 cannot be derived from its last character)
+    suffix = {"v67": "6.7", "v68": "6.8", "v69": "6.9", "v610": "6.10"}[variant]
+    source = AGENT / f"submission-v{suffix}"
+    archive = AGENT / f"submission-v{suffix}.zip"
     if not source.is_dir():
         print(f"missing source tree: {source}", file=sys.stderr)
         return 1
@@ -120,7 +150,9 @@ def main() -> int:
             failures.append(f"no committed archive to compare against: {archive}")
 
         # negative controls
-        for index, (label, anchor, replacement) in enumerate(CONTROLS[variant], start=1):
+        for index, control in enumerate(CONTROLS[variant], start=1):
+            label, anchor, replacement = control[0], control[1], control[2]
+            replace_all = len(control) > 3 and control[3] == "all"
             copy = tmp_path / f"{source.name}-mut{index}"
             shutil.copytree(source, copy)
             prompt = copy / "prompts" / "system.md"
@@ -128,7 +160,8 @@ def main() -> int:
             if anchor not in text:
                 failures.append(f"{label}: anchor not found, control is stale: {anchor!r}")
                 continue
-            prompt.write_text(text.replace(anchor, replacement, 1), encoding="utf-8")
+            mutated = text.replace(anchor, replacement) if replace_all else text.replace(anchor, replacement, 1)
+            prompt.write_text(mutated, encoding="utf-8")
             result = build(copy, tmp_path / f"mut{index}.zip")
             ok = result.returncode != 0 and "ERROR:" in result.stderr
             print(f"negative control {index:2}: {'fires' if ok else 'DOES NOT FIRE'} - {label}")
