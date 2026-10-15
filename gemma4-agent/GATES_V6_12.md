@@ -1,8 +1,19 @@
 # V6.12 — artefakt zgłoszeniowy na noc 15/16 X 2026 (bramki zamrożone przed wysyłką)
 
-Stan na 2026-10-15 ~20:20 UTC. V6.12 **nie został wysłany**. Nic się nie stanie, dopóki nie
+Stan na 2026-10-15 ~20:40 UTC. V6.12 **nie został wysłany**. Nic się nie stanie, dopóki nie
 zostanie wypchnięty `gemma4-agent/kaggle_smoke/official-submit-v612.trigger` (albo workflow nie
 zostanie uruchomiony ręcznie z wyborem artefaktu).
+
+## Dwa sposoby uzbrojenia (wybierz jeden)
+
+| | kiedy | co się dzieje |
+| --- | --- | --- |
+| **A. Uzbrojenie triggerem** (domyślne, dla nocy) | teraz, między ~19:05 a 00:05 UTC | job startuje od razu, wykonuje **całą** weryfikację (hash, duplikat komunikatu, oba strażniki slotu), po czym **śpi do 00:05 UTC** i dopiero wtedy wykonuje upload. `git push` triggera zadziała nawet 5 h przed północą; jeśli odpalisz go dalej niż 5 h od granicy, job **odmawia i nic nie wysyła**, a trigger zostaje w repo (`selftest_wait_step.py` 4/4) |
+| **B. Ręczne uruchomienie** (Actions → Run workflow) | dowolna pora, np. 02:10 czasu lokalnego | `mode=send_now` wysyła natychmiast (strażnicy nadal działają), `mode=wait_boundary` czeka tak jak A. Wybór artefaktu: `v612`/`v611`/`v610`/`v68` |
+
+Uzbrojenie A **nie wymaga obecności o 2 w nocy** — to jest cała różnica wobec poprzedniej wersji.
+Anulowanie: Run → Cancel (albo usunięcie triggera nie jest potrzebne, bo job czyta go na starcie —
+nieprzeprowadzony job nie wysyła niczego).
 
 ## Czym V6.12 jest
 
@@ -46,6 +57,7 @@ idzie do Kaggle**, bo scenariusz porażki to nie „niższy wynik", tylko „bra
 | selftest łańcucha strażników wysyłki (`tools/selftest_submit_guard.py`) | **7/7** — zły hash, duplikat komunikatu, slot dzienny, okno 24 h, nieparsowalna data, czysta wysyłka, zgodność pinu SHA z realnym archiwum |
 | odtworzenie wszystkich ramion z drzewa źródłowego | bajt w bajt (v6.5 `cb847599`, v6.6 `b6686c53`, v6.7 `df7364e2`, v6.8 `8c816fc8`, v6.9 `c99f3d81`, v6.10 `523d43fb`, v6.11 `7b2beec1`, v6.12 `5381ae17`) |
 | workflow wysyłki | YAML parsuje się; nazwa obecna; identyfikator zadania `submit-next` **bez kropki** (incydent fantomowych przebiegów z 2026-10-15) |
+| arytmetyka czekania na granicę dnia | `tools/selftest_wait_step.py` **4/4** — uzbrojenie 20:19 UTC czeka 13 560 s do 00:05 UTC, uzbrojenie 12:00 UTC odmawia i nie kasuje triggera, ręczne `send_now` nie czeka, ręczne `wait_boundary` o 23:50 czeka 15 min |
 
 ## Łańcuch strażników wysyłki (co się stanie po wypchnięciu triggera)
 

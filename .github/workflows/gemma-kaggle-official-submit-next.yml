@@ -5,6 +5,12 @@ name: Official Kaggle submission (next candidate)
 #   * gemma4-agent/kaggle_smoke/official-submit-v611.trigger  (the aggressive 8-minute arm)
 # is pushed, or the workflow is dispatched manually with an explicit artifact choice.
 #
+# A trigger push ARMS a timed send: the job sleeps until the next 00:05 UTC, the moment the
+# competition's daily submission slot refreshes (02:05 Warsaw), so the submitted day is the new UTC
+# day and the following day's slot opens at the same hour instead of being blocked for 24 h from
+# e.g. 20:00 UTC. The wait is refused (nothing sent, trigger left in place) when the boundary is
+# more than MAX_WAIT_HOURS away; manual dispatch defaults to sending immediately.
+#
 # The guard chain (tools/submit_kaggle_once.py) is: the archive must hash to the value pinned below
 # for that artifact (so the uploaded bytes are the reviewed build), the message must not already
 # exist in the competition history, and no submission may exist from today or the last 24 hours
@@ -25,6 +31,14 @@ on:
           - v611
           - v610
           - v68
+      mode:
+        description: "send_now = submit as soon as the guards pass; wait_boundary = sleep until 00:05 UTC"
+        type: choice
+        required: true
+        default: send_now
+        options:
+          - send_now
+          - wait_boundary
   push:
     branches:
       - arena/c4eeb067-gemma-konkurs
@@ -42,13 +56,57 @@ concurrency:
 jobs:
   submit-next:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 340
     steps:
       - name: Checkout session branch
         uses: actions/checkout@v4
         with:
           ref: ${{ github.ref_name }}
           fetch-depth: 0
+
+      - name: Wait for the next UTC daily boundary when arming for the night
+        id: wait
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          REQUESTED_MODE: ${{ github.event.inputs.mode }}
+          MAX_WAIT_HOURS: "5"
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import datetime as dt
+          import os
+          import sys
+          import time
+
+          event = os.environ.get("EVENT_NAME", "")
+          mode = (os.environ.get("REQUESTED_MODE") or "").strip()
+          if event != "push" and mode != "wait_boundary":
+              print("Mode: send now (no boundary wait requested).")
+              sys.exit(0)
+
+          max_wait = float(os.environ.get("MAX_WAIT_HOURS", "5")) * 3600
+          now = dt.datetime.now(dt.timezone.utc)
+          target = (now + dt.timedelta(days=1)).replace(hour=0, minute=5, second=0, microsecond=0)
+          delta = (target - now).total_seconds()
+          if delta > max_wait:
+              print(
+                  "Refusing to arm: the next daily boundary is "
+                  f"{target:%Y-%m-%d %H:%M} UTC, {delta / 3600:.1f} h away "
+                  f"(limit {max_wait / 3600:.0f} h). Nothing was submitted and the trigger file was "
+                  "left in place - push it again closer to the boundary, or dispatch this workflow "
+                  "manually with mode=send_now.",
+                  flush=True,
+              )
+              sys.exit(1)
+          if delta > 0:
+              print(
+                  f"Armed: waiting {delta / 60:.1f} min for {target:%Y-%m-%d %H:%M} UTC, the moment the "
+                  "competition's daily submission slot refreshes.",
+                  flush=True,
+              )
+              time.sleep(delta)
+          print("Boundary reached at", dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC"), flush=True)
+          PY
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -112,7 +170,7 @@ jobs:
             --result-json "${{ steps.select.outputs.receipt }}"
 
       - name: Show submission receipt
-        if: always()
+        if: always() && steps.wait.outcome == 'success'
         run: |
           receipt="${{ steps.select.outputs.receipt }}"
           if [ -n "$receipt" ] && [ -f "$receipt" ]; then
@@ -122,7 +180,7 @@ jobs:
           fi
 
       - name: Record the receipt and consume the trigger
-        if: always()
+        if: always() && steps.wait.outcome == 'success' && steps.select.outcome == 'success'
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
