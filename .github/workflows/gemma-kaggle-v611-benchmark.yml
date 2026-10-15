@@ -1,0 +1,144 @@
+name: Gemma Kaggle V6.11 benchmark
+
+# V6.10 full screen on the same 30 tasks and seed as V3/V4/V5/V6.1-V6.4, so the comparison is 1:1.
+# V6.10 = V6.4 + THREE levers: the V6.7 harness-contract rules, the V6.8 evolved locator and the
+# V6.6 inline delivery. This is the candidate arm: the two strongest measured levers plus the
+# structural fix for the refused-write failure mode. Each lever has its own single-lever arm, so
+# a win here can be checked against them; the combination exists because a submission slot, not a
+# GPU hour, is the scarce resource in this competition.
+#
+# V6.10's pre-registered expectations live in GATES_V6_10.md. Does not create an official
+# submission. Nothing runs until gemma4-agent/kaggle_smoke/v611-benchmark.trigger is pushed.
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - arena/c4eeb067-gemma-konkurs
+    paths:
+      - gemma4-agent/kaggle_smoke/v611-benchmark.trigger
+
+permissions:
+  contents: write
+
+concurrency:
+  group: v611-benchmark.trigger-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Checkout session branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Kaggle CLI
+        run: python -m pip install --disable-pip-version-check --quiet kaggle
+
+      - name: Configure Kaggle credentials
+        env:
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "$KAGGLE_API_TOKEN" ]; then
+            echo "Repository Actions secret KAGGLE_API_TOKEN is missing."
+            exit 1
+          fi
+          mkdir -p "$HOME/.kaggle"
+          printf '%s' "$KAGGLE_API_TOKEN" | tr -d '\r\n' > "$HOME/.kaggle/access_token"
+          chmod 600 "$HOME/.kaggle/access_token"
+          echo "Kaggle CLI configured; token value was not logged."
+
+      - name: Run private same-seed 30-task V6.11 benchmark on competition L4x4
+        env:
+          KAGGLE_USERNAME: petersharps
+        run: |
+          python gemma4-agent/tools/run_kaggle_v1_smoke.py \
+            --submission gemma4-agent/submission-v6.11.zip \
+            --outdir gemma4-agent/kaggle_results/v6-11-benchmark \
+            --task-count 30 \
+            --task-id fastapi_15588 \
+            --seed 20261009 \
+            --max-wait-minutes 240 \
+            --poll-interval-seconds 60
+
+      - name: Fetch Kaggle notebook log after failure (read-only)
+        if: failure()
+        continue-on-error: true
+        run: |
+          if [ -s gemma4-agent/kaggle_results/v6-11-benchmark/run.json ]; then
+            python gemma4-agent/tools/fetch_kaggle_kernel_log.py \
+              --run-json gemma4-agent/kaggle_results/v6-11-benchmark/run.json \
+              --output-dir "$RUNNER_TEMP/gemma-v611-benchmark-kernel-logs"
+            python gemma4-agent/tools/summarize_kaggle_kernel_log.py \
+              "$RUNNER_TEMP/gemma-v611-benchmark-kernel-logs/kernel.log"
+          else
+            echo "No Kaggle kernel reference was recorded; no log fetch attempted."
+          fi
+
+      - name: Remove raw task patches before persistence
+        if: always()
+        run: rm -f gemma4-agent/kaggle_results/v6-11-benchmark/agent_benchmark_patches.txt
+
+      - name: Upload V6 benchmark summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gemma-v611-benchmark-${{ github.run_id }}
+          path: |
+            gemma4-agent/kaggle_results/v6-11-benchmark/run.json
+            gemma4-agent/kaggle_results/v6-11-benchmark/agent_benchmark_result.json
+          if-no-files-found: warn
+
+      - name: Upload Kaggle failure log
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gemma-v611-benchmark-kernel-log-${{ github.run_id }}
+          path: ${{ runner.temp }}/gemma-v611-benchmark-kernel-logs/
+          if-no-files-found: warn
+          retention-days: 3
+
+      - name: Commit V6 benchmark summary to this branch
+        if: always()
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin "$GITHUB_REF_NAME"
+          # SAFE PATTERN - fixed 2026-10-13, after it destroyed this branch once.
+          # The previous 'git reset --soft origin/<branch>' moves HEAD but leaves the INDEX on
+          # this job's own, older checkout, so the results commit rebuilt the OLD tree and
+          # silently reverted every commit pushed while the kernel ran: on 2026-10-13 it deleted
+          # the guarded submitter and the submit workflow, dropped the packer guards and reset
+          # submission-v6.11.zip from 650e1dba back to abf22bac (see GATES_V6_3.md).
+          # Safe order: take the REMOTE tree first, then re-apply only this run's outputs.
+          rm -rf /tmp/keep && mkdir -p /tmp/keep
+          cp -r gemma4-agent/kaggle_results/v6-11-benchmark /tmp/keep/ 2>/dev/null || true
+          git reset --hard "origin/$GITHUB_REF_NAME"
+          mkdir -p gemma4-agent/kaggle_results
+          cp -r /tmp/keep/v6-11-benchmark gemma4-agent/kaggle_results/ 2>/dev/null || true
+          git add gemma4-agent/kaggle_results/v6-11-benchmark 2>/dev/null || true
+          python gemma4-agent/tools/compare_screenings.py || true
+          git add gemma4-agent/kaggle_results/screening_history.md || true
+          # the trigger file exists exactly while a run has not consumed it yet
+          git rm -q --ignore-unmatch gemma4-agent/kaggle_smoke/v611-benchmark.trigger
+          if [ -z "$(git diff --cached --name-only)" ]; then
+            echo "No result files were produced; nothing to commit."
+            exit 0
+          fi
+          git commit -m "chore(gemma): record Run private same-seed 30-task V6.11 benchmark [skip ci]"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
+
+      - name: Verify documentation consistency (CI95 intervals against recorded JSON)
+        if: always()
+        run: python3 gemma4-agent/tools/check_docs_consistency.py

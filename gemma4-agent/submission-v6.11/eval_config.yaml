@@ -1,0 +1,25 @@
+# V6.11 budget — the first arm since V5 that restores V5's call and turn budget.
+#
+# Why this changes at all (see GATES_V6_11.md, RESEARCH_2026-10-15_EXTERNAL.md):
+# - V5 scored 0.13 with 45 calls / 80 turns / 150 s / 5.25 min. Every V6.x arm since ran at
+#   30 calls / 60 turns, and in the V6.4 screen 12 of 30 sessions ended exactly at the call cap
+#   while 19 died on the clock — the caps were binding, not protective.
+# - Public, independent measurements of the same harness: a 4-minute per-task cap scored 0.08
+#   against 0.12 without one (Pathfinder v1 vs v2), and an analysis of a 112-task run estimates a
+#   6-minute cap loses ~45% of solves because the tasks that take 8-15 minutes are the ones that
+#   end up solved. A public 0.18 configuration runs 8 minutes per task.
+# - The harness's documented 12-hour limit covers the whole run and EXCEEDING IT ERRORS THE
+#   ENTIRE SUBMISSION, so the cap is only safe if the MEAN stays low. That is what V6.11's second
+#   prompt rule is for: finish as soon as the intended edit is on disk. The math:
+#     120 tasks * (mean 3.5 min + 0.5 min setup) = 8.0 h   <- target
+#     120 tasks * (mean 5.0 min + 0.5 min setup) = 11.0 h  <- still fits
+#     120 tasks * (cap  8.0 min + 0.5 min setup) = 17.0 h  <- would error the submission
+#   So the pre-registered gate on the V6.11 benchmark is the measured mean: <= 5.0 min per task.
+#   If the run comes back above that, the cap drops back (the rule is cheap to change, the 12-hour
+#   error is not).
+# - timeout_seconds stays at V5's measured 150 s: a single runaway command must not eat a session.
+evaluation:
+  timeout_seconds: 150
+  max_tool_calls: 45
+  max_turns: 80
+  max_time_minutes: 8.0

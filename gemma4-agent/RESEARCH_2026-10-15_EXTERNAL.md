@@ -133,3 +133,22 @@ Kaggle: `748051`, `749528`, `749597`, `749585`, `748287`, `743063`, `743506`, `7
 (Black Cat, 209 przebiegów), `romanrozen`, `mizeroluckygall`, `zhukovoleksiy`, `nihilisticneuralnet`.
 Gałęzie siostrzane: `Pokemon@a450b00f` (tip `21f919d`), `Pokemon@7911f950` (tip `53a11a8`),
 `Smak-Domu-Konkurs@5ed750ef` (tip `b08f8e8`).
+
+## 8. Weryfikacja i uzgodnienie z opinią drugiej gałęzi (2026-10-15, po jej lekturze)
+
+Cztery twierdzenia z jej przeglądu sprawdziłem u źródła; dwa przyjąłem bez zmian, dwa skorygowałem.
+
+| twierdzenie drugiej gałęzi | weryfikacja | decyzja |
+| --- | --- | --- |
+| Zakaz narzędzi grafowych może być nieaktualny (270/314 zapytań zwraca wyniki) | **potwierdzone** w wątku `748323` (autor odtwarza 314 wywołań przez 4 buildy na CPU); tam też: „czy to pomaga rozwiązywać zadania — **nie testowaliśmy**", odpowiedzi mają medianę **5 763 znaki**, async nadal brakuje | **odłożone jako osobne ramię warunkowe** (jedno wywołanie, tylko gdy lokalizator nie wskazuje kandydata). Nie wchodzi do V6.11: nasz lokalizator (top-1 55,5 %) jest 2,5× lepszy od najlepszego publicznego benchu (TF-IDF 0,21), a odpowiedź grafu zjada ~40 % efektywnego kontekstu |
+| Odrzucone edycje realnie marnują budżet (105/524, „część zadań powtarzała identyczne wywołanie") | **potwierdzone i mocniejsze niż w przeglądzie**: 105/524 = 20 %, pochodzi z 15 zadań, 6 z nich daje 85 %, a **47 z 105 straciło granice długiego argumentu**; autorzy widzą, że notebook Budget-Fit ostrzega przed docstringami w `old_string` | **przyjęte jako reguła V6.11**. Uwaga: nasz prompt **już miał** zakaz docstringów w `old_string` (dodany wcześniej) — dopisaliśmy więc tylko połowę „nie wysyłaj ponownie odrzuconego wywołania" + liczby jako uzasadnienie |
+| `max_output_tokens: 16384` jest ryzykowne (publiczny 0,18 używa 8192) | Brak dowodu w naszych danych: żaden z naszych przebiegów nie pokazał błędu kontekstu/długości. Wątek `748323` potwierdza natomiast, że **od 8 października `include_thoughts: false` nie wyłącza rozumowania, tylko je ukrywa** (semantyka zmieniła się między buildami bez zmiany wersji) — to unieważnia część starych interpretacji ablacji | **bez zmian** (jedna dźwignia na raz); ryzyko monitorowane: przy następnej diagnostyce szukamy w śladach błędów typu „maximum context"/truncation. Zmiana 16384 → 8192 to kandydat na osobne ramię |
+| Prosty single-agent lepszy niż dokładanie subagentów | **przyjęte i to koryguje moją własną listę**: w `RESEARCH` §4 miałem analyzer jako L3 na podstawie starszego pomiaru Black Cat (0,08 → 0,10). Sprzeczny, nowszy pomiar sparowany (27/70 single vs 16/70 coder+analyzer) + publiczna konfiguracja 0,18 = **single agent** | **L3 usunięte z rankingu**; do V6.11 nie wchodzi żaden subagent |
+| LoRA: canary przed treningiem, ryzyko KV cache | zgodne z moim §1 i §4 (HOST `749528`, wątki `744331`/`749191`) | **canary zaimplementowany** w `tools/make_sft_notebook.py` jako twarda bramka (`SystemExit`, jeśli adapter ignorowany); rank 8, attention-only, jeden adapter |
+| Gałęzie siostrzane: brak replikacji / smoke przeszacowuje | zgodne z moim odczytem (§7) | bez zmian |
+
+Czego **nie** przyjąłem: (a) „najpierw sprawdzić checksum wheelhouse'u po wersji" — 748323 pokazuje,
+że wersja nie zmienia się między buildami, więc fingerprint robimy **po hashu plików** (to samo
+zalecenie, ostrzejsza implementacja); (b) włączenia grafów „na wszelki wypadek" — bez pomiaru
+kosztu kontekstu to zakład, nie dźwignia; (c) traktowania 0,18/0,20 z publicznych notebooków jako
+celu do kopiowania — to pojedyncze wyniki przy wariancji ±0,02–0,04 (ten sam pakiet: 0,17/0,15/0,13/0,15).

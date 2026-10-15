@@ -80,25 +80,31 @@ Pełne tabele: `analysis/locator-evolve/validation.md`; ranking zwycięzcy:
 
 Oba naprawione; po naprawie kontrola zgodności pliku z pomiarem przechodzi w 100 %.
 
-## 4. Rekomendacja na sobotni reset (2026-10-17 00:00 UTC) — zaktualizowana po recenzji drugiej gałęzi
+## 4. Rekomendacja na sobotni reset (2026-10-17 00:00 UTC) — PRZEPISANA 2026-10-15
 
-Cztery ramiona po ~5,6 h rozliczeniowych = ~22,4 h z 30 h tygodnia (zapas ~7,6 h na powtórkę):
+**Ta sekcja jest nieaktualna jako plan.** Cztery ramiona promptowe (V6.7 → V6.8 → V6.5 → V6.10)
+mierzyłyby dźwignie, które nie dotykają największej zmierzonej dziury: **konwersji lokalizacji na
+edycję i budżetu per zadanie**. Rekonesans zewnętrzny z 2026-10-15 (`RESEARCH_2026-10-15_EXTERNAL.md`)
+dał na to trzy niezależne pomiary, a nasze własne dane to potwierdzają (V6.4: 12/30 sesji kończy
+się dokładnie na capie wywołań, 19/30 na zegarze, 11/30 z pustym drzewem; 5 z 11 sesji koszyka N
+miało złoto na #1 i nie wykonało żadnej edycji).
 
-| kolejność | ramię | dźwignia | artefakt | bramki |
+Nowy plan na sobotę (szczegóły i bramki w `GATES_V6_11.md`):
+
+| kolejność | ramię | co testuje | artefakt | bramki |
 | --- | --- | --- | --- | --- |
-| 1 | **V6.7** | reguły kontraktu narzędzi (9/9 odrzuconych zapisów) | `df7364e2…` | `GATES_V6_7.md` |
-| 2 | **V6.8** | stałe lokalizatora z wyszukiwania populacyjnego | `8c816fc8…` | `GATES_V6_8.md` |
-| 3 | **V6.5** | framing edycji | `cb847599…` | `GATES_V6_5.md` |
-| 4 | **V6.10** | kontrakt + ewoluowany lokalizator + inline (kandydat) | `523d43fb…` | `GATES_V6_10.md` |
+| 1 | **V6.11** | budżet V5 (45 wywołań / 80 tur / 8 min) + cztery reguły konwersji | `7b2beec1…` | `GATES_V6_11.md` (R1–R5, S1–S2) |
+| 2 | **V6.10** | kontrola: ten sam układ na starym budżecie 30/60/5,25 | `523d43fb…` | `GATES_V6_10.md` |
+| 3+ | rezerwa | V6.7 / V6.8 / V6.5 (stare ramiona) albo kolejna iteracja V6.11 | — | — |
 
-Co zmieniło się wobec wersji z 18:30: **V6.6 wypada z czterech przebiegów** (jego dźwignia jest
-w V6.10 i w V6.9), a **V6.10 wchodzi jako kandydat** — bo rzadkim zasobem jest slot dobowy na
-zgłoszenie, nie godzina GPU. V6.9 (`c99f3d81…`) zostaje zbudowany i gotowy, ale **nie jest
-w pierwszej czwórce**: daje ten sam test kombinacji co V6.10 przy słabszej treści (bez kontraktu
-i bez ewoluowanego lokalizatora), więc ma sens dopiero, jeśli V6.10 wypadnie źle, a V6.5 i V6.6
-będą wyglądać dobrze.
+Historia decyzji: wersja z 18:30 (V6.7 → V6.8 → V6.5 → V6.10) zakładała, że wąskim gardłem jest
+lokalizacja i higiena narzędzi. Lokalizacja jest zmierzona i **lepsza niż wszystko publiczne**
+(top-1 55,5 % / top-3 67,2 % na dev, 51 % / 74 % na holdoucie, wobec najlepszego publicznego benchu
+TF-IDF 21 % / 50 %), a mimo to nie przekłada się na wynik — więc kolejne ramiona promptowe to
+doskonalenie nie-tego-zaworu. V6.9 (`c99f3d81…`) nadal istnieje i nie jest w pierwszej dwójce.
 
-**Kolejność startów ma znaczenie:** V6.7 i V6.8 startują pierwsze (największa wartość informacyjna),
-V6.5 trzeci, V6.10 ostatni — jeśli po trzech przebiegach okaże się, że któryś z levers wyraźnie
-szkodzi, kandydata można jeszcze zbudować inaczej przed czwartym startem (koszt: jedna przebudowa
-bez GPU).
+**Kolejność startów ma znaczenie:** V6.11 startuje pierwszy, bo odpowiada na pytanie, czy wracamy
+do budżetu V5 — jeśli tak, cała reszta planu (łącznie z sobotnim doborem kandydata) się upraszcza.
+V6.10 jako kontrola uruchamia się drugi, na tym samym seedzie i tych samych 30 zadaniach.
+
+

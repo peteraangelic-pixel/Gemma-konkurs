@@ -60,6 +60,34 @@ CONTROLS: dict[str, list[tuple[str, str, str]]] = {
          "never create a dummy edit merely to satisfy the deadline. The first intended edit must be "
          "on disk by tool call 4 - make it even if you are not yet certain it is the right file."),
     ],
+    "v611": [
+        ("V6.11 guard: budget statement matches eval_config",
+         "this run is wider than the last one: an 8-minute window and 45 calls", "a wider budget"),
+        ("V6.11 guard: finish-early rule",
+         "**Finish as soon as your intended edit is on disk**", "**Finish when you can**"),
+        ("V6.11 guard: no-empty-tree rescue",
+         "If by call 8 the tree still has no intended edit", "If you are unsure what to edit"),
+        ("V6.11 guard: the rescue rule's closing requirement",
+         "No session ends with an empty tree.", "Try to end with an edit."),
+        ("V6.11 guard: edit-parser measurement",
+         "mandatory input parameters are not present", "a rejected edit call"),
+        # the two budget guards live in eval_config.yaml, so these controls mutate that file
+        ("V6.11 guard: the measured 8.0-minute window",
+         "  max_time_minutes: 8.0", "  max_time_minutes: 5.25", "eval_config.yaml"),
+        ("V6.11 guard: V5's 45-call budget restored",
+         "  max_tool_calls: 45", "  max_tool_calls: 30", "eval_config.yaml"),
+        ("V6.11 guard: contract rule (ceiling)",
+         "Tool call budget exhausted (30 calls)", "the tool call ceiling"),
+        ("V6.11 guard: the embedded script is the evolved one",
+         "# EVOLVED 2026", "# hand-tuned"),
+        ("V6.11 guard: non-inline locator form must be rejected",
+         "cd /workspace && python3 -c",
+         "cd /workspace && python3 /tmp/locate.py --root . --top 8 && python3 -c"),
+        ("V6.11 guard: V6.5 framing must be absent",
+         "never create a dummy edit merely to satisfy the deadline",
+         "never create a dummy edit merely to satisfy the deadline. The first intended edit must be "
+         "on disk by tool call 4 - make it even if you are not yet certain it is the right file."),
+    ],
     "v68": [
         ("V6.8 guard: dev recall of the evolved locator",
          "top 3 for 67% of them, in the top 5 for 74%", "top 3 for 66% of them, in the top 5 for 73%"),
@@ -119,7 +147,8 @@ def main() -> int:
     args = parser.parse_args()
     variant = args.variant
     # variant id -> the directory suffix (v610 cannot be derived from its last character)
-    suffix = {"v67": "6.7", "v68": "6.8", "v69": "6.9", "v610": "6.10"}[variant]
+    suffix = {"v67": "6.7", "v68": "6.8", "v69": "6.9", "v610": "6.10",
+              "v611": "6.11"}[variant]
     source = AGENT / f"submission-v{suffix}"
     archive = AGENT / f"submission-v{suffix}.zip"
     if not source.is_dir():
@@ -153,9 +182,18 @@ def main() -> int:
         for index, control in enumerate(CONTROLS[variant], start=1):
             label, anchor, replacement = control[0], control[1], control[2]
             replace_all = len(control) > 3 and control[3] == "all"
+            # V6.11 added budget guards that live in eval_config.yaml, so a control may name the
+            # file it mutates as a 4th element (a plain 4th element of "all" keeps meaning
+            # "replace every occurrence in prompts/system.md").
+            target_rel = "prompts/system.md"
+            if len(control) > 3 and control[3] not in ("all",):
+                target_rel = str(control[3])
             copy = tmp_path / f"{source.name}-mut{index}"
             shutil.copytree(source, copy)
-            prompt = copy / "prompts" / "system.md"
+            prompt = copy / target_rel
+            if not prompt.is_file():
+                failures.append(f"{label}: control target does not exist: {target_rel}")
+                continue
             text = prompt.read_text(encoding="utf-8")
             if anchor not in text:
                 failures.append(f"{label}: anchor not found, control is stale: {anchor!r}")

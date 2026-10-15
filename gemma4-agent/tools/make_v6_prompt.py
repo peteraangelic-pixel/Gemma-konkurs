@@ -44,8 +44,10 @@ V67_DIR = ROOT / "gemma4-agent" / "submission-v6.7"
 V68_DIR = ROOT / "gemma4-agent" / "submission-v6.8"
 V69_DIR = ROOT / "gemma4-agent" / "submission-v6.9"
 V610_DIR = ROOT / "gemma4-agent" / "submission-v6.10"
+V611_DIR = ROOT / "gemma4-agent" / "submission-v6.11"
 VARIANT_DIR = {"v64": V6_DIR, "v65": V65_DIR, "v66": V66_DIR, "v67": V67_DIR,
-               "v68": V68_DIR, "v69": V69_DIR, "v610": V610_DIR}[VARIANT]
+               "v68": V68_DIR, "v69": V69_DIR, "v610": V610_DIR,
+               "v611": V611_DIR}[VARIANT]
 OUT = VARIANT_DIR / "prompts" / "system.md"
 LOCATOR = VARIANT_DIR / "tools" / "locate.py"
 
@@ -378,6 +380,58 @@ V68_EDITS = [
     ),
 ]
 
+# V6.11 (2026-10-15): the budget-and-conversion arm. Every edit is pinned to a measurement, and
+# none of them touches the locator, the tools or the sampling settings, so a win here is
+# attributable to the two levers this arm exists to test:
+#   (1) BUDGET. V5 scored 0.13 with 45 calls / 80 turns / 5.25 min; every V6.x arm since ran at
+#       30 calls / 60 turns, and in the V6.4 screen 12 of 30 sessions died exactly at the call cap
+#       while the clock killed 19. A public competitor measures the cost directly: a 4-minute cap
+#       scored 0.08 against 0.12 without one, and their reconstruction of the same run says a
+#       6-minute cap loses ~45% of solves because the 8-15 minute tasks are the ones that get
+#       solved. eval_config.yaml for this variant therefore carries 45 calls / 80 turns / 8.0 min.
+#   (2) CONVERSION. In the V6.4 screen 11 of 30 sessions ended with an empty tree and 5 of the 11
+#       basket-N sessions had the gold file at rank 1 and still never edited anything. The rules
+#       below are the response: finish as soon as the edit is on disk, and if there is no edit by
+#       call 8, get one by running a repro rather than by reading more.
+# The fourth edit comes from a publicly measured edit-parser failure (105 of 524 edit_file /
+# write_file calls rejected with "mandatory input parameters are not present", 47 of them because
+# a long argument lost its boundaries); our own prompt already bans docstrings in old_string, so
+# this only adds the "never resend a rejected call" half and the measured numbers behind it.
+V611_EDITS = [
+    (
+        # Keep the numbers honest with eval_config.yaml. The stale-example sentence that follows
+        # is left intact on purpose: it is a historical measurement of the 30-call run.
+        "You have roughly 5 minutes of wall clock and a budget of about 30 tool calls (the "
+        "ceiling a 5.25-minute session can actually reach)",
+        "You have roughly 8 minutes of wall clock and a budget of about 45 tool calls (this run "
+        "is wider than the last one: an 8-minute window and 45 calls)",
+    ),
+    (
+        "to finish, write your final message with no tool call.",
+        "to finish, write your final message with no tool call. **Finish as soon as your intended "
+        "edit is on disk**: check it once if that is cheap, then stop even with minutes left. The "
+        "12-hour budget belongs to the whole run, not to your task - a session that ends itself at "
+        "12-24 calls leaves the time a harder task needs to use its full 8-minute window.",
+    ),
+    (
+        "Two to four `read_file` calls (or `sed -n 'A,Bp'` inside a shell call) are usually enough.",
+        "Two to four `read_file` calls (or `sed -n 'A,Bp'` inside a shell call) are usually enough. "
+        "If by call 8 the tree still has no intended edit, stop reading: write a 10-line repro "
+        "under `/tmp` from the issue text and run it, then edit the file its traceback names; if "
+        "the traceback names nothing, edit the top locator candidate anyway. No session ends with "
+        "an empty tree.",
+    ),
+    (
+        "never resend the same string: extend it with the surrounding lines until the match is "
+        "unique.",
+        "never resend the same string: extend it with the surrounding lines until the match is "
+        "unique. Never resend a call the harness rejected either: in a measured public run 105 of "
+        "524 `edit_file`/`write_file` calls came back with `mandatory input parameters are not "
+        "present` and 47 of those had lost the boundaries of a long argument, so keep `old_string` "
+        "short and split one big edit into several small ones.",
+    ),
+]
+
 
 def apply_post_edits(prompt: str) -> str:
     for old, new in POST_EDITS:
@@ -441,6 +495,17 @@ def apply_post_edits(prompt: str) -> str:
                             ("V66-invocation", V66_EDITS[:1])):
             for old, new in edits:
                 assert old in prompt, f"missing {name} anchor in v610: " + old[:60]
+                prompt = prompt.replace(old, new, 1)
+    if VARIANT == "v611":
+        # The budget-and-conversion arm: the verifiably strongest composition (V6.10 = contract
+        # rules + evolved locator + inline delivery) plus the four V6.11 edits above. The 8-minute
+        # window lives in eval_config.yaml, not here, so the prompt and the budget cannot drift.
+        for name, edits in (("V67", V67_EDITS), ("V68", V68_EDITS),
+                            ("V66-invocation", V66_EDITS[:1]), ("V611", V611_EDITS)):
+            for old, new in edits:
+                assert old in prompt, f"missing {name} anchor in v611: " + old[:60]
+                assert old not in new or new.startswith(old), \
+                    f"{name} edit must append to the inherited sentence: " + old[:60]
                 prompt = prompt.replace(old, new, 1)
     if VARIANT == "v69":
         # The combination the other branch built locally and called "V6.7" (sha 0cd0d2bf...):
