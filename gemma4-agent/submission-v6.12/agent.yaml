@@ -1,0 +1,26 @@
+# V6.12 submission arm (2026-10-15). Composition: V6.4 + the V6.7 harness-contract rules
+# + the V6.8 evolved locator + the V6.6 inline delivery + the V6.11 conversion rules, at V5's
+# proven budget envelope (150 s / 45 calls / 80 turns / 5.25 min).
+# This file is byte-identical to the V6.4/V6.10/V6.11 agent.yaml on purpose: V6.12 changes only the
+# prompt (four edits: the 45-call budget statement, finish-early, the call-8 no-empty-tree rescue,
+# the measured edit-parser rule) and eval_config.yaml (V5's 45/80 headroom instead of V6.10's
+# 30/60). The model, the tool registry, the sampling settings and the locator script are untouched,
+# and the per-task CLOCK stays at 5.25 minutes - the one change that can error the whole run (an
+# 8-minute clock whose mean is unmeasured) is deliberately not in this archive.
+agent_class: LlmAgent
+name: gemma4_locator_repair
+model: gemma-4-31b-it-qat-w4a16-ct
+description: A time-budgeted software-repair agent that localizes an issue with a measured deterministic locator and makes an early, minimal source edit; the harness captures the working-tree diff.
+instruction: !include prompts/system.md
+tools:
+  # Graph tools stay registered so an attempted call cannot break the ADK tool loop,
+  # but the instructions tell the agent not to use them (measured: no benefit).
+  - run_command
+  - read_file
+  - edit_file
+  - write_file
+  - get_status
+  - get_code_neighbors
+  - search_similar_code
+  - get_code_subgraph
+generate_content_config: !include configs/sampling.yaml

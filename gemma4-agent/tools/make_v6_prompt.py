@@ -45,9 +45,10 @@ V68_DIR = ROOT / "gemma4-agent" / "submission-v6.8"
 V69_DIR = ROOT / "gemma4-agent" / "submission-v6.9"
 V610_DIR = ROOT / "gemma4-agent" / "submission-v6.10"
 V611_DIR = ROOT / "gemma4-agent" / "submission-v6.11"
+V612_DIR = ROOT / "gemma4-agent" / "submission-v6.12"
 VARIANT_DIR = {"v64": V6_DIR, "v65": V65_DIR, "v66": V66_DIR, "v67": V67_DIR,
                "v68": V68_DIR, "v69": V69_DIR, "v610": V610_DIR,
-               "v611": V611_DIR}[VARIANT]
+               "v611": V611_DIR, "v612": V612_DIR}[VARIANT]
 OUT = VARIANT_DIR / "prompts" / "system.md"
 LOCATOR = VARIANT_DIR / "tools" / "locate.py"
 
@@ -433,6 +434,57 @@ V611_EDITS = [
 ]
 
 
+# V6.12 (2026-10-15, the submission arm for the night of 15/16 October): V6.10 + the three
+# conversion rules of V6.11, with the ONE change of V6.11 that can zero the whole run left out.
+#
+# Why not V6.11's 8-minute window: the harness's 12-hour limit covers the entire run, and
+# exceeding it errors the whole submission (host, discussion 743063). The safe envelope depends on
+# the MEAN, not the cap: V5 completed at 120 * (mean 3.9 min + ~0.5 min setup) = ~8.8 h, and our
+# V6.4 screen shows sessions run to ~95% of the cap (mean 4.97 min at a 5.25-minute cap). Raising
+# the cap to 8 minutes therefore projects 120 * 8.5 = 17 h worst case and ~13 h if the mean lands
+# at 6 minutes - an error, not a score. Until the V6.11 benchmark measures the new mean (gate S1:
+# <= 5.0 min/task), the proven envelope (V5's 150 s / 45 calls / 80 turns / 5.25 min) is what ships.
+#
+# What V6.12 does add is everything that is free in wall-clock terms:
+#   * 45 calls / 80 turns (V5's headroom) so the call cap can no longer refuse a first edit,
+#   * "finish as soon as your intended edit is on disk" - fewer sessions burning the clock after
+#     the diff is already written,
+#   * the call-8 no-empty-tree rescue (V6.4: 11 of 30 sessions ended with an empty tree),
+#   * the measured edit-parser rule (discussion 748323: 105 of 524 edit calls rejected).
+V612_EDITS = [
+    (
+        "You have roughly 5 minutes of wall clock and a budget of about 30 tool calls (the "
+        "ceiling a 5.25-minute session can actually reach)",
+        "You have roughly 5 minutes of wall clock and a budget of about 45 tool calls (the "
+        "ceiling a 5.25-minute session can actually reach, so the clock, not the cap, is what ends "
+        "most sessions)",
+    ),
+    (
+        "to finish, write your final message with no tool call.",
+        "to finish, write your final message with no tool call. **Finish as soon as your intended "
+        "edit is on disk**: check it once if that is cheap, then stop even with calls left. The "
+        "12-hour budget belongs to the whole run, not to your task - a session that ends itself at "
+        "12-24 calls leaves the time a harder task needs.",
+    ),
+    (
+        "Two to four `read_file` calls (or `sed -n 'A,Bp'` inside a shell call) are usually enough.",
+        "Two to four `read_file` calls (or `sed -n 'A,Bp'` inside a shell call) are usually enough. "
+        "If by call 8 the tree still has no intended edit, stop reading: write a 10-line repro "
+        "under `/tmp` from the issue text and run it, then edit the file its traceback names; if "
+        "the traceback names nothing, edit the top locator candidate anyway. No session ends with "
+        "an empty tree.",
+    ),
+    (
+        "never resend the same string: extend it with the surrounding lines until the match is "
+        "unique.",
+        "never resend the same string: extend it with the surrounding lines until the match is "
+        "unique. Never resend a call the harness rejected either: in a measured public run 105 of "
+        "524 `edit_file`/`write_file` calls came back with `mandatory input parameters are not "
+        "present` and 47 of those had lost the boundaries of a long argument, so keep `old_string` "
+        "short and split one big edit into several small ones.",
+    ),
+]
+
 def apply_post_edits(prompt: str) -> str:
     for old, new in POST_EDITS:
         assert old in prompt, "missing anchor: " + old[:60]
@@ -495,6 +547,16 @@ def apply_post_edits(prompt: str) -> str:
                             ("V66-invocation", V66_EDITS[:1])):
             for old, new in edits:
                 assert old in prompt, f"missing {name} anchor in v610: " + old[:60]
+                prompt = prompt.replace(old, new, 1)
+    if VARIANT == "v612":
+        # The submission arm: V6.10's composition + V6.11's conversion rules, at V5's proven
+        # budget envelope. The 8-minute window stays out on purpose (see V612_EDITS above).
+        for name, edits in (("V67", V67_EDITS), ("V68", V68_EDITS),
+                            ("V66-invocation", V66_EDITS[:1]), ("V612", V612_EDITS)):
+            for old, new in edits:
+                assert old in prompt, f"missing {name} anchor in v612: " + old[:60]
+                assert old not in new or new.startswith(old), \
+                    f"{name} edit must append to the inherited sentence: " + old[:60]
                 prompt = prompt.replace(old, new, 1)
     if VARIANT == "v611":
         # The budget-and-conversion arm: the verifiably strongest composition (V6.10 = contract

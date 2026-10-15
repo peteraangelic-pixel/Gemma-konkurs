@@ -96,7 +96,8 @@ def optional_yaml_parse(path: Path):
 def validate_tree(submission_dir: Path) -> list[Path]:
     submission_dir = submission_dir.resolve()
     # Derived from the directory name so a mis-typed --source-dir cannot package the wrong text.
-    variant = ("v611" if "6.11" in submission_dir.name
+    variant = ("v612" if "6.12" in submission_dir.name
+               else "v611" if "6.11" in submission_dir.name
                else "v610" if "6.10" in submission_dir.name
                else "v69" if "6.9" in submission_dir.name
                else "v68" if "6.8" in submission_dir.name
@@ -229,6 +230,7 @@ def validate_tree(submission_dir: Path) -> list[Path]:
         "v69": ("python3 -c \"$(cat <<'LOCATE_PY'", "\" --root . --top 8 <<'ISSUE_EOF'"),
         "v610": ("python3 -c \"$(cat <<'LOCATE_PY'", "\" --root . --top 8 <<'ISSUE_EOF'"),
         "v611": ("python3 -c \"$(cat <<'LOCATE_PY'", "\" --root . --top 8 <<'ISSUE_EOF'"),
+        "v612": ("python3 -c \"$(cat <<'LOCATE_PY'", "\" --root . --top 8 <<'ISSUE_EOF'"),
         "v67": ("cat > /tmp/locate.py <<'LOCATE_PY'", "python3 /tmp/locate.py --root . --top 8"),
         "v68": ("cat > /tmp/locate.py <<'LOCATE_PY'", "python3 /tmp/locate.py --root . --top 8"),
     }
@@ -241,6 +243,7 @@ def validate_tree(submission_dir: Path) -> list[Path]:
         "v69": ("cat > /tmp/locate.py", "python3 /tmp/locate.py"),
         "v610": ("cat > /tmp/locate.py <<'LOCATE_PY'", "python3 /tmp/locate.py --root . --top 8"),
         "v611": ("cat > /tmp/locate.py <<'LOCATE_PY'", "python3 /tmp/locate.py --root . --top 8"),
+        "v612": ("cat > /tmp/locate.py <<'LOCATE_PY'", "python3 /tmp/locate.py --root . --top 8"),
     }
     for phrase in locator_banned[variant]:
         if phrase in prompt_text:
@@ -266,7 +269,7 @@ def validate_tree(submission_dir: Path) -> list[Path]:
     # V6.3 prompt-quality guards (three real defects shipped once: a stale call budget, a
     # duplicated sentence and two bullets glued together by a Python line continuation).
     prose = prompt_text.split("## Locator script", 1)[0]
-    if "45 tool calls" in prose and variant != "v611":
+    if "45 tool calls" in prose and variant not in ("v611", "v612"):
         fail("prompts/system.md quotes the stale 45-call budget; the harness cap is 30.")
     if prose.count("narrowest test target, always bounded:") != 1:
         fail("prompts/system.md has a duplicated verification sentence.")
@@ -379,7 +382,7 @@ def validate_tree(submission_dir: Path) -> list[Path]:
                 fail(f"V6.7 prompt lost {label}: {phrase!r}")
         if "Thirty-two calls across that run" not in prose:
             fail("V6.7 prompt lost the comment-only command count.")
-    elif variant not in ("v610", "v611"):
+    elif variant not in ("v610", "v611", "v612"):
         for phrase, label in V67_REQUIRED:
             if phrase in prose:
                 fail(f"{variant} archive contains V6.7-only text ({label}); variants are mixed up.")
@@ -403,7 +406,7 @@ def validate_tree(submission_dir: Path) -> list[Path]:
         # the evolved script must be the one in the archive, not a leftover copy
         if "EVOLVED 2026" not in prompt_text:
             fail("V6.8 prompt embeds a locator without the EVOLVED header; rebake it.")
-    elif variant not in ("v610", "v611"):
+    elif variant not in ("v610", "v611", "v612"):
         for phrase, label in V68_REQUIRED:
             if phrase in prose:
                 fail(f"{variant} archive contains V6.8-only text ({label}); variants are mixed up.")
@@ -441,6 +444,45 @@ def validate_tree(submission_dir: Path) -> list[Path]:
             fail("V6.11 prompt embeds a locator without the EVOLVED header; rebake it.")
         if "LOCATE_PY" not in prompt_text:
             fail("V6.11 prompt lost the LOCATE_PY heredoc entirely.")
+    # ---- V6.12: the submission arm ------------------------------------------------------------
+    # V6.10's composition + the three V6.11 conversion rules, at V5's proven budget envelope. The
+    # budget is pinned here, not just documented: the one change that can zero the whole run
+    # (extending the per-task clock past the envelope that has actually completed a scored run) is
+    # refused by the packer for this variant, and the 8-minute wording is banned outright.
+    V612_REQUIRED = (
+        ("45 tool calls", "V6.12 budget statement (V5's headroom, still a 5.25-minute clock)"),
+        ("so the clock, not the cap, is what ends most sessions",
+         "V6.12 statement of which limit actually binds"),
+        ("**Finish as soon as your intended edit is on disk**",
+         "V6.12 finish-early rule (fewer sessions burning the clock after the diff exists)"),
+        ("The 12-hour budget belongs to the whole run, not to your task",
+         "V6.12 rationale for finishing early (the run-level budget is shared)"),
+        ("If by call 8 the tree still has no intended edit",
+         "V6.12 no-empty-tree rescue (11/30 empty trees in the V6.4 screen)"),
+        ("No session ends with an empty tree.", "V6.12 closing requirement of the rescue rule"),
+        ("mandatory input parameters are not present",
+         "V6.12 edit-parser measurement (105/524 rejections in a public run)"),
+    )
+    if variant == "v612":
+        for phrase, label in (*V67_REQUIRED, *V68_REQUIRED, *V612_REQUIRED):
+            if phrase not in prose and phrase not in prompt_text:
+                fail(f"V6.12 prompt lost {label}: {phrase!r}")
+        if "an 8-minute window" in prompt_text or "8 minutes of wall clock" in prompt_text:
+            fail("V6.12 must not advertise an 8-minute window: that budget is V6.11's and its "
+                 "mean is unmeasured; the 12-hour limit would risk erroring the whole run.")
+        # budget pinned to V5's proven envelope (the only one that has completed a scored run)
+        if budget["max_time_minutes"] != 5.25:
+            fail("V6.12 must keep max_time_minutes=5.25 (V5's envelope, 120*(5.25+0.5)=11.5 h).")
+        if budget["max_tool_calls"] != 45 or budget["max_turns"] != 80:
+            fail("V6.12 restores V5's 45-call / 80-turn headroom; got "
+                 f"{budget['max_tool_calls']:.0f}/{budget['max_turns']:.0f}.")
+        for phrase, label in V65_REQUIRED:
+            if phrase in prose:
+                fail(f"V6.12 archive contains V6.5-only text ({label}); variants are mixed up.")
+        if "EVOLVED 2026" not in prompt_text:
+            fail("V6.12 prompt embeds a locator without the EVOLVED header; rebake it.")
+        if "LOCATE_PY" not in prompt_text:
+            fail("V6.12 prompt lost the LOCATE_PY heredoc entirely.")
     if variant == "v610":
         # the candidate: contract rules + evolved locator + inline delivery. No V6.5 framing here.
         for phrase, label in (*V67_REQUIRED, *V68_REQUIRED):
@@ -517,7 +559,9 @@ def main() -> int:
                              "source directory is the V6.5 tree")
     args = parser.parse_args()
     if args.output is None:
-        if "6.11" in args.source_dir.name:
+        if "6.12" in args.source_dir.name:
+            args.output = BASE_DIR / "submission-v6.12.zip"
+        elif "6.11" in args.source_dir.name:
             args.output = BASE_DIR / "submission-v6.11.zip"
         elif "6.10" in args.source_dir.name:
             args.output = BASE_DIR / "submission-v6.10.zip"

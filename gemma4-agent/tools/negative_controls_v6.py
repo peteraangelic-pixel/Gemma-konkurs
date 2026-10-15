@@ -88,6 +88,43 @@ CONTROLS: dict[str, list[tuple[str, str, str]]] = {
          "never create a dummy edit merely to satisfy the deadline. The first intended edit must be "
          "on disk by tool call 4 - make it even if you are not yet certain it is the right file."),
     ],
+    "v612": [
+        ("V6.12 guard: budget statement (V5 headroom)",
+         "45 tool calls", "30 tool calls"),
+        ("V6.12 guard: which limit actually binds",
+         "so the clock, not the cap, is what ends most sessions", "the cap is generous"),
+        ("V6.12 guard: finish-early rule",
+         "**Finish as soon as your intended edit is on disk**", "**Finish when you can**"),
+        ("V6.12 guard: run-level budget rationale",
+         "The 12-hour budget belongs to the whole run, not to your task", "budget matters"),
+        ("V6.12 guard: no-empty-tree rescue",
+         "If by call 8 the tree still has no intended edit", "If you are unsure what to edit"),
+        ("V6.12 guard: the rescue rule's closing requirement",
+         "No session ends with an empty tree.", "Try to end with an edit."),
+        ("V6.12 guard: edit-parser measurement",
+         "mandatory input parameters are not present", "a rejected edit call"),
+        ("V6.12 guard: an 8-minute window must be refused",
+         "so the clock, not the cap, is what ends most sessions",
+         "so the clock, not the cap, is what ends most sessions. This run is wider: an 8-minute window."),
+        # the three budget pins live in eval_config.yaml, so these controls mutate that file
+        ("V6.12 guard: the clock stays at V5's proven cap",
+         "  max_time_minutes: 5.25", "  max_time_minutes: 8.0", "eval_config.yaml"),
+        ("V6.12 guard: V5's 45-call headroom",
+         "  max_tool_calls: 45", "  max_tool_calls: 30", "eval_config.yaml"),
+        ("V6.12 guard: V5's 80-turn headroom",
+         "  max_turns: 80", "  max_turns: 60", "eval_config.yaml"),
+        ("V6.12 guard: contract rule (ceiling)",
+         "Tool call budget exhausted (30 calls)", "the tool call ceiling"),
+        ("V6.12 guard: the embedded script is the evolved one",
+         "# EVOLVED 2026", "# hand-tuned"),
+        ("V6.12 guard: non-inline locator form must be rejected",
+         "cd /workspace && python3 -c",
+         "cd /workspace && python3 /tmp/locate.py --root . --top 8 && python3 -c"),
+        ("V6.12 guard: V6.5 framing must be absent",
+         "never create a dummy edit merely to satisfy the deadline",
+         "never create a dummy edit merely to satisfy the deadline. The first intended edit must be "
+         "on disk by tool call 4 - make it even if you are not yet certain it is the right file."),
+    ],
     "v68": [
         ("V6.8 guard: dev recall of the evolved locator",
          "top 3 for 67% of them, in the top 5 for 74%", "top 3 for 66% of them, in the top 5 for 73%"),
@@ -148,7 +185,7 @@ def main() -> int:
     variant = args.variant
     # variant id -> the directory suffix (v610 cannot be derived from its last character)
     suffix = {"v67": "6.7", "v68": "6.8", "v69": "6.9", "v610": "6.10",
-              "v611": "6.11"}[variant]
+              "v611": "6.11", "v612": "6.12"}[variant]
     source = AGENT / f"submission-v{suffix}"
     archive = AGENT / f"submission-v{suffix}.zip"
     if not source.is_dir():

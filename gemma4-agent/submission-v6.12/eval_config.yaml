@@ -1,0 +1,22 @@
+# V6.12 budget — V5's envelope, which is the only one that has completed a scored run.
+#
+# Why exactly these numbers (see GATES_V6_12.md and RESEARCH_2026-10-15_EXTERNAL.md):
+# - V5 scored 0.13 with 150 s / 45 calls / 80 turns / 5.25 min, i.e. this envelope is proven to fit
+#   the competition's 12-hour run limit on the real scored split.
+# - The 12-hour limit covers the WHOLE run and exceeding it errors the entire submission
+#   (host, discussion 743063). What makes an envelope safe is the MEAN, not the cap:
+#       120 * (mean 3.9 min + ~0.5 min setup) = ~8.8 h    <- V5's measured mean in our screen
+#       120 * (cap  5.25 min + 0.5 min setup) = 11.5 h    <- worst case that V5 actually survived
+#       120 * (cap  8.0  min + 0.5 min setup) = 17.0 h    <- V6.11's arm; must be measured first
+#   Our screens show sessions run to ~95% of the cap (V6.4: mean 4.97 min at a 5.25-minute cap), so
+#   raising the clock raises the mean until the finish-early rule is proven on GPU. V6.11 tests
+#   that; until its S1 gate (<= 5.0 min/task) passes, this file keeps the proven numbers.
+# - Call/turn headroom is restored to V5's 45/80 because it costs no wall-clock time: at ~10-15 s
+#   per model call the 5.25-minute clock binds long before 45 calls, but the 30-call cap did refuse
+#   a first edit outright in 2 of 30 V6.4 sessions ("Tool call budget exhausted (30 calls)").
+# - timeout_seconds stays at V5's 150 s: a single runaway command must not eat a session.
+evaluation:
+  timeout_seconds: 150
+  max_tool_calls: 45
+  max_turns: 80
+  max_time_minutes: 5.25

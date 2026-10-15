@@ -1,0 +1,146 @@
+name: Official Kaggle submission (next candidate)
+
+# Guarded, one-shot upload of ONE committed archive. Nothing runs until either
+#   * gemma4-agent/kaggle_smoke/official-submit-v612.trigger  (default: the submission arm)
+#   * gemma4-agent/kaggle_smoke/official-submit-v611.trigger  (the aggressive 8-minute arm)
+# is pushed, or the workflow is dispatched manually with an explicit artifact choice.
+#
+# The guard chain (tools/submit_kaggle_once.py) is: the archive must hash to the value pinned below
+# for that artifact (so the uploaded bytes are the reviewed build), the message must not already
+# exist in the competition history, and no submission may exist from today or the last 24 hours
+# (competition limit: one submission per day). Kaggle authentication uses the repository secret;
+# the token is never printed. The job id contains no dots after the 2026-10-15 incident where a dot
+# in a job id made GitHub report a phantom failed run on every push.
+
+on:
+  workflow_dispatch:
+    inputs:
+      artifact:
+        description: "Which committed archive to submit"
+        type: choice
+        required: true
+        default: v612
+        options:
+          - v612
+          - v611
+          - v610
+          - v68
+  push:
+    branches:
+      - arena/c4eeb067-gemma-konkurs
+    paths:
+      - gemma4-agent/kaggle_smoke/official-submit-v612.trigger
+      - gemma4-agent/kaggle_smoke/official-submit-v611.trigger
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gemma-official-submit-next-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  submit-next:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout session branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Kaggle CLI
+        run: python -m pip install --disable-pip-version-check --quiet kaggle
+
+      - name: Configure Kaggle credentials
+        env:
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "$KAGGLE_API_TOKEN" ]; then
+            echo "Repository Actions secret KAGGLE_API_TOKEN is missing."
+            exit 1
+          fi
+          mkdir -p "$HOME/.kaggle"
+          printf '%s' "$KAGGLE_API_TOKEN" | tr -d '\r\n' > "$HOME/.kaggle/access_token"
+          chmod 600 "$HOME/.kaggle/access_token"
+          echo "Kaggle CLI configured; token value was not logged."
+
+      - name: Select the artifact and stage it as submission.zip
+        id: select
+        run: |
+          set -euo pipefail
+          choice="${{ github.event.inputs.artifact }}"
+          if [ -z "$choice" ]; then
+            if [ -f gemma4-agent/kaggle_smoke/official-submit-v611.trigger ]; then
+              choice=v611
+            else
+              choice=v612
+            fi
+          fi
+          case "$choice" in
+            v612) zip=submission-v6.12.zip; msg=V6.12; sha=5381ae17398f88ba434313439d9b784103dbab514bd7a0a3798a142f3c84c515 ;;
+            v611) zip=submission-v6.11.zip; msg=V6.11; sha=7b2beec178e1d8210d607abd11c1d5a24fd6252e9879467adf568f2b8b05202e ;;
+            v610) zip=submission-v6.10.zip; msg=V6.10; sha=523d43fb458ec1befa702416619ca79a0f562475ca3249749bd297fa91b527b0 ;;
+            v68)  zip=submission-v6.8.zip;  msg=V6.8;  sha=8c816fc836436ea60c8b563ae5526d78c3906779e41cbf5f4017c6c93e38573b ;;
+            *)    echo "Unknown artifact choice: $choice"; exit 1 ;;
+          esac
+          mkdir -p "$RUNNER_TEMP/upload"
+          cp "gemma4-agent/$zip" "$RUNNER_TEMP/upload/submission.zip"
+          echo "Selected $zip as submission.zip (message $msg, sha256 ${sha:0:12}...)"
+          {
+            echo "zip=$zip"
+            echo "msg=$msg"
+            echo "sha=$sha"
+            echo "receipt=gemma4-agent/kaggle_results/${choice}-official-submission.json"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Submit once if the daily slot is available
+        env:
+          KAGGLE_USERNAME: petersharps
+        run: |
+          python gemma4-agent/tools/submit_kaggle_once.py \
+            --archive "$RUNNER_TEMP/upload/submission.zip" \
+            --message "${{ steps.select.outputs.msg }}" \
+            --expected-sha256 "${{ steps.select.outputs.sha }}" \
+            --result-json "${{ steps.select.outputs.receipt }}"
+
+      - name: Show submission receipt
+        if: always()
+        run: |
+          receipt="${{ steps.select.outputs.receipt }}"
+          if [ -n "$receipt" ] && [ -f "$receipt" ]; then
+            cat "$receipt"
+          else
+            echo "No receipt file was produced."
+          fi
+
+      - name: Record the receipt and consume the trigger
+        if: always()
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin "$GITHUB_REF_NAME"
+          # SAFE PATTERN (see gemma-kaggle-v610-benchmark.yml): take the REMOTE tree first, then
+          # re-apply only this run's outputs, so commits pushed while the job ran are not reverted.
+          rm -rf /tmp/keep && mkdir -p /tmp/keep
+          cp -r gemma4-agent/kaggle_results /tmp/keep/ 2>/dev/null || true
+          git reset --hard "origin/$GITHUB_REF_NAME"
+          cp -r /tmp/keep/kaggle_results/. gemma4-agent/kaggle_results/ 2>/dev/null || true
+          git add gemma4-agent/kaggle_results 2>/dev/null || true
+          git rm -q --ignore-unmatch \
+            gemma4-agent/kaggle_smoke/official-submit-v612.trigger \
+            gemma4-agent/kaggle_smoke/official-submit-v611.trigger
+          if [ -z "$(git diff --cached --name-only)" ]; then
+            echo "Nothing to record."
+            exit 0
+          fi
+          git commit -m "chore(gemma): record official submission attempt [skip ci]"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
