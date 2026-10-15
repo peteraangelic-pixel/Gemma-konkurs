@@ -1,3 +1,5 @@
+name: Gemma Kaggle V6.10 benchmark
+
 # V6.10 full screen on the same 30 tasks and seed as V3/V4/V5/V6.1-V6.4, so the comparison is 1:1.
 # V6.10 = V6.4 + THREE levers: the V6.7 harness-contract rules, the V6.8 evolved locator and the
 # V6.6 inline delivery. This is the candidate arm: the two strongest measured levers plus the

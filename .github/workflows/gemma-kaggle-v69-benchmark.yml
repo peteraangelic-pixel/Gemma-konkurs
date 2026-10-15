@@ -1,3 +1,5 @@
+name: Gemma Kaggle V6.9 benchmark
+
 # V6.9 full screen on the same 30 tasks and seed as V3/V4/V5/V6.1-V6.4, so the comparison is 1:1.
 # V6.9 = V6.4 + TWO levers in one arm: the V6.5 edit framing (a rough, revisable first edit is
 # expected; the line between an intended edit and a dummy is intent, not accuracy) and the V6.6

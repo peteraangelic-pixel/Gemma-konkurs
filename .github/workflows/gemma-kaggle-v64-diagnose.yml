@@ -1,3 +1,5 @@
+name: Gemma Kaggle V6.4 raw-call diagnosis
+
 # V6.4 raw-trace diagnosis: what the agent ran, and what its edits did.
 #
 # The committed trace summaries keep tool names and targets only. Two failure buckets of the full

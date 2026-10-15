@@ -3,6 +3,12 @@ name: Official Kaggle V6.8 submission
 # Guarded, one-shot upload of the V6.8 archive. Nothing runs until
 # gemma4-agent/kaggle_smoke/v6.8-official-submit.trigger is pushed (or this workflow is
 # dispatched manually), so merging these files cannot consume the daily submission slot.
+#
+# 2026-10-15: the job id was "submit-v6.8" - a dot is not allowed in a job id, which made
+# GitHub treat the whole file as invalid and report a phantom failed run on EVERY push to
+# this branch (two of them appeared on unrelated commits and looked like submission
+# attempts). Renamed to "submit-v68"; no submission was ever created by those runs
+# (no receipt file, and the competition submission list is unchanged).
 on:
   workflow_dispatch:
   push:
@@ -19,7 +25,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  submit-v6.8:
+  submit-v68:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:

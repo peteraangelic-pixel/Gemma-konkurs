@@ -12,9 +12,20 @@
     "file_name": "submission.zip",
     "date": "2026-10-14 15:58:54.433000",
     "description": "V5",
-    "status": "SubmissionStatus.PENDING",
-    "public_score": "",
+    "status": "SubmissionStatus.COMPLETE",
+    "public_score": "0.13",
     "private_score": ""
   },
-  "checked_utc": "2026-10-14T16:00:17+00:00"
+  "checked_utc": "2026-10-14T16:00:17+00:00",
+  "score_confirmed": {
+    "status": "SubmissionStatus.COMPLETE",
+    "public_score": "0.13",
+    "private_score": "",
+    "checked_utc": "2026-10-15T15:26:18+00:00",
+    "source": "read-only poll run 38760271510 (kaggle_results/submissions.csv)",
+    "rank_at_check": 1390,
+    "teams_on_leaderboard": 2857,
+    "leader_score": 0.24,
+    "note": "V4 (ref 57045226) scored 0.03, so V5 is a 4.33x improvement; the submission is COMPLETE and no further check is needed."
+  }
 }

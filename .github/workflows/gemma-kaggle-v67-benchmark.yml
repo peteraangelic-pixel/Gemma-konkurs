@@ -1,3 +1,5 @@
+name: Gemma Kaggle V6.7 benchmark
+
 # V6.7 full screen on the same 30 tasks and seed as V3/V4/V5/V6.1/V6.2/V6.3, so the comparison is
 # 1:1. V6.7 = V6.4 + ONE lever: harness-contract compliance, i.e. seven rules taken from the RAW
 # tool calls of the V6.4 run (analysis/diagnostics-2026-10-14/v64-raw-calls.md) - the 30-call

@@ -1,3 +1,5 @@
+name: Gemma Kaggle V6.8 benchmark
+
 # V6.8 full screen on the same 30 tasks and seed as V3/V4/V5/V6.1-V6.4, so the comparison is 1:1.
 # V6.8 = V6.4 + ONE lever: the locator's ten hand-picked scoring constants, replaced by the winner
 # of a population search (tools/evolve_locator.py) fitted on 128 published dev tasks with gold
