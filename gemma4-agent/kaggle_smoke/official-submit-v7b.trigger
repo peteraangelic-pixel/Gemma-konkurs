@@ -17,3 +17,8 @@ restored and from here each submission moves a single factor.
 Guard chain, unchanged: pinned sha256 (e35f20ab1361450d1877010188620d130117e657492a7b48d2c49d681086886e),
 duplicate-message check, one-submission-per-day and rolling 24 h guards, then a history reconciliation
 that records kaggle_results/v7b-official-submission.json.
+
+Retry note (2026-10-16 19:35 UTC): the first push of this file also carried the workflow change itself, and no run
+was created for it - the hypothesis is that the push filter was evaluated with the previously
+registered definition, whose paths list did not yet name this file. This commit touches only the
+trigger, so the new definition is already in place.
