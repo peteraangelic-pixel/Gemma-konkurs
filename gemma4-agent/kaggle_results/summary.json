@@ -1,18 +1,18 @@
 {
-  "fetched_utc": "2026-10-15T15:26:18+00:00",
+  "fetched_utc": "2026-10-16T19:22:09+00:00",
   "competition": "gemma-4-developer-agent",
   "team_filter": null,
-  "leaderboard_rows": 2857,
-  "submission_rows": 2,
+  "leaderboard_rows": 2964,
+  "submission_rows": 3,
   "our_leaderboard_rows": [],
   "top10": [
     {
       "Rank": "1",
       "TeamId": "16948405",
       "TeamName": "Yurnero",
-      "LastSubmissionDate": "2026-10-15 01:42:22",
+      "LastSubmissionDate": "2026-10-16 04:51:40",
       "Score": "0.24",
-      "SubmissionCount": "14",
+      "SubmissionCount": "15",
       "TeamMemberUserNames": "samson8"
     },
     {
@@ -28,9 +28,9 @@
       "Rank": "3",
       "TeamId": "17015790",
       "TeamName": "Francis Joseph",
-      "LastSubmissionDate": "2026-10-14 16:09:30",
+      "LastSubmissionDate": "2026-10-15 15:17:00",
       "Score": "0.22",
-      "SubmissionCount": "9",
+      "SubmissionCount": "10",
       "TeamMemberUserNames": "francisjosephdev"
     },
     {
@@ -46,9 +46,9 @@
       "Rank": "5",
       "TeamId": "16956138",
       "TeamName": "Ayush Barai",
-      "LastSubmissionDate": "2026-10-14 05:12:02",
+      "LastSubmissionDate": "2026-10-15 04:30:17",
       "Score": "0.22",
-      "SubmissionCount": "18",
+      "SubmissionCount": "19",
       "TeamMemberUserNames": "ayush04barai"
     },
     {
@@ -64,18 +64,18 @@
       "Rank": "7",
       "TeamId": "16948844",
       "TeamName": "omallo",
-      "LastSubmissionDate": "2026-10-12 12:07:41",
+      "LastSubmissionDate": "2026-10-15 08:42:41",
       "Score": "0.22",
-      "SubmissionCount": "15",
+      "SubmissionCount": "16",
       "TeamMemberUserNames": "omallo"
     },
     {
       "Rank": "8",
       "TeamId": "17039226",
       "TeamName": "Vibhanshu Singh",
-      "LastSubmissionDate": "2026-10-12 03:55:02",
+      "LastSubmissionDate": "2026-10-16 00:29:32",
       "Score": "0.22",
-      "SubmissionCount": "5",
+      "SubmissionCount": "6",
       "TeamMemberUserNames": "vibhanshus"
     },
     {
@@ -100,6 +100,15 @@
   "public_kernels_found": 0,
   "top10_members_public_kernels": [],
   "latest_submissions": [
+    {
+      "ref": "57247888",
+      "fileName": "submission.zip",
+      "date": "2026-10-16 00:05:07.063000",
+      "description": "V6.12",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.08",
+      "privateScore": ""
+    },
     {
       "ref": "57188055",
       "fileName": "submission.zip",
