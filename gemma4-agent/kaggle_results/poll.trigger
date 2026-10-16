@@ -1,1 +1,1 @@
-read-only Kaggle status/score check for V4 ref 57045226; no upload, no submission, no notebook execution; UTC=2026-10-12T07:17:04Z
+Read-only Kaggle submission-status poll requested by user; specifically verify V6.12 ref 57247888. Fetch submissions and public leaderboard only; no upload, no benchmark, no notebook execution. Tick=2026-10-16T19:30Z.
