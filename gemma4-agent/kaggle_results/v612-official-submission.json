@@ -1,0 +1,22 @@
+{
+  "competition": "gemma-4-developer-agent",
+  "filename": "submission.zip",
+  "message": "V6.12",
+  "sha256_expected": "5381ae17398f88ba434313439d9b784103dbab514bd7a0a3798a142f3c84c515",
+  "status": "submitted",
+  "official_submission_requested": true,
+  "sha256_actual": "5381ae17398f88ba434313439d9b784103dbab514bd7a0a3798a142f3c84c515",
+  "cli_exit_code": 0,
+  "submission_created": true,
+  "submission": {
+    "ref": "57247888",
+    "file_name": "submission.zip",
+    "date": "2026-10-16 00:05:07.063000",
+    "description": "V6.12",
+    "status": "SubmissionStatus.PENDING",
+    "public_score": "",
+    "private_score": ""
+  },
+  "retry_warning": "Do not resubmit this ZIP; use the recorded submission ref/status.",
+  "checked_utc": "2026-10-16T00:05:09+00:00"
+}
