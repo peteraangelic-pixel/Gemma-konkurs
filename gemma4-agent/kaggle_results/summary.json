@@ -1,18 +1,18 @@
 {
-  "fetched_utc": "2026-10-12T07:17:25+00:00",
+  "fetched_utc": "2026-10-16T19:23:24+00:00",
   "competition": "gemma-4-developer-agent",
   "team_filter": null,
-  "leaderboard_rows": 2501,
-  "submission_rows": 1,
+  "leaderboard_rows": 2964,
+  "submission_rows": 3,
   "our_leaderboard_rows": [],
   "top10": [
     {
       "Rank": "1",
       "TeamId": "16948405",
       "TeamName": "Yurnero",
-      "LastSubmissionDate": "2026-10-11 03:22:36",
+      "LastSubmissionDate": "2026-10-16 04:51:40",
       "Score": "0.24",
-      "SubmissionCount": "10",
+      "SubmissionCount": "15",
       "TeamMemberUserNames": "samson8"
     },
     {
@@ -28,99 +28,96 @@
       "Rank": "3",
       "TeamId": "17015790",
       "TeamName": "Francis Joseph",
-      "LastSubmissionDate": "2026-10-10 10:31:27",
+      "LastSubmissionDate": "2026-10-15 15:17:00",
       "Score": "0.22",
-      "SubmissionCount": "8",
+      "SubmissionCount": "10",
       "TeamMemberUserNames": "francisjosephdev"
     },
     {
       "Rank": "4",
       "TeamId": "16955167",
       "TeamName": "Deepest Mind",
-      "LastSubmissionDate": "2026-10-09 14:40:22",
+      "LastSubmissionDate": "2026-10-14 17:44:32",
       "Score": "0.22",
-      "SubmissionCount": "8",
+      "SubmissionCount": "11",
       "TeamMemberUserNames": "tanavbajaj"
     },
     {
       "Rank": "5",
       "TeamId": "16956138",
       "TeamName": "Ayush Barai",
-      "LastSubmissionDate": "2026-10-10 04:57:16",
+      "LastSubmissionDate": "2026-10-15 04:30:17",
       "Score": "0.22",
-      "SubmissionCount": "16",
+      "SubmissionCount": "19",
       "TeamMemberUserNames": "ayush04barai"
     },
     {
       "Rank": "6",
       "TeamId": "17019135",
       "TeamName": "Lakshya Mewara0025",
-      "LastSubmissionDate": "2026-10-10 12:22:12",
+      "LastSubmissionDate": "2026-10-12 17:17:40",
       "Score": "0.22",
-      "SubmissionCount": "7",
+      "SubmissionCount": "8",
       "TeamMemberUserNames": "lakshyamewara0025"
     },
     {
       "Rank": "7",
-      "TeamId": "16949307",
-      "TeamName": "Mizero Lucky Gall",
-      "LastSubmissionDate": "2026-10-08 06:39:08",
-      "Score": "0.20",
-      "SubmissionCount": "10",
-      "TeamMemberUserNames": "mizeroluckygall"
+      "TeamId": "16948844",
+      "TeamName": "omallo",
+      "LastSubmissionDate": "2026-10-15 08:42:41",
+      "Score": "0.22",
+      "SubmissionCount": "16",
+      "TeamMemberUserNames": "omallo"
     },
     {
       "Rank": "8",
-      "TeamId": "16953434",
-      "TeamName": "islet",
-      "LastSubmissionDate": "2026-10-08 01:48:16",
-      "Score": "0.20",
-      "SubmissionCount": "7",
-      "TeamMemberUserNames": "kojimar"
+      "TeamId": "17039226",
+      "TeamName": "Vibhanshu Singh",
+      "LastSubmissionDate": "2026-10-16 00:29:32",
+      "Score": "0.22",
+      "SubmissionCount": "6",
+      "TeamMemberUserNames": "vibhanshus"
     },
     {
       "Rank": "9",
-      "TeamId": "16954250",
-      "TeamName": "Kawchar Husain",
-      "LastSubmissionDate": "2026-10-10 09:22:35",
-      "Score": "0.20",
-      "SubmissionCount": "9",
-      "TeamMemberUserNames": "kawchar85,raininbox"
+      "TeamId": "16959074",
+      "TeamName": "ABHIRUP DAS",
+      "LastSubmissionDate": "2026-10-13 12:57:38",
+      "Score": "0.22",
+      "SubmissionCount": "12",
+      "TeamMemberUserNames": "abhirupdas10"
     },
     {
       "Rank": "10",
-      "TeamId": "16950280",
-      "TeamName": "songhahaha66",
-      "LastSubmissionDate": "2026-10-08 13:23:25",
-      "Score": "0.20",
-      "SubmissionCount": "11",
-      "TeamMemberUserNames": "songhahaha66"
+      "TeamId": "17040816",
+      "TeamName": "Thomas TưNhân",
+      "LastSubmissionDate": "2026-10-14 06:15:59",
+      "Score": "0.22",
+      "SubmissionCount": "5",
+      "TeamMemberUserNames": "nhanbayernuit"
     }
   ],
-  "public_kernels_found": 2,
-  "top10_members_public_kernels": [
+  "public_kernels_found": 0,
+  "top10_members_public_kernels": [],
+  "latest_submissions": [
     {
-      "ref": "mizeroluckygall/pathfinder-gemma-4-agent-eda-baseline",
-      "title": "Pathfinder  | Gemma 4 Agent: EDA + Baseline+",
-      "author": "Mizero Lucky Gall",
-      "lastRunTime": "2026-09-25 19:41:46.330000",
-      "totalVotes": "52",
-      "leader_rank": "7",
-      "leader_team": "Mizero Lucky Gall",
-      "matched_member": "mizeroluckygall"
+      "ref": "57247888",
+      "fileName": "submission.zip",
+      "date": "2026-10-16 00:05:07.063000",
+      "description": "V6.12",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.08",
+      "privateScore": ""
     },
     {
-      "ref": "mizeroluckygall/gemma-4-agent-eda-agent-validator",
-      "title": "Gemma 4 Agent 🌟EDA + Agent + Validator",
-      "author": "Mizero Lucky Gall",
-      "lastRunTime": "2026-09-25 06:24:30.270000",
-      "totalVotes": "3",
-      "leader_rank": "7",
-      "leader_team": "Mizero Lucky Gall",
-      "matched_member": "mizeroluckygall"
-    }
-  ],
-  "latest_submissions": [
+      "ref": "57188055",
+      "fileName": "submission.zip",
+      "date": "2026-10-14 15:58:54.433000",
+      "description": "V5",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.13",
+      "privateScore": ""
+    },
     {
       "ref": "57045226",
       "fileName": "submission.zip",
