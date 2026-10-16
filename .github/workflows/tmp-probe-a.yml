@@ -1,0 +1,14 @@
+name: Probe A minimal
+
+on:
+  push:
+    branches:
+      - arena/c4eeb067-gemma-konkurs
+    paths:
+      - gemma4-agent/kaggle_smoke/probe-a.trigger
+
+jobs:
+  one:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo hello
