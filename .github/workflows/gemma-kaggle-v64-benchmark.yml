@@ -1,15 +1,25 @@
-# V6.4 full screen on the same 30 tasks and seed as V3/V4/V5/V6.1/V6.2/V6.3, so the comparison is
-# 1:1. V6.4 = V6.3 + the four mechanism rules M1-M4, the call-4 first-edit deadline (with the
-# anti-dummy clause) and the removed submit_patch tool.
+name: Gemma Kaggle V7-c clock screen
+
+# CARRIER NOTE (2026-10-16): GitHub stopped registering NEW workflow files for this repository -
+# gemma-kaggle-v67/v68/v69/v610/v611-benchmark.yml and the freshly written v7c file are all absent
+# from /actions/workflows, while files that already existed keep working, including content edits
+# to them (proven twice today). So this screen rides on the existing, registered v64-benchmark file
+# and keeps its trigger path byte-identical. The V6.4 arm it used to carry is superseded: V6.4 was
+# measured long ago (10/30) and its four mechanism rules are precisely the kind of bundle that the
+# V6.12 result (0.08 against V5's 0.13) showed must not be shipped unattributed.
 #
-# What this run CANNOT do: it cannot lead to a submission of V6.4. The decision rule frozen before
-# the runs (GATES_V6_4.md) requires G1-G3 = 0 in BOTH screens, and the mini-screen already has
-# G2 = 1 (rich_3105 ended empty after 106.9 s). This run is therefore purely informational: it
-# measures whether converting empty trees into patches (measured in the mini: 0 -> 1348 B and
-# 0 -> 377 B) changes the number of solved tasks on the same 30-task sample as V3-V6.3.
-# Pre-registered gates and expectations: gemma4-agent/GATES_V6_4.md
-# Does not create an official submission. Nothing runs until
-# gemma4-agent/kaggle_smoke/v64-benchmark.trigger is pushed.
+# What this screen measures: does an 8-minute per-task clock keep the MEAN task duration inside the
+# competition's 12-hour whole-run limit? V7-c is the V5 archive with exactly one changed value
+# (max_time_minutes 5.25 -> 8.0); agent.yaml, configs/sampling.yaml and prompts/system.md are
+# byte-identical to V5, so the measured mean belongs to the clock alone. The 12-hour limit covers
+# the entire run and a breach errors the WHOLE submission (host 743063), so what fits is the mean:
+# mean <= 4.3 min fits even a 150-task split, mean <= 5.5 min fits only ~120 tasks. The packer
+# refuses this clock outside the submission-v7c tree and prints a MEASUREMENT ARM banner; this
+# archive is never submitted as an entry. Gates Z1-Z5 are pre-registered in GATES_V7_C.md.
+#
+# Two jobs on purpose: a trigger push ARMS the screen for the weekly GPU quota reset (Saturday
+# 00:00 UTC) / daily boundary (00:05 UTC) - the arm job sleeps until then, starts the kernel and
+# leaves; the collect job gets its own six-hour budget to poll and fetch the result.
 
 on:
   workflow_dispatch:
@@ -23,11 +33,142 @@ permissions:
   contents: write
 
 concurrency:
-  group: v64-benchmark.trigger-${{ github.ref }}
+  group: v7c-clock-screen.trigger-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
-  benchmark:
+  arm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    outputs:
+      kernel_ref: ${{ steps.kernel.outputs.kernel_ref }}
+    steps:
+      - name: Checkout session branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Wait for the weekly GPU quota reset / daily boundary
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          REQUESTED_MODE: start_now
+          MAX_WAIT_HOURS: "8"
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import datetime as dt
+          import os
+          import sys
+          import time
+
+          event = os.environ.get("EVENT_NAME", "")
+          mode = (os.environ.get("REQUESTED_MODE") or "").strip()
+          if mode != "wait_boundary" and event == "workflow_dispatch":
+              print("Mode: start now (manual dispatch).")
+              sys.exit(0)
+
+          max_wait = float(os.environ.get("MAX_WAIT_HOURS", "8")) * 3600
+          now = dt.datetime.now(dt.timezone.utc)
+          target = (now + dt.timedelta(days=1)).replace(hour=0, minute=5, second=0, microsecond=0)
+          delta = (target - now).total_seconds()
+          if delta > max_wait:
+              print(
+                  "Refusing to arm: the next quota reset / daily boundary is "
+                  f"{target:%Y-%m-%d %H:%M} UTC, {delta / 3600:.1f} h away "
+                  f"(limit {max_wait / 3600:.0f} h). The trigger file was left in place - push it "
+                  "again closer to the boundary.",
+                  flush=True,
+              )
+              sys.exit(1)
+          if delta > 0:
+              print(
+                  f"Armed: waiting {delta / 60:.1f} min for {target:%Y-%m-%d %H:%M} UTC - the weekly "
+                  "GPU quota reset and the daily submission boundary.",
+                  flush=True,
+              )
+              time.sleep(delta)
+          print("Boundary reached at", dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC"), flush=True)
+          PY
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Kaggle CLI
+        run: python -m pip install --disable-pip-version-check --quiet kaggle
+
+      - name: Configure Kaggle credentials
+        env:
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "$KAGGLE_API_TOKEN" ]; then
+            echo "Repository Actions secret KAGGLE_API_TOKEN is missing."
+            exit 1
+          fi
+          mkdir -p "$HOME/.kaggle"
+          printf '%s' "$KAGGLE_API_TOKEN" | tr -d '\r\n' > "$HOME/.kaggle/access_token"
+          chmod 600 "$HOME/.kaggle/access_token"
+          echo "Kaggle CLI configured; token value was not logged."
+
+      - name: Start the 30-task V7-c clock screen (bounded poll, kernel keeps running)
+        continue-on-error: true
+        env:
+          KAGGLE_USERNAME: petersharps
+        run: |
+          set -uo pipefail
+          timeout 600 python gemma4-agent/tools/run_kaggle_v1_smoke.py \
+            --submission gemma4-agent/submission-v7c.zip \
+            --outdir gemma4-agent/kaggle_results/v7-c-benchmark \
+            --task-count 30 \
+            --task-id fastapi_15588 \
+            --seed 20261009 \
+            --max-wait-minutes 300 \
+            --poll-interval-seconds 45
+          code=$?
+          echo "Launcher exit: $code (124 = the polling window was cut; the kernel itself continues)."
+          exit 0
+
+      - name: Expose the kernel reference for the collecting job
+        id: kernel
+        if: always()
+        run: |
+          set -uo pipefail
+          ref=$(python3 - <<'PY'
+          import json
+          from pathlib import Path
+          path = Path("gemma4-agent/kaggle_results/v7-c-benchmark/run.json")
+          print(json.loads(path.read_text()).get("kernel_ref", "") if path.is_file() else "")
+          PY
+          )
+          echo "kernel_ref=$ref" >> "$GITHUB_OUTPUT"
+          echo "Kernel reference recorded: ${ref:-none}"
+
+      - name: Commit the launch record so the collecting job can read it
+        if: always()
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin "$GITHUB_REF_NAME"
+          rm -rf /tmp/keep && mkdir -p /tmp/keep
+          cp -r gemma4-agent/kaggle_results/v7-c-benchmark /tmp/keep/ 2>/dev/null || true
+          git reset --hard "origin/$GITHUB_REF_NAME"
+          mkdir -p gemma4-agent/kaggle_results
+          cp -r /tmp/keep/v7-c-benchmark gemma4-agent/kaggle_results/ 2>/dev/null || true
+          git add gemma4-agent/kaggle_results/v7-c-benchmark 2>/dev/null || true
+          if [ -z "$(git diff --cached --name-only)" ]; then
+            echo "Nothing to record."
+            exit 0
+          fi
+          git commit -m "chore(gemma): record the V7-c clock screen launch [skip ci]"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
+
+  collect:
+    needs: arm
+    if: needs.arm.outputs.kernel_ref != ''
     runs-on: ubuntu-latest
     timeout-minutes: 360
     steps:
@@ -59,85 +200,66 @@ jobs:
           chmod 600 "$HOME/.kaggle/access_token"
           echo "Kaggle CLI configured; token value was not logged."
 
-      - name: Run private same-seed 30-task V6.4 benchmark on competition L4x4
+      - name: Wait for the kernel and fetch its result
         env:
           KAGGLE_USERNAME: petersharps
         run: |
-          python gemma4-agent/tools/run_kaggle_v1_smoke.py \
-            --submission gemma4-agent/submission-v6.zip \
-            --outdir gemma4-agent/kaggle_results/v6-4-benchmark \
-            --task-count 30 \
-            --task-id fastapi_15588 \
-            --seed 20261009 \
-            --max-wait-minutes 240 \
-            --poll-interval-seconds 60
+          python gemma4-agent/tools/poll_kernel_until_done.py \
+            --run-json gemma4-agent/kaggle_results/v7-c-benchmark/run.json \
+            --max-wait-minutes 340 \
+            --poll-interval-seconds 90
 
       - name: Fetch Kaggle notebook log after failure (read-only)
         if: failure()
         continue-on-error: true
         run: |
-          if [ -s gemma4-agent/kaggle_results/v6-4-benchmark/run.json ]; then
+          if [ -s gemma4-agent/kaggle_results/v7-c-benchmark/run.json ]; then
             python gemma4-agent/tools/fetch_kaggle_kernel_log.py \
-              --run-json gemma4-agent/kaggle_results/v6-4-benchmark/run.json \
-              --output-dir "$RUNNER_TEMP/gemma-v64-benchmark-kernel-logs"
+              --run-json gemma4-agent/kaggle_results/v7-c-benchmark/run.json \
+              --output-dir "$RUNNER_TEMP/gemma-v7c-kernel-logs"
             python gemma4-agent/tools/summarize_kaggle_kernel_log.py \
-              "$RUNNER_TEMP/gemma-v64-benchmark-kernel-logs/kernel.log"
+              "$RUNNER_TEMP/gemma-v7c-kernel-logs/kernel.log"
           else
             echo "No Kaggle kernel reference was recorded; no log fetch attempted."
           fi
 
       - name: Remove raw task patches before persistence
         if: always()
-        run: rm -f gemma4-agent/kaggle_results/v6-4-benchmark/agent_benchmark_patches.txt
+        run: rm -f gemma4-agent/kaggle_results/v7-c-benchmark/agent_benchmark_patches.txt
 
-      - name: Upload V6 benchmark summary
+      - name: Upload the V7-c screen summary
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: gemma-v64-benchmark-${{ github.run_id }}
+          name: gemma-v7c-clock-screen-${{ github.run_id }}
           path: |
-            gemma4-agent/kaggle_results/v6-4-benchmark/run.json
-            gemma4-agent/kaggle_results/v6-4-benchmark/agent_benchmark_result.json
+            gemma4-agent/kaggle_results/v7-c-benchmark/run.json
+            gemma4-agent/kaggle_results/v7-c-benchmark/agent_benchmark_result.json
           if-no-files-found: warn
 
-      - name: Upload Kaggle failure log
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: gemma-v64-benchmark-kernel-log-${{ github.run_id }}
-          path: ${{ runner.temp }}/gemma-v64-benchmark-kernel-logs/
-          if-no-files-found: warn
-          retention-days: 3
-
-      - name: Commit V6 benchmark summary to this branch
+      - name: Commit the V7-c result to this branch
         if: always()
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git fetch origin "$GITHUB_REF_NAME"
-          # SAFE PATTERN - fixed 2026-10-13, after it destroyed this branch once.
-          # The previous 'git reset --soft origin/<branch>' moves HEAD but leaves the INDEX on
-          # this job's own, older checkout, so the results commit rebuilt the OLD tree and
-          # silently reverted every commit pushed while the kernel ran: on 2026-10-13 it deleted
-          # the guarded submitter and the submit workflow, dropped the packer guards and reset
-          # submission-v6.zip from 650e1dba back to abf22bac (see GATES_V6_3.md).
-          # Safe order: take the REMOTE tree first, then re-apply only this run's outputs.
+          # SAFE PATTERN (see GATES_V6_3.md): take the REMOTE tree first, then re-apply this run's
+          # outputs, so commits pushed while the kernel ran are never reverted.
           rm -rf /tmp/keep && mkdir -p /tmp/keep
-          cp -r gemma4-agent/kaggle_results/v6-4-benchmark /tmp/keep/ 2>/dev/null || true
+          cp -r gemma4-agent/kaggle_results/v7-c-benchmark /tmp/keep/ 2>/dev/null || true
           git reset --hard "origin/$GITHUB_REF_NAME"
           mkdir -p gemma4-agent/kaggle_results
-          cp -r /tmp/keep/v6-4-benchmark gemma4-agent/kaggle_results/ 2>/dev/null || true
-          git add gemma4-agent/kaggle_results/v6-4-benchmark 2>/dev/null || true
+          cp -r /tmp/keep/v7-c-benchmark gemma4-agent/kaggle_results/ 2>/dev/null || true
+          git add gemma4-agent/kaggle_results/v7-c-benchmark 2>/dev/null || true
           python gemma4-agent/tools/compare_screenings.py || true
           git add gemma4-agent/kaggle_results/screening_history.md || true
-          # the trigger file exists exactly while a run has not consumed it yet
-          git rm -q --ignore-unmatch gemma4-agent/kaggle_smoke/v64-benchmark.trigger
+          git rm -q --ignore-unmatch gemma4-agent/kaggle_smoke/v7c-benchmark.trigger
           if [ -z "$(git diff --cached --name-only)" ]; then
             echo "No result files were produced; nothing to commit."
             exit 0
           fi
-          git commit -m "chore(gemma): record Run private same-seed 30-task V6.4 benchmark [skip ci]"
+          git commit -m "chore(gemma): record the V7-c clock screen result [skip ci]"
           git push origin "HEAD:${GITHUB_REF_NAME}"
 
       - name: Verify documentation consistency (CI95 intervals against recorded JSON)
