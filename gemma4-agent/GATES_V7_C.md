@@ -61,3 +61,25 @@ plik-trigger, **nie odpala runu** — filtr `paths` ocenia zarejestrowana defini
 
 Koszt: 30 zadań × ~5–8 min ≈ **3,5–4,5 h** z tygodniowej kwoty 30 h (L4×4 liczy się ×2 → realnie
 ~7–9 h limitu). Workflow nie tworzy żadnej oficjalnej submisji.
+
+## Uzbrojenie (wykonane) + awaria rejestracji workflow po stronie GitHuba
+
+- Run: **`38957738585`**, sha `5834516`. Job `arm`, krok 3 „Wait for the weekly GPU quota reset /
+  daily boundary" = `in_progress` o 19:50 UTC → ekran startuje o **2026-10-17 00:05 UTC** (po resecie
+  kwoty o 00:00), a job `collect` (świeży budżet 6 h) dociąga wynik przez `tools/poll_kernel_until_done.py`.
+- **Incydent GitHuba (2026-10-16, ~19:40 UTC):** GitHub **przestaje rejestrować nowe pliki workflow**
+  w tym repo. Dowody: `gemma-kaggle-v67/v68/v69/v610/v611-benchmark.yml` oraz świeżo dodany
+  `gemma-kaggle-v7c-clock-screen.yml` **nie występują** w `/actions/workflows` (43 pliki lokalnie,
+  32 zarejestrowane), a **minimalny** workflow-sonda też się nie zarejestrował — czyli to nie treść
+  pliku. Pliki istniejące nadal działają, **łącznie ze zmianami treści** (dowód: run `38956037802`
+  odpalił się o 19:35 na pushu dotykającym wyłącznie `official-submit-v7b.trigger`, ścieżki obecnej
+  tylko w zedytowanej definicji).
+- **Obejście:** ekran V7-c jedzie na **istniejącym, zarejestrowanym** pliku
+  `.github/workflows/gemma-kaggle-v64-benchmark.yml` (id `383191760`), zachowując jego ścieżkę
+  triggera `gemma4-agent/kaggle_smoke/v64-benchmark.trigger` bez zmiany. Nazwa runu w Actions to
+  „Gemma Kaggle V7-c clock screen", co jest *dowodem*, że GitHub użył nowej treści pliku.
+  Ramię V6.4, które ten plik nosił, jest i tak przedawnione (zmierzone 10/30, a jego reguły to
+  dokładnie ten rodzaj nieprzypisywalnej paczki, przed którą ostrzega wynik V6.12).
+- Konsekwencja dla przyszłych prac: **dopóki nie rejestrują się nowe pliki, każdy nowy „launcher"
+  musi wejść jako zmiana treści istniejącego zarejestrowanego pliku** (i to jest też powód, dla
+  którego V6.10/V6.11 nigdy same nie odpaliły — ich workflowy są w tym gronie).
