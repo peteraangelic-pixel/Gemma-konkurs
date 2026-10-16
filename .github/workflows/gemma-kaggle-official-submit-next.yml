@@ -27,6 +27,7 @@ on:
         required: true
         default: v612
         options:
+          - v7b
           - v612
           - v611
           - v610
@@ -43,6 +44,7 @@ on:
     branches:
       - arena/c4eeb067-gemma-konkurs
     paths:
+      - gemma4-agent/kaggle_smoke/official-submit-v7b.trigger
       - gemma4-agent/kaggle_smoke/official-submit-v612.trigger
       - gemma4-agent/kaggle_smoke/official-submit-v611.trigger
 
@@ -136,13 +138,17 @@ jobs:
           set -euo pipefail
           choice="${{ github.event.inputs.artifact }}"
           if [ -z "$choice" ]; then
-            if [ -f gemma4-agent/kaggle_smoke/official-submit-v611.trigger ]; then
-              choice=v611
-            else
-              choice=v612
-            fi
+            # Exactly one trigger file is ever pushed, so the trigger that is present names the arm.
+            for candidate in v7b v612 v611; do
+              if [ -f "gemma4-agent/kaggle_smoke/official-submit-${candidate}.trigger" ]; then
+                choice="$candidate"
+                break
+              fi
+            done
+            choice="${choice:-v7b}"
           fi
           case "$choice" in
+            v7b)  zip=submission-v7b.zip;  msg=V7b;  sha=e35f20ab1361450d1877010188620d130117e657492a7b48d2c49d681086886e ;;
             v612) zip=submission-v6.12.zip; msg=V6.12; sha=5381ae17398f88ba434313439d9b784103dbab514bd7a0a3798a142f3c84c515 ;;
             v611) zip=submission-v6.11.zip; msg=V6.11; sha=7b2beec178e1d8210d607abd11c1d5a24fd6252e9879467adf568f2b8b05202e ;;
             v610) zip=submission-v6.10.zip; msg=V6.10; sha=523d43fb458ec1befa702416619ca79a0f562475ca3249749bd297fa91b527b0 ;;
@@ -194,6 +200,7 @@ jobs:
           cp -r /tmp/keep/kaggle_results/. gemma4-agent/kaggle_results/ 2>/dev/null || true
           git add gemma4-agent/kaggle_results 2>/dev/null || true
           git rm -q --ignore-unmatch \
+            gemma4-agent/kaggle_smoke/official-submit-v7b.trigger \
             gemma4-agent/kaggle_smoke/official-submit-v612.trigger \
             gemma4-agent/kaggle_smoke/official-submit-v611.trigger
           if [ -z "$(git diff --cached --name-only)" ]; then
