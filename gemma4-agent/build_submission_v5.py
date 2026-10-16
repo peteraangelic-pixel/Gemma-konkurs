@@ -80,7 +80,7 @@ def optional_yaml_parse(path: Path):
     return yaml.load(read_utf8(path), Loader=IncludeLoader)
 
 
-def validate_tree(submission_dir: Path) -> list[Path]:
+def validate_tree(submission_dir: Path, clock_arm_minutes: float | None = None) -> list[Path]:
     submission_dir = submission_dir.resolve()
     if not submission_dir.is_dir():
         fail(f"Missing submission source directory: {submission_dir}")
@@ -148,11 +148,28 @@ def validate_tree(submission_dir: Path) -> list[Path]:
         if match is None:
             fail(f"eval_config.yaml is missing a numeric evaluation.{key} value.")
         budget[key] = float(match.group(1))
-    if budget["max_time_minutes"] > MAX_SAFE_TIME_MINUTES:
-        fail(
-            f"max_time_minutes={budget['max_time_minutes']} exceeds the safe envelope "
-            f"({MAX_SAFE_TIME_MINUTES}); ~120 tasks would not fit the 12-hour cap."
-        )
+    if clock_arm_minutes is None:
+        if budget["max_time_minutes"] > MAX_SAFE_TIME_MINUTES:
+            fail(
+                f"max_time_minutes={budget['max_time_minutes']} exceeds the safe envelope "
+                f"({MAX_SAFE_TIME_MINUTES}); ~120 tasks would not fit the 12-hour cap."
+            )
+    else:
+        # Measurement-only escape hatch, deliberately narrow: exactly one directory name, exactly
+        # one clock value, and a banner that says out loud what the archive is for. The whole point
+        # of the V7-c screen is to learn the MEAN task duration at a raised clock, because the mean
+        # (not the cap) decides whether ~120-150 tasks fit the competition's 12-hour run limit
+        # (host 743063: a breach errors the entire submission, not just the last task).
+        if submission_dir.name != "submission-v7c":
+            fail(
+                "a raised clock is only allowed for the V7-c measurement tree "
+                f"(got {submission_dir.name!r})"
+            )
+        if budget["max_time_minutes"] != clock_arm_minutes:
+            fail(
+                f"V7-c must carry the requested clock exactly: got "
+                f"{budget['max_time_minutes']}, expected {clock_arm_minutes}"
+            )
     if budget["max_tool_calls"] < MIN_SAFE_TOOL_CALLS:
         fail(
             f"max_tool_calls={budget['max_tool_calls']:.0f} is below the measured useful "
@@ -199,6 +216,12 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--source-dir", type=Path, default=DEFAULT_SUBMISSION_DIR)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    parser.add_argument(
+        "--clock-arm-minutes",
+        type=float,
+        default=None,
+        help="measurement-only: allow exactly this raised per-task clock, and only in submission-v7c (never for a submission)",
+    )
     args = parser.parse_args()
     submission_dir = (
         args.source_dir if args.source_dir.is_absolute() else (Path.cwd() / args.source_dir).resolve()
@@ -206,7 +229,7 @@ def main() -> int:
     output = args.output if args.output.is_absolute() else (Path.cwd() / args.output).resolve()
 
     try:
-        files = validate_tree(submission_dir)
+        files = validate_tree(submission_dir, args.clock_arm_minutes)
         build_zip(output, files, submission_dir)
     except (ValueError, OSError, zipfile.BadZipFile) as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
@@ -219,6 +242,12 @@ def main() -> int:
         print(f"Size: {output.stat().st_size:,} bytes")
         print(f"SHA-256: {digest}")
         print("Archive root includes: " + ", ".join(archive.namelist()[:6]))
+        if args.clock_arm_minutes is not None:
+            print(
+                f"MEASUREMENT ARM ONLY - clock {args.clock_arm_minutes} min: this archive exists "
+                "to measure the mean task duration on the 30-task screen. Do not submit it to "
+                "Kaggle as an official entry."
+            )
     return 0
 
 

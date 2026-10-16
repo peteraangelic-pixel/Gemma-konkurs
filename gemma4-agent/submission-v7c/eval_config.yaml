@@ -1,0 +1,28 @@
+# V7-c — MEASUREMENT ARM, not a submission candidate.
+#
+# This archive exists to answer exactly one question: at a raised per-task clock, what is the MEAN
+# task duration? The competition's 12-hour limit covers the whole run and a breach errors the
+# ENTIRE submission (host, discussion 743063), and what fits the limit is the mean, not the cap:
+#
+#     120 tasks * (mean 3.9 min + ~0.5 min setup) = ~8.8 h    <- V5, the only scored run we have
+#     120 tasks * (cap  5.25 min + 0.5 min setup) = 11.5 h    <- worst case V5 actually survived
+#     120 tasks * (cap  8.0  min + 0.5 min setup) = 17.0 h    <- does not fit; needs a measured mean
+#     150 tasks * (mean 4.3 min + 0.5 min setup) = 12.0 h     <- the conservative safety target
+#
+# So: mean <= 4.3 min is safe even if the hidden split holds 150 tasks; mean <= 5.5 min is safe only
+# if it holds ~120. V7-c changes the clock and nothing else - same prompt, same tools, same sampling
+# as V5 - precisely so that the measured mean belongs to the clock alone.
+#
+# The packer only builds this tree with an explicit flag
+# (python3 gemma4-agent/build_submission_v5.py --source-dir gemma4-agent/submission-v7c \
+#  --output gemma4-agent/submission-v7c.zip --clock-arm-minutes 8.0), prints a MEASUREMENT ARM
+# banner, and the V5 submission path still refuses anything above 5.5 minutes.
+
+evaluation:
+  # A single runaway command must not eat a session; 150 s is V5's proven value.
+  timeout_seconds: 150
+  # V5's proven headroom. At ~10-15 s per model call the 8-minute clock binds long before 45 calls.
+  max_tool_calls: 45
+  max_turns: 80
+  # The lever under test: 5.25 -> 8.0 minutes.
+  max_time_minutes: 8.0
