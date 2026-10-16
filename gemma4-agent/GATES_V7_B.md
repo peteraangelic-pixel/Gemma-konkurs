@@ -73,3 +73,16 @@ python3 gemma4-agent/tools/check_v7b_delta.py --mutate
 python3 gemma4-agent/build_submission_v5.py --source-dir gemma4-agent/submission-v7b --output gemma4-agent/submission-v7b.zip
 # oczekiwany SHA-256: e35f20ab1361450d1877010188620d130117e657492a7b48d2c49d681086886e
 ```
+
+## Uzbrojenie (wykonane) i lekcja operacyjna
+
+- Run: **`38956037802`**, sha `6fc67dc`, krok 3 „Wait for the next UTC daily boundary" = `in_progress`
+  o 19:36 UTC → job śpi do **2026-10-17 00:05:00 UTC** i wtedy wysyła. Anulowanie: Run → Cancel.
+- **Lekcja (nowa):** push, w którym zmienił się **sam plik workflow** *i* doszedł nowy plik-trigger,
+  którego ścieżki nie było w *poprzednio zarejestrowanej* definicji, **nie odpala runu** — filtr
+  `paths` oceniono starą definicją. Dowód: push `2847461` (workflow + trigger razem) = brak runu;
+  push `6fc67dc` (sam trigger, definicja już zarejestrowana) = run natychmiast. Kolejność jest więc
+  obowiązkowa: **najpierw push z plikiem workflow, potem push z triggerem**. (Druga lekcja z dziś:
+  `[skip ci]` w opisie commita też tłumi run — patrz `ANALYSIS_2026-10-16_V6_12_RESULT.md`.)
+- Wysyłkę V6.12 (`3ed4e05`) to ominęło tylko dlatego, że jej ścieżka triggera była w definicji już
+  wcześniej; V7-b wymagał nowej ścieżki i dlatego trafił na tę pułapkę.
