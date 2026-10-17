@@ -35,6 +35,8 @@ from pathlib import Path
 
 COMPETITION = "gemma-4-developer-agent"
 MODEL_SOURCE = "google/gemma-4/Other/gemma-4-31b-it-qat-w4a16-ct/2"
+WHEELHOUSE = "metric/gemma-4-developer-agent-wheelhouse"
+WHEELHOUSE_DIR = "/kaggle/input/datasets/metric/gemma-4-developer-agent-wheelhouse"
 MODEL_PATH = "/kaggle/input/models/google/gemma-4/other/gemma-4-31b-it-qat-w4a16-ct/2"
 MACHINE_SHAPE = "NvidiaL4"
 DOCKER_IMAGE = (
@@ -89,6 +91,41 @@ def embedded_repo_cell(root: Path) -> dict:
         "print('embedded files:', len(_json.loads(_PAYLOAD)))\n",
     ]
     return {"cell_type": "code", "execution_count": None, "metadata": {}, "outputs": [], "source": lines}
+
+
+WHEELHOUSE_SETUP = """# --- install the competition wheelhouse first ------------------------------------------------
+# The image's transformers does not know the `gemma4` architecture (ValueError on AutoConfig), and
+# the kernel has no internet. The competition ships the exact wheels the scored harness uses, and
+# the benchmark notebook installs them the same way - so the SFT run does too.
+import glob, importlib, os, subprocess, sys
+from pathlib import Path
+
+os.environ["TRANSFORMERS_NO_TF"] = "1"
+WH = Path("%s")
+assert WH.is_dir(), f"Wheelhouse not mounted: {WH}"
+for pattern in ("/usr/local/lib/python*/dist-packages/*cutlass*.pth",
+                "/usr/local/lib/python*/site-packages/*cutlass*.pth"):
+    for pth in glob.glob(pattern):
+        try:
+            os.unlink(pth)
+        except OSError:
+            pass
+tmp = Path("/tmp/wheelhouse"); tmp.mkdir(parents=True, exist_ok=True)
+for wheel in WH.glob("*.whl"):
+    if "cutlass" in wheel.name.lower():
+        continue
+    name = wheel.name.replace("cu128", "+cu128") if ("cu128" in wheel.name and "+" not in wheel.name) else wheel.name
+    target = tmp / name
+    if not target.exists():
+        os.symlink(wheel, target)
+wheels = sorted(str(w) for w in tmp.glob("*.whl"))
+print(f"installing {len(wheels)} offline wheels from the competition wheelhouse")
+subprocess.run([sys.executable, "-m", "pip", "install", "-q", "--no-deps", "--force-reinstall", *wheels], check=True)
+importlib.invalidate_caches()
+import transformers
+print("transformers", transformers.__version__)
+print("gemma4 recognised:", "gemma4" in getattr(transformers.models, "__name__", "") or any("gemma4" in m for m in dir(transformers.models)))
+""" % WHEELHOUSE_DIR
 
 
 def normalize_notebook(nb: dict) -> dict:
@@ -157,6 +194,22 @@ def patch_notebook(nb: dict, *, smoke: bool, base_dir: str, locator_from: str = 
             raise SystemExit(f"patch {key!r} did not apply - refusing to push a half-patched notebook")
 
     normalize_notebook(nb)
+
+    # The wheelhouse install must be the FIRST code that touches transformers, so it goes right
+    # after the configuration cell.
+    install_index = None
+    for index, cell in enumerate(nb["cells"]):
+        source = "".join(cell["source"])
+        if cell["cell_type"] == "code" and "SMOKE =" in source and "REPO_DIR" in source:
+            install_index = index
+            break
+    if install_index is None:
+        raise SystemExit("could not find the configuration cell for the wheelhouse install")
+    nb["cells"].insert(install_index + 1, {
+        "cell_type": "code", "execution_count": None, "metadata": {}, "outputs": [],
+        "source": WHEELHOUSE_SETUP.splitlines(keepends=True),
+    })
+    applied["wheelhouse"] = 1
 
     if repo_root is not None:
         # Replace the git-clone cell (the kernel has no internet) with the embedded-file cell.
@@ -271,7 +324,7 @@ def main() -> int:
             "machine_shape": MACHINE_SHAPE,
             "docker_image": DOCKER_IMAGE,
             "docker_image_pinning_type": "original",
-            "dataset_sources": [],
+            "dataset_sources": [WHEELHOUSE],
             "competition_sources": [COMPETITION],
             "kernel_sources": [],
             "model_sources": [MODEL_SOURCE],
