@@ -132,6 +132,18 @@ def patch_notebook(nb: dict, *, smoke: bool, base_dir: str, locator_from: str = 
             source = source.replace(f"{base_dir}/tools/locate.py", f"{locator_from}/tools/locate.py")
             applied["locator"] = applied.get("locator", 0) + 1
 
+        # The benchmark notebook mounts the competition data under /kaggle/input/competitions/...,
+        # but this notebook was written against /kaggle/input/<competition>. Resolve both instead of
+        # failing the build cell with MISSING.
+        if 'DATA_DIR = Path("/kaggle/input/gemma-4-developer-agent")' in source:
+            source = source.replace(
+                'DATA_DIR = Path("/kaggle/input/gemma-4-developer-agent")',
+                'DATA_DIR = next((p for p in (Path("/kaggle/input/competitions/gemma-4-developer-agent"),'
+                ' Path("/kaggle/input/gemma-4-developer-agent")) if p.is_dir()),'
+                ' Path("/kaggle/input/competitions/gemma-4-developer-agent"))'
+            )
+            applied["data_dir"] = applied.get("data_dir", 0) + 1
+
         if '"gemma-4-31b-it-qat-w4a16-ct"' in source:
             source = source.replace('"gemma-4-31b-it-qat-w4a16-ct"', f'"{MODEL_PATH}"')
             applied["model_path"] = applied.get("model_path", 0) + 1
@@ -140,7 +152,7 @@ def patch_notebook(nb: dict, *, smoke: bool, base_dir: str, locator_from: str = 
         # visible in the printed metadata.
         cell["source"] = source.splitlines(keepends=True)
 
-    for key in ("SMOKE", "base_dir", "model_path", "locator"):
+    for key in ("SMOKE", "base_dir", "model_path", "locator", "data_dir"):
         if not applied.get(key):
             raise SystemExit(f"patch {key!r} did not apply - refusing to push a half-patched notebook")
 
