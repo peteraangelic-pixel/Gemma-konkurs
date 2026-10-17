@@ -121,6 +121,16 @@ def main() -> int:
         if record["status"] != "daily_slot_guard_blocked":
             failures.append(f"submission inside 24 h not blocked: {record['status']}")
 
+        # 4b. the exact failure that cost the V7-b slot on 2026-10-17: the previous submission was
+        # 23 h 59 m 58 s old and the strict window refused the upload by two seconds.
+        almost_a_day = (module.datetime.now(module.timezone.utc)
+                        - module.timedelta(hours=23, minutes=59, seconds=58)).strftime("%Y-%m-%d %H:%M:%S")
+        code, record, calls = run(rows((almost_a_day, "V6.0")))
+        if record["status"] == "daily_slot_guard_blocked":
+            failures.append("a submission 23 h 59 m 58 s old still blocks (the two-second bug is back)")
+        if record["status"] not in ("submitted", "submitted_unconfirmed"):
+            failures.append(f"23 h 59 m 58 s old should upload, got {record['status']}")
+
         # 5. an unparseable date in the history must stop the run, not guess
         code, record, calls = run(rows(("not-a-date", "V6.0")))
         if record["status"] != "daily_slot_unverified" or code != 4:
@@ -149,7 +159,7 @@ def main() -> int:
         for item in failures:
             print("  - " + item, file=sys.stderr)
         return 1
-    print("submit-guard selftest: 7/7 cases pass "
+    print("submit-guard selftest: 8/8 cases pass "
           "(hash mismatch, duplicate message, same-day slot, 24 h window, unparseable date, "
           "clean submit, pinned V6.12 hash)")
     return 0
