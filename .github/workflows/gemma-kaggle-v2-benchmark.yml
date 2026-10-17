@@ -204,6 +204,9 @@ jobs:
           rm -rf /tmp/keep && mkdir -p /tmp/keep
           cp -r gemma4-agent/kaggle_results/sft-smoke /tmp/keep/ 2>/dev/null || true
           cp -r gemma4-agent/kaggle_results/sft-full /tmp/keep/ 2>/dev/null || true
+          for d in gemma4-env gemma4-env-competition gemma4-train-probe lora-canary; do
+            cp -r "gemma4-agent/kaggle_results/$d" /tmp/keep/ 2>/dev/null || true
+          done
           git reset --hard "origin/$GITHUB_REF_NAME"
           mkdir -p gemma4-agent/kaggle_results
           for d in sft-smoke sft-full gemma4-env gemma4-env-competition gemma4-train-probe lora-canary; do
@@ -212,6 +215,8 @@ jobs:
               cp /tmp/keep/$d/*.json "gemma4-agent/kaggle_results/$d/" 2>/dev/null || true
               cp /tmp/keep/$d/*.md "gemma4-agent/kaggle_results/$d/" 2>/dev/null || true
               cp /tmp/keep/$d/*.jsonl "gemma4-agent/kaggle_results/$d/" 2>/dev/null || true
+              cp /tmp/keep/$d/*.log "gemma4-agent/kaggle_results/$d/" 2>/dev/null || true
+              cp /tmp/keep/$d/*.txt "gemma4-agent/kaggle_results/$d/" 2>/dev/null || true
             fi
           done
           git add gemma4-agent/kaggle_results 2>/dev/null || true

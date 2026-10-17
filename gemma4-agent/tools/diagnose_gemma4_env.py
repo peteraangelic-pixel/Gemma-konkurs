@@ -226,6 +226,14 @@ def main() -> int:
         state["kaggle_status"] = status
         write_json(outdir / "run.json", state)
         print("status:", status, flush=True)
+        if status in ("COMPLETE", "ERROR", "CANCELED"):
+            logs = subprocess.run(["kaggle", "kernels", "logs", kernel_ref], capture_output=True, text=True)
+            raw = (logs.stdout or "") + (logs.stderr or "")
+            if raw.strip():
+                outdir.mkdir(parents=True, exist_ok=True)
+                (outdir / "kernel.log").write_text(raw, encoding="utf-8", errors="replace")
+                (outdir / "kernel_log_tail.md").write_text(raw[-20000:], encoding="utf-8", errors="replace")
+                print("kernel log saved:", len(raw), "chars", flush=True)
         if status == "COMPLETE":
             with tempfile.TemporaryDirectory(prefix="gemma-env-out-") as temporary:
                 subprocess.run(["kaggle", "kernels", "output", kernel_ref, "--path", temporary, "--force"],
