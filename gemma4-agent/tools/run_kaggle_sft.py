@@ -186,7 +186,22 @@ def patch_notebook(nb: dict, *, smoke: bool, base_dir: str, locator_from: str = 
             "print('model mounted:', '" + MODEL_PATH + "')\n",
         ],
     }
-    nb["cells"].insert(1, guard)
+    # Insert the guard AFTER the configuration cell. Putting it at index 1 made it run before
+    # SMOKE/REPO_DIR existed and the kernel died with NameError - a fix that cost one GPU run.
+    # It must also come AFTER the cell that materialises the repository files, because it asserts
+    # that the prompt exists on disk.
+    anchor_index = None
+    for index, cell in enumerate(nb["cells"]):
+        source = "".join(cell["source"])
+        if cell["cell_type"] != "code":
+            continue
+        if "SMOKE =" in source and "REPO_DIR" in source:
+            anchor_index = index
+        if "embedded at push time" in source:
+            anchor_index = index
+    if anchor_index is None:
+        raise SystemExit("could not find the configuration/embed cell; refusing to place the guard blindly")
+    nb["cells"].insert(anchor_index + 1, guard)
     return normalize_notebook(nb)
 
 
