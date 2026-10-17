@@ -28,6 +28,8 @@ from typing import Any
 
 COMPETITION = "gemma-4-developer-agent"
 EXPECTED_FILENAME = "submission.zip"
+# Tolerance for the rolling 24-hour check; see the note at the guard itself.
+DATES_TOLERANCE = timedelta(minutes=5)
 
 
 def write_json(path: Path, value: dict[str, Any]) -> None:
@@ -262,10 +264,18 @@ def main() -> int:
         })
         return finish(args.result_json, record, 4)
 
+    # The 24-hour window carries a tolerance. On 2026-10-17 at 00:05:05 UTC this guard blocked the
+    # V7-b upload by two seconds: the previous submission went up at 2026-10-16 00:05:07, exactly
+    # one day earlier, so `now - submitted_at` was 23 h 59 m 58 s. Two seconds of clock skew cost a
+    # whole submission slot, and the calendar rule - one submission per UTC day - was already
+    # satisfied by the first clause. The tolerance keeps the conservative rolling-window check while
+    # making it immune to sub-minute skew, and the arming wait now targets 00:10 UTC for the same
+    # reason.
     recent = [
         (submitted_at, row)
         for submitted_at, row in parsed_dates
-        if submitted_at.date() == now.date() or now - submitted_at < timedelta(hours=24)
+        if submitted_at.date() == now.date()
+        or now - submitted_at < timedelta(hours=24) - DATES_TOLERANCE
     ]
     if recent:
         newest = max(recent, key=lambda item: item[0])

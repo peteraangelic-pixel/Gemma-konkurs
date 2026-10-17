@@ -5,7 +5,9 @@ name: Official Kaggle submission (next candidate)
 #   * gemma4-agent/kaggle_smoke/official-submit-v611.trigger  (the aggressive 8-minute arm)
 # is pushed, or the workflow is dispatched manually with an explicit artifact choice.
 #
-# A trigger push ARMS a timed send: the job sleeps until the next 00:05 UTC, the moment the
+# A trigger push ARMS a timed send only when it is needed: the step reads our own submission
+# receipts, sends immediately if the daily slot is open, and otherwise sleeps until 00:10 UTC, the
+# moment the
 # competition's daily submission slot refreshes (02:05 Warsaw), so the submitted day is the new UTC
 # day and the following day's slot opens at the same hour instead of being blocked for 24 h from
 # e.g. 20:00 UTC. The wait is refused (nothing sent, trigger left in place) when the boundary is
@@ -66,7 +68,7 @@ jobs:
           ref: ${{ github.ref_name }}
           fetch-depth: 0
 
-      - name: Wait for the next UTC daily boundary when arming for the night
+      - name: Decide whether to send now or wait for the daily boundary
         id: wait
         env:
           EVENT_NAME: ${{ github.event_name }}
@@ -76,37 +78,83 @@ jobs:
           set -euo pipefail
           python3 - <<'PY'
           import datetime as dt
+          import glob
+          import json
           import os
           import sys
           import time
 
+          TOLERANCE_MINUTES = 5
           event = os.environ.get("EVENT_NAME", "")
           mode = (os.environ.get("REQUESTED_MODE") or "").strip()
           if event != "push" and mode != "wait_boundary":
               print("Mode: send now (no boundary wait requested).")
               sys.exit(0)
 
-          max_wait = float(os.environ.get("MAX_WAIT_HOURS", "5")) * 3600
+          def parse(value):
+              if not value:
+                  return None
+              text = str(value).strip().replace(" ", "T", 1)
+              try:
+                  parsed = dt.datetime.fromisoformat(text)
+              except ValueError:
+                  return None
+              if parsed.tzinfo is None:
+                  parsed = parsed.replace(tzinfo=dt.timezone.utc)
+              return parsed.astimezone(dt.timezone.utc)
+
+          # The decision is data-driven: how long ago did we actually get a submission through?
+          # Waiting for the boundary is worth it only when a recent submission would otherwise block
+          # the window right after it. On 2026-10-17 00:05:05 the guard blocked the V7-b upload by
+          # two seconds (the previous submission was 23 h 59 m 58 s old), so this step both targets
+          # 00:10 UTC and reads the receipts instead of guessing.
+          newest = None
+          for path in sorted(glob.glob("gemma4-agent/kaggle_results/*official-submission*.json")):
+              try:
+                  record = json.load(open(path, encoding="utf-8"))
+              except (OSError, ValueError):
+                  continue
+              submission = record.get("submission") or {}
+              if not record.get("submission_created") or not submission:
+                  continue
+              moment = parse(submission.get("date"))
+              if moment and (newest is None or moment > newest):
+                  newest = moment
+
           now = dt.datetime.now(dt.timezone.utc)
-          target = (now + dt.timedelta(days=1)).replace(hour=0, minute=5, second=0, microsecond=0)
-          delta = (target - now).total_seconds()
+          boundary = now.replace(hour=0, minute=10, second=0, microsecond=0)
+          if boundary <= now:
+              boundary += dt.timedelta(days=1)
+          delta = (boundary - now).total_seconds()
+
+          if newest is not None:
+              age = (now - newest).total_seconds() / 3600
+              print(f"Newest recorded submission: {newest:%Y-%m-%d %H:%M} UTC ({age:.1f} h ago).")
+              recent = age < 24 - TOLERANCE_MINUTES / 60
+          else:
+              print("No recorded submission found in the receipts.")
+              recent = False
+
+          if not recent:
+              print("The daily slot is open; sending now instead of sleeping to the boundary.")
+              sys.exit(0)
+
+          max_wait = float(os.environ.get("MAX_WAIT_HOURS", "5")) * 3600
           if delta > max_wait:
               print(
-                  "Refusing to arm: the next daily boundary is "
-                  f"{target:%Y-%m-%d %H:%M} UTC, {delta / 3600:.1f} h away "
-                  f"(limit {max_wait / 3600:.0f} h). Nothing was submitted and the trigger file was "
-                  "left in place - push it again closer to the boundary, or dispatch this workflow "
-                  "manually with mode=send_now.",
+                  f"Refusing to arm: the last submission is recent and the next boundary is "
+                  f"{boundary:%Y-%m-%d %H:%M} UTC, {delta / 3600:.1f} h away (limit {max_wait / 3600:.0f} h). "
+                  "Nothing was submitted and the trigger file was left in place - push it again closer "
+                  "to the boundary.",
                   flush=True,
               )
               sys.exit(1)
-          if delta > 0:
-              print(
-                  f"Armed: waiting {delta / 60:.1f} min for {target:%Y-%m-%d %H:%M} UTC, the moment the "
-                  "competition's daily submission slot refreshes.",
-                  flush=True,
-              )
-              time.sleep(delta)
+          print(
+              f"Armed: waiting {delta / 60:.1f} min for {boundary:%Y-%m-%d %H:%M} UTC, when the "
+              "rolling 24-hour window and the daily boundary both clear.",
+              flush=True,
+          )
+          time.sleep(delta)
           print("Boundary reached at", dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC"), flush=True)
           PY
 
