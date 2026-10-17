@@ -25,6 +25,7 @@ on:
         required: true
         default: smoke
         options:
+          - diagnose
           - smoke
           - full
   push:
@@ -119,6 +120,11 @@ jobs:
         run: |
           set -uo pipefail
           mode="${REQUESTED_MODE:-smoke}"
+          if [ "$mode" = "diagnose" ]; then
+            echo "Mode: diagnose (CPU only, no GPU quota)"
+            python gemma4-agent/tools/diagnose_gemma4_env.py               --outdir gemma4-agent/kaggle_results/gemma4-env               --max-wait-minutes 40
+            exit $?
+          fi
           if [ "$mode" = "full" ]; then
             outdir=gemma4-agent/kaggle_results/sft-full
             flag=--full
@@ -154,6 +160,7 @@ jobs:
           path: |
             gemma4-agent/kaggle_results/sft-smoke
             gemma4-agent/kaggle_results/sft-full
+            gemma4-agent/kaggle_results/gemma4-env
             ${{ runner.temp }}/kernellogs/
           if-no-files-found: warn
           retention-days: 14
@@ -174,7 +181,7 @@ jobs:
           cp -r gemma4-agent/kaggle_results/sft-full /tmp/keep/ 2>/dev/null || true
           git reset --hard "origin/$GITHUB_REF_NAME"
           mkdir -p gemma4-agent/kaggle_results
-          for d in sft-smoke sft-full; do
+          for d in sft-smoke sft-full gemma4-env; do
             if [ -d "/tmp/keep/$d" ]; then
               mkdir -p "gemma4-agent/kaggle_results/$d"
               cp /tmp/keep/$d/*.json "gemma4-agent/kaggle_results/$d/" 2>/dev/null || true
