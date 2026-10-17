@@ -1,6 +1,6 @@
 {
   "created_utc": "2026-10-17T00:05:07+00:00",
-  "status": "running",
+  "status": "complete",
   "submission_sha256": "907b8648c6dcbb53b7f2fb3c5fa9a54d73af55278b66c04aeef70714ce19883e",
   "fixed_task_id": "fastapi_15588",
   "task_count_requested": 30,
@@ -26,5 +26,22 @@
   "gpu_requested": true,
   "push_verified": true,
   "push_probe_raw": "petersharps/gemma-agent-benchmark-907b8648-20261017-000507 has status \"KernelWorkerStatus.QUEUED\"",
-  "kaggle_status": "KernelWorkerStatus.RUNNING"
+  "kaggle_status": "COMPLETE",
+  "poll_checked_utc": "2026-10-17T02:40:05+00:00",
+  "result": {
+    "tasks_completed_or_failed": 30,
+    "task_count_selected": 30,
+    "resolved_count": 10,
+    "score_estimate": 0.3333333333333333,
+    "score_ci95_wilson": [
+      0.19230295526846194,
+      0.5122027418616973
+    ],
+    "mean_task_duration_seconds": 261.1973299578998,
+    "total_task_duration_seconds": 7835.919898736995,
+    "benchmark_wall_seconds": 7837.600406921,
+    "per_task_max_time_minutes": 8.0,
+    "submission_sha256": "907b8648c6dcbb53b7f2fb3c5fa9a54d73af55278b66c04aeef70714ce19883e"
+  },
+  "fetched_utc": "2026-10-17T02:40:18+00:00"
 }
