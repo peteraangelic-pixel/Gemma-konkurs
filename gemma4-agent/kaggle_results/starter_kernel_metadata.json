@@ -1,5 +1,5 @@
 {
-  "retrieved_utc": "2026-10-17T10:20:52+00:00",
+  "retrieved_utc": "2026-10-17T10:49:26+00:00",
   "kernel_ref": "ryanholbrook/getting-started-gemma-4-developer-agent",
   "notebook_executed": false,
   "gpu_quota_used": false,
@@ -23,10 +23,10 @@
     ],
     "kernel_sources": [],
     "model_sources": [
-      "google/gemma-4/Other/gemma-4-e4b-it-qat-w4a16-ct/2",
+      "google/gemma-4/Other/gemma-4-31b-it-qat-w4a16-ct/2",
       "google/gemma-4/Other/gemma-4-12b-it-qat-w4a16-ct/2",
       "google/gemma-4/Other/gemma-4-e2b-it-qat-w4a16-ct/2",
-      "google/gemma-4/Other/gemma-4-31b-it-qat-w4a16-ct/2"
+      "google/gemma-4/Other/gemma-4-e4b-it-qat-w4a16-ct/2"
     ]
   }
 }

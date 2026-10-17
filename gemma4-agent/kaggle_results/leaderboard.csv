@@ -1,7 +1,7 @@
 Rank,TeamId,TeamName,LastSubmissionDate,Score,SubmissionCount,TeamMemberUserNames
 1,16948405,Yurnero,"2026-10-16 04:51:40",0.24,15,samson8
 2,17019455,"Yike Xu","2026-10-08 06:07:23",0.24,7,weiyun22021
-3,17015790,"Francis Joseph","2026-10-15 15:17:00",0.22,10,francisjosephdev
+3,17015790,"Francis Joseph","2026-10-16 20:09:11",0.22,11,francisjosephdev
 4,16955167,"Deepest Mind","2026-10-14 17:44:32",0.22,11,tanavbajaj
 5,16956138,"Ayush Barai","2026-10-16 03:57:53",0.22,20,ayush04barai
 6,17019135,"Lakshya Mewara0025","2026-10-12 17:17:40",0.22,8,lakshyamewara0025
@@ -17,7 +17,7 @@ Rank,TeamId,TeamName,LastSubmissionDate,Score,SubmissionCount,TeamMemberUserName
 16,16957585,DVS,"2026-10-14 14:29:00",0.22,8,davis0178
 17,16967594,"Igor Zharov","2026-10-16 10:07:02",0.22,15,flexonafft
 18,16983938,"Minghao Xia","2026-10-16 03:45:07",0.22,11,minghaoxia
-19,17098471,"God Se7en","2026-10-15 16:08:43",0.22,2,godseven7
+19,17098471,"God Se7en","2026-10-16 20:46:05",0.22,3,godseven7
 20,16956702,"Varun Ambadi","2026-10-13 16:19:33",0.22,17,varunambadi
 21,16948602,"guoqin gu","2026-10-16 18:08:36",0.22,7,"guoqingu,huanligong,roschildrui"
 22,16965041,DTG,"2026-10-14 07:13:08",0.22,9,yuchen1ghu
@@ -93,7 +93,7 @@ Rank,TeamId,TeamName,LastSubmissionDate,Score,SubmissionCount,TeamMemberUserName
 92,16967058,Souvik_D_Biswas,"2026-10-16 17:47:47",0.20,14,"soukeaizenz,souvikdbiswas"
 93,17032803,xiakongxin,"2026-10-16 10:41:48",0.20,8,xiakongxin
 94,17043418,"Nam Nguyen Ngoc","2026-10-14 13:50:32",0.20,4,ngocnamk3er
-95,16966060,togakyo,"2026-10-14 15:35:13",0.20,10,kyosuketogashi
+95,16966060,togakyo,"2026-10-16 19:07:49",0.20,11,kyosuketogashi
 96,16979741,"Munhim Qazi","2026-10-14 20:13:36",0.20,8,"munhimqazi,omarwaqar"
 97,16948026,"Emre Cirak","2026-10-16 13:18:43",0.20,21,biohack44
 98,16968278,"yeshwanth udayshankar","2026-10-16 13:27:44",0.20,17,yeshwanthudayshankar
@@ -335,7 +335,7 @@ Rank,TeamId,TeamName,LastSubmissionDate,Score,SubmissionCount,TeamMemberUserName
 334,16959072,"Nir Aberman","2026-10-16 05:56:34",0.18,17,niraberman
 335,17015855,kimchikingdom,"2026-10-16 05:43:36",0.18,4,kimchikingdom
 336,17034233,"Sailor Ren","2026-10-16 16:11:49",0.18,8,sailorren
-337,17079575,Lampwright,"2026-10-16 06:05:04",0.18,3,"auroravolta,cherry1220,hongyuzhou122,kkimino"
+337,17079575,Lampwright,"2026-10-17 00:04:50",0.18,4,"auroravolta,cherry1220,hongyuzhou122,kkimino"
 338,16971279,"Sunghyun Jun","2026-10-16 13:37:40",0.18,7,sunghyunjun
 339,17042955,"Oyinloye Oluwasola","2026-10-16 07:24:02",0.18,9,deysholey
 340,16948671,WLYYYo,"2026-10-14 11:30:12",0.18,9,wlyyyo
@@ -443,7 +443,7 @@ Rank,TeamId,TeamName,LastSubmissionDate,Score,SubmissionCount,TeamMemberUserName
 442,16992887,"Kirill Labzin","2026-10-10 21:14:47",0.17,10,kirilllabzin
 443,17014863,"Bardia Bahadori","2026-10-15 14:24:27",0.17,6,bardiabahadori
 444,16975243,youchy,"2026-10-10 15:22:58",0.17,10,youchy
-445,17016995,Sintonizando,"2026-10-15 14:59:44",0.17,12,sanjmen
+445,17016995,Sintonizando,"2026-10-16 20:24:15",0.17,13,sanjmen
 446,16958457,"Wills Cui","2026-10-09 03:52:07",0.17,10,willscui
 447,17011540,Sahil,"2026-10-16 06:09:07",0.17,15,normannweuifohpq9
 448,16955405,"Slade Cowling","2026-10-10 22:06:12",0.17,12,sladecowling
@@ -510,7 +510,7 @@ Rank,TeamId,TeamName,LastSubmissionDate,Score,SubmissionCount,TeamMemberUserName
 509,17058855,Tachibana,"2026-10-08 07:05:45",0.17,1,naototachibana
 510,17050900,DieByTheSword,"2026-10-10 03:46:40",0.17,2,przemysawstroiws
 511,16963131,"Matvey Murtazaliev","2026-10-15 14:19:59",0.17,13,infibiss
-512,16962311,Penguin,"2026-10-15 12:39:53",0.17,12,penguin069
+512,16962311,Penguin,"2026-10-16 18:52:41",0.17,13,penguin069
 513,16990202,dongdongunique2,"2026-10-16 13:36:39",0.17,12,yinzhaoren
 514,16982132,"Dariush Afshar","2026-10-16 15:15:51",0.17,12,dariushafshar
 515,16962265,CTO,"2026-10-13 18:00:55",0.17,16,caleboleary
@@ -566,7 +566,7 @@ Rank,TeamId,TeamName,LastSubmissionDate,Score,SubmissionCount,TeamMemberUserName
 565,17070061,"Kim Tae Heon","2026-10-13 23:12:09",0.17,3,agileteam
 566,16955772,"son min hyeok","2026-10-12 20:30:38",0.17,9,sonminhyeoks
 567,16982370,yaya__k,"2026-10-10 21:34:38",0.17,5,yaya88k
-568,16970253,Chloe,"2026-10-15 12:01:56",0.17,3,baytree1238
+568,16970253,Chloe,"2026-10-16 20:15:22",0.17,4,baytree1238
 569,17021495,"F G","2026-10-16 12:23:20",0.17,9,rombuk74
 570,16949529,"Cosmic Princess Kaggler","2026-10-16 22:05:57",0.17,18,whitelily
 571,17079673,"Spandana Bhardwaj","2026-10-11 00:08:00",0.17,1,spandanabhardwaj
@@ -644,7 +644,7 @@ Rank,TeamId,TeamName,LastSubmissionDate,Score,SubmissionCount,TeamMemberUserName
 643,17074110,FanZhang,"2026-10-12 07:37:52",0.17,1,zhangfun
 644,17064332,"Sagar Nannaware","2026-10-16 13:56:59",0.17,5,sagarnannaware
 645,16986459,"Jay Gautam","2026-10-16 06:25:25",0.17,15,jaygautam007
-646,16959469,"Dixon Yeurmuth","2026-10-15 21:11:02",0.17,13,dixonyeurmuth
+646,16959469,"Dixon Yeurmuth","2026-10-16 22:02:03",0.17,14,dixonyeurmuth
 647,16976526,Liujiahua,"2026-10-16 16:27:40",0.17,6,liujiahua2358
 648,17074410,IWannaGotoUS,"2026-10-12 09:16:11",0.17,1,randyzhang666
 649,16957746,Harsha,"2026-10-16 02:24:48",0.17,18,harshakalluri14
@@ -832,350 +832,350 @@ Rank,TeamId,TeamName,LastSubmissionDate,Score,SubmissionCount,TeamMemberUserName
 831,17028563,"Jianheng Li","2026-10-16 17:23:23",0.17,2,jianhengli
 832,17057146,"Souriya Khaosanga","2026-10-16 17:32:54",0.17,6,souriyakhaosanga
 833,17080109,wangweiming1111,"2026-10-16 17:45:40",0.17,1,wangweiming2222
-834,16977789,GopiPitchai,"2026-09-29 00:14:22",0.15,2,gopipitchai
-835,16956348,Ajeya,"2026-10-10 05:00:26",0.15,9,"adityaudiya,divyakushpunjabi"
-836,17013409,"Michael Klassen","2026-10-07 08:26:01",0.15,4,michaelklassen
-837,16967739,"Ilia Iliev","2026-10-16 15:04:43",0.15,11,iliailiev1
-838,16986834,zegggg,"2026-10-14 22:55:47",0.15,6,zeyouzhang
-839,16993908,"Noah Sabaj","2026-10-04 00:00:24",0.15,5,noahsabaj
-840,16948703,"Ty Liu","2026-10-12 20:50:25",0.15,11,zhibowangligan
-841,16981518,"mainly for fun","2026-10-15 02:05:08",0.15,10,hcngnga
-842,16959380,"Manoj Gowda BG","2026-10-16 15:53:48",0.15,15,"manojgowdabg,nidhigowdabg"
-843,16983222,"rossi vittorio","2026-10-03 11:44:29",0.15,3,rossivittorio
-844,16970958,"Aditya Sasidhar","2026-10-15 17:40:16",0.15,10,tadityasasidhar
-845,17017172,AkiraOnojp,"2026-10-14 02:32:55",0.15,8,akiraonojp
-846,17017263,"sean xueee","2026-10-15 02:59:04",0.15,8,seanxueee
-847,16962819,"Andrew J Sanderson","2026-10-04 00:36:07",0.15,2,andrewjsanderson
-848,16982712,neko941,"2026-10-14 09:41:30",0.15,12,nekonekonyan
-849,16959419,"Med Mongi Benyaiche","2026-10-16 10:28:54",0.15,14,"medmongibenyaiche,oussamazaied,ramitabib"
-850,16958176,fshindo,"2026-10-16 15:04:02",0.15,15,ffsscf
-851,16966240,"Sheng-Hao Chen","2026-10-16 00:18:05",0.15,14,orionch
-852,16991414,d_tree_suki,"2026-10-14 14:06:59",0.15,7,yuki11ii
-853,16955452,"Leander Antony","2026-10-16 19:15:36",0.15,8,leanderantony30
-854,16983416,"Brian Chua","2026-10-04 14:35:40",0.15,4,chuazhengweibrian
-855,16989019,cccyou,"2026-10-15 13:13:11",0.15,7,cccyou
-856,16958829,SaTa,"2026-10-16 16:42:23",0.15,13,masa55taka
-857,16947927,J&F,"2026-10-16 13:51:23",0.15,19,"frtgnn,jaejohn"
-858,16992761,"Tyler Martin","2026-10-09 23:50:08",0.15,9,tylermartinalaska
-859,17015288,Rey4Dan,"2026-10-16 23:35:49",0.15,5,rey4dan
-860,17021315,Anon,"2026-10-16 04:57:17",0.15,13,huggkurz
-861,16972691,TaPUNGaa,"2026-10-16 17:08:51",0.15,13,nusrati
-862,16975773,spacetime1008,"2026-10-16 05:23:43",0.15,11,spacetime1008
-863,16956551,"Xiangzhu Yan","2026-10-14 06:36:55",0.15,7,"litahsu,xiangzhuyan"
-864,16979666,"jananika senthilkumar","2026-10-13 16:01:41",0.15,15,"jananikasenthilkumar,ssjaswanth"
-865,16949593,Phoenix,"2026-10-13 16:37:34",0.15,8,chetanagrawall
-866,16950810,"Aman Arora","2026-10-08 16:06:47",0.15,7,aroraaman
-867,17024290,陳盛楠,"2026-10-06 06:44:09",0.15,3,fuzaxia
-868,16962544,Yuan800,"2026-10-15 14:06:23",0.15,5,"jacqueszhelinzhang,yuan800"
-869,16963548,"Mohamed abdelrazik","2026-10-06 09:17:24",0.15,1,mohamed3abdelrazik
-870,16958035,bharat,"2026-10-08 03:29:14",0.15,4,bharatmohan
-871,17042905,Captainuknow,"2026-10-06 10:54:31",0.15,1,captainuknow
-872,16951804,"Vavilkin Alexander","2026-10-08 15:15:53",0.15,6,vavalex
-873,16956105,"Shankha Suvro Mullick","2026-10-08 05:21:11",0.15,9,shankhasuvromullick
-874,17044324,Shozyfrenia,"2026-10-15 08:01:22",0.15,4,shozyfrenia
-875,16968469,AbhilashReddyYammanuru,"2026-10-06 16:16:19",0.15,9,abhilashreddyy
-876,16952696,LChaY,"2026-10-06 16:20:00",0.15,13,liuuu114514
-877,17036954,"Bala Murugan AIML","2026-10-14 11:00:44",0.15,6,balamuruganaiml
-878,17027202,"aalok agrawal","2026-10-11 22:46:21",0.15,5,aalokagrawal02
-879,17045014,Tyborr,"2026-10-08 23:57:32",0.15,3,tyborr
-880,17013049,LuanHengYu,"2026-10-06 21:17:47",0.15,3,apexml
-881,17033089,"Michael Pershin","2026-10-15 18:22:27",0.15,8,michaelpershin
-882,17043980,thwaitsusa2,"2026-10-08 19:51:05",0.15,3,thwaitsusa2
-883,17031549,sawao7,"2026-10-13 18:01:42",0.15,6,sawao7
-884,16987218,"Sum YEUNG","2026-10-15 02:03:01",0.15,7,sumyeung
-885,16952752,woldy,"2026-10-07 00:18:36",0.15,14,woldywei
-886,17017076,"PoongRyu B","2026-10-14 13:08:46",0.15,10,poongryub
-887,16956252,"Shalini S","2026-10-12 14:30:08",0.15,12,shals14
-888,17031067,"Ihor V. Popov","2026-10-11 17:17:18",0.15,7,"ihorvpopov,irynapopovav"
-889,17032022,Washburn,"2026-10-07 04:11:43",0.15,3,washburn7
-890,17037794,"Didhiti Nahid","2026-10-16 07:13:03",0.15,7,didhitinahid
-891,16956545,"TABOUT MHAMED","2026-10-08 17:43:34",0.15,5,taboutmhamed
-892,16965953,"Abdul Wahab Khan","2026-10-07 08:42:20",0.15,2,abdulwahab2321
-893,16962274,OverfitOracle,"2026-10-07 12:04:55",0.15,5,alisalmanrana
-894,17019375,quant_kiid,"2026-10-07 13:47:01",0.15,2,quantkiid
-895,16959234,"Angel Petrov","2026-10-16 12:03:31",0.15,18,angpetrov
-896,17021433,"Simranjeet Singh","2026-10-15 11:04:39",0.15,4,simranjeetsingh5
-897,16969039,tomtom2026,"2026-10-15 17:40:57",0.15,11,tomtom2026
-898,16954773,TechOne,"2026-10-12 13:41:38",0.15,5,"pavanshelat,raj072004"
-899,17024403,"Harshank Matkar","2026-10-16 17:06:43",0.15,2,harshankmatkar
-900,17035839,"SHUO WANG","2026-10-07 19:04:36",0.15,2,shuowang928
-901,16986460,TransformoGGers,"2026-10-15 13:55:17",0.15,8,"agrover112,rmibourgerie"
-902,16994034,"Joe Young","2026-10-07 21:41:21",0.15,6,jsphyg
-903,17015951,"Huzaifa Mankda","2026-10-10 15:07:17",0.15,4,huzaifa242
-904,16976602,FJ,"2026-10-07 23:42:52",0.15,4,wenfengjia
-905,16954489,whoami,"2026-10-14 02:00:52",0.15,11,whoamircc
-906,16948682,"Kunal Aarse","2026-10-08 02:42:14",0.15,5,kunalinfinite
-907,17023550,Kentaro,"2026-10-16 23:20:11",0.15,8,kentaro1207y
-908,17049107,Pablo,"2026-10-16 09:49:31",0.15,5,lanteluons
-909,17052744,"YOUNG CHOW","2026-10-16 08:53:03",0.15,6,youngchow
-910,16953944,"Ray Yen216","2026-10-14 19:35:19",0.15,10,rayyen216
-911,17018962,"Yining Tan","2026-10-08 04:02:21",0.15,1,"cyanlu,mistyqaq,yiningtan"
-912,16957650,Aevion-Labs,"2026-10-08 04:08:55",0.15,1,aevionlabs
-913,16959092,"Fadhl Akmal","2026-10-14 07:00:07",0.15,6,fadhlakmal
-914,16979275,jiangnanxn,"2026-10-15 10:31:53",0.15,11,jiangnanxn
-915,17057365,"Hà Quang Minh","2026-10-08 04:17:21",0.15,1,haaminh
-916,16971537,"liangjiang chen","2026-10-14 02:20:20",0.15,8,"auince1,liangjiangchen"
-917,16963104,"Mohamed el.harery","2026-10-16 10:03:57",0.15,12,mohamedelharery
-918,17059135,"Aswath Vanan","2026-10-08 07:10:33",0.15,1,aswathvanan
-919,16953466,"Dheerendra Singh Tomar","2026-10-08 08:01:42",0.15,4,tomardheerendra
-920,17051814,"Seraph Lux","2026-10-08 09:37:49",0.15,2,seraphlux
-921,17060038,Qiwei,"2026-10-08 09:46:01",0.15,1,qiweiyin
-922,16956129,"Vicens Gaitan","2026-10-08 10:38:42",0.15,5,vicensgaitan
-923,17020837,Pa3฿aJluHа,"2026-10-16 11:30:47",0.15,8,hettpugymajlhuk
-924,16955919,"Yan Zhou","2026-10-08 12:33:41",0.15,1,yanzhou06
-925,16964809,"DARSHAN A","2026-10-14 16:44:24",0.15,9,ad12345kag
-926,16991437,Stitch,"2026-10-08 13:26:25",0.15,3,mitsuaccessjam
-927,16954144,Santhana,"2026-10-14 13:47:17",0.15,5,santhanalekshmic
-928,16954373,"Small Field","2026-10-08 15:02:46",0.15,9,ttttoooo
-929,17024429,carbonapi,"2026-10-08 16:01:47",0.15,5,nonempty
-930,16967450,Toon,"2026-10-16 17:05:44",0.15,11,sanhapon
-931,16954377,lingyu07,"2026-10-16 14:42:06",0.15,11,lingyu07
-932,17061939,Chikuwabu,"2026-10-08 16:19:35",0.15,1,prgckwb
-933,16980841,"Jay Gupta","2026-10-12 14:03:19",0.15,8,noobhunterjay
-934,17022737,"Vidit Parashar","2026-10-08 18:14:28",0.15,2,viditparashar123456
-935,16961828,raydestar,"2026-10-16 17:44:10",0.15,9,raydestar
-936,16948868,"Oleksii Zhukov","2026-10-16 22:44:10",0.15,21,zhukovoleksiy
-937,16950932,aruuu,"2026-10-08 19:23:15",0.15,4,arruuu
-938,17014468,mmwstudy,"2026-10-15 07:35:58",0.15,3,mmwstudy
-939,16956792,"Sriharsha Sammeta","2026-10-16 05:12:18",0.15,11,sriharshasammeta
-940,16967530,"Connor Tynan","2026-10-14 21:59:32",0.15,13,connortynan
-941,17043174,"Subin An","2026-10-15 03:04:15",0.15,6,subinium
-942,16971579,Huggingfish,"2026-10-16 03:39:45",0.15,9,kylervaler
-943,17045912,Rounak-agrwl,"2026-10-09 00:00:34",0.15,4,rounakagrwl
-944,16988702,"Ghaisan K","2026-10-16 09:28:57",0.15,12,ghaisank
-945,17064890,"Shane Schisler","2026-10-09 00:51:52",0.15,1,seschis
-946,17030889,Udenaka,"2026-10-16 17:25:47",0.15,4,udenaka
-947,17034276,BOB,"2026-10-15 09:18:09",0.15,6,hotpotbro
-948,16958825,JOONSEOEOM,"2026-10-09 03:58:00",0.15,4,joonseoeom
-949,16950298,HZM,"2026-10-14 00:31:40",0.15,10,leehann
-950,17037561,Lixrixy,"2026-10-09 06:24:49",0.15,2,lixrixy
-951,17027143,"Nguyễn Cường","2026-10-09 06:36:12",0.15,1,ngcngcmi
-952,17066739,AnOldStory,"2026-10-09 06:38:48",0.15,1,anoldstory
-953,17024607,Jeus,"2026-10-16 14:39:53",0.15,11,jiseungwoo
-954,17067267,"Mathurin Ache","2026-10-16 14:45:42",0.15,4,mathurinache
-955,17014731,"k hori ","2026-10-09 09:01:18",0.15,7,khori7
-956,16956189,Ju,"2026-10-09 09:21:41",0.15,2,juziddd
-957,17015279,killinneko,"2026-10-09 11:18:18",0.15,3,killinneko
-958,16951930,"Atakan Aldemir","2026-10-09 11:49:04",0.15,3,atakanaldemir
-959,17032981,"Ghazaros Barseghyan","2026-10-16 06:37:35",0.15,3,ghazarosbarseghyan91
-960,17038434,amitrajan,"2026-10-16 06:39:04",0.15,8,amitrajan012
-961,17068378,"Oliver Szabó","2026-10-13 12:00:40",0.15,3,oliverszab
-962,16991193,jean808,"2026-10-09 14:29:51",0.15,1,jean808
-963,16956161,Anubisyy,"2026-10-16 03:49:36",0.15,3,anubisyy
-964,17069815,Vatsal,"2026-10-09 15:34:32",0.15,1,vatsal1s
-965,16948575,insuperabilehart,"2026-10-11 12:44:55",0.15,2,insuperabile
-966,16989710,"Andrey Serov","2026-10-09 19:09:11",0.15,4,andrayserov
-967,16992545,"Marvin O","2026-10-14 10:01:31",0.15,4,marvinoka4
-968,17032488,"Madhur Shyam Maurya","2026-10-11 13:05:22",0.15,5,madhurmaurya
-969,16987881,"Changyuan Chen","2026-10-09 20:29:21",0.15,7,changyuanchenmit
-970,16980818,"Till Wegmueller","2026-10-13 05:36:38",0.15,3,toasterson
-971,17026033,"Kevin A","2026-10-16 11:22:52",0.15,6,"aswinsuthaharan,kevinaghu"
-972,16966732,"wei chang","2026-10-10 01:51:13",0.15,7,wayne0404
-973,16958383,Evannnnnn,"2026-10-12 02:32:21",0.15,3,"evannnnnn,victort111,yanhaodinggeorge"
-974,17014821,"Iason Malkotsis","2026-10-16 10:29:14",0.15,11,jasonthird
-975,17043498,"Nguyên Nguyễn Việt","2026-10-16 14:06:10",0.15,4,nguynnguynvit
-976,16951460,"Chirantan Bhardwaj","2026-10-10 05:29:04",0.15,12,chirantanbhardwaj
-977,16973809,shivam,"2026-10-10 06:26:53",0.15,3,itskshivam
-978,17024827,"Venkat Balaji S","2026-10-16 09:59:24",0.15,6,dataarthur
-979,17023301,"Vivaan Satija","2026-10-17 04:19:34",0.15,4,vivaansatija
-980,17075017,aefinityaiinc,"2026-10-10 08:41:54",0.15,1,aefinityaiinc
-981,16965991,UIT-DIFF,"2026-10-15 14:07:20",0.15,13,"nguynvithung2108,toni0710,vitnguynnguyen"
-982,16971546,西松大祐,"2026-10-15 20:53:25",0.15,7,wep212
-983,17040257,Corgi-Samoyed,"2026-10-15 23:56:35",0.15,3,corgisamoyed
-984,17061318,ShaazD,"2026-10-16 09:25:59",0.15,6,shaazd
-985,17068581,"Kento Okumura","2026-10-12 13:00:04",0.15,2,kentookumura
-986,16959849,"shrey sharma07","2026-10-16 03:34:15",0.15,10,"atulbaliyan,shreysharma07"
-987,17060295,"Vlad Studennykov","2026-10-10 15:35:28",0.15,1,vladstud716373618
-988,17044109,darasty,"2026-10-16 19:02:18",0.15,4,darasty
-989,16962500,zengpu,"2026-10-10 16:20:24",0.15,15,zengpu
-990,16961006,"Habib ullah","2026-10-16 07:36:54",0.15,14,habibullah123456789
-991,16949801,"No Name","2026-10-10 17:00:43",0.15,3,ivanj0
-992,17065979,Dancing_RYAN,"2026-10-16 06:59:06",0.15,5,res1235
-993,17027160,Behzad,"2026-10-16 06:32:55",0.15,11,beh6271157
-994,17071157,"Jarno Rantala","2026-10-12 13:50:30",0.15,2,jarski
-995,16953440,aki,"2026-10-16 17:48:21",0.15,5,andenmeikou
-996,16989552,Artyom,"2026-10-10 21:42:11",0.15,6,netstalker1337
-997,16962495,dvv_ram,"2026-10-10 22:04:09",0.15,8,ddvram
-998,16993582,"Be A Gent","2026-10-15 17:47:46",0.15,8,rhooon
-999,16960439,sinchir0,"2026-10-15 00:30:10",0.15,13,sinchir0
-1000,17043898,Mforg,"2026-10-15 01:25:47",0.15,4,mforg74911
-1001,16964624,"Ian Jones","2026-10-14 00:44:31",0.15,11,ianaldenjones
-1002,17079598,"Sunstone North Lab","2026-10-14 18:38:49",0.15,3,burtonlancaster
-1003,17028256,"Sonu Yadav","2026-10-11 03:31:25",0.15,1,sonuyadav710
-1004,17064037,Arav20,"2026-10-11 03:35:15",0.15,2,arav20
-1005,16965363,"Anupam Sharma","2026-10-11 05:44:01",0.15,4,"cosmogeek,yadavdinesh1"
-1006,16954782,"NODUS - M.Y.C.E.L.I.S","2026-10-16 20:44:36",0.15,11,neronrx
-1007,17067750,jayyang3,"2026-10-11 06:43:32",0.15,1,jayyang3
-1008,17057634,"Hance Wang","2026-10-11 06:46:40",0.15,1,hancewang
-1009,16948199,Mycelis,"2026-10-15 05:35:45",0.15,7,johnmoncel
-1010,17043538,yamakawanin,"2026-10-15 09:04:44",0.15,5,yamakawanin
-1011,16966022,"Sungjoon Park","2026-10-11 07:37:50",0.15,6,sungjoon94
-1012,17013327,"Meteor #2","2026-10-16 11:23:02",0.15,7,meteorkid
-1013,16970348,"lionel W509","2026-10-11 09:31:01",0.15,5,lionelw509
-1014,16960796,ASI,"2026-10-12 22:53:27",0.15,6,"akshayggupta1,atomstack001,sanyamverma03"
-1015,16949775,"Carson Rodrigues","2026-10-16 19:08:08",0.15,17,carsonrodrigues
-1016,17026098,kazuhiro3381,"2026-10-11 10:11:51",0.15,7,kazuhiro3381
-1017,16972013,"Arnab Patra 77","2026-10-14 09:05:13",0.15,6,arnabpatra77
-1018,16958024,arcSYSU,"2026-10-13 09:30:01",0.15,7,"akiakiczc,fairygrenn,wuqifan9"
-1019,17010588,Khalid,"2026-10-11 11:31:38",0.15,2,khalid000000
-1020,17020591,gatarez,"2026-10-14 18:06:25",0.15,6,rezvangataullin
-1021,16971897,cgrlkc,"2026-10-13 10:34:44",0.15,14,cgrlkc
-1022,16956557,"Hamed Vakili","2026-10-14 05:10:21",0.15,9,hamedvakilit0
-1023,17069074,Test,"2026-10-11 13:11:53",0.15,1,husy07
-1024,17031888,"Dmytro Maliarenko","2026-10-15 13:04:04",0.15,3,arxitekton
-1025,17048121,yuyu2172,"2026-10-13 00:09:50",0.15,4,yuyu2172
-1026,16948597,"Aiman Al-Shalfi","2026-10-16 11:11:10",0.15,13,aimanalshalfi
-1027,17081839,zymonody7,"2026-10-11 15:12:48",0.15,1,zymonody7
-1028,17012516,"Shubham Vankalas","2026-10-16 00:06:12",0.15,6,shubhamvankalas
-1029,17064493,"Leandro Rocha","2026-10-11 17:33:22",0.15,2,leandrorocver
-1030,17032994,"Josh Barth","2026-10-11 17:50:08",0.15,3,jabarth
-1031,16948565,Cyrus,"2026-10-11 22:07:43",0.15,2,jamalsaeedi
-1032,17085220,Chestercopperpot,"2026-10-11 22:49:09",0.15,1,tysonwashere
-1033,17047546,"Weiyi He","2026-10-11 23:29:02",0.15,4,weiyihe126
-1034,17031521,Jason,"2026-10-11 23:47:36",0.15,3,pipi86
-1035,17021229,michi,"2026-10-14 23:21:53",0.15,3,michi883
-1036,17058481,"PATARA TRIRAT","2026-10-16 01:49:37",0.15,3,itouchz
-1037,17051778,zard599,"2026-10-12 01:53:10",0.15,2,zard599
-1038,16988946,Fourques,"2026-10-12 02:05:31",0.15,1,fourques
-1039,17083655,"Minamoto Genji","2026-10-12 02:05:50",0.15,1,minamotogenji
-1040,16951072,"Constant Variables","2026-10-12 02:53:39",0.15,1,"bhumikashaw,ds24f2001383,maldev08,sadhanalearns"
-1041,16989769,eeexian,"2026-10-12 03:18:49",0.15,1,eeexian
-1042,17074687,manduinca,"2026-10-12 03:47:00",0.15,1,manduinca
-1043,16951052,Alpha4,"2026-10-12 04:23:01",0.15,4,"braincloud,shanzhong8"
-1044,17085360,jjjackielyu,"2026-10-12 04:35:55",0.15,1,jjjackielyu
-1045,17035979,"Du Qiezui","2026-10-16 12:07:38",0.15,8,duqiezui
-1046,17066451,carriercheng,"2026-10-15 23:28:02",0.15,5,carriercheng
-1047,17013110,@<<Ideain>>,"2026-10-16 11:13:21",0.15,10,ideain
-1048,16985045,Arulrajj,"2026-10-12 06:14:15",0.15,5,arulrajj
-1049,16966878,Ayodeji,"2026-10-14 20:12:35",0.15,8,ayodejiibrahimlateef
-1050,16969068,"Isaack Joshua","2026-10-12 06:30:49",0.15,8,isaackjoshua
-1051,17017545,"Adam Johnson","2026-10-16 16:51:32",0.15,10,comfyops
-1052,16971902,"Kashyapsinh gohil","2026-10-13 18:05:15",0.15,4,kashyapsinhgohil
-1053,17038108,"Almaz Yessenyazov","2026-10-16 09:11:21",0.15,5,almazishe
-1054,16948173,Hellboy,"2026-10-12 07:43:29",0.15,3,helmirinaldi
-1055,17033227,"Marco Fancisco","2026-10-15 16:44:35",0.15,7,marcofancisco
-1056,17041888,"Kathrine Ganda","2026-10-12 08:57:45",0.15,2,kathrineganda
-1057,16981533,qs22,"2026-10-12 09:04:22",0.15,1,compensator
-1058,16950073,seven,"2026-10-12 09:35:09",0.15,3,morikawatakeshi
-1059,17064700,xiaomo121,"2026-10-14 00:59:07",0.15,2,xiaomo121
-1060,16961162,ParsaAshrafi,"2026-10-12 10:34:35",0.15,3,parsaashrafii
-1061,16991860,"Fuat Çakıcı","2026-10-12 11:13:54",0.15,11,fuatcakiicii
-1062,16970473,Dhaneesh.M,"2026-10-16 12:36:29",0.15,3,dhaneeshm1
-1063,17024144,"Kerstein Lapuz","2026-10-16 17:07:58",0.15,11,kersteinlapuz
-1064,17020314,MaiNguyenQuynh,"2026-10-14 10:31:30",0.15,5,mainq1
-1065,16954093,"Kevin E R MILLE","2026-10-16 02:22:40",0.15,11,kevinermille
-1066,16990991,aliqwen,"2026-10-12 13:01:22",0.15,4,aliqwen
-1067,17085284,Ryan2255,"2026-10-13 19:55:42",0.15,2,ryan2255
-1068,17014095,"Constantin Craciun","2026-10-16 05:49:04",0.15,5,constantincraciun
-1069,17020466,Yuto.M,"2026-10-15 10:57:19",0.15,7,yutomuroshima
-1070,16948690,AjitDaGeniusGuy,"2026-10-16 09:57:36",0.15,18,ajitdageniusguy
-1071,17065314,"Mohammed Abed","2026-10-16 10:43:05",0.15,6,mohammedabed56666
-1072,17042661,"Hamza Imran","2026-10-12 15:04:05",0.15,2,hmzirn
-1073,17021752,"Federico Moreno","2026-10-15 01:38:49",0.15,5,federicomoreno613
-1074,16975693,wangkunkun,"2026-10-12 16:23:36",0.15,3,wangkunkunn
-1075,17031852,nerdai,"2026-10-15 21:12:37",0.15,5,nerdai
-1076,17077137,"Emanuele Miranda","2026-10-13 21:47:30",0.15,2,emanuelemiranda
-1077,16978024,"Aaron amacadu","2026-10-12 16:51:03",0.15,2,aaronamacadu
-1078,16955165,"Rengarajan G","2026-10-16 03:59:23",0.15,7,rengarajang
-1079,16990272,Dishant94,"2026-10-12 18:05:30",0.15,1,dishant94
-1080,17066614,"Karthik Rajagopalan","2026-10-16 00:00:28",0.15,5,karthikr223
-1081,16974938,BrandonH12,"2026-10-12 18:45:49",0.15,9,brandonh12
-1082,17058078,SpicyOhi13,"2026-10-16 15:45:31",0.15,4,spicyohi13
-1083,17043973,"Derrick Kirimi","2026-10-14 13:07:40",0.15,3,derrickkirimi
-1084,17088115,"Lim Ba Su","2026-10-15 05:34:25",0.15,2,limbasu
-1085,17021264,Finex,"2026-10-14 05:24:45",0.15,7,varush70
-1086,16984937,CorpUnum,"2026-10-15 08:37:10",0.15,8,antonisfragkos
-1087,16982841,sue124,"2026-10-12 23:12:46",0.15,4,ryotasueyoshi
-1088,16950295,tamref,"2026-10-16 04:34:43",0.15,15,tamreff3290
-1089,16989363,isthereanycode,"2026-10-16 02:44:02",0.15,4,isthereanycode
-1090,17073915,NockAI,"2026-10-15 03:05:11",0.15,3,nockai
-1091,17084272,salyamq,"2026-10-13 03:15:27",0.15,2,salyamq
-1092,17083533,"mouad berqia","2026-10-14 17:43:09",0.15,3,mouadberqia
-1093,16959575,"Hitesh Kumar","2026-10-16 01:24:14",0.15,13,erhiteshkumar
-1094,17081121,Eric_Yang_08,"2026-10-16 06:19:15",0.15,4,ericyang08
-1095,17011617,"Grim Reaper","2026-10-16 04:49:52",0.15,11,fathomable
-1096,17064171,"Nihal Kumar Sharma","2026-10-13 06:00:32",0.15,2,nihalkumarsharma
-1097,17021705,"Denis Sanchez","2026-10-13 06:44:10",0.15,4,denissanchez
-1098,16983987,"Héctor Valverde","2026-10-16 07:25:02",0.15,10,hvpareja
-1099,17034157,arman1o1,"2026-10-13 08:18:59",0.15,5,arman1o1
-1100,16980632,"Shantanu Kharwar","2026-10-14 14:32:39",0.15,2,byteknight28
-1101,16975359,tests1234,"2026-10-16 10:19:27",0.15,8,tests1234
-1102,17096568,"Jingshui Fu","2026-10-15 08:51:57",0.15,2,jingshuifu
-1103,17095572,"Kaipeng Zheng","2026-10-13 10:43:32",0.15,1,kaipengzheng
-1104,16952520,"Chen Siyuan","2026-10-15 13:17:17",0.15,4,chensiyuan03
-1105,16986276,"HD h Joratos","2026-10-14 14:04:51",0.15,12,hdhjoratos
-1106,16990445,"Nick Rom111","2026-10-15 14:49:00",0.15,7,nickrom111
-1107,16967390,"FIX AGENTIC CODING!","2026-10-13 12:07:14",0.15,2,mkrimenurgm
-1108,16991903,TAKESHI7676,"2026-10-15 05:53:27",0.15,12,takeshi7676
-1109,17076292,BoLiu,"2026-10-13 13:47:12",0.15,1,liulb92
-1110,16958722,"Sintu Verma","2026-10-16 04:30:19",0.15,15,sintuverma
-1111,17050362,Yuyannnn,"2026-10-13 14:58:32",0.15,2,yuyannnn
-1112,17038240,Grit-77,"2026-10-13 15:34:19",0.15,9,grit77
-1113,17044129,"Oleg Fateev 13","2026-10-15 16:52:16",0.15,4,olegfateev13
-1114,17097685,"Md Muqtadir Fuad","2026-10-13 17:24:24",0.15,1,mdmuqtadirfuad
-1115,17091408,"Grigory Gulyuk","2026-10-16 10:15:57",0.15,4,grigorygulyuk
-1116,16967458,Ethereal49,"2026-10-14 20:13:01",0.15,2,ethereal49
-1117,17026085,"Devang Singh Grewal","2026-10-15 19:10:53",0.15,6,devanggrewal
-1118,17091616,Scarttish,"2026-10-13 20:26:42",0.15,2,scarttish
-1119,17026706,aksi1122,"2026-10-16 18:34:13",0.15,4,aksi1122
-1120,16954282,"Maksim Kostritsya","2026-10-13 21:29:53",0.15,5,maksimkostritsya
-1121,17046644,Rospel,"2026-10-13 22:01:08",0.15,1,rospel
-1122,16954138,"Jerry Jin","2026-10-13 23:42:55",0.15,11,jerrydjin
-1123,16988882,lime0001,"2026-10-14 00:03:56",0.15,2,lime0001
-1124,16982016,"Yang Kuang Ou","2026-10-14 00:18:29",0.15,2,yangkuangou
-1125,17055697,"Eoin Forrest","2026-10-14 03:49:31",0.15,1,eoinforrest
-1126,16965693,tarinta,"2026-10-14 05:07:51",0.15,3,tarinta
-1127,17080918,"Do Phuc Hung","2026-10-15 08:52:43",0.15,4,dophuchung
-1128,17070866,blackship1100,"2026-10-16 02:13:27",0.15,4,blackship1100
-1129,16993552,"Abdelkader Djebloun","2026-10-14 07:50:05",0.15,11,abdelkaderdjebloun
-1130,16959455,"Mark Edwin","2026-10-16 04:58:12",0.15,4,benjfrank
-1131,17010626,"szlachetny snieg","2026-10-14 09:33:14",0.15,3,takayukiimoto
-1132,16949765,"Rohan Alex Bimal","2026-10-16 13:58:10",0.15,11,rohanalexbimal
-1133,16972826,"SylChrist Labs","2026-10-16 06:55:57",0.15,8,"christinamohan,sylviamumu"
-1134,16986070,"Nicolas Dalbec-Constant","2026-10-14 10:39:37",0.15,9,nicolasdalbec
-1135,17078022,Jackeeee_M,"2026-10-14 10:50:13",0.15,4,"christinewood,jackeeeem"
-1136,16951191,Efthimios,"2026-10-16 11:10:24",0.15,15,efthimiosfousekis
-1137,17032588,"Ahmet Kiraz","2026-10-14 11:08:45",0.15,7,ahmetqiraz
-1138,17097174,"rami hreden ","2026-10-16 19:09:18",0.15,3,ramihreden
-1139,16967939,"Jesse Weigel","2026-10-15 09:12:16",0.15,12,jesseweigel
-1140,16961484,"Philippe Mugisha","2026-10-15 13:16:27",0.15,2,philippemugisha
-1141,17086068,xuandao,"2026-10-16 12:56:22",0.15,3,xuandaoinhk
-1142,17093764,tzy22101059,"2026-10-15 14:35:41",0.15,2,tzy22101059
-1143,17085951,CoorDi,"2026-10-16 09:40:17",0.15,4,bxy0125
-1144,16983957,"Tuna Xiao","2026-10-16 08:56:14",0.15,3,tunaxiao
-1145,17081646,kamikaze-san,"2026-10-14 16:29:58",0.15,1,aniruddhthamatam
-1146,16958199,IPGLEG,"2026-10-15 14:54:22",0.15,11,ipgleg
-1147,16974638,galatea,"2026-10-16 18:33:05",0.15,6,ark911
-1148,17076255,"Dhruv Tibarewal","2026-10-16 06:14:44",0.15,3,dhruvtibarewal
-1149,17036922,"ANAND PRAKKASH Dubey","2026-10-16 18:55:22",0.15,7,anandprakkashdubey
-1150,17108236,hinemos,"2026-10-14 19:03:14",0.15,1,hinemos
-1151,17096810,"Ashutosh Rana #2","2026-10-14 20:02:22",0.15,1,ashutoshrana04
-1152,17025583,SANARCEATE,"2026-10-15 14:35:51",0.15,7,sanarceate
-1153,17107948,"Mahathir Moon","2026-10-16 08:31:29",0.15,2,"mahathirmoon,tasinsahil"
-1154,16956787,zigiella,"2026-10-16 20:21:00",0.15,20,zigiella
-1155,17018317,wataru420,"2026-10-15 21:41:33",0.15,6,wataru420
-1156,16985042,Kamil,"2026-10-16 18:49:23",0.15,12,ahaaab
-1157,17023898,jade,"2026-10-16 17:53:38",0.15,6,kain205
-1158,16982137,"Christopher McClendon","2026-10-16 13:27:32",0.15,5,christophermcclendon
-1159,16958211,"Mike Anderson","2026-10-16 00:00:41",0.15,17,manderson240
-1160,17102036,"Nate Shingleton","2026-10-16 00:06:32",0.15,2,nateshingleton
-1161,17017258,"Adam -(DevOps)-","2026-10-16 00:05:03",0.15,11,feedking1
-1162,17013680,tact,"2026-10-16 00:03:04",0.15,12,mototact
-1163,16994189,"Sirui Zeng","2026-10-16 03:57:06",0.15,12,siruizeng
-1164,17010637,CHU1PC,"2026-10-16 07:44:56",0.15,3,tadashikato
-1165,17013809,"Kazumi Sakamaki","2026-10-16 17:22:41",0.15,7,hatimitusiropp
-1166,17065681,mightochondria,"2026-10-16 02:52:31",0.15,3,mightochondria
-1167,17059917,Lap1acee,"2026-10-15 04:42:54",0.15,4,lap1acee
-1168,16949120,"Rahul Rathnavel K","2026-10-15 05:26:30",0.15,11,rahulrathnavel
-1169,17083156,MioValentine,"2026-10-15 06:49:44",0.15,3,yuyizhu
-1170,17015542,"Iswar Patra","2026-10-16 07:43:20",0.15,2,iswarpatra
-1171,17074121,Xiaojuncai,"2026-10-16 09:09:23",0.15,4,xiaojuncai10358
-1172,17077652,"Enock Mumo","2026-10-16 09:09:26",0.15,3,enockmumo
-1173,17120730,"baolong lin1","2026-10-16 15:27:53",0.15,2,baolonglin1
-1174,17078562,"13 phacharapon","2026-10-15 09:22:43",0.15,3,phacharapon
-1175,16959764,SmitBailwal,"2026-10-16 11:22:03",0.15,12,smitbailwal
-1176,17069508,"Artem Bakalinskiy","2026-10-15 10:08:58",0.15,2,artembakalinskiy
-1177,17079698,"Masashi Nishimoto","2026-10-15 11:02:24",0.15,4,masashinishimoto
+834,17079698,"Masashi Nishimoto","2026-10-16 20:00:37",0.17,5,masashinishimoto
+835,16977789,GopiPitchai,"2026-09-29 00:14:22",0.15,2,gopipitchai
+836,16956348,Ajeya,"2026-10-10 05:00:26",0.15,9,"adityaudiya,divyakushpunjabi"
+837,17013409,"Michael Klassen","2026-10-07 08:26:01",0.15,4,michaelklassen
+838,16967739,"Ilia Iliev","2026-10-16 15:04:43",0.15,11,iliailiev1
+839,16986834,zegggg,"2026-10-14 22:55:47",0.15,6,zeyouzhang
+840,16993908,"Noah Sabaj","2026-10-04 00:00:24",0.15,5,noahsabaj
+841,16948703,"Ty Liu","2026-10-12 20:50:25",0.15,11,zhibowangligan
+842,16981518,"mainly for fun","2026-10-15 02:05:08",0.15,10,hcngnga
+843,16959380,"Manoj Gowda BG","2026-10-16 15:53:48",0.15,15,"manojgowdabg,nidhigowdabg"
+844,16983222,"rossi vittorio","2026-10-03 11:44:29",0.15,3,rossivittorio
+845,16970958,"Aditya Sasidhar","2026-10-15 17:40:16",0.15,10,tadityasasidhar
+846,17017172,AkiraOnojp,"2026-10-14 02:32:55",0.15,8,akiraonojp
+847,17017263,"sean xueee","2026-10-15 02:59:04",0.15,8,seanxueee
+848,16962819,"Andrew J Sanderson","2026-10-04 00:36:07",0.15,2,andrewjsanderson
+849,16982712,neko941,"2026-10-14 09:41:30",0.15,12,nekonekonyan
+850,16959419,"Med Mongi Benyaiche","2026-10-16 10:28:54",0.15,14,"medmongibenyaiche,oussamazaied,ramitabib"
+851,16958176,fshindo,"2026-10-16 15:04:02",0.15,15,ffsscf
+852,16966240,"Sheng-Hao Chen","2026-10-16 00:18:05",0.15,14,orionch
+853,16991414,d_tree_suki,"2026-10-14 14:06:59",0.15,7,yuki11ii
+854,16955452,"Leander Antony","2026-10-16 19:15:36",0.15,8,leanderantony30
+855,16983416,"Brian Chua","2026-10-04 14:35:40",0.15,4,chuazhengweibrian
+856,16989019,cccyou,"2026-10-15 13:13:11",0.15,7,cccyou
+857,16958829,SaTa,"2026-10-16 16:42:23",0.15,13,masa55taka
+858,16947927,J&F,"2026-10-16 13:51:23",0.15,19,"frtgnn,jaejohn"
+859,16992761,"Tyler Martin","2026-10-09 23:50:08",0.15,9,tylermartinalaska
+860,17015288,Rey4Dan,"2026-10-16 23:35:49",0.15,5,rey4dan
+861,17021315,Anon,"2026-10-16 04:57:17",0.15,13,huggkurz
+862,16972691,TaPUNGaa,"2026-10-16 17:08:51",0.15,13,nusrati
+863,16975773,spacetime1008,"2026-10-16 05:23:43",0.15,11,spacetime1008
+864,16956551,"Xiangzhu Yan","2026-10-14 06:36:55",0.15,7,"litahsu,xiangzhuyan"
+865,16979666,"jananika senthilkumar","2026-10-13 16:01:41",0.15,15,"jananikasenthilkumar,ssjaswanth"
+866,16949593,Phoenix,"2026-10-13 16:37:34",0.15,8,chetanagrawall
+867,16950810,"Aman Arora","2026-10-08 16:06:47",0.15,7,aroraaman
+868,17024290,陳盛楠,"2026-10-06 06:44:09",0.15,3,fuzaxia
+869,16962544,Yuan800,"2026-10-15 14:06:23",0.15,5,"jacqueszhelinzhang,yuan800"
+870,16963548,"Mohamed abdelrazik","2026-10-06 09:17:24",0.15,1,mohamed3abdelrazik
+871,16958035,bharat,"2026-10-08 03:29:14",0.15,4,bharatmohan
+872,17042905,Captainuknow,"2026-10-06 10:54:31",0.15,1,captainuknow
+873,16951804,"Vavilkin Alexander","2026-10-08 15:15:53",0.15,6,vavalex
+874,16956105,"Shankha Suvro Mullick","2026-10-08 05:21:11",0.15,9,shankhasuvromullick
+875,17044324,Shozyfrenia,"2026-10-15 08:01:22",0.15,4,shozyfrenia
+876,16968469,AbhilashReddyYammanuru,"2026-10-06 16:16:19",0.15,9,abhilashreddyy
+877,16952696,LChaY,"2026-10-06 16:20:00",0.15,13,liuuu114514
+878,17036954,"Bala Murugan AIML","2026-10-14 11:00:44",0.15,6,balamuruganaiml
+879,17027202,"aalok agrawal","2026-10-11 22:46:21",0.15,5,aalokagrawal02
+880,17045014,Tyborr,"2026-10-08 23:57:32",0.15,3,tyborr
+881,17013049,LuanHengYu,"2026-10-06 21:17:47",0.15,3,apexml
+882,17033089,"Michael Pershin","2026-10-15 18:22:27",0.15,8,michaelpershin
+883,17043980,thwaitsusa2,"2026-10-08 19:51:05",0.15,3,thwaitsusa2
+884,17031549,sawao7,"2026-10-13 18:01:42",0.15,6,sawao7
+885,16987218,"Sum YEUNG","2026-10-15 02:03:01",0.15,7,sumyeung
+886,16952752,woldy,"2026-10-07 00:18:36",0.15,14,woldywei
+887,17017076,"PoongRyu B","2026-10-14 13:08:46",0.15,10,poongryub
+888,16956252,"Shalini S","2026-10-12 14:30:08",0.15,12,shals14
+889,17031067,"Ihor V. Popov","2026-10-11 17:17:18",0.15,7,"ihorvpopov,irynapopovav"
+890,17032022,Washburn,"2026-10-07 04:11:43",0.15,3,washburn7
+891,17037794,"Didhiti Nahid","2026-10-16 07:13:03",0.15,7,didhitinahid
+892,16956545,"TABOUT MHAMED","2026-10-08 17:43:34",0.15,5,taboutmhamed
+893,16965953,"Abdul Wahab Khan","2026-10-07 08:42:20",0.15,2,abdulwahab2321
+894,16962274,OverfitOracle,"2026-10-07 12:04:55",0.15,5,alisalmanrana
+895,17019375,quant_kiid,"2026-10-07 13:47:01",0.15,2,quantkiid
+896,16959234,"Angel Petrov","2026-10-16 12:03:31",0.15,18,angpetrov
+897,17021433,"Simranjeet Singh","2026-10-15 11:04:39",0.15,4,simranjeetsingh5
+898,16969039,tomtom2026,"2026-10-15 17:40:57",0.15,11,tomtom2026
+899,16954773,TechOne,"2026-10-12 13:41:38",0.15,5,"pavanshelat,raj072004"
+900,17024403,"Harshank Matkar","2026-10-16 17:06:43",0.15,2,harshankmatkar
+901,17035839,"SHUO WANG","2026-10-07 19:04:36",0.15,2,shuowang928
+902,16986460,TransformoGGers,"2026-10-15 13:55:17",0.15,8,"agrover112,rmibourgerie"
+903,16994034,"Joe Young","2026-10-07 21:41:21",0.15,6,jsphyg
+904,17015951,"Huzaifa Mankda","2026-10-10 15:07:17",0.15,4,huzaifa242
+905,16976602,FJ,"2026-10-07 23:42:52",0.15,4,wenfengjia
+906,16954489,whoami,"2026-10-14 02:00:52",0.15,11,whoamircc
+907,16948682,"Kunal Aarse","2026-10-08 02:42:14",0.15,5,kunalinfinite
+908,17023550,Kentaro,"2026-10-16 23:20:11",0.15,8,kentaro1207y
+909,17049107,Pablo,"2026-10-16 09:49:31",0.15,5,lanteluons
+910,17052744,"YOUNG CHOW","2026-10-16 08:53:03",0.15,6,youngchow
+911,16953944,"Ray Yen216","2026-10-14 19:35:19",0.15,10,rayyen216
+912,17018962,"Yining Tan","2026-10-08 04:02:21",0.15,1,"cyanlu,mistyqaq,yiningtan"
+913,16957650,Aevion-Labs,"2026-10-08 04:08:55",0.15,1,aevionlabs
+914,16959092,"Fadhl Akmal","2026-10-14 07:00:07",0.15,6,fadhlakmal
+915,16979275,jiangnanxn,"2026-10-15 10:31:53",0.15,11,jiangnanxn
+916,17057365,"Hà Quang Minh","2026-10-08 04:17:21",0.15,1,haaminh
+917,16971537,"liangjiang chen","2026-10-14 02:20:20",0.15,8,"auince1,liangjiangchen"
+918,16963104,"Mohamed el.harery","2026-10-16 10:03:57",0.15,12,mohamedelharery
+919,17059135,"Aswath Vanan","2026-10-08 07:10:33",0.15,1,aswathvanan
+920,16953466,"Dheerendra Singh Tomar","2026-10-08 08:01:42",0.15,4,tomardheerendra
+921,17051814,"Seraph Lux","2026-10-08 09:37:49",0.15,2,seraphlux
+922,17060038,Qiwei,"2026-10-08 09:46:01",0.15,1,qiweiyin
+923,16956129,"Vicens Gaitan","2026-10-08 10:38:42",0.15,5,vicensgaitan
+924,17020837,Pa3฿aJluHа,"2026-10-16 11:30:47",0.15,8,hettpugymajlhuk
+925,16955919,"Yan Zhou","2026-10-08 12:33:41",0.15,1,yanzhou06
+926,16964809,"DARSHAN A","2026-10-14 16:44:24",0.15,9,ad12345kag
+927,16991437,Stitch,"2026-10-08 13:26:25",0.15,3,mitsuaccessjam
+928,16954144,Santhana,"2026-10-14 13:47:17",0.15,5,santhanalekshmic
+929,16954373,"Small Field","2026-10-08 15:02:46",0.15,9,ttttoooo
+930,17024429,carbonapi,"2026-10-08 16:01:47",0.15,5,nonempty
+931,16967450,Toon,"2026-10-16 17:05:44",0.15,11,sanhapon
+932,16954377,lingyu07,"2026-10-16 14:42:06",0.15,11,lingyu07
+933,17061939,Chikuwabu,"2026-10-08 16:19:35",0.15,1,prgckwb
+934,16980841,"Jay Gupta","2026-10-12 14:03:19",0.15,8,noobhunterjay
+935,17022737,"Vidit Parashar","2026-10-08 18:14:28",0.15,2,viditparashar123456
+936,16961828,raydestar,"2026-10-16 17:44:10",0.15,9,raydestar
+937,16948868,"Oleksii Zhukov","2026-10-16 22:44:10",0.15,21,zhukovoleksiy
+938,16950932,aruuu,"2026-10-08 19:23:15",0.15,4,arruuu
+939,17014468,mmwstudy,"2026-10-15 07:35:58",0.15,3,mmwstudy
+940,16956792,"Sriharsha Sammeta","2026-10-16 05:12:18",0.15,11,sriharshasammeta
+941,16967530,"Connor Tynan","2026-10-14 21:59:32",0.15,13,connortynan
+942,17043174,"Subin An","2026-10-15 03:04:15",0.15,6,subinium
+943,16971579,Huggingfish,"2026-10-16 03:39:45",0.15,9,kylervaler
+944,17045912,Rounak-agrwl,"2026-10-09 00:00:34",0.15,4,rounakagrwl
+945,16988702,"Ghaisan K","2026-10-16 09:28:57",0.15,12,ghaisank
+946,17064890,"Shane Schisler","2026-10-09 00:51:52",0.15,1,seschis
+947,17030889,Udenaka,"2026-10-16 17:25:47",0.15,4,udenaka
+948,17034276,BOB,"2026-10-15 09:18:09",0.15,6,hotpotbro
+949,16958825,JOONSEOEOM,"2026-10-09 03:58:00",0.15,4,joonseoeom
+950,16950298,HZM,"2026-10-14 00:31:40",0.15,10,leehann
+951,17037561,Lixrixy,"2026-10-09 06:24:49",0.15,2,lixrixy
+952,17027143,"Nguyễn Cường","2026-10-09 06:36:12",0.15,1,ngcngcmi
+953,17066739,AnOldStory,"2026-10-09 06:38:48",0.15,1,anoldstory
+954,17024607,Jeus,"2026-10-16 14:39:53",0.15,11,jiseungwoo
+955,17067267,"Mathurin Ache","2026-10-16 14:45:42",0.15,4,mathurinache
+956,17014731,"k hori ","2026-10-09 09:01:18",0.15,7,khori7
+957,16956189,Ju,"2026-10-09 09:21:41",0.15,2,juziddd
+958,17015279,killinneko,"2026-10-09 11:18:18",0.15,3,killinneko
+959,16951930,"Atakan Aldemir","2026-10-09 11:49:04",0.15,3,atakanaldemir
+960,17032981,"Ghazaros Barseghyan","2026-10-16 06:37:35",0.15,3,ghazarosbarseghyan91
+961,17038434,amitrajan,"2026-10-16 06:39:04",0.15,8,amitrajan012
+962,17068378,"Oliver Szabó","2026-10-13 12:00:40",0.15,3,oliverszab
+963,16991193,jean808,"2026-10-09 14:29:51",0.15,1,jean808
+964,16956161,Anubisyy,"2026-10-16 03:49:36",0.15,3,anubisyy
+965,17069815,Vatsal,"2026-10-09 15:34:32",0.15,1,vatsal1s
+966,16948575,insuperabilehart,"2026-10-11 12:44:55",0.15,2,insuperabile
+967,16989710,"Andrey Serov","2026-10-09 19:09:11",0.15,4,andrayserov
+968,16992545,"Marvin O","2026-10-14 10:01:31",0.15,4,marvinoka4
+969,17032488,"Madhur Shyam Maurya","2026-10-11 13:05:22",0.15,5,madhurmaurya
+970,16987881,"Changyuan Chen","2026-10-09 20:29:21",0.15,7,changyuanchenmit
+971,16980818,"Till Wegmueller","2026-10-13 05:36:38",0.15,3,toasterson
+972,17026033,"Kevin A","2026-10-16 11:22:52",0.15,6,"aswinsuthaharan,kevinaghu"
+973,16966732,"wei chang","2026-10-10 01:51:13",0.15,7,wayne0404
+974,16958383,Evannnnnn,"2026-10-12 02:32:21",0.15,3,"evannnnnn,victort111,yanhaodinggeorge"
+975,17014821,"Iason Malkotsis","2026-10-16 10:29:14",0.15,11,jasonthird
+976,17043498,"Nguyên Nguyễn Việt","2026-10-16 14:06:10",0.15,4,nguynnguynvit
+977,16951460,"Chirantan Bhardwaj","2026-10-10 05:29:04",0.15,12,chirantanbhardwaj
+978,16973809,shivam,"2026-10-10 06:26:53",0.15,3,itskshivam
+979,17024827,"Venkat Balaji S","2026-10-16 09:59:24",0.15,6,dataarthur
+980,17023301,"Vivaan Satija","2026-10-17 04:19:34",0.15,4,vivaansatija
+981,17075017,aefinityaiinc,"2026-10-10 08:41:54",0.15,1,aefinityaiinc
+982,16965991,UIT-DIFF,"2026-10-15 14:07:20",0.15,13,"nguynvithung2108,toni0710,vitnguynnguyen"
+983,16971546,西松大祐,"2026-10-15 20:53:25",0.15,7,wep212
+984,17040257,Corgi-Samoyed,"2026-10-15 23:56:35",0.15,3,corgisamoyed
+985,17061318,ShaazD,"2026-10-16 09:25:59",0.15,6,shaazd
+986,17068581,"Kento Okumura","2026-10-12 13:00:04",0.15,2,kentookumura
+987,16959849,"shrey sharma07","2026-10-16 03:34:15",0.15,10,"atulbaliyan,shreysharma07"
+988,17060295,"Vlad Studennykov","2026-10-10 15:35:28",0.15,1,vladstud716373618
+989,17044109,darasty,"2026-10-16 19:02:18",0.15,4,darasty
+990,16962500,zengpu,"2026-10-10 16:20:24",0.15,15,zengpu
+991,16961006,"Habib ullah","2026-10-16 07:36:54",0.15,14,habibullah123456789
+992,16949801,"No Name","2026-10-10 17:00:43",0.15,3,ivanj0
+993,17065979,Dancing_RYAN,"2026-10-16 06:59:06",0.15,5,res1235
+994,17027160,Behzad,"2026-10-16 06:32:55",0.15,11,beh6271157
+995,17071157,"Jarno Rantala","2026-10-12 13:50:30",0.15,2,jarski
+996,16953440,aki,"2026-10-16 17:48:21",0.15,5,andenmeikou
+997,16989552,Artyom,"2026-10-10 21:42:11",0.15,6,netstalker1337
+998,16962495,dvv_ram,"2026-10-10 22:04:09",0.15,8,ddvram
+999,16993582,"Be A Gent","2026-10-15 17:47:46",0.15,8,rhooon
+1000,16960439,sinchir0,"2026-10-15 00:30:10",0.15,13,sinchir0
+1001,17043898,Mforg,"2026-10-15 01:25:47",0.15,4,mforg74911
+1002,16964624,"Ian Jones","2026-10-14 00:44:31",0.15,11,ianaldenjones
+1003,17079598,"Sunstone North Lab","2026-10-14 18:38:49",0.15,3,burtonlancaster
+1004,17028256,"Sonu Yadav","2026-10-11 03:31:25",0.15,1,sonuyadav710
+1005,17064037,Arav20,"2026-10-11 03:35:15",0.15,2,arav20
+1006,16965363,"Anupam Sharma","2026-10-11 05:44:01",0.15,4,"cosmogeek,yadavdinesh1"
+1007,16954782,"NODUS - M.Y.C.E.L.I.S","2026-10-16 20:44:36",0.15,11,neronrx
+1008,17067750,jayyang3,"2026-10-11 06:43:32",0.15,1,jayyang3
+1009,17057634,"Hance Wang","2026-10-11 06:46:40",0.15,1,hancewang
+1010,16948199,Mycelis,"2026-10-15 05:35:45",0.15,7,johnmoncel
+1011,17043538,yamakawanin,"2026-10-15 09:04:44",0.15,5,yamakawanin
+1012,16966022,"Sungjoon Park","2026-10-11 07:37:50",0.15,6,sungjoon94
+1013,17013327,"Meteor #2","2026-10-16 11:23:02",0.15,7,meteorkid
+1014,16970348,"lionel W509","2026-10-11 09:31:01",0.15,5,lionelw509
+1015,16960796,ASI,"2026-10-12 22:53:27",0.15,6,"akshayggupta1,atomstack001,sanyamverma03"
+1016,16949775,"Carson Rodrigues","2026-10-16 19:08:08",0.15,17,carsonrodrigues
+1017,17026098,kazuhiro3381,"2026-10-11 10:11:51",0.15,7,kazuhiro3381
+1018,16972013,"Arnab Patra 77","2026-10-14 09:05:13",0.15,6,arnabpatra77
+1019,16958024,arcSYSU,"2026-10-13 09:30:01",0.15,7,"akiakiczc,fairygrenn,wuqifan9"
+1020,17010588,Khalid,"2026-10-11 11:31:38",0.15,2,khalid000000
+1021,17020591,gatarez,"2026-10-14 18:06:25",0.15,6,rezvangataullin
+1022,16971897,cgrlkc,"2026-10-13 10:34:44",0.15,14,cgrlkc
+1023,16956557,"Hamed Vakili","2026-10-14 05:10:21",0.15,9,hamedvakilit0
+1024,17069074,Test,"2026-10-11 13:11:53",0.15,1,husy07
+1025,17031888,"Dmytro Maliarenko","2026-10-15 13:04:04",0.15,3,arxitekton
+1026,17048121,yuyu2172,"2026-10-13 00:09:50",0.15,4,yuyu2172
+1027,16948597,"Aiman Al-Shalfi","2026-10-16 11:11:10",0.15,13,aimanalshalfi
+1028,17081839,zymonody7,"2026-10-11 15:12:48",0.15,1,zymonody7
+1029,17012516,"Shubham Vankalas","2026-10-16 00:06:12",0.15,6,shubhamvankalas
+1030,17064493,"Leandro Rocha","2026-10-11 17:33:22",0.15,2,leandrorocver
+1031,17032994,"Josh Barth","2026-10-11 17:50:08",0.15,3,jabarth
+1032,16948565,Cyrus,"2026-10-11 22:07:43",0.15,2,jamalsaeedi
+1033,17085220,Chestercopperpot,"2026-10-11 22:49:09",0.15,1,tysonwashere
+1034,17047546,"Weiyi He","2026-10-11 23:29:02",0.15,4,weiyihe126
+1035,17031521,Jason,"2026-10-11 23:47:36",0.15,3,pipi86
+1036,17021229,michi,"2026-10-14 23:21:53",0.15,3,michi883
+1037,17058481,"PATARA TRIRAT","2026-10-16 01:49:37",0.15,3,itouchz
+1038,17051778,zard599,"2026-10-12 01:53:10",0.15,2,zard599
+1039,16988946,Fourques,"2026-10-12 02:05:31",0.15,1,fourques
+1040,17083655,"Minamoto Genji","2026-10-12 02:05:50",0.15,1,minamotogenji
+1041,16951072,"Constant Variables","2026-10-12 02:53:39",0.15,1,"bhumikashaw,ds24f2001383,maldev08,sadhanalearns"
+1042,16989769,eeexian,"2026-10-12 03:18:49",0.15,1,eeexian
+1043,17074687,manduinca,"2026-10-12 03:47:00",0.15,1,manduinca
+1044,16951052,Alpha4,"2026-10-12 04:23:01",0.15,4,"braincloud,shanzhong8"
+1045,17085360,jjjackielyu,"2026-10-12 04:35:55",0.15,1,jjjackielyu
+1046,17035979,"Du Qiezui","2026-10-16 12:07:38",0.15,8,duqiezui
+1047,17066451,carriercheng,"2026-10-15 23:28:02",0.15,5,carriercheng
+1048,17013110,@<<Ideain>>,"2026-10-16 11:13:21",0.15,10,ideain
+1049,16985045,Arulrajj,"2026-10-12 06:14:15",0.15,5,arulrajj
+1050,16966878,Ayodeji,"2026-10-14 20:12:35",0.15,8,ayodejiibrahimlateef
+1051,16969068,"Isaack Joshua","2026-10-12 06:30:49",0.15,8,isaackjoshua
+1052,17017545,"Adam Johnson","2026-10-16 16:51:32",0.15,10,comfyops
+1053,16971902,"Kashyapsinh gohil","2026-10-13 18:05:15",0.15,4,kashyapsinhgohil
+1054,17038108,"Almaz Yessenyazov","2026-10-16 09:11:21",0.15,5,almazishe
+1055,16948173,Hellboy,"2026-10-12 07:43:29",0.15,3,helmirinaldi
+1056,17033227,"Marco Fancisco","2026-10-15 16:44:35",0.15,7,marcofancisco
+1057,17041888,"Kathrine Ganda","2026-10-12 08:57:45",0.15,2,kathrineganda
+1058,16981533,qs22,"2026-10-12 09:04:22",0.15,1,compensator
+1059,16950073,seven,"2026-10-12 09:35:09",0.15,3,morikawatakeshi
+1060,17064700,xiaomo121,"2026-10-14 00:59:07",0.15,2,xiaomo121
+1061,16961162,ParsaAshrafi,"2026-10-12 10:34:35",0.15,3,parsaashrafii
+1062,16991860,"Fuat Çakıcı","2026-10-12 11:13:54",0.15,11,fuatcakiicii
+1063,16970473,Dhaneesh.M,"2026-10-16 12:36:29",0.15,3,dhaneeshm1
+1064,17024144,"Kerstein Lapuz","2026-10-16 17:07:58",0.15,11,kersteinlapuz
+1065,17020314,MaiNguyenQuynh,"2026-10-14 10:31:30",0.15,5,mainq1
+1066,16954093,"Kevin E R MILLE","2026-10-16 02:22:40",0.15,11,kevinermille
+1067,16990991,aliqwen,"2026-10-12 13:01:22",0.15,4,aliqwen
+1068,17085284,Ryan2255,"2026-10-13 19:55:42",0.15,2,ryan2255
+1069,17014095,"Constantin Craciun","2026-10-16 05:49:04",0.15,5,constantincraciun
+1070,17020466,Yuto.M,"2026-10-15 10:57:19",0.15,7,yutomuroshima
+1071,16948690,AjitDaGeniusGuy,"2026-10-16 09:57:36",0.15,18,ajitdageniusguy
+1072,17065314,"Mohammed Abed","2026-10-16 10:43:05",0.15,6,mohammedabed56666
+1073,17042661,"Hamza Imran","2026-10-12 15:04:05",0.15,2,hmzirn
+1074,17021752,"Federico Moreno","2026-10-15 01:38:49",0.15,5,federicomoreno613
+1075,16975693,wangkunkun,"2026-10-12 16:23:36",0.15,3,wangkunkunn
+1076,17031852,nerdai,"2026-10-15 21:12:37",0.15,5,nerdai
+1077,17077137,"Emanuele Miranda","2026-10-13 21:47:30",0.15,2,emanuelemiranda
+1078,16978024,"Aaron amacadu","2026-10-12 16:51:03",0.15,2,aaronamacadu
+1079,16955165,"Rengarajan G","2026-10-16 03:59:23",0.15,7,rengarajang
+1080,16990272,Dishant94,"2026-10-12 18:05:30",0.15,1,dishant94
+1081,17066614,"Karthik Rajagopalan","2026-10-16 00:00:28",0.15,5,karthikr223
+1082,16974938,BrandonH12,"2026-10-12 18:45:49",0.15,9,brandonh12
+1083,17058078,SpicyOhi13,"2026-10-16 15:45:31",0.15,4,spicyohi13
+1084,17043973,"Derrick Kirimi","2026-10-14 13:07:40",0.15,3,derrickkirimi
+1085,17088115,"Lim Ba Su","2026-10-15 05:34:25",0.15,2,limbasu
+1086,17021264,Finex,"2026-10-14 05:24:45",0.15,7,varush70
+1087,16984937,CorpUnum,"2026-10-15 08:37:10",0.15,8,antonisfragkos
+1088,16982841,sue124,"2026-10-12 23:12:46",0.15,4,ryotasueyoshi
+1089,16950295,tamref,"2026-10-16 04:34:43",0.15,15,tamreff3290
+1090,16989363,isthereanycode,"2026-10-16 02:44:02",0.15,4,isthereanycode
+1091,17073915,NockAI,"2026-10-15 03:05:11",0.15,3,nockai
+1092,17084272,salyamq,"2026-10-13 03:15:27",0.15,2,salyamq
+1093,17083533,"mouad berqia","2026-10-14 17:43:09",0.15,3,mouadberqia
+1094,16959575,"Hitesh Kumar","2026-10-16 01:24:14",0.15,13,erhiteshkumar
+1095,17081121,Eric_Yang_08,"2026-10-16 06:19:15",0.15,4,ericyang08
+1096,17011617,"Grim Reaper","2026-10-16 04:49:52",0.15,11,fathomable
+1097,17064171,"Nihal Kumar Sharma","2026-10-13 06:00:32",0.15,2,nihalkumarsharma
+1098,17021705,"Denis Sanchez","2026-10-13 06:44:10",0.15,4,denissanchez
+1099,16983987,"Héctor Valverde","2026-10-16 07:25:02",0.15,10,hvpareja
+1100,17034157,arman1o1,"2026-10-13 08:18:59",0.15,5,arman1o1
+1101,16980632,"Shantanu Kharwar","2026-10-14 14:32:39",0.15,2,byteknight28
+1102,16975359,tests1234,"2026-10-16 10:19:27",0.15,8,tests1234
+1103,17096568,"Jingshui Fu","2026-10-15 08:51:57",0.15,2,jingshuifu
+1104,17095572,"Kaipeng Zheng","2026-10-13 10:43:32",0.15,1,kaipengzheng
+1105,16952520,"Chen Siyuan","2026-10-15 13:17:17",0.15,4,chensiyuan03
+1106,16986276,"HD h Joratos","2026-10-14 14:04:51",0.15,12,hdhjoratos
+1107,16990445,"Nick Rom111","2026-10-15 14:49:00",0.15,7,nickrom111
+1108,16967390,"FIX AGENTIC CODING!","2026-10-13 12:07:14",0.15,2,mkrimenurgm
+1109,16991903,TAKESHI7676,"2026-10-15 05:53:27",0.15,12,takeshi7676
+1110,17076292,BoLiu,"2026-10-13 13:47:12",0.15,1,liulb92
+1111,16958722,"Sintu Verma","2026-10-16 04:30:19",0.15,15,sintuverma
+1112,17050362,Yuyannnn,"2026-10-13 14:58:32",0.15,2,yuyannnn
+1113,17038240,Grit-77,"2026-10-13 15:34:19",0.15,9,grit77
+1114,17044129,"Oleg Fateev 13","2026-10-15 16:52:16",0.15,4,olegfateev13
+1115,17097685,"Md Muqtadir Fuad","2026-10-13 17:24:24",0.15,1,mdmuqtadirfuad
+1116,17091408,"Grigory Gulyuk","2026-10-16 10:15:57",0.15,4,grigorygulyuk
+1117,16967458,Ethereal49,"2026-10-14 20:13:01",0.15,2,ethereal49
+1118,17026085,"Devang Singh Grewal","2026-10-15 19:10:53",0.15,6,devanggrewal
+1119,17091616,Scarttish,"2026-10-13 20:26:42",0.15,2,scarttish
+1120,17026706,aksi1122,"2026-10-16 18:34:13",0.15,4,aksi1122
+1121,16954282,"Maksim Kostritsya","2026-10-13 21:29:53",0.15,5,maksimkostritsya
+1122,17046644,Rospel,"2026-10-13 22:01:08",0.15,1,rospel
+1123,16954138,"Jerry Jin","2026-10-13 23:42:55",0.15,11,jerrydjin
+1124,16988882,lime0001,"2026-10-14 00:03:56",0.15,2,lime0001
+1125,16982016,"Yang Kuang Ou","2026-10-14 00:18:29",0.15,2,yangkuangou
+1126,17055697,"Eoin Forrest","2026-10-14 03:49:31",0.15,1,eoinforrest
+1127,16965693,tarinta,"2026-10-14 05:07:51",0.15,3,tarinta
+1128,17080918,"Do Phuc Hung","2026-10-15 08:52:43",0.15,4,dophuchung
+1129,17070866,blackship1100,"2026-10-16 02:13:27",0.15,4,blackship1100
+1130,16993552,"Abdelkader Djebloun","2026-10-14 07:50:05",0.15,11,abdelkaderdjebloun
+1131,16959455,"Mark Edwin","2026-10-16 04:58:12",0.15,4,benjfrank
+1132,17010626,"szlachetny snieg","2026-10-14 09:33:14",0.15,3,takayukiimoto
+1133,16949765,"Rohan Alex Bimal","2026-10-16 13:58:10",0.15,11,rohanalexbimal
+1134,16972826,"SylChrist Labs","2026-10-16 06:55:57",0.15,8,"christinamohan,sylviamumu"
+1135,16986070,"Nicolas Dalbec-Constant","2026-10-14 10:39:37",0.15,9,nicolasdalbec
+1136,17078022,Jackeeee_M,"2026-10-14 10:50:13",0.15,4,"christinewood,jackeeeem"
+1137,16951191,Efthimios,"2026-10-16 11:10:24",0.15,15,efthimiosfousekis
+1138,17032588,"Ahmet Kiraz","2026-10-14 11:08:45",0.15,7,ahmetqiraz
+1139,17097174,"rami hreden ","2026-10-16 19:09:18",0.15,3,ramihreden
+1140,16967939,"Jesse Weigel","2026-10-15 09:12:16",0.15,12,jesseweigel
+1141,16961484,"Philippe Mugisha","2026-10-15 13:16:27",0.15,2,philippemugisha
+1142,17086068,xuandao,"2026-10-16 12:56:22",0.15,3,xuandaoinhk
+1143,17093764,tzy22101059,"2026-10-15 14:35:41",0.15,2,tzy22101059
+1144,17085951,CoorDi,"2026-10-16 09:40:17",0.15,4,bxy0125
+1145,16983957,"Tuna Xiao","2026-10-16 08:56:14",0.15,3,tunaxiao
+1146,17081646,kamikaze-san,"2026-10-14 16:29:58",0.15,1,aniruddhthamatam
+1147,16958199,IPGLEG,"2026-10-15 14:54:22",0.15,11,ipgleg
+1148,16974638,galatea,"2026-10-16 18:33:05",0.15,6,ark911
+1149,17076255,"Dhruv Tibarewal","2026-10-16 06:14:44",0.15,3,dhruvtibarewal
+1150,17036922,"ANAND PRAKKASH Dubey","2026-10-16 18:55:22",0.15,7,anandprakkashdubey
+1151,17108236,hinemos,"2026-10-14 19:03:14",0.15,1,hinemos
+1152,17096810,"Ashutosh Rana #2","2026-10-14 20:02:22",0.15,1,ashutoshrana04
+1153,17025583,SANARCEATE,"2026-10-15 14:35:51",0.15,7,sanarceate
+1154,17107948,"Mahathir Moon","2026-10-16 08:31:29",0.15,2,"mahathirmoon,tasinsahil"
+1155,16956787,zigiella,"2026-10-16 20:21:00",0.15,20,zigiella
+1156,17018317,wataru420,"2026-10-15 21:41:33",0.15,6,wataru420
+1157,16985042,Kamil,"2026-10-16 18:49:23",0.15,12,ahaaab
+1158,17023898,jade,"2026-10-16 17:53:38",0.15,6,kain205
+1159,16982137,"Christopher McClendon","2026-10-16 13:27:32",0.15,5,christophermcclendon
+1160,16958211,"Mike Anderson","2026-10-16 00:00:41",0.15,17,manderson240
+1161,17102036,"Nate Shingleton","2026-10-16 00:06:32",0.15,2,nateshingleton
+1162,17017258,"Adam -(DevOps)-","2026-10-16 00:05:03",0.15,11,feedking1
+1163,17013680,tact,"2026-10-16 00:03:04",0.15,12,mototact
+1164,16994189,"Sirui Zeng","2026-10-16 03:57:06",0.15,12,siruizeng
+1165,17010637,CHU1PC,"2026-10-16 07:44:56",0.15,3,tadashikato
+1166,17013809,"Kazumi Sakamaki","2026-10-16 17:22:41",0.15,7,hatimitusiropp
+1167,17065681,mightochondria,"2026-10-16 02:52:31",0.15,3,mightochondria
+1168,17059917,Lap1acee,"2026-10-15 04:42:54",0.15,4,lap1acee
+1169,16949120,"Rahul Rathnavel K","2026-10-15 05:26:30",0.15,11,rahulrathnavel
+1170,17083156,MioValentine,"2026-10-15 06:49:44",0.15,3,yuyizhu
+1171,17015542,"Iswar Patra","2026-10-16 07:43:20",0.15,2,iswarpatra
+1172,17074121,Xiaojuncai,"2026-10-16 09:09:23",0.15,4,xiaojuncai10358
+1173,17077652,"Enock Mumo","2026-10-16 09:09:26",0.15,3,enockmumo
+1174,17120730,"baolong lin1","2026-10-16 15:27:53",0.15,2,baolonglin1
+1175,17078562,"13 phacharapon","2026-10-15 09:22:43",0.15,3,phacharapon
+1176,16959764,SmitBailwal,"2026-10-16 11:22:03",0.15,12,smitbailwal
+1177,17069508,"Artem Bakalinskiy","2026-10-15 10:08:58",0.15,2,artembakalinskiy
 1178,16951834,"Darshan Makwana","2026-10-16 15:50:32",0.15,6,ellipticaloranges
 1179,16972867,"Yusaku Muroya","2026-10-15 11:50:11",0.15,8,ymuroya47
 1180,16986045,heartkilla,"2026-10-16 07:34:52",0.15,7,aruchomu
@@ -1241,521 +1241,521 @@ Rank,TeamId,TeamName,LastSubmissionDate,Score,SubmissionCount,TeamMemberUserName
 1240,17029281,programmers,"2026-10-16 17:39:04",0.15,8,"mhahmad,mohib94"
 1241,17063073,"Joonas Maanonen","2026-10-16 18:01:39",0.15,3,joonasmaanonen
 1242,17015109,"Collistus Kibe","2026-10-16 19:19:30",0.15,3,collistuskibe
-1243,16955462,"Chandan Ranjan","2026-10-09 04:01:25",0.13,7,chandanranjan
-1244,16958231,"Daniel Olajide","2026-10-06 14:20:13",0.13,7,danielolajide
-1245,16950316,"Jeki Wan Taufik","2026-10-06 00:41:14",0.13,3,jek1wantaufik
-1246,16974238,Ingenhousz,"2026-09-27 20:11:48",0.13,1,ingenhousz
-1247,16952221,"Hironori Uchikawa","2026-10-14 22:00:09",0.13,14,huchkw
-1248,16969793,Steins,"2026-10-03 00:01:28",0.13,7,baccano
-1249,16951469,"Chandan Kumar Barada","2026-10-03 07:27:31",0.13,9,ckskaggle
-1250,16989932,Ahmed_Sherif382,"2026-10-13 13:41:36",0.13,4,ahmedsherif382
-1251,16956190,"Itan Ruiz","2026-10-16 20:05:50",0.13,12,"gamaerry,itanruiz"
-1252,16993339,Shiva,"2026-09-30 18:48:54",0.13,1,shivasai77
-1253,16992675,hertz,"2026-10-05 13:37:12",0.13,3,nori117
-1254,16952734,Haumea,"2026-10-08 14:42:39",0.13,5,chaitanyagullapalli
-1255,16950494,KiKi,"2026-10-15 08:28:14",0.13,13,kingkiller2164
-1256,16972809,lost,"2026-10-12 00:30:02",0.13,9,fluorescencexe
-1257,16948719,"Angel Robles","2026-10-16 00:11:21",0.13,14,alrobles
-1258,16948198,"Yes, Your Harness.","2026-10-08 01:54:28",0.13,12,hiranorm
-1259,16949068,"Ritwika Kancharla","2026-10-13 20:44:37",0.13,7,ritwikakancharla
-1260,16963676,"Halil İbrahim Güllük","2026-10-02 00:41:33",0.13,1,halilbrahimgllk
-1261,16950264,Maaax,"2026-10-11 14:49:40",0.13,5,maaax
-1262,16958386,"Manoj Shetty","2026-10-07 10:58:40",0.13,9,manojhmshetty
-1263,16988697,GopalKAI,"2026-10-06 23:19:02",0.13,7,gopalkai
-1264,16981035,"Shengkai Su","2026-10-06 15:17:54",0.13,7,shengkaisu
-1265,17016851,"Guangyu Song","2026-10-14 02:29:20",0.13,4,gysong
-1266,16960472,Toru59er,"2026-10-12 04:32:11",0.13,8,toru59er
-1267,16958198,Adaluvu,"2026-10-16 17:29:14",0.13,5,adaluvu
-1268,16955241,"Faisal Sarwar","2026-10-04 17:37:46",0.13,10,faisalsarwar
-1269,17019901,"Aradhya Khandelwal","2026-10-02 12:35:53",0.13,1,aradhya1211
-1270,16970796,"THEODOROS ISLAMIDIS","2026-10-14 10:50:56",0.13,9,tislamidis
-1271,16980986,"Sachin Coding1","2026-10-02 17:50:00",0.13,1,sachincoding1
-1272,16954838,"Narendar Kumar Ale","2026-10-16 19:55:43",0.13,12,narendarkumarale
-1273,16987439,"Danial Jahanbani","2026-10-07 19:00:05",0.13,7,"danialjahanbani,mohseniranmanesh"
-1274,16958047,"Dr ChandraShekar","2026-10-14 02:32:56",0.13,6,drchandrashekar
-1275,16992516,Dewakaran,"2026-10-13 12:02:22",0.13,10,dewakaran
-1276,16993506,"Philipp k-s","2026-10-16 13:14:30",0.13,12,philippkeussenstrau
-1277,17015111,"Charly Van grimbergen","2026-10-14 16:51:09",0.13,4,charlyvangrimbergen
-1278,17021638,Arun,"2026-10-15 05:34:59",0.13,9,wasbornlazy
-1279,17013597,"Yanxi Teng","2026-10-04 15:02:43",0.13,3,yanxiteng
-1280,16949044,Flempan,"2026-10-14 21:19:40",0.13,18,farhadabtahi
-1281,17022418,"Sumit Patil","2026-10-11 18:02:53",0.13,4,sumit3141
-1282,16982878,"Debashis Mohapatra","2026-10-03 15:23:19",0.13,3,debashismohapatra
-1283,17011533,binaryRahul,"2026-10-03 17:36:11",0.13,1,binaryrahul
-1284,16989859,我需要一份实习,"2026-10-13 19:51:15",0.13,6,badboiriri
-1285,17022331,"tittle brains","2026-10-07 22:18:59",0.13,3,"eliasmls,jakubdusza"
-1286,17024376,VitalClick,"2026-10-06 05:40:13",0.13,4,sunkie
-1287,17038377,"Gumma 4","2026-10-07 06:31:32",0.13,3,"flnkhome,kazumamiyashita,y129besan"
-1288,17041262,"Sardor Muxiddinov","2026-10-15 04:04:05",0.13,5,"asanashirov,asilbekasqarov,azizbekalimov,sardorishiguro,zakhraluna"
-1289,17023360,": MheePeem :","2026-10-04 08:27:18",0.13,1,mheepeem
-1290,16952529,"(ノ◡ <)","2026-10-09 19:37:23",0.13,6,nawfeelrahman1124444
-1291,17026486,SkyXMamba,"2026-10-04 09:49:12",0.13,2,syctranoreply
-1292,16976564,CYLik,"2026-10-09 12:29:43",0.13,7,cylik93
-1293,17029631,Nyassy,"2026-10-05 22:32:26",0.13,2,ka4869
-1294,16968472,"LG Music","2026-10-05 03:48:37",0.13,10,lgmusic
-1295,17027205,cosmmmos,"2026-10-04 15:23:37",0.13,1,cosmmmos
-1296,17022417,"anthony mbadiwe ikeme","2026-10-04 17:06:44",0.13,2,anthonymbadiweikeme
-1297,16955878,rgusain,"2026-10-14 12:05:30",0.13,7,rgusain
-1298,16959768,HarnessMaxxing,"2026-10-09 01:20:48",0.13,9,"aatiffraz,arpitsrivastava95"
-1299,16955652,"Wikimind AI","2026-10-08 23:15:42",0.13,15,wikimindai
-1300,16974193,"Sébastien henry","2026-10-08 14:37:01",0.13,6,sebmontreal
-1301,17028150,"Rodrigo Stachlewski Palma","2026-10-07 21:58:42",0.13,5,rodrigospalma
-1302,16971859,"Oana Unciuleanu","2026-10-05 00:14:57",0.13,9,oanaunciuleanu
-1303,16958695,harmo-miu,"2026-10-11 02:06:30",0.13,12,harmomiu
-1304,16986776,Cflave,"2026-10-06 13:56:32",0.13,7,clavelle27
-1305,17026191,Raosaheb,"2026-10-16 13:01:01",0.13,4,raosahebmore
-1306,17017638,"Chirapathleo Saelim","2026-10-10 16:56:35",0.13,5,chirapathleosaelim
-1307,16948604,XiaoYan12,"2026-10-06 05:10:25",0.13,9,xiaoyan12
-1308,16974614,"Taha Alselwi","2026-10-16 14:43:55",0.13,11,tahaalselwii
-1309,16986950,cmuhao,"2026-10-11 17:52:46",0.13,6,cmuhao
-1310,16969865,"Madhukar Devarasetti","2026-10-16 08:30:09",0.13,15,madhukardevarasetti
-1311,17013485,Bhadra,"2026-10-13 16:48:53",0.13,6,"anant26075,vedantmoghe"
-1312,16975252,laoshansong,"2026-10-08 06:33:10",0.13,9,laoshansong
-1313,16948179,wakaka,"2026-10-07 16:27:51",0.13,9,bernicerobinson
-1314,16954042,ShubhayuG,"2026-10-10 06:48:38",0.13,4,shubhayug
-1315,16990845,"Giuseppe Castelluccio","2026-10-10 11:31:42",0.13,8,giuseppecastelluccio
-1316,16987933,"Juhil Modi-24BCS10310","2026-10-05 20:24:44",0.13,4,juhilmodi
-1317,17016480,"Nicbos Lol","2026-10-07 19:08:37",0.13,5,nicboslol
-1318,16964607,"Rizkynanda Praditia","2026-10-13 00:20:07",0.13,10,rizkynandapraditia
-1319,17025193,hum,"2026-10-08 07:57:10",0.13,7,hassan8rehman
-1320,16959207,HoangMinh,"2026-10-10 07:42:06",0.13,6,kizhowl
-1321,17035013,Lishuyu,"2026-10-10 21:55:26",0.13,5,lishuyu
-1322,16959662,"chengrong huang","2026-10-15 01:10:02",0.13,8,chengronghuang
-1323,16979543,"Vinh Đặng Quang","2026-10-12 03:30:14",0.13,2,vinhdqforwork
-1324,17039328,"Viktor betker","2026-10-06 04:48:53",0.13,1,viktorbetker
-1325,17020345,jjakimoto,"2026-10-13 00:07:16",0.13,7,jjakimoto
-1326,16952432,esprit,"2026-10-06 09:41:32",0.13,8,takuji
-1327,17032779,"Ayodeji Akinola","2026-10-06 11:18:14",0.13,1,ayodejiakinola
-1328,17043768,"Hùng Nguyễn Việt21","2026-10-11 10:23:22",0.13,4,hngnguynvit21
-1329,16974663,"Francis CL YAP","2026-10-06 14:21:38",0.13,4,francisclyap
-1330,16969796,Randy,"2026-10-06 14:52:07",0.13,4,rvndyerwin
-1331,16973410,"Gajendra Singh Tanwar","2026-10-16 11:11:16",0.13,12,gstanwar16
-1332,17029970,"Masha Kholodenko","2026-10-06 17:00:00",0.13,1,mashakholodenko
-1333,17038798,Navomesh,"2026-10-16 15:24:10",0.13,3,"shdowguy,theamartyapandey"
-1334,17037268,HloyaR,"2026-10-14 22:48:59",0.13,7,hloyar
-1335,16951350,"Ritvik Shrivastava","2026-10-07 10:06:04",0.13,6,ritvikshrivastava
-1336,16950491,"SeshuRaju 🧘‍♂️","2026-10-12 13:12:05",0.13,3,seshurajup
-1337,16949226,Saurav,"2026-10-07 18:09:24",0.13,6,sauravchat
-1338,17014659,ns0329,"2026-10-06 19:26:12",0.13,3,ns0329
-1339,17045163,"Ardahan Doğru","2026-10-10 14:44:17",0.13,4,ardahandoru
-1340,16969133,"Murat Beşli","2026-10-06 22:38:08",0.13,6,muratbeli
-1341,16950208,xthixsl_ml,"2026-10-09 05:08:26",0.13,11,xthistle999
-1342,16988496,"Fujiwari Ryou","2026-10-12 04:11:59",0.13,11,fujiwariryou
-1343,16984925,ZG415,"2026-10-10 01:16:19",0.13,11,zguo415
-1344,16961928,"Moazzem Hossain","2026-10-08 13:08:12",0.13,7,mthem77
-1345,17022901,"Neo Juan","2026-10-08 03:00:50",0.13,4,neojuan
-1346,16981711,"Bin Studio","2026-10-08 08:41:15",0.13,3,binstudio
-1347,17044804,"Abdelghani Charouiti","2026-10-15 08:39:04",0.13,9,abdelghanicharouiti
-1348,16972100,"ahmed Farouk ahmed","2026-10-07 09:28:00",0.13,2,ahmedfaroukahmed
-1349,17030515,"Batuhan Özdemir","2026-10-11 21:07:52",0.13,3,iamnotindangerskyler
-1350,17026772,"harsh raj #2","2026-10-09 01:15:25",0.13,4,harshraj2789
-1351,16963238,LuisSpecian,"2026-10-16 02:47:58",0.13,12,lspecian
-1352,16960508,KitN,"2026-10-07 13:02:33",0.13,4,kitn19
-1353,17048625,"willam wu","2026-10-07 14:24:11",0.13,1,biaaib
-1354,16948907,"Krizsó Gergely","2026-10-07 15:30:10",0.13,14,lucifer19
-1355,17022744,CS4ALL,"2026-10-16 15:30:14",0.13,7,cs4all
-1356,17053549,"Mohamed Amine Aichaoui","2026-10-07 16:44:48",0.13,1,mohamedamineaichaoui
-1357,17047859,"Prashant Kikani","2026-10-07 16:50:19",0.13,1,prashantkikani
-1358,16955777,Prikat,"2026-10-16 13:23:30",0.13,6,prikat
-1359,17028171,"Roni Uhle","2026-10-10 16:41:39",0.13,4,roniuhle
-1360,17032555,"Muhammad Ayan","2026-10-16 13:21:03",0.13,9,nerdayan
-1361,16973416,VELVRIN,"2026-10-15 09:16:58",0.13,14,avioon
-1362,16974480,"Qazi Hamza","2026-10-08 19:00:48",0.13,3,hamzakazi
-1363,17010569,Zadios,"2026-10-15 03:14:33",0.13,10,zadios
-1364,16959264,"Nicholas Hui","2026-10-16 00:47:54",0.13,18,nicholashuihk
-1365,16965628,"Artem Zelenskii","2026-10-10 16:27:52",0.13,8,artemzelenskii
-1366,16951721,YogaNukko,"2026-10-11 03:50:33",0.13,4,takahitomizunobyts
-1367,17026616,Latif,"2026-10-10 02:12:25",0.13,6,abdulatifmahgoub
-1368,17029243,billhlin,"2026-10-08 03:03:21",0.13,2,billhlin
-1369,17057444,GaoSu0715,"2026-10-08 03:50:33",0.13,1,gaosu0715
-1370,17056768,HongTaeYang,"2026-10-13 23:04:08",0.13,2,hongtaeyang
-1371,17045205,"Thành Long Lý","2026-10-12 05:53:01",0.13,4,ltl1603
-1372,16949599,"Ramesh Arvind","2026-10-08 07:21:12",0.13,12,rameshln
-1373,17024704,"Bipul Shaw","2026-10-08 07:21:58",0.13,1,bipulshaw05
-1374,16992364,"Mashrur Ahmed Yafi","2026-10-10 12:27:58",0.13,3,mashrurahmedyafi
-1375,16971675,"Han steph","2026-10-16 02:12:59",0.13,4,hansteph
-1376,17041471,AyShi,"2026-10-15 08:24:50",0.13,3,muhammadtojiddinov
-1377,16969652,"Osama Abdelaal","2026-10-16 09:12:21",0.13,17,osama133
-1378,16968591,Alejoair7,"2026-10-16 06:47:09",0.13,7,alejoair7
-1379,16962981,"RMS Danaraj","2026-10-16 12:56:52",0.13,15,salorajan
-1380,17042649,"Hilmi Tuna Sayın","2026-10-08 15:41:15",0.13,3,hilmitunasayn
-1381,17061631,SHY1412,"2026-10-08 15:45:04",0.13,11,"shy1412,whisperlast"
-1382,17062552,"xianhao Lin6077","2026-10-12 12:19:07",0.13,2,xianhaolin6077
-1383,16953957,"Ajith Pinninti","2026-10-08 17:29:25",0.13,1,"ajithsudo,sudokiran"
-1384,16974468,HaneefRasheed,"2026-10-08 18:07:47",0.13,10,h3rasheed
-1385,16950367,"Azabudai Hills","2026-10-08 21:15:43",0.13,5,mikeintokyo
-1386,17044123,Zotar,"2026-10-16 14:09:00",0.13,4,chunhinma
-1387,16989191,LaiCxm,"2026-10-12 02:09:00",0.13,4,laicxm
-1388,17064949,"Laura Hung","2026-10-16 23:46:14",0.13,4,laurahung
-1389,17065453,"wei feng01","2026-10-09 04:28:59",0.13,1,weifeng01
-1390,16955187,karims,"2026-10-09 06:23:21",0.13,1,spiraldesign
-1391,17065431,"Windup Knight","2026-10-09 07:34:20",0.13,1,id509001
-1392,16987975,gurume,"2026-10-16 11:12:27",0.13,10,gempei
-1393,17068283,Versetyt,"2026-10-11 04:33:25",0.13,2,versetyt
-1394,17046899,P.AI.R,"2026-10-14 01:05:14",0.13,3,medicalphotonics
-1395,16967796,"astha singh","2026-10-14 08:37:30",0.13,8,asthasingh1003
-1396,17022112,"Ahonakpon Guy GBAGUIDI","2026-10-09 14:40:28",0.13,1,guyahonakpongbaguidi
-1397,17065601,"xia yunlong","2026-10-09 14:57:03",0.13,1,xiayunlong
-1398,17019582,Igorkart,"2026-10-11 18:32:14",0.13,4,igorkart
-1399,16956372,AJ,"2026-10-16 12:08:03",0.13,9,abduljabbarcalica
-1400,17015096,Just-a-name,"2026-10-15 01:25:35",0.13,6,thanhtran969696
-1401,16978095,muutyy,"2026-10-09 15:39:39",0.13,7,muutyy
-1402,17029216,Murphy,"2026-10-13 13:38:32",0.13,3,murphyshao
-1403,17032643,"Joshua Okolo","2026-10-09 15:44:36",0.13,1,joshuaokolo
-1404,16988563,"Mr. Guys","2026-10-11 09:22:46",0.13,5,"nkminion,pythonicvarun"
-1405,17070518,"Kiệt Võ","2026-10-14 06:18:35",0.13,3,kietvo2207
-1406,17044619,gap,"2026-10-09 17:26:52",0.13,1,giaanpham
-1407,17011756,Raymang0,"2026-10-16 09:52:41",0.13,4,raymondbrookman
-1408,17050077,"Selahattin Günter","2026-10-09 19:56:57",0.13,1,selahattingnter
-1409,17060565,"Gao Yening","2026-10-15 23:46:03",0.13,3,gaoyening
-1410,16976402,"Kyle Liu","2026-10-16 09:21:24",0.13,6,kyleliu8
-1411,16970254,ts,"2026-10-10 00:07:35",0.13,1,takehirosano
-1412,17023044,Aacceeo,"2026-10-10 02:57:07",0.13,1,aacceeo
-1413,16985314,gon2gon2,"2026-10-15 10:40:18",0.13,6,gon2gon2
-1414,17068172,tuannm3812,"2026-10-10 05:29:33",0.13,1,tuannm3812
-1415,17035375,"Wajid Qayyum","2026-10-10 05:49:32",0.13,1,wajidqayyum
-1416,16955329,Achso,"2026-10-13 08:46:40",0.13,4,"anahitatabriziyan,rssr25"
-1417,17052330,"HUANG Xin","2026-10-14 22:39:53",0.13,3,leonhx
-1418,16958373,Yiran123,"2026-10-12 14:49:12",0.13,5,"gracezhang927,yiran123"
-1419,17026682,loveispoison,"2026-10-10 08:21:45",0.13,6,loveispoison
-1420,17076047,"SOLOMON SHALOM LIJO","2026-10-13 09:02:33",0.13,3,solomonshalomlijo
-1421,17011391,sindaehyeok,"2026-10-16 01:54:38",0.13,11,"dongsushin123,sindaehyeok"
-1422,16951134,amin-amou,"2026-10-11 20:41:36",0.13,11,msaiam
-1423,17025507,IMRAN/의공학과,"2026-10-13 13:20:20",0.13,6,imranmj
-1424,16971993,"Mohamed Tawfik","2026-10-16 11:46:27",0.13,3,mtawfikm
-1425,17077050,th3y3llowbird,"2026-10-10 12:20:13",0.13,1,tiquasar
-1426,17044999,"Javier Mora Jimenez","2026-10-14 07:57:56",0.13,4,"javiermorajimenez,witnessofthe"
-1427,16980798,Semicolon;,"2026-10-12 04:08:20",0.13,2,prathameshmundada16
-1428,17027210,"Yuri Kont","2026-10-10 14:52:40",0.13,3,ykontik
-1429,17018063,yomogii,"2026-10-10 15:28:52",0.13,1,yomogii
-1430,17051790,"Raizel Kaewhawong","2026-10-13 07:53:28",0.13,5,raizelkaewhawong
-1431,17033043,"Aarush pandey","2026-10-10 15:38:35",0.13,4,aarushpandey
-1432,16964756,"qc z","2026-10-12 11:10:38",0.13,13,docjlm
-1433,17049967,"Kavya Viramgama","2026-10-12 12:19:33",0.13,3,kavyaviramgama
-1434,16950943,Doraking,"2026-10-12 08:47:09",0.13,4,dorakingx
-1435,17070746,"Jakov Levant","2026-10-10 21:56:39",0.13,1,jakovlevant
-1436,16959474,"Stefan Cringusi","2026-10-10 22:20:51",0.13,11,stefancringusi
-1437,16963120,nicdeluc,"2026-10-10 23:03:16",0.13,1,nicdeluc
-1438,17010523,mot,"2026-10-16 00:16:48",0.13,5,elda27
-1439,16955352,"Amit Malakar","2026-10-15 14:30:35",0.13,12,amitmalakarjoy
-1440,16988084,"Naveen Venu Bagadi","2026-10-14 18:03:33",0.13,3,naveenvenubagadi
-1441,16988302,"Muhammad Saeed Pak","2026-10-15 07:36:09",0.13,4,muhammadsaeedpak
-1442,16971496,porphy,"2026-10-11 07:47:45",0.13,4,porphy
-1443,17023555,"Hung-Ting Hsieh","2026-10-11 08:25:06",0.13,3,kevindic0214
-1444,16968266,Phaltyide108,"2026-10-11 11:37:26",0.13,1,phaltyide108
-1445,16977915,Bootstrapping,"2026-10-14 13:42:10",0.13,3,wujianming
-1446,17036200,gogogo,"2026-10-16 17:11:43",0.13,3,haosky1
-1447,17027010,"Kota kachori","2026-10-11 18:42:57",0.13,5,krishsingaria
-1448,16991935,KEMO16858,"2026-10-11 19:02:41",0.13,4,kemo16858
-1449,16954475,Vinit,"2026-10-11 19:50:55",0.13,8,ryotsuu
-1450,17082994,azika0408,"2026-10-11 20:55:10",0.13,1,azika0408
-1451,16956072,sanju25,"2026-10-11 22:06:56",0.13,1,sanju25
-1452,17062017,"Szymon Charkiewicz","2026-10-16 16:31:59",0.13,7,szymoncharkiewicz
-1453,16964535,"Fernando Rodrigues","2026-10-14 12:53:35",0.13,10,fernandosr85
-1454,16989862,"Hoàng Trung Nguyễn","2026-10-15 14:28:08",0.13,6,hongtrungnguyn
-1455,17081736,buaachenqun,"2026-10-12 01:30:29",0.13,1,buaachenqun
-1456,17139265,jiyujia,"2026-10-12 01:42:48",0.13,1,"ccjjllt,jiyujia"
-1457,17057317,"yeh shibang","2026-10-16 02:58:24",0.13,2,yehshibang
-1458,17059971,DarylzDD,"2026-10-16 09:46:51",0.13,4,darylzdd
-1459,17018145,varianceofx,"2026-10-12 04:03:17",0.13,5,varianceofx
-1460,17011374,"Nazmul Huda","2026-10-12 04:03:53",0.13,8,inazmulhuda
-1461,17086409,"Prabhat Agnihotri","2026-10-12 04:51:46",0.13,1,agnihotriprabhat
-1462,17022142,tominister,"2026-10-12 05:32:37",0.13,3,tominister
-1463,16988645,HireMe,"2026-10-12 06:22:44",0.13,5,junta1104
-1464,17087612,kihiro,"2026-10-14 14:59:21",0.13,2,kihiro
-1465,17044521,Ausrine,"2026-10-12 10:19:39",0.13,2,ausrine
-1466,17036043,"Kival Mahadew (Kival)","2026-10-12 10:33:40",0.13,3,kivalmahadewkival
-1467,16955335,"Shiva Shankar","2026-10-14 16:15:51",0.13,8,"nikhilsgowda,shivashankar98"
-1468,17089216,"Qian Xinyi","2026-10-12 13:25:00",0.13,1,qianxinyi
-1469,17015057,"Lee Robb","2026-10-12 14:57:10",0.13,1,leerobb
-1470,17033142,"Leon Lum","2026-10-12 15:21:14",0.13,1,leonlum
-1471,16970087,yunhui469,"2026-10-16 12:34:17",0.13,8,yunhui469
-1472,17024919,"Vegard Reiso Ragnhildstveit","2026-10-12 15:36:21",0.13,1,veggis1077
-1473,16982807,"Jiman Kwon","2026-10-16 17:49:36",0.13,9,jimankwon
-1474,17091508,"Tim Pendrell","2026-10-15 12:27:18",0.13,2,timpendrell
-1475,17022415,"Zhongzheng Bao","2026-10-14 04:19:47",0.13,3,zhongzhengbao
-1476,16953099,"Bryan Bosire","2026-10-12 17:49:07",0.13,2,bryanbosire
-1477,17010887,"bo hou","2026-10-16 19:06:49",0.13,3,jsjhoubo
-1478,17024564,"Pratham Lahoti","2026-10-15 20:31:29",0.13,5,prathamlahoti2
-1479,17043353,Saiteja,"2026-10-12 18:37:26",0.13,1,saitejaala
-1480,16982856,mehmet,"2026-10-12 20:34:56",0.13,2,mehmetuunl
-1481,16987415,"Radhakrishnan Guhan","2026-10-16 19:26:21",0.13,3,rmsgrk
-1482,16969757,"Sugar Is Sweet","2026-10-13 00:51:11",0.13,2,"bamboozled5803,bokhangnghunh,nemesistco,raystupid"
-1483,17093768,Ryelith,"2026-10-13 02:39:35",0.13,1,leolilley
-1484,16950946,machengyuan,"2026-10-16 03:56:09",0.13,5,machengyuan
-1485,17017321,quackquack,"2026-10-15 01:38:29",0.13,9,ky8ori
-1486,16989366,"Maham Haroon","2026-10-13 04:37:57",0.13,2,mahamhc
-1487,17022828,"Shiviansh Yadav","2026-10-13 06:02:12",0.13,2,shivianshyadav
-1488,17018976,haseryooooo,"2026-10-13 06:04:13",0.13,6,haseryooooo
-1489,16955083,ABHISHEK,"2026-10-15 17:33:10",0.13,4,aureliox
-1490,16960435,Rudrapratapsinh1507,"2026-10-16 04:55:18",0.13,17,rudrapratapsinh1507
-1491,17097029,HangRao,"2026-10-13 12:06:22",0.13,1,hangrao
-1492,16951888,"Zhengkang Mei","2026-10-13 12:55:15",0.13,5,zhengkangmei
-1493,17056742,Y-Kitaro,"2026-10-13 14:00:32",0.13,3,yhataktaro
-1494,17003486,Evix,"2026-10-13 14:12:43",0.13,5,itevix
-1495,17062069,"FRéeàíbrlghtO0óL Ho","2026-10-16 14:40:01",0.13,4,frebrlghto0lho
-1496,16948252,"Sourab Ghosh","2026-10-13 14:51:55",0.13,2,sourabghosh
-1497,16962894,rober12e4,"2026-10-13 15:41:36",0.13,13,rober12e4
-1498,17095361,"SIDHAARTH SHREE","2026-10-16 17:11:00",0.13,4,sidhaarthshree
-1499,16948000,"Athar Sayed","2026-10-13 17:06:28",0.13,2,sayedathar11
-1500,17039133,101,"2026-10-15 00:06:03",0.13,2,ayshthkr
-1501,17090509,"Zen kōan","2026-10-15 09:09:52",0.13,2,vc9408
-1502,16979994,EasyHome,"2026-10-16 16:24:37",0.13,6,patrickredler
-1503,17081858,hamdi619,"2026-10-16 16:28:23",0.13,4,hamdi619
-1504,16987717,Samarth,"2026-10-16 05:04:47",0.13,6,samarth1006
-1505,17088974,Shyshca,"2026-10-16 03:08:05",0.13,4,shyshca
-1506,16950706,"Hammad Farooq","2026-10-14 05:40:48",0.13,6,malikhammadfarooq
-1507,16954005,Godzilla1215,"2026-10-16 03:05:02",0.13,17,godzilla1215
-1508,17024730,"Aran Yogesh M","2026-10-14 06:32:57",0.13,1,aranyogeshm
-1509,17102805,"Hiến Nguyễn Đức","2026-10-14 07:05:01",0.13,1,hinnguync
-1510,17102686,"Dũng Nguyễn Hữu","2026-10-14 07:05:21",0.13,1,dunguit
-1511,17083677,"Jenil Langaliya","2026-10-14 07:08:00",0.13,2,jenillangaliya
-1512,17080612,Mobassir,"2026-10-14 11:55:30",0.13,1,mobassir
-1513,17100016,"Srikanth Dongala","2026-10-14 15:00:00",0.13,1,srikanthdongala
-1514,16969134,Quaranet,"2026-10-15 18:35:00",0.13,11,"buraktheroot,yusufbaranyldz"
-1515,17076916,PeterSharps,"2026-10-16 00:05:07",0.13,3,petersharps
-1516,17080129,"Will Wu","2026-10-16 15:57:39",0.13,3,will4130
-1517,17053799,sergeicu,"2026-10-14 16:15:56",0.13,4,sergeicu
-1518,17022236,"Nehad Hirmiz","2026-10-14 18:46:38",0.13,6,nehadhimiz
-1519,17100240,"Linh Hoang BCIT","2026-10-14 20:16:59",0.13,2,linhhoangbcit
-1520,16952567,codelion,"2026-10-14 23:05:20",0.13,7,codelion
-1521,17011450,"kiki yi2","2026-10-16 00:22:15",0.13,9,kikiyi2
-1522,16958589,"Kevin Yang","2026-10-16 00:21:38",0.13,4,sjyangkevin
-1523,16949295,"Kefei Yan","2026-10-16 04:19:14",0.13,9,"ffy208,kefeiyan"
-1524,17023238,linyifangzhenshuai,"2026-10-16 00:50:41",0.13,6,linyifangzhenshuai
-1525,16973200,P.u,"2026-10-16 02:08:05",0.13,4,dramaeyp
-1526,17120360," Dennis6886","2026-10-15 02:53:50",0.13,1,dennis6886
-1527,16968183,"Justin Yang","2026-10-16 00:53:44",0.13,4,zake7749
-1528,16988011,"Charbel Nehme","2026-10-15 03:43:49",0.13,1,charbelnehme
-1529,17057894,SunnyKumar79089,"2026-10-15 03:59:40",0.13,1,sunnykumar79089
-1530,16957093,"Phil Gear","2026-10-16 01:01:01",0.13,15,philgear
-1531,17106682,"Kaliden Aiarys","2026-10-16 18:01:30",0.13,2,kalidenaiarys
-1532,17033809,"Nivin :D","2026-10-16 00:34:07",0.13,2,nivind
-1533,17085884,"ghassan chebli","2026-10-16 05:02:40",0.13,5,ghassanchebli
-1534,17069040,SABAC,"2026-10-16 04:26:11",0.13,6,takafumifukase
-1535,17020446,SolveIT,"2026-10-15 09:29:28",0.13,2,pes1ug23am212
-1536,16982238,wcwswswws,"2026-10-16 05:48:12",0.13,13,wcwswswws
-1537,17027615,"Pol Simon","2026-10-15 12:37:40",0.13,6,polsimon
-1538,17039553,nair-akash,"2026-10-15 12:56:16",0.13,3,nairakash
-1539,17030835,"Oleh RCL","2026-10-15 13:13:56",0.13,4,olehrcl
-1540,17020339,"Patrick Amaru","2026-10-15 14:09:08",0.13,4,patrickamaru
-1541,17107250,RR_404,"2026-10-15 14:29:13",0.13,1,reshamrajshivwanshi
-1542,17097480,WangYilin_henuAI,"2026-10-15 15:23:44",0.13,2,violin1
-1543,17125463,wbzdssfeq,"2026-10-16 15:28:12",0.13,2,wbzdssfeq
-1544,16965789,cryptozenith,"2026-10-15 15:37:30",0.13,4,cryptozenith
-1545,16958266,Saltice,"2026-10-16 17:44:54",0.13,17,"amrishazafreen,saltice"
-1546,17022212,Sight2,"2026-10-16 19:45:05",0.13,7,"cai12341234,crimsurfer,jingwenxu85,sakurasss,yuankunzou3"
-1547,17089462,"Mihir Mohite","2026-10-15 20:16:46",0.13,3,mimojito
-1548,16956550,AdriMonFer,"2026-10-15 21:09:27",0.13,12,"adrimonfer,ntrixlm"
-1549,16969844,"Coherence Energy Labs","2026-10-16 00:03:12",0.13,11,joshphilbrick
-1550,17097217,AICON_Shibata,"2026-10-16 00:05:55",0.13,3,a1273352
-1551,17067874,Elio040208,"2026-10-16 00:06:47",0.13,3,elio040208
-1552,17074228,YaoXiaoming,"2026-10-16 00:17:58",0.13,3,yaoxiaoming
-1553,16950016,"Mohammad Yaser Hussain","2026-10-16 00:55:02",0.13,6,mohammadyaserhussain
-1554,17059355,AAP,"2026-10-16 01:21:33",0.13,5,"czlcode,dhndezmchdo,fuchunchan,gralach,kuochenyu"
-1555,16970224,GUOHAOYANG,"2026-10-16 02:24:36",0.13,2,pkuszboi
-1556,16959569,"Phạm Tiến 1306","2026-10-16 02:56:20",0.13,1,phmtin1306
-1557,17101400,"Earl Co","2026-10-16 03:39:45",0.13,1,earlco
-1558,16948892,"Alexander Gremyakov","2026-10-16 04:32:00",0.13,2,alexandergremyakov
-1559,17129656,DigiInformed,"2026-10-16 04:39:14",0.13,1,digiinformed
-1560,17067117,"Kasa chu","2026-10-16 04:44:16",0.13,3,chukai
-1561,16987444,stornic56,"2026-10-16 05:25:15",0.13,2,stornic56
-1562,17105899,"ruben garcia","2026-10-16 05:35:07",0.13,3,rubengarciahevia
-1563,17129888,"Jeffrey Tucker","2026-10-16 05:52:27",0.13,1,jeffreytucker701
-1564,17070230,newbyy,"2026-10-16 06:06:14",0.13,1,newbyy
-1565,16974036,"Adnan Ahmad Abbasi","2026-10-16 06:44:17",0.13,6,adnanahmadabbasi
-1566,17130582,"Maman Salto","2026-10-16 07:45:35",0.13,1,saddamaditya
-1567,16968561,"Ursula Kümpel","2026-10-16 07:56:33",0.13,9,ursulakmpel
-1568,16978122,s_okamo,"2026-10-16 07:57:37",0.13,6,sokamo
-1569,17102644,"The 13th Seat of The Genius Club","2026-10-16 08:04:50",0.13,1,wudangdexiaodoashi
-1570,17131129,"Cam-Luan Truong","2026-10-16 09:00:44",0.13,1,luantruong
-1571,17126026,"yunbin park","2026-10-16 10:46:28",0.13,1,yunbinpark
-1572,17107787,"Tirth Kanani","2026-10-16 11:27:25",0.13,1,tirth1402
-1573,16986113,"Yubo WANG","2026-10-16 12:40:04",0.13,1,arksey
-1574,17100654,"امير الخمري","2026-10-16 12:53:08",0.13,1,amiralkhamry33
-1575,17034098,lyx0217,"2026-10-16 12:53:49",0.13,1,bojackkk
-1576,17013621,Zain96,"2026-10-16 14:26:22",0.13,3,zain96
-1577,16967237,Haraguchi-T,"2026-10-16 14:34:24",0.13,11,haraguchit
-1578,17126875,"Ramana Pidatala","2026-10-16 14:41:03",0.13,1,ramanapidatala
-1579,17131251,GrandOptima,"2026-10-16 15:00:34",0.13,1,kojunhyeok1234
-1580,16984625,"Thomas M Thoppil","2026-10-16 15:23:07",0.13,4,thomasmthoppil
-1581,17131980,StupidXie,"2026-10-16 16:39:59",0.13,1,stupidxie
-1582,16953338,InSociEUP,"2026-10-16 18:22:25",0.13,11,santanubanerjee9
-1583,17125550,"Alokik Sharma","2026-10-16 19:02:22",0.13,1,alokiksharma
-1584,16988054,"Md Sabbir Rahman","2026-10-16 19:03:46",0.13,5,rahmanexpress
-1585,17078824,EPI-G-3a,"2026-10-16 21:12:54",0.13,2,"aurelierambout,mayeulescoubou"
-1586,17137396,TalhaArif7,"2026-10-16 23:26:23",0.13,1,talhaarif7
-1587,16949401,"Roman Rozen","2026-10-03 20:05:24",0.12,3,romanrozen
-1588,16956263,"mahmoud al-ghraibeh","2026-10-06 01:58:17",0.12,11,mahmoudalghraibeh
-1589,16956919,"Mubin Shaikh","2026-09-28 07:43:49",0.12,5,shaikhmubin
-1590,16949760,Radek,"2026-10-14 18:33:19",0.12,19,rathko
-1591,16956140,"Adarsh Varshney","2026-10-01 10:23:39",0.12,7,adarshvarshney
-1592,16958822,Thomas,"2026-10-02 20:00:04",0.12,8,tommurakami
-1593,16960703,"Mohamed Samir","2026-09-26 13:25:29",0.12,2,mosam002
-1594,16948032,"Lucas Hudson","2026-10-06 09:18:03",0.12,2,lucashudson
-1595,16961565,"vogts wu","2026-09-26 04:04:12",0.12,2,vogtswu
-1596,16956185,"Alan Karl","2026-09-25 15:32:59",0.12,1,alankarl
-1597,16950768,Krishna,"2026-10-06 00:00:39",0.12,10,"del=541caaf374a521bc,imvetri0,kaori02,mahirm01,wekayyes"
-1598,16956164,"Manuel Rinaldi","2026-10-08 19:09:24",0.12,14,manuel86
-1599,16966250,"LAHOUCINE BOUSMENE","2026-09-26 08:42:25",0.12,1,fadmadahouz
-1600,16957036,zglg,"2026-10-04 17:36:16",0.12,6,jackzhenguo
-1601,16954886,"HUANG PENGYU","2026-09-27 16:05:09",0.12,3,huangpengyu
-1602,16956158,"Ayiloye Timothy","2026-09-27 17:41:24",0.12,3,ayiloyetimothy
-1603,16949639,juliencst,"2026-10-16 12:26:24",0.12,15,juliencst
-1604,16947997,"Kerem Celik","2026-10-12 17:56:47",0.12,7,keremelik
-1605,16951018,Kagamihara,"2026-10-10 06:41:18",0.12,14,kagamihara
-1606,16955575,"Orange Marques","2026-10-03 00:34:09",0.12,10,orangemarques
-1607,16963334,"Ben Winterhalter","2026-10-06 12:42:31",0.12,7,benwinterhalter
-1608,16951544,mp,"2026-09-29 00:07:19",0.12,4,notnitsuj
-1609,16967510,"Asem Abdullah","2026-10-16 21:01:09",0.12,12,asemabdullah
-1610,16966492,olHwHlo,"2026-10-16 12:24:01",0.12,8,olhwhlo
-1611,16956482,Cpleasance,"2026-10-06 00:02:08",0.12,11,cpleasance
-1612,16964671,kadoud10,"2026-10-02 00:12:56",0.12,4,kadoud10
-1613,16965819,Rezvan_gh92,"2026-10-07 00:01:09",0.12,12,rezvangh92
-1614,16966148,"Marushan Anpalahan","2026-10-11 00:05:10",0.12,11,marushananpalahan
-1615,16957456,"Rodrigo Batista da Silva","2026-10-16 08:15:06",0.12,22,eurodrigobatista
-1616,16982119,lizs,"2026-09-29 03:25:32",0.12,1,chiila
-1617,16965272,100rabh,"2026-10-01 04:42:34",0.12,3,saurabhkumar234
-1618,16955847,"Lazaros Avramidis","2026-10-08 05:02:46",0.12,8,lazarosavramidis
-1619,16984104,Suncrest,"2026-10-08 04:50:39",0.12,2,suncrest
-1620,16957134,AroojAhmed,"2026-09-30 12:01:25",0.12,7,quresa9
-1621,16948143,"Marco Ledda","2026-10-01 00:02:29",0.12,9,marcoledda29
-1622,16951838,"James Y","2026-10-02 00:05:23",0.12,7,redoctopusk
-1623,16948890,Vishnu,"2026-10-08 17:54:24",0.12,8,tpjvishnuvardhan
-1624,16950419,FinalSunFlower,"2026-09-30 01:24:33",0.12,7,finalsunflower
-1625,16958407,"vijaya kumari","2026-10-07 03:49:05",0.12,4,vijayarv
-1626,16965501,Lonnie,"2026-10-08 14:28:30",0.12,11,lonnieqin
-1627,16985417,"Deepak Jangra","2026-10-02 02:45:48",0.12,3,deepakj100
-1628,16962333,nerd,"2026-10-11 09:30:20",0.12,13,runningbotslichess
-1629,16959577,"Sagnik Dey #2","2026-10-04 00:13:01",0.12,10,sagnikdey7
-1630,16949380,majorSeaweed,"2026-09-30 17:08:59",0.12,1,sorcererbi
-1631,16956061,Abhijeetgg,"2026-09-30 17:13:58",0.12,3,abhijeetgg
-1632,16992190,"Aleksandr Kruchinin","2026-10-01 12:19:12",0.12,2,aleksandrkruchinin
-1633,16986318,"Noushin JA","2026-10-03 13:40:08",0.12,5,noushinbme
-1634,17014578,"Jeffrey Turov","2026-10-02 06:58:30",0.12,2,jeffreyturov
-1635,16962124,"Ahmed Elemam & Moaz Eldegwy","2026-10-11 20:25:35",0.12,9,"ahmdelemam,moazeldegwy"
-1636,16963507,"Pavithra Raghudath","2026-10-01 18:12:16",0.12,2,pavithraraghudath
-1637,17011794,"Harrit Vaga","2026-10-01 19:05:45",0.12,1,harritvaga
-1638,16956711,"Omar Hisham","2026-10-05 11:56:05",0.12,5,omarhisham19
-1639,17016334,"Guarav Bansal","2026-10-03 01:44:08",0.12,3,guaravbansal
-1640,16953916,"Grzegorz Sionkowski","2026-10-01 23:50:47",0.12,3,sionek
-1641,16982044,Михаил,"2026-10-02 00:00:11",0.12,4,msingatullin
-1642,17013659,Xiaoyu_hkgo,"2026-10-04 00:29:19",0.12,4,xiaoyuhkgo
-1643,16978102,"Bartholomew Jordan","2026-10-10 23:20:40",0.12,8,bartholomewjordan
-1644,17016395,"Siddhesh Sathe","2026-10-03 13:43:16",0.12,3,sidcodegg
-1645,16967727,EyobAleB,"2026-10-16 04:21:14",0.12,16,eyobaleb
-1646,16948993,Parabellum,"2026-10-13 16:45:28",0.12,6,abdrah
-1647,17014337,"Akira Hirohashi","2026-10-02 02:13:49",0.12,1,akirahirohashi
-1648,16991167,Mani_Jos,"2026-10-02 02:27:45",0.12,3,"avatar3905,manijos"
-1649,16972104,"Kartik Soni","2026-10-12 13:59:25",0.12,7,kartiksoni15
-1650,17014891,Bin.Han,"2026-10-15 23:52:43",0.12,7,binhan0514
-1651,17012336,uuu,"2026-10-02 05:40:47",0.12,2,vovafinogenov
-1652,16982338,"Gino Viloria","2026-10-06 05:40:36",0.12,8,ginoviloria
-1653,16969920,RahulBhattacharya,"2026-10-06 20:45:26",0.12,7,rahulbats
-1654,16971713,DCP,"2026-10-16 20:49:44",0.12,16,durgachandupeddinti
-1655,16986395,星晴天空,"2026-10-05 13:17:00",0.12,3,zpqm000
-1656,16949047,"Adithya Giridharan","2026-10-15 17:29:00",0.12,14,adithyagiri
-1657,17018109,TonightIsOver,"2026-10-02 08:49:06",0.12,1,tonightisover
-1658,16950426,"Preferred Coding Agent","2026-10-16 17:05:09",0.12,5,"mamurai,msd0110,okdshin,tubotubo"
-1659,16955624,"Veronika Yaitskikh","2026-10-15 13:49:16",0.12,14,veronikayaitskikh
-1660,16977804,"listener s","2026-10-13 08:33:08",0.12,2,listeners
-1661,16979820,GOSS,"2026-10-02 15:21:19",0.12,1,gossan
-1662,16991469,tomfng,"2026-10-02 16:14:57",0.12,1,tomfng
-1663,16956432,TirumalaMarri,"2026-10-02 20:17:59",0.12,2,mtreddy
-1664,16993866,"Bob Lee Swagger","2026-10-02 20:44:48",0.12,2,cobo94
-1665,16979766,Optimem,"2026-10-03 18:42:26",0.12,2,rohithkodakandla
-1666,16961921,"Kainwang Roger","2026-10-03 00:00:37",0.12,8,kainwangroger
-1667,16952846,Mik-Kom4,"2026-10-06 13:23:33",0.12,11,rokuml
-1668,16991173,"Shawn Ramey","2026-10-03 01:43:06",0.12,3,shawnramey
-1669,16952659,Alish-0x,"2026-10-14 08:41:59",0.12,12,alish0x
-1670,16966107,"Wu Hongyi","2026-10-04 04:18:53",0.12,3,seafoodcf
-1671,16960569,eitaro8,"2026-10-15 13:24:55",0.12,10,komugi8
-1672,16966749,"Hajime Kumami","2026-10-08 13:32:52",0.12,3,hajimekumami
-1673,16983288,toki_mwc,"2026-10-15 23:39:58",0.12,9,tokimwc
-1674,16985505,"Felix Tom","2026-10-06 13:12:24",0.12,4,felixtom
-1675,16988760,"yu lesui","2026-10-05 02:56:54",0.12,6,yulesui
-1676,17024197,MilkaDVP,"2026-10-03 06:01:13",0.12,1,gerbertradmirovich
-1677,17018030,kobq,"2026-10-03 06:55:56",0.12,2,kooobq
-1678,16960064,"Ranjith B","2026-10-14 13:23:19",0.12,17,ranjithb236
-1679,17024932,"Amine Ahmed 4","2026-10-10 17:19:07",0.12,7,amineahmed4
-1680,17019750,"sasuke #2","2026-10-10 11:56:16",0.12,6,sasuke312
-1681,16971889,smh,"2026-10-13 05:36:45",0.12,10,"jnjbhjguktutft,tyx0412,uiimmz,uilhgy76ygtf7yui,vibe0519"
-1682,16953449,Shushantw,"2026-10-09 03:13:54",0.12,14,shushantw
-1683,16985395,MAGI,"2026-10-10 10:23:27",0.12,4,"asircanaslan,babayaga123412,grkemmutlu,oruc74,sadkcanelik"
-1684,17022610,"Salih Potuk","2026-10-03 14:05:06",0.12,1,salihpotuk
-1685,16990683,"K Abhi Ram","2026-10-14 15:54:43",0.12,3,"arnavmangarapu,gayaz16,kabhiram21"
-1686,16984753,xinwang,"2026-10-10 07:06:05",0.12,5,xxxtetantion
-1687,17027953,"Manan Wadhwa","2026-10-03 21:33:00",0.12,1,manan45
-1688,16988507,"Columbia Guardians","2026-10-11 16:03:18",0.12,7,"bhaumikshah08,meghansh36"
-1689,16964858,randombsgo,"2026-10-12 03:00:14",0.12,4,jungter
-1690,16956127,"Dhe Yeong","2026-10-08 19:45:01",0.12,3,dheyeong
-1691,16962100,"Sangam Gautam","2026-10-06 07:33:33",0.12,12,"sangam21,wangapa106g"
-1692,16951862,zhouhanwei,"2026-10-05 00:00:10",0.12,11,zhouhanwei
-1693,16982413,Dnyanesh,"2026-10-04 04:26:06",0.12,5,dnyaneshbharambe
-1694,17023418,UEHA,"2026-10-05 09:30:42",0.12,3,triumphtrump
-1695,17024991,"Rishabh Bhardwaj #2","2026-10-04 10:07:26",0.12,1,rishabhbhardwaj1815
-1696,16955316,HighlandCows,"2026-10-04 10:45:34",0.12,3,edhlee
-1697,17015400,Cognit0,"2026-10-12 18:21:17",0.12,7,thefool00
-1698,16989737,mraz1006,"2026-10-04 13:07:19",0.12,3,mraz1006
-1699,17025767,anujyadav_31,"2026-10-12 07:20:44",0.12,4,anujyadav31
-1700,17027037,"Vishnu N S","2026-10-10 00:06:07",0.12,4,eswincha
-1701,17031425,asananan,"2026-10-05 01:22:29",0.12,2,asananan
-1702,16968996,Aurora,"2026-10-04 15:14:37",0.12,1,"niteshranjansingh,themeghajoshi"
-1703,17032122,"jacob OKOTH O","2026-10-04 16:34:15",0.12,1,jacobokotho
-1704,17029923,"Jan Steindl-Starlinger","2026-10-04 16:50:22",0.12,1,jansteindlstarlinger
-1705,17017232,WANGYAOPING,"2026-10-05 16:59:03",0.12,3,wangyaoping
-1706,16980363,IPT,"2026-10-08 08:32:29",0.12,7,"muhammadalizeeshan,syedtahaluvsai"
-1707,16955440,Unemployed,"2026-10-07 17:10:33",0.12,7,"cuongduc,tungdd2"
-1708,17021289,"Kole Duncan Robertson","2026-10-06 01:54:45",0.12,2,kduncanrobertson
-1709,17017125,"Reid Childs","2026-10-13 22:25:48",0.12,5,"avibanerjee384,reidchilds"
-1710,17008827,"Frank S.","2026-10-05 00:29:50",0.12,2,franksunp
-1711,17031941,Dennis,"2026-10-11 02:39:16",0.12,3,dennisfong
-1712,16970779,"dhananjay das","2026-10-11 17:27:55",0.12,11,jaydashi
-1713,16976195,"Rémi Soubeyrand","2026-10-13 12:20:46",0.12,12,rmisoubeyrand
-1714,16972123,"Prawinkumar Bala","2026-10-08 16:05:11",0.12,5,prawinkumarbala
-1715,17035072,starkhushi,"2026-10-05 07:25:01",0.12,1,starkhushi
-1716,16992681,Zyy7390,"2026-10-07 00:02:30",0.12,7,zyy7390
-1717,16979890,"Dmitry Volovikov","2026-10-05 10:16:24",0.12,4,dmitryvolovikov
-1718,16958662,aimeigaoshou,"2026-10-05 12:08:56",0.12,5,sasdasdasdad
-1719,16965207,"Yuya Shintani","2026-10-05 13:59:18",0.12,3,uplus26e7
-1720,16950372,"vnejk erorjfe","2026-10-08 12:10:23",0.12,11,vnejkerorjfe
-1721,16976289,Lemonabc,"2026-10-06 06:49:40",0.12,6,lemonabc
-1722,16969294,"Arjun Vinod","2026-10-08 15:53:27",0.12,3,arjun0014
-1723,16982720,hikarimaru,"2026-10-16 05:33:11",0.12,9,hikarimaru
-1724,16985575,"Menelik Zafir","2026-10-17 00:07:13",0.12,13,professorice
-1725,16974199,Cacinie,"2026-10-14 09:17:28",0.12,4,cacinie
-1726,16950048,"Ronit Agarwal","2026-10-06 00:50:29",0.12,2,ronitagarwal1
-1727,16967134,"Sumanth Mallya","2026-10-16 11:56:57",0.12,14,sumanthmallya
-1728,17016956,claWith,"2026-10-07 00:46:28",0.12,4,clawith
-1729,17026232,"Nkateko Mashigo","2026-10-08 08:41:50",0.12,6,nkatekomashigo
-1730,17032358,"Jack Lvv","2026-10-16 14:32:00",0.12,7,jacklvv
-1731,17016217,"Sasha Turutin","2026-10-06 06:30:37",0.12,2,alturutin
-1732,17041048,manbuhjm,"2026-10-07 15:19:57",0.12,2,manbuhjm
-1733,16958866,liuzewen123,"2026-10-13 03:33:35",0.12,11,liuzewen123
-1734,16970032,Dylan,"2026-10-10 16:24:38",0.12,5,dylan2778
-1735,16950493,"Affriza Wildan Fauzan","2026-10-07 02:01:09",0.12,2,affrizawildanfauzan
-1736,16966451,"Maria Carolina BRAY","2026-10-16 12:09:51",0.12,18,mariacarolinabray
-1737,17020855,"Hal Zweiman","2026-10-08 12:03:59",0.12,5,halzweiman
-1738,16958999,"Shan Zahra","2026-10-13 11:44:50",0.12,7,sukananaqvi
-1739,16951438,HITL,"2026-10-06 15:34:56",0.12,8,"atharvjandial,darshdhawan"
-1740,16985375,SnapShot,"2026-10-16 13:20:03",0.12,7,"mahakagarwal07,officialabhinavsingh"
-1741,17044915,"INAM ULLAH","2026-10-06 18:35:17",0.12,1,enginamullah
-1742,16991816,Eddy87,"2026-10-16 15:02:52",0.12,9,"anurag0306,eddy87"
-1743,17045876,"Vadim Pryakhin","2026-10-06 20:36:10",0.12,1,vadimpryakhin
-1744,16957217,mikebeth,"2026-10-06 20:46:59",0.12,1,miguelbeta
-1745,16980750,Salavat,"2026-10-12 10:16:14",0.12,7,salavat1k
-1746,17035085,"Aakash Kavuru","2026-10-13 00:08:43",0.12,2,aakashkavuru
-1747,17011310,Jet,"2026-10-08 05:14:24",0.12,7,drkongvis
-1748,17019812,topabaem,"2026-10-08 16:11:50",0.12,3,topabaem
-1749,17047147,MYOUCER,"2026-10-07 02:46:08",0.12,1,myoucer
-1750,16975215,Aker,"2026-10-16 01:36:55",0.12,17,johnsonaker
-1751,16966961,src,"2026-10-15 08:23:37",0.12,12,skthtu
-1752,16950659,Gendaijin,"2026-10-12 14:38:34",0.12,5,gendaijin
-1753,16961964,"Jaghadish Rajagopalan","2026-10-07 05:53:29",0.12,4,jaghadish
-1754,17021799,Serene,"2026-10-07 06:17:41",0.12,3,serenearyal
-1755,17047876,KyubumHwang,"2026-10-08 00:48:39",0.12,2,kyubumhwnag
-1756,16956044,Deepakexplores,"2026-10-16 18:01:49",0.12,8,deepakexplores
-1757,16966888,jan,"2026-10-14 09:03:45",0.12,14,janddd
+1243,16966888,jan,"2026-10-16 19:48:29",0.15,15,janddd
+1244,16955462,"Chandan Ranjan","2026-10-09 04:01:25",0.13,7,chandanranjan
+1245,16958231,"Daniel Olajide","2026-10-06 14:20:13",0.13,7,danielolajide
+1246,16950316,"Jeki Wan Taufik","2026-10-06 00:41:14",0.13,3,jek1wantaufik
+1247,16974238,Ingenhousz,"2026-09-27 20:11:48",0.13,1,ingenhousz
+1248,16952221,"Hironori Uchikawa","2026-10-14 22:00:09",0.13,14,huchkw
+1249,16969793,Steins,"2026-10-03 00:01:28",0.13,7,baccano
+1250,16951469,"Chandan Kumar Barada","2026-10-03 07:27:31",0.13,9,ckskaggle
+1251,16989932,Ahmed_Sherif382,"2026-10-13 13:41:36",0.13,4,ahmedsherif382
+1252,16956190,"Itan Ruiz","2026-10-16 20:05:50",0.13,12,"gamaerry,itanruiz"
+1253,16993339,Shiva,"2026-09-30 18:48:54",0.13,1,shivasai77
+1254,16992675,hertz,"2026-10-05 13:37:12",0.13,3,nori117
+1255,16952734,Haumea,"2026-10-08 14:42:39",0.13,5,chaitanyagullapalli
+1256,16950494,KiKi,"2026-10-15 08:28:14",0.13,13,kingkiller2164
+1257,16972809,lost,"2026-10-12 00:30:02",0.13,9,fluorescencexe
+1258,16948719,"Angel Robles","2026-10-16 00:11:21",0.13,14,alrobles
+1259,16948198,"Yes, Your Harness.","2026-10-08 01:54:28",0.13,12,hiranorm
+1260,16949068,"Ritwika Kancharla","2026-10-13 20:44:37",0.13,7,ritwikakancharla
+1261,16963676,"Halil İbrahim Güllük","2026-10-02 00:41:33",0.13,1,halilbrahimgllk
+1262,16950264,Maaax,"2026-10-11 14:49:40",0.13,5,maaax
+1263,16958386,"Manoj Shetty","2026-10-07 10:58:40",0.13,9,manojhmshetty
+1264,16988697,GopalKAI,"2026-10-06 23:19:02",0.13,7,gopalkai
+1265,16981035,"Shengkai Su","2026-10-06 15:17:54",0.13,7,shengkaisu
+1266,17016851,"Guangyu Song","2026-10-14 02:29:20",0.13,4,gysong
+1267,16960472,Toru59er,"2026-10-12 04:32:11",0.13,8,toru59er
+1268,16958198,Adaluvu,"2026-10-16 17:29:14",0.13,5,adaluvu
+1269,16955241,"Faisal Sarwar","2026-10-04 17:37:46",0.13,10,faisalsarwar
+1270,17019901,"Aradhya Khandelwal","2026-10-02 12:35:53",0.13,1,aradhya1211
+1271,16970796,"THEODOROS ISLAMIDIS","2026-10-14 10:50:56",0.13,9,tislamidis
+1272,16980986,"Sachin Coding1","2026-10-02 17:50:00",0.13,1,sachincoding1
+1273,16954838,"Narendar Kumar Ale","2026-10-16 19:55:43",0.13,12,narendarkumarale
+1274,16987439,"Danial Jahanbani","2026-10-07 19:00:05",0.13,7,"danialjahanbani,mohseniranmanesh"
+1275,16958047,"Dr ChandraShekar","2026-10-14 02:32:56",0.13,6,drchandrashekar
+1276,16992516,Dewakaran,"2026-10-13 12:02:22",0.13,10,dewakaran
+1277,16993506,"Philipp k-s","2026-10-16 13:14:30",0.13,12,philippkeussenstrau
+1278,17015111,"Charly Van grimbergen","2026-10-14 16:51:09",0.13,4,charlyvangrimbergen
+1279,17021638,Arun,"2026-10-15 05:34:59",0.13,9,wasbornlazy
+1280,17013597,"Yanxi Teng","2026-10-04 15:02:43",0.13,3,yanxiteng
+1281,16949044,Flempan,"2026-10-14 21:19:40",0.13,18,farhadabtahi
+1282,17022418,"Sumit Patil","2026-10-11 18:02:53",0.13,4,sumit3141
+1283,16982878,"Debashis Mohapatra","2026-10-03 15:23:19",0.13,3,debashismohapatra
+1284,17011533,binaryRahul,"2026-10-03 17:36:11",0.13,1,binaryrahul
+1285,16989859,我需要一份实习,"2026-10-13 19:51:15",0.13,6,badboiriri
+1286,17022331,"tittle brains","2026-10-07 22:18:59",0.13,3,"eliasmls,jakubdusza"
+1287,17024376,VitalClick,"2026-10-06 05:40:13",0.13,4,sunkie
+1288,17038377,"Gumma 4","2026-10-07 06:31:32",0.13,3,"flnkhome,kazumamiyashita,y129besan"
+1289,17041262,"Sardor Muxiddinov","2026-10-15 04:04:05",0.13,5,"asanashirov,asilbekasqarov,azizbekalimov,sardorishiguro,zakhraluna"
+1290,17023360,": MheePeem :","2026-10-04 08:27:18",0.13,1,mheepeem
+1291,16952529,"(ノ◡ <)","2026-10-09 19:37:23",0.13,6,nawfeelrahman1124444
+1292,17026486,SkyXMamba,"2026-10-04 09:49:12",0.13,2,syctranoreply
+1293,16976564,CYLik,"2026-10-09 12:29:43",0.13,7,cylik93
+1294,17029631,Nyassy,"2026-10-05 22:32:26",0.13,2,ka4869
+1295,16968472,"LG Music","2026-10-05 03:48:37",0.13,10,lgmusic
+1296,17027205,cosmmmos,"2026-10-04 15:23:37",0.13,1,cosmmmos
+1297,17022417,"anthony mbadiwe ikeme","2026-10-04 17:06:44",0.13,2,anthonymbadiweikeme
+1298,16955878,rgusain,"2026-10-14 12:05:30",0.13,7,rgusain
+1299,16959768,HarnessMaxxing,"2026-10-09 01:20:48",0.13,9,"aatiffraz,arpitsrivastava95"
+1300,16955652,"Wikimind AI","2026-10-08 23:15:42",0.13,15,wikimindai
+1301,16974193,"Sébastien henry","2026-10-08 14:37:01",0.13,6,sebmontreal
+1302,17028150,"Rodrigo Stachlewski Palma","2026-10-07 21:58:42",0.13,5,rodrigospalma
+1303,16971859,"Oana Unciuleanu","2026-10-05 00:14:57",0.13,9,oanaunciuleanu
+1304,16958695,harmo-miu,"2026-10-11 02:06:30",0.13,12,harmomiu
+1305,16986776,Cflave,"2026-10-06 13:56:32",0.13,7,clavelle27
+1306,17026191,Raosaheb,"2026-10-16 13:01:01",0.13,4,raosahebmore
+1307,17017638,"Chirapathleo Saelim","2026-10-10 16:56:35",0.13,5,chirapathleosaelim
+1308,16948604,XiaoYan12,"2026-10-06 05:10:25",0.13,9,xiaoyan12
+1309,16974614,"Taha Alselwi","2026-10-16 14:43:55",0.13,11,tahaalselwii
+1310,16986950,cmuhao,"2026-10-11 17:52:46",0.13,6,cmuhao
+1311,16969865,"Madhukar Devarasetti","2026-10-16 08:30:09",0.13,15,madhukardevarasetti
+1312,17013485,Bhadra,"2026-10-13 16:48:53",0.13,6,"anant26075,vedantmoghe"
+1313,16975252,laoshansong,"2026-10-08 06:33:10",0.13,9,laoshansong
+1314,16948179,wakaka,"2026-10-07 16:27:51",0.13,9,bernicerobinson
+1315,16954042,ShubhayuG,"2026-10-10 06:48:38",0.13,4,shubhayug
+1316,16990845,"Giuseppe Castelluccio","2026-10-10 11:31:42",0.13,8,giuseppecastelluccio
+1317,16987933,"Juhil Modi-24BCS10310","2026-10-05 20:24:44",0.13,4,juhilmodi
+1318,17016480,"Nicbos Lol","2026-10-07 19:08:37",0.13,5,nicboslol
+1319,16964607,"Rizkynanda Praditia","2026-10-13 00:20:07",0.13,10,rizkynandapraditia
+1320,17025193,hum,"2026-10-08 07:57:10",0.13,7,hassan8rehman
+1321,16959207,HoangMinh,"2026-10-10 07:42:06",0.13,6,kizhowl
+1322,17035013,Lishuyu,"2026-10-10 21:55:26",0.13,5,lishuyu
+1323,16959662,"chengrong huang","2026-10-15 01:10:02",0.13,8,chengronghuang
+1324,16979543,"Vinh Đặng Quang","2026-10-12 03:30:14",0.13,2,vinhdqforwork
+1325,17039328,"Viktor betker","2026-10-06 04:48:53",0.13,1,viktorbetker
+1326,17020345,jjakimoto,"2026-10-13 00:07:16",0.13,7,jjakimoto
+1327,16952432,esprit,"2026-10-06 09:41:32",0.13,8,takuji
+1328,17032779,"Ayodeji Akinola","2026-10-06 11:18:14",0.13,1,ayodejiakinola
+1329,17043768,"Hùng Nguyễn Việt21","2026-10-11 10:23:22",0.13,4,hngnguynvit21
+1330,16974663,"Francis CL YAP","2026-10-06 14:21:38",0.13,4,francisclyap
+1331,16969796,Randy,"2026-10-06 14:52:07",0.13,4,rvndyerwin
+1332,16973410,"Gajendra Singh Tanwar","2026-10-16 11:11:16",0.13,12,gstanwar16
+1333,17029970,"Masha Kholodenko","2026-10-06 17:00:00",0.13,1,mashakholodenko
+1334,17038798,Navomesh,"2026-10-16 15:24:10",0.13,3,"shdowguy,theamartyapandey"
+1335,17037268,HloyaR,"2026-10-14 22:48:59",0.13,7,hloyar
+1336,16951350,"Ritvik Shrivastava","2026-10-07 10:06:04",0.13,6,ritvikshrivastava
+1337,16950491,"SeshuRaju 🧘‍♂️","2026-10-12 13:12:05",0.13,3,seshurajup
+1338,16949226,Saurav,"2026-10-07 18:09:24",0.13,6,sauravchat
+1339,17014659,ns0329,"2026-10-06 19:26:12",0.13,3,ns0329
+1340,17045163,"Ardahan Doğru","2026-10-10 14:44:17",0.13,4,ardahandoru
+1341,16969133,"Murat Beşli","2026-10-06 22:38:08",0.13,6,muratbeli
+1342,16950208,xthixsl_ml,"2026-10-09 05:08:26",0.13,11,xthistle999
+1343,16988496,"Fujiwari Ryou","2026-10-12 04:11:59",0.13,11,fujiwariryou
+1344,16984925,ZG415,"2026-10-10 01:16:19",0.13,11,zguo415
+1345,16961928,"Moazzem Hossain","2026-10-08 13:08:12",0.13,7,mthem77
+1346,17022901,"Neo Juan","2026-10-08 03:00:50",0.13,4,neojuan
+1347,16981711,"Bin Studio","2026-10-08 08:41:15",0.13,3,binstudio
+1348,17044804,"Abdelghani Charouiti","2026-10-15 08:39:04",0.13,9,abdelghanicharouiti
+1349,16972100,"ahmed Farouk ahmed","2026-10-07 09:28:00",0.13,2,ahmedfaroukahmed
+1350,17030515,"Batuhan Özdemir","2026-10-11 21:07:52",0.13,3,iamnotindangerskyler
+1351,17026772,"harsh raj #2","2026-10-09 01:15:25",0.13,4,harshraj2789
+1352,16963238,LuisSpecian,"2026-10-16 02:47:58",0.13,12,lspecian
+1353,16960508,KitN,"2026-10-07 13:02:33",0.13,4,kitn19
+1354,17048625,"willam wu","2026-10-07 14:24:11",0.13,1,biaaib
+1355,16948907,"Krizsó Gergely","2026-10-07 15:30:10",0.13,14,lucifer19
+1356,17022744,CS4ALL,"2026-10-16 15:30:14",0.13,7,cs4all
+1357,17053549,"Mohamed Amine Aichaoui","2026-10-07 16:44:48",0.13,1,mohamedamineaichaoui
+1358,17047859,"Prashant Kikani","2026-10-07 16:50:19",0.13,1,prashantkikani
+1359,16955777,Prikat,"2026-10-16 13:23:30",0.13,6,prikat
+1360,17028171,"Roni Uhle","2026-10-10 16:41:39",0.13,4,roniuhle
+1361,17032555,"Muhammad Ayan","2026-10-16 13:21:03",0.13,9,nerdayan
+1362,16973416,VELVRIN,"2026-10-15 09:16:58",0.13,14,avioon
+1363,16974480,"Qazi Hamza","2026-10-08 19:00:48",0.13,3,hamzakazi
+1364,17010569,Zadios,"2026-10-15 03:14:33",0.13,10,zadios
+1365,16959264,"Nicholas Hui","2026-10-16 00:47:54",0.13,18,nicholashuihk
+1366,16965628,"Artem Zelenskii","2026-10-10 16:27:52",0.13,8,artemzelenskii
+1367,16951721,YogaNukko,"2026-10-11 03:50:33",0.13,4,takahitomizunobyts
+1368,17026616,Latif,"2026-10-10 02:12:25",0.13,6,abdulatifmahgoub
+1369,17029243,billhlin,"2026-10-08 03:03:21",0.13,2,billhlin
+1370,17057444,GaoSu0715,"2026-10-08 03:50:33",0.13,1,gaosu0715
+1371,17056768,HongTaeYang,"2026-10-13 23:04:08",0.13,2,hongtaeyang
+1372,17045205,"Thành Long Lý","2026-10-12 05:53:01",0.13,4,ltl1603
+1373,16949599,"Ramesh Arvind","2026-10-08 07:21:12",0.13,12,rameshln
+1374,17024704,"Bipul Shaw","2026-10-08 07:21:58",0.13,1,bipulshaw05
+1375,16992364,"Mashrur Ahmed Yafi","2026-10-10 12:27:58",0.13,3,mashrurahmedyafi
+1376,16971675,"Han steph","2026-10-16 02:12:59",0.13,4,hansteph
+1377,17041471,AyShi,"2026-10-15 08:24:50",0.13,3,muhammadtojiddinov
+1378,16969652,"Osama Abdelaal","2026-10-16 09:12:21",0.13,17,osama133
+1379,16968591,Alejoair7,"2026-10-16 06:47:09",0.13,7,alejoair7
+1380,16962981,"RMS Danaraj","2026-10-16 12:56:52",0.13,15,salorajan
+1381,17042649,"Hilmi Tuna Sayın","2026-10-08 15:41:15",0.13,3,hilmitunasayn
+1382,17061631,SHY1412,"2026-10-08 15:45:04",0.13,11,"shy1412,whisperlast"
+1383,17062552,"xianhao Lin6077","2026-10-12 12:19:07",0.13,2,xianhaolin6077
+1384,16953957,"Ajith Pinninti","2026-10-08 17:29:25",0.13,1,"ajithsudo,sudokiran"
+1385,16974468,HaneefRasheed,"2026-10-08 18:07:47",0.13,10,h3rasheed
+1386,16950367,"Azabudai Hills","2026-10-08 21:15:43",0.13,5,mikeintokyo
+1387,17044123,Zotar,"2026-10-16 14:09:00",0.13,4,chunhinma
+1388,16989191,LaiCxm,"2026-10-12 02:09:00",0.13,4,laicxm
+1389,17064949,"Laura Hung","2026-10-16 23:46:14",0.13,4,laurahung
+1390,17065453,"wei feng01","2026-10-09 04:28:59",0.13,1,weifeng01
+1391,16955187,karims,"2026-10-09 06:23:21",0.13,1,spiraldesign
+1392,17065431,"Windup Knight","2026-10-09 07:34:20",0.13,1,id509001
+1393,16987975,gurume,"2026-10-16 11:12:27",0.13,10,gempei
+1394,17068283,Versetyt,"2026-10-11 04:33:25",0.13,2,versetyt
+1395,17046899,P.AI.R,"2026-10-14 01:05:14",0.13,3,medicalphotonics
+1396,16967796,"astha singh","2026-10-14 08:37:30",0.13,8,asthasingh1003
+1397,17022112,"Ahonakpon Guy GBAGUIDI","2026-10-09 14:40:28",0.13,1,guyahonakpongbaguidi
+1398,17065601,"xia yunlong","2026-10-09 14:57:03",0.13,1,xiayunlong
+1399,17019582,Igorkart,"2026-10-11 18:32:14",0.13,4,igorkart
+1400,16956372,AJ,"2026-10-16 12:08:03",0.13,9,abduljabbarcalica
+1401,17015096,Just-a-name,"2026-10-15 01:25:35",0.13,6,thanhtran969696
+1402,16978095,muutyy,"2026-10-09 15:39:39",0.13,7,muutyy
+1403,17029216,Murphy,"2026-10-13 13:38:32",0.13,3,murphyshao
+1404,17032643,"Joshua Okolo","2026-10-09 15:44:36",0.13,1,joshuaokolo
+1405,16988563,"Mr. Guys","2026-10-11 09:22:46",0.13,5,"nkminion,pythonicvarun"
+1406,17070518,"Kiệt Võ","2026-10-14 06:18:35",0.13,3,kietvo2207
+1407,17044619,gap,"2026-10-09 17:26:52",0.13,1,giaanpham
+1408,17011756,Raymang0,"2026-10-16 09:52:41",0.13,4,raymondbrookman
+1409,17050077,"Selahattin Günter","2026-10-09 19:56:57",0.13,1,selahattingnter
+1410,17060565,"Gao Yening","2026-10-15 23:46:03",0.13,3,gaoyening
+1411,16976402,"Kyle Liu","2026-10-16 09:21:24",0.13,6,kyleliu8
+1412,16970254,ts,"2026-10-10 00:07:35",0.13,1,takehirosano
+1413,17023044,Aacceeo,"2026-10-10 02:57:07",0.13,1,aacceeo
+1414,16985314,gon2gon2,"2026-10-15 10:40:18",0.13,6,gon2gon2
+1415,17068172,tuannm3812,"2026-10-10 05:29:33",0.13,1,tuannm3812
+1416,17035375,"Wajid Qayyum","2026-10-10 05:49:32",0.13,1,wajidqayyum
+1417,16955329,Achso,"2026-10-13 08:46:40",0.13,4,"anahitatabriziyan,rssr25"
+1418,17052330,"HUANG Xin","2026-10-14 22:39:53",0.13,3,leonhx
+1419,16958373,Yiran123,"2026-10-12 14:49:12",0.13,5,"gracezhang927,yiran123"
+1420,17026682,loveispoison,"2026-10-10 08:21:45",0.13,6,loveispoison
+1421,17076047,"SOLOMON SHALOM LIJO","2026-10-13 09:02:33",0.13,3,solomonshalomlijo
+1422,17011391,sindaehyeok,"2026-10-16 01:54:38",0.13,11,"dongsushin123,sindaehyeok"
+1423,16951134,amin-amou,"2026-10-11 20:41:36",0.13,11,msaiam
+1424,17025507,IMRAN/의공학과,"2026-10-13 13:20:20",0.13,6,imranmj
+1425,16971993,"Mohamed Tawfik","2026-10-16 11:46:27",0.13,3,mtawfikm
+1426,17077050,th3y3llowbird,"2026-10-10 12:20:13",0.13,1,tiquasar
+1427,17044999,"Javier Mora Jimenez","2026-10-14 07:57:56",0.13,4,"javiermorajimenez,witnessofthe"
+1428,16980798,Semicolon;,"2026-10-12 04:08:20",0.13,2,prathameshmundada16
+1429,17027210,"Yuri Kont","2026-10-10 14:52:40",0.13,3,ykontik
+1430,17018063,yomogii,"2026-10-10 15:28:52",0.13,1,yomogii
+1431,17051790,"Raizel Kaewhawong","2026-10-13 07:53:28",0.13,5,raizelkaewhawong
+1432,17033043,"Aarush pandey","2026-10-10 15:38:35",0.13,4,aarushpandey
+1433,16964756,"qc z","2026-10-12 11:10:38",0.13,13,docjlm
+1434,17049967,"Kavya Viramgama","2026-10-12 12:19:33",0.13,3,kavyaviramgama
+1435,16950943,Doraking,"2026-10-12 08:47:09",0.13,4,dorakingx
+1436,17070746,"Jakov Levant","2026-10-10 21:56:39",0.13,1,jakovlevant
+1437,16959474,"Stefan Cringusi","2026-10-10 22:20:51",0.13,11,stefancringusi
+1438,16963120,nicdeluc,"2026-10-10 23:03:16",0.13,1,nicdeluc
+1439,17010523,mot,"2026-10-16 00:16:48",0.13,5,elda27
+1440,16955352,"Amit Malakar","2026-10-15 14:30:35",0.13,12,amitmalakarjoy
+1441,16988084,"Naveen Venu Bagadi","2026-10-14 18:03:33",0.13,3,naveenvenubagadi
+1442,16988302,"Muhammad Saeed Pak","2026-10-15 07:36:09",0.13,4,muhammadsaeedpak
+1443,16971496,porphy,"2026-10-11 07:47:45",0.13,4,porphy
+1444,17023555,"Hung-Ting Hsieh","2026-10-11 08:25:06",0.13,3,kevindic0214
+1445,16968266,Phaltyide108,"2026-10-11 11:37:26",0.13,1,phaltyide108
+1446,16977915,Bootstrapping,"2026-10-14 13:42:10",0.13,3,wujianming
+1447,17036200,gogogo,"2026-10-16 17:11:43",0.13,3,haosky1
+1448,17027010,"Kota kachori","2026-10-11 18:42:57",0.13,5,krishsingaria
+1449,16991935,KEMO16858,"2026-10-11 19:02:41",0.13,4,kemo16858
+1450,16954475,Vinit,"2026-10-11 19:50:55",0.13,8,ryotsuu
+1451,17082994,azika0408,"2026-10-11 20:55:10",0.13,1,azika0408
+1452,16956072,sanju25,"2026-10-11 22:06:56",0.13,1,sanju25
+1453,17062017,"Szymon Charkiewicz","2026-10-16 16:31:59",0.13,7,szymoncharkiewicz
+1454,16964535,"Fernando Rodrigues","2026-10-14 12:53:35",0.13,10,fernandosr85
+1455,16989862,"Hoàng Trung Nguyễn","2026-10-15 14:28:08",0.13,6,hongtrungnguyn
+1456,17081736,buaachenqun,"2026-10-12 01:30:29",0.13,1,buaachenqun
+1457,17139265,jiyujia,"2026-10-12 01:42:48",0.13,1,"ccjjllt,jiyujia"
+1458,17057317,"yeh shibang","2026-10-16 02:58:24",0.13,2,yehshibang
+1459,17059971,DarylzDD,"2026-10-16 09:46:51",0.13,4,darylzdd
+1460,17018145,varianceofx,"2026-10-12 04:03:17",0.13,5,varianceofx
+1461,17011374,"Nazmul Huda","2026-10-12 04:03:53",0.13,8,inazmulhuda
+1462,17086409,"Prabhat Agnihotri","2026-10-12 04:51:46",0.13,1,agnihotriprabhat
+1463,17022142,tominister,"2026-10-12 05:32:37",0.13,3,tominister
+1464,16988645,HireMe,"2026-10-12 06:22:44",0.13,5,junta1104
+1465,17087612,kihiro,"2026-10-14 14:59:21",0.13,2,kihiro
+1466,17044521,Ausrine,"2026-10-12 10:19:39",0.13,2,ausrine
+1467,17036043,"Kival Mahadew (Kival)","2026-10-12 10:33:40",0.13,3,kivalmahadewkival
+1468,16955335,"Shiva Shankar","2026-10-14 16:15:51",0.13,8,"nikhilsgowda,shivashankar98"
+1469,17089216,"Qian Xinyi","2026-10-12 13:25:00",0.13,1,qianxinyi
+1470,17015057,"Lee Robb","2026-10-12 14:57:10",0.13,1,leerobb
+1471,17033142,"Leon Lum","2026-10-12 15:21:14",0.13,1,leonlum
+1472,16970087,yunhui469,"2026-10-16 12:34:17",0.13,8,yunhui469
+1473,17024919,"Vegard Reiso Ragnhildstveit","2026-10-12 15:36:21",0.13,1,veggis1077
+1474,16982807,"Jiman Kwon","2026-10-16 17:49:36",0.13,9,jimankwon
+1475,17091508,"Tim Pendrell","2026-10-15 12:27:18",0.13,2,timpendrell
+1476,17022415,"Zhongzheng Bao","2026-10-14 04:19:47",0.13,3,zhongzhengbao
+1477,16953099,"Bryan Bosire","2026-10-12 17:49:07",0.13,2,bryanbosire
+1478,17010887,"bo hou","2026-10-16 19:06:49",0.13,3,jsjhoubo
+1479,17024564,"Pratham Lahoti","2026-10-15 20:31:29",0.13,5,prathamlahoti2
+1480,17043353,Saiteja,"2026-10-12 18:37:26",0.13,1,saitejaala
+1481,16982856,mehmet,"2026-10-12 20:34:56",0.13,2,mehmetuunl
+1482,16987415,"Radhakrishnan Guhan","2026-10-16 19:26:21",0.13,3,rmsgrk
+1483,16969757,"Sugar Is Sweet","2026-10-13 00:51:11",0.13,2,"bamboozled5803,bokhangnghunh,nemesistco,raystupid"
+1484,17093768,Ryelith,"2026-10-13 02:39:35",0.13,1,leolilley
+1485,16950946,machengyuan,"2026-10-16 03:56:09",0.13,5,machengyuan
+1486,17017321,quackquack,"2026-10-15 01:38:29",0.13,9,ky8ori
+1487,16989366,"Maham Haroon","2026-10-13 04:37:57",0.13,2,mahamhc
+1488,17022828,"Shiviansh Yadav","2026-10-13 06:02:12",0.13,2,shivianshyadav
+1489,17018976,haseryooooo,"2026-10-13 06:04:13",0.13,6,haseryooooo
+1490,16955083,ABHISHEK,"2026-10-15 17:33:10",0.13,4,aureliox
+1491,16960435,Rudrapratapsinh1507,"2026-10-16 04:55:18",0.13,17,rudrapratapsinh1507
+1492,17097029,HangRao,"2026-10-13 12:06:22",0.13,1,hangrao
+1493,16951888,"Zhengkang Mei","2026-10-13 12:55:15",0.13,5,zhengkangmei
+1494,17056742,Y-Kitaro,"2026-10-13 14:00:32",0.13,3,yhataktaro
+1495,17003486,Evix,"2026-10-13 14:12:43",0.13,5,itevix
+1496,17062069,"FRéeàíbrlghtO0óL Ho","2026-10-16 14:40:01",0.13,4,frebrlghto0lho
+1497,16948252,"Sourab Ghosh","2026-10-13 14:51:55",0.13,2,sourabghosh
+1498,16962894,rober12e4,"2026-10-13 15:41:36",0.13,13,rober12e4
+1499,17095361,"SIDHAARTH SHREE","2026-10-16 17:11:00",0.13,4,sidhaarthshree
+1500,16948000,"Athar Sayed","2026-10-13 17:06:28",0.13,2,sayedathar11
+1501,17039133,101,"2026-10-15 00:06:03",0.13,2,ayshthkr
+1502,17090509,"Zen kōan","2026-10-15 09:09:52",0.13,2,vc9408
+1503,16979994,EasyHome,"2026-10-16 16:24:37",0.13,6,patrickredler
+1504,17081858,hamdi619,"2026-10-16 16:28:23",0.13,4,hamdi619
+1505,16987717,Samarth,"2026-10-16 05:04:47",0.13,6,samarth1006
+1506,17088974,Shyshca,"2026-10-16 03:08:05",0.13,4,shyshca
+1507,16950706,"Hammad Farooq","2026-10-14 05:40:48",0.13,6,malikhammadfarooq
+1508,16954005,Godzilla1215,"2026-10-16 03:05:02",0.13,17,godzilla1215
+1509,17024730,"Aran Yogesh M","2026-10-14 06:32:57",0.13,1,aranyogeshm
+1510,17102805,"Hiến Nguyễn Đức","2026-10-14 07:05:01",0.13,1,hinnguync
+1511,17102686,"Dũng Nguyễn Hữu","2026-10-14 07:05:21",0.13,1,dunguit
+1512,17083677,"Jenil Langaliya","2026-10-14 07:08:00",0.13,2,jenillangaliya
+1513,17080612,Mobassir,"2026-10-14 11:55:30",0.13,1,mobassir
+1514,17100016,"Srikanth Dongala","2026-10-14 15:00:00",0.13,1,srikanthdongala
+1515,16969134,Quaranet,"2026-10-15 18:35:00",0.13,11,"buraktheroot,yusufbaranyldz"
+1516,17076916,PeterSharps,"2026-10-16 00:05:07",0.13,3,petersharps
+1517,17080129,"Will Wu","2026-10-16 15:57:39",0.13,3,will4130
+1518,17053799,sergeicu,"2026-10-14 16:15:56",0.13,4,sergeicu
+1519,17022236,"Nehad Hirmiz","2026-10-14 18:46:38",0.13,6,nehadhimiz
+1520,17100240,"Linh Hoang BCIT","2026-10-14 20:16:59",0.13,2,linhhoangbcit
+1521,16952567,codelion,"2026-10-14 23:05:20",0.13,7,codelion
+1522,17011450,"kiki yi2","2026-10-16 00:22:15",0.13,9,kikiyi2
+1523,16958589,"Kevin Yang","2026-10-16 00:21:38",0.13,4,sjyangkevin
+1524,16949295,"Kefei Yan","2026-10-16 04:19:14",0.13,9,"ffy208,kefeiyan"
+1525,17023238,linyifangzhenshuai,"2026-10-16 00:50:41",0.13,6,linyifangzhenshuai
+1526,16973200,P.u,"2026-10-16 02:08:05",0.13,4,dramaeyp
+1527,17120360," Dennis6886","2026-10-15 02:53:50",0.13,1,dennis6886
+1528,16968183,"Justin Yang","2026-10-16 00:53:44",0.13,4,zake7749
+1529,16988011,"Charbel Nehme","2026-10-15 03:43:49",0.13,1,charbelnehme
+1530,17057894,SunnyKumar79089,"2026-10-15 03:59:40",0.13,1,sunnykumar79089
+1531,16957093,"Phil Gear","2026-10-16 01:01:01",0.13,15,philgear
+1532,17106682,"Kaliden Aiarys","2026-10-16 18:01:30",0.13,2,kalidenaiarys
+1533,17033809,"Nivin :D","2026-10-16 00:34:07",0.13,2,nivind
+1534,17085884,"ghassan chebli","2026-10-16 05:02:40",0.13,5,ghassanchebli
+1535,17069040,SABAC,"2026-10-16 04:26:11",0.13,6,takafumifukase
+1536,17020446,SolveIT,"2026-10-15 09:29:28",0.13,2,pes1ug23am212
+1537,16982238,wcwswswws,"2026-10-16 05:48:12",0.13,13,wcwswswws
+1538,17027615,"Pol Simon","2026-10-15 12:37:40",0.13,6,polsimon
+1539,17039553,nair-akash,"2026-10-15 12:56:16",0.13,3,nairakash
+1540,17030835,"Oleh RCL","2026-10-15 13:13:56",0.13,4,olehrcl
+1541,17020339,"Patrick Amaru","2026-10-15 14:09:08",0.13,4,patrickamaru
+1542,17107250,RR_404,"2026-10-15 14:29:13",0.13,1,reshamrajshivwanshi
+1543,17097480,WangYilin_henuAI,"2026-10-15 15:23:44",0.13,2,violin1
+1544,17125463,wbzdssfeq,"2026-10-16 15:28:12",0.13,2,wbzdssfeq
+1545,16965789,cryptozenith,"2026-10-15 15:37:30",0.13,4,cryptozenith
+1546,16958266,Saltice,"2026-10-16 17:44:54",0.13,17,"amrishazafreen,saltice"
+1547,17022212,Sight2,"2026-10-16 19:45:05",0.13,7,"cai12341234,crimsurfer,jingwenxu85,sakurasss,yuankunzou3"
+1548,17089462,"Mihir Mohite","2026-10-15 20:16:46",0.13,3,mimojito
+1549,16956550,AdriMonFer,"2026-10-15 21:09:27",0.13,12,"adrimonfer,ntrixlm"
+1550,16969844,"Coherence Energy Labs","2026-10-16 00:03:12",0.13,11,joshphilbrick
+1551,17097217,AICON_Shibata,"2026-10-16 00:05:55",0.13,3,a1273352
+1552,17067874,Elio040208,"2026-10-16 00:06:47",0.13,3,elio040208
+1553,17074228,YaoXiaoming,"2026-10-16 00:17:58",0.13,3,yaoxiaoming
+1554,16950016,"Mohammad Yaser Hussain","2026-10-16 00:55:02",0.13,6,mohammadyaserhussain
+1555,17059355,AAP,"2026-10-16 01:21:33",0.13,5,"czlcode,dhndezmchdo,fuchunchan,gralach,kuochenyu"
+1556,16970224,GUOHAOYANG,"2026-10-16 02:24:36",0.13,2,pkuszboi
+1557,16959569,"Phạm Tiến 1306","2026-10-16 02:56:20",0.13,1,phmtin1306
+1558,17101400,"Earl Co","2026-10-16 03:39:45",0.13,1,earlco
+1559,16948892,"Alexander Gremyakov","2026-10-16 04:32:00",0.13,2,alexandergremyakov
+1560,17129656,DigiInformed,"2026-10-16 04:39:14",0.13,1,digiinformed
+1561,17067117,"Kasa chu","2026-10-16 04:44:16",0.13,3,chukai
+1562,16987444,stornic56,"2026-10-16 05:25:15",0.13,2,stornic56
+1563,17105899,"ruben garcia","2026-10-16 05:35:07",0.13,3,rubengarciahevia
+1564,17129888,"Jeffrey Tucker","2026-10-16 05:52:27",0.13,1,jeffreytucker701
+1565,17070230,newbyy,"2026-10-16 06:06:14",0.13,1,newbyy
+1566,16974036,"Adnan Ahmad Abbasi","2026-10-16 06:44:17",0.13,6,adnanahmadabbasi
+1567,17130582,"Maman Salto","2026-10-16 07:45:35",0.13,1,saddamaditya
+1568,16968561,"Ursula Kümpel","2026-10-16 07:56:33",0.13,9,ursulakmpel
+1569,16978122,s_okamo,"2026-10-16 07:57:37",0.13,6,sokamo
+1570,17102644,"The 13th Seat of The Genius Club","2026-10-16 08:04:50",0.13,1,wudangdexiaodoashi
+1571,17131129,"Cam-Luan Truong","2026-10-16 09:00:44",0.13,1,luantruong
+1572,17126026,"yunbin park","2026-10-16 10:46:28",0.13,1,yunbinpark
+1573,17107787,"Tirth Kanani","2026-10-16 11:27:25",0.13,1,tirth1402
+1574,16986113,"Yubo WANG","2026-10-16 12:40:04",0.13,1,arksey
+1575,17100654,"امير الخمري","2026-10-16 12:53:08",0.13,1,amiralkhamry33
+1576,17034098,lyx0217,"2026-10-16 12:53:49",0.13,1,bojackkk
+1577,17013621,Zain96,"2026-10-16 14:26:22",0.13,3,zain96
+1578,16967237,Haraguchi-T,"2026-10-16 14:34:24",0.13,11,haraguchit
+1579,17126875,"Ramana Pidatala","2026-10-16 14:41:03",0.13,1,ramanapidatala
+1580,17131251,GrandOptima,"2026-10-16 15:00:34",0.13,1,kojunhyeok1234
+1581,16984625,"Thomas M Thoppil","2026-10-16 15:23:07",0.13,4,thomasmthoppil
+1582,17131980,StupidXie,"2026-10-16 16:39:59",0.13,1,stupidxie
+1583,16953338,InSociEUP,"2026-10-16 18:22:25",0.13,11,santanubanerjee9
+1584,17125550,"Alokik Sharma","2026-10-16 19:02:22",0.13,1,alokiksharma
+1585,16988054,"Md Sabbir Rahman","2026-10-16 19:03:46",0.13,5,rahmanexpress
+1586,17078824,EPI-G-3a,"2026-10-16 21:12:54",0.13,2,"aurelierambout,mayeulescoubou"
+1587,17137396,TalhaArif7,"2026-10-16 23:26:23",0.13,1,talhaarif7
+1588,16949401,"Roman Rozen","2026-10-03 20:05:24",0.12,3,romanrozen
+1589,16956263,"mahmoud al-ghraibeh","2026-10-06 01:58:17",0.12,11,mahmoudalghraibeh
+1590,16956919,"Mubin Shaikh","2026-09-28 07:43:49",0.12,5,shaikhmubin
+1591,16949760,Radek,"2026-10-14 18:33:19",0.12,19,rathko
+1592,16956140,"Adarsh Varshney","2026-10-01 10:23:39",0.12,7,adarshvarshney
+1593,16958822,Thomas,"2026-10-02 20:00:04",0.12,8,tommurakami
+1594,16960703,"Mohamed Samir","2026-09-26 13:25:29",0.12,2,mosam002
+1595,16948032,"Lucas Hudson","2026-10-06 09:18:03",0.12,2,lucashudson
+1596,16961565,"vogts wu","2026-09-26 04:04:12",0.12,2,vogtswu
+1597,16956185,"Alan Karl","2026-09-25 15:32:59",0.12,1,alankarl
+1598,16950768,Krishna,"2026-10-06 00:00:39",0.12,10,"del=541caaf374a521bc,imvetri0,kaori02,mahirm01,wekayyes"
+1599,16956164,"Manuel Rinaldi","2026-10-08 19:09:24",0.12,14,manuel86
+1600,16966250,"LAHOUCINE BOUSMENE","2026-09-26 08:42:25",0.12,1,fadmadahouz
+1601,16957036,zglg,"2026-10-04 17:36:16",0.12,6,jackzhenguo
+1602,16954886,"HUANG PENGYU","2026-09-27 16:05:09",0.12,3,huangpengyu
+1603,16956158,"Ayiloye Timothy","2026-09-27 17:41:24",0.12,3,ayiloyetimothy
+1604,16949639,juliencst,"2026-10-16 12:26:24",0.12,15,juliencst
+1605,16947997,"Kerem Celik","2026-10-12 17:56:47",0.12,7,keremelik
+1606,16951018,Kagamihara,"2026-10-10 06:41:18",0.12,14,kagamihara
+1607,16955575,"Orange Marques","2026-10-03 00:34:09",0.12,10,orangemarques
+1608,16963334,"Ben Winterhalter","2026-10-06 12:42:31",0.12,7,benwinterhalter
+1609,16951544,mp,"2026-09-29 00:07:19",0.12,4,notnitsuj
+1610,16967510,"Asem Abdullah","2026-10-16 21:01:09",0.12,12,asemabdullah
+1611,16966492,olHwHlo,"2026-10-16 12:24:01",0.12,8,olhwhlo
+1612,16956482,Cpleasance,"2026-10-06 00:02:08",0.12,11,cpleasance
+1613,16964671,kadoud10,"2026-10-02 00:12:56",0.12,4,kadoud10
+1614,16965819,Rezvan_gh92,"2026-10-07 00:01:09",0.12,12,rezvangh92
+1615,16966148,"Marushan Anpalahan","2026-10-11 00:05:10",0.12,11,marushananpalahan
+1616,16957456,"Rodrigo Batista da Silva","2026-10-16 08:15:06",0.12,22,eurodrigobatista
+1617,16982119,lizs,"2026-09-29 03:25:32",0.12,1,chiila
+1618,16965272,100rabh,"2026-10-01 04:42:34",0.12,3,saurabhkumar234
+1619,16955847,"Lazaros Avramidis","2026-10-08 05:02:46",0.12,8,lazarosavramidis
+1620,16984104,Suncrest,"2026-10-08 04:50:39",0.12,2,suncrest
+1621,16957134,AroojAhmed,"2026-09-30 12:01:25",0.12,7,quresa9
+1622,16948143,"Marco Ledda","2026-10-01 00:02:29",0.12,9,marcoledda29
+1623,16951838,"James Y","2026-10-02 00:05:23",0.12,7,redoctopusk
+1624,16948890,Vishnu,"2026-10-08 17:54:24",0.12,8,tpjvishnuvardhan
+1625,16950419,FinalSunFlower,"2026-09-30 01:24:33",0.12,7,finalsunflower
+1626,16958407,"vijaya kumari","2026-10-07 03:49:05",0.12,4,vijayarv
+1627,16965501,Lonnie,"2026-10-08 14:28:30",0.12,11,lonnieqin
+1628,16985417,"Deepak Jangra","2026-10-02 02:45:48",0.12,3,deepakj100
+1629,16962333,nerd,"2026-10-11 09:30:20",0.12,13,runningbotslichess
+1630,16959577,"Sagnik Dey #2","2026-10-04 00:13:01",0.12,10,sagnikdey7
+1631,16949380,majorSeaweed,"2026-09-30 17:08:59",0.12,1,sorcererbi
+1632,16956061,Abhijeetgg,"2026-09-30 17:13:58",0.12,3,abhijeetgg
+1633,16992190,"Aleksandr Kruchinin","2026-10-01 12:19:12",0.12,2,aleksandrkruchinin
+1634,16986318,"Noushin JA","2026-10-03 13:40:08",0.12,5,noushinbme
+1635,17014578,"Jeffrey Turov","2026-10-02 06:58:30",0.12,2,jeffreyturov
+1636,16962124,"Ahmed Elemam & Moaz Eldegwy","2026-10-11 20:25:35",0.12,9,"ahmdelemam,moazeldegwy"
+1637,16963507,"Pavithra Raghudath","2026-10-01 18:12:16",0.12,2,pavithraraghudath
+1638,17011794,"Harrit Vaga","2026-10-01 19:05:45",0.12,1,harritvaga
+1639,16956711,"Omar Hisham","2026-10-05 11:56:05",0.12,5,omarhisham19
+1640,17016334,"Guarav Bansal","2026-10-03 01:44:08",0.12,3,guaravbansal
+1641,16953916,"Grzegorz Sionkowski","2026-10-01 23:50:47",0.12,3,sionek
+1642,16982044,Михаил,"2026-10-02 00:00:11",0.12,4,msingatullin
+1643,17013659,Xiaoyu_hkgo,"2026-10-04 00:29:19",0.12,4,xiaoyuhkgo
+1644,16978102,"Bartholomew Jordan","2026-10-10 23:20:40",0.12,8,bartholomewjordan
+1645,17016395,"Siddhesh Sathe","2026-10-03 13:43:16",0.12,3,sidcodegg
+1646,16967727,EyobAleB,"2026-10-16 04:21:14",0.12,16,eyobaleb
+1647,16948993,Parabellum,"2026-10-13 16:45:28",0.12,6,abdrah
+1648,17014337,"Akira Hirohashi","2026-10-02 02:13:49",0.12,1,akirahirohashi
+1649,16991167,Mani_Jos,"2026-10-02 02:27:45",0.12,3,"avatar3905,manijos"
+1650,16972104,"Kartik Soni","2026-10-12 13:59:25",0.12,7,kartiksoni15
+1651,17014891,Bin.Han,"2026-10-15 23:52:43",0.12,7,binhan0514
+1652,17012336,uuu,"2026-10-02 05:40:47",0.12,2,vovafinogenov
+1653,16982338,"Gino Viloria","2026-10-06 05:40:36",0.12,8,ginoviloria
+1654,16969920,RahulBhattacharya,"2026-10-06 20:45:26",0.12,7,rahulbats
+1655,16971713,DCP,"2026-10-16 20:49:44",0.12,16,durgachandupeddinti
+1656,16986395,星晴天空,"2026-10-05 13:17:00",0.12,3,zpqm000
+1657,16949047,"Adithya Giridharan","2026-10-15 17:29:00",0.12,14,adithyagiri
+1658,17018109,TonightIsOver,"2026-10-02 08:49:06",0.12,1,tonightisover
+1659,16950426,"Preferred Coding Agent","2026-10-16 17:05:09",0.12,5,"mamurai,msd0110,okdshin,tubotubo"
+1660,16955624,"Veronika Yaitskikh","2026-10-15 13:49:16",0.12,14,veronikayaitskikh
+1661,16977804,"listener s","2026-10-13 08:33:08",0.12,2,listeners
+1662,16979820,GOSS,"2026-10-02 15:21:19",0.12,1,gossan
+1663,16991469,tomfng,"2026-10-02 16:14:57",0.12,1,tomfng
+1664,16956432,TirumalaMarri,"2026-10-02 20:17:59",0.12,2,mtreddy
+1665,16993866,"Bob Lee Swagger","2026-10-02 20:44:48",0.12,2,cobo94
+1666,16979766,Optimem,"2026-10-03 18:42:26",0.12,2,rohithkodakandla
+1667,16961921,"Kainwang Roger","2026-10-03 00:00:37",0.12,8,kainwangroger
+1668,16952846,Mik-Kom4,"2026-10-06 13:23:33",0.12,11,rokuml
+1669,16991173,"Shawn Ramey","2026-10-03 01:43:06",0.12,3,shawnramey
+1670,16952659,Alish-0x,"2026-10-14 08:41:59",0.12,12,alish0x
+1671,16966107,"Wu Hongyi","2026-10-04 04:18:53",0.12,3,seafoodcf
+1672,16960569,eitaro8,"2026-10-15 13:24:55",0.12,10,komugi8
+1673,16966749,"Hajime Kumami","2026-10-08 13:32:52",0.12,3,hajimekumami
+1674,16983288,toki_mwc,"2026-10-15 23:39:58",0.12,9,tokimwc
+1675,16985505,"Felix Tom","2026-10-06 13:12:24",0.12,4,felixtom
+1676,16988760,"yu lesui","2026-10-05 02:56:54",0.12,6,yulesui
+1677,17024197,MilkaDVP,"2026-10-03 06:01:13",0.12,1,gerbertradmirovich
+1678,17018030,kobq,"2026-10-03 06:55:56",0.12,2,kooobq
+1679,16960064,"Ranjith B","2026-10-14 13:23:19",0.12,17,ranjithb236
+1680,17024932,"Amine Ahmed 4","2026-10-10 17:19:07",0.12,7,amineahmed4
+1681,17019750,"sasuke #2","2026-10-10 11:56:16",0.12,6,sasuke312
+1682,16971889,smh,"2026-10-13 05:36:45",0.12,10,"jnjbhjguktutft,tyx0412,uiimmz,uilhgy76ygtf7yui,vibe0519"
+1683,16953449,Shushantw,"2026-10-09 03:13:54",0.12,14,shushantw
+1684,16985395,MAGI,"2026-10-10 10:23:27",0.12,4,"asircanaslan,babayaga123412,grkemmutlu,oruc74,sadkcanelik"
+1685,17022610,"Salih Potuk","2026-10-03 14:05:06",0.12,1,salihpotuk
+1686,16990683,"K Abhi Ram","2026-10-14 15:54:43",0.12,3,"arnavmangarapu,gayaz16,kabhiram21"
+1687,16984753,xinwang,"2026-10-10 07:06:05",0.12,5,xxxtetantion
+1688,17027953,"Manan Wadhwa","2026-10-03 21:33:00",0.12,1,manan45
+1689,16988507,"Columbia Guardians","2026-10-11 16:03:18",0.12,7,"bhaumikshah08,meghansh36"
+1690,16964858,randombsgo,"2026-10-12 03:00:14",0.12,4,jungter
+1691,16956127,"Dhe Yeong","2026-10-08 19:45:01",0.12,3,dheyeong
+1692,16962100,"Sangam Gautam","2026-10-06 07:33:33",0.12,12,"sangam21,wangapa106g"
+1693,16951862,zhouhanwei,"2026-10-05 00:00:10",0.12,11,zhouhanwei
+1694,16982413,Dnyanesh,"2026-10-04 04:26:06",0.12,5,dnyaneshbharambe
+1695,17023418,UEHA,"2026-10-05 09:30:42",0.12,3,triumphtrump
+1696,17024991,"Rishabh Bhardwaj #2","2026-10-04 10:07:26",0.12,1,rishabhbhardwaj1815
+1697,16955316,HighlandCows,"2026-10-04 10:45:34",0.12,3,edhlee
+1698,17015400,Cognit0,"2026-10-12 18:21:17",0.12,7,thefool00
+1699,16989737,mraz1006,"2026-10-04 13:07:19",0.12,3,mraz1006
+1700,17025767,anujyadav_31,"2026-10-12 07:20:44",0.12,4,anujyadav31
+1701,17027037,"Vishnu N S","2026-10-10 00:06:07",0.12,4,eswincha
+1702,17031425,asananan,"2026-10-05 01:22:29",0.12,2,asananan
+1703,16968996,Aurora,"2026-10-04 15:14:37",0.12,1,"niteshranjansingh,themeghajoshi"
+1704,17032122,"jacob OKOTH O","2026-10-04 16:34:15",0.12,1,jacobokotho
+1705,17029923,"Jan Steindl-Starlinger","2026-10-04 16:50:22",0.12,1,jansteindlstarlinger
+1706,17017232,WANGYAOPING,"2026-10-05 16:59:03",0.12,3,wangyaoping
+1707,16980363,IPT,"2026-10-08 08:32:29",0.12,7,"muhammadalizeeshan,syedtahaluvsai"
+1708,16955440,Unemployed,"2026-10-07 17:10:33",0.12,7,"cuongduc,tungdd2"
+1709,17021289,"Kole Duncan Robertson","2026-10-06 01:54:45",0.12,2,kduncanrobertson
+1710,17017125,"Reid Childs","2026-10-13 22:25:48",0.12,5,"avibanerjee384,reidchilds"
+1711,17008827,"Frank S.","2026-10-05 00:29:50",0.12,2,franksunp
+1712,17031941,Dennis,"2026-10-11 02:39:16",0.12,3,dennisfong
+1713,16970779,"dhananjay das","2026-10-11 17:27:55",0.12,11,jaydashi
+1714,16976195,"Rémi Soubeyrand","2026-10-13 12:20:46",0.12,12,rmisoubeyrand
+1715,16972123,"Prawinkumar Bala","2026-10-08 16:05:11",0.12,5,prawinkumarbala
+1716,17035072,starkhushi,"2026-10-05 07:25:01",0.12,1,starkhushi
+1717,16992681,Zyy7390,"2026-10-07 00:02:30",0.12,7,zyy7390
+1718,16979890,"Dmitry Volovikov","2026-10-05 10:16:24",0.12,4,dmitryvolovikov
+1719,16958662,aimeigaoshou,"2026-10-05 12:08:56",0.12,5,sasdasdasdad
+1720,16965207,"Yuya Shintani","2026-10-05 13:59:18",0.12,3,uplus26e7
+1721,16950372,"vnejk erorjfe","2026-10-08 12:10:23",0.12,11,vnejkerorjfe
+1722,16976289,Lemonabc,"2026-10-06 06:49:40",0.12,6,lemonabc
+1723,16969294,"Arjun Vinod","2026-10-08 15:53:27",0.12,3,arjun0014
+1724,16982720,hikarimaru,"2026-10-16 05:33:11",0.12,9,hikarimaru
+1725,16985575,"Menelik Zafir","2026-10-17 00:07:13",0.12,13,professorice
+1726,16974199,Cacinie,"2026-10-14 09:17:28",0.12,4,cacinie
+1727,16950048,"Ronit Agarwal","2026-10-06 00:50:29",0.12,2,ronitagarwal1
+1728,16967134,"Sumanth Mallya","2026-10-16 11:56:57",0.12,14,sumanthmallya
+1729,17016956,claWith,"2026-10-07 00:46:28",0.12,4,clawith
+1730,17026232,"Nkateko Mashigo","2026-10-08 08:41:50",0.12,6,nkatekomashigo
+1731,17032358,"Jack Lvv","2026-10-16 14:32:00",0.12,7,jacklvv
+1732,17016217,"Sasha Turutin","2026-10-06 06:30:37",0.12,2,alturutin
+1733,17041048,manbuhjm,"2026-10-07 15:19:57",0.12,2,manbuhjm
+1734,16958866,liuzewen123,"2026-10-13 03:33:35",0.12,11,liuzewen123
+1735,16970032,Dylan,"2026-10-10 16:24:38",0.12,5,dylan2778
+1736,16950493,"Affriza Wildan Fauzan","2026-10-07 02:01:09",0.12,2,affrizawildanfauzan
+1737,16966451,"Maria Carolina BRAY","2026-10-16 12:09:51",0.12,18,mariacarolinabray
+1738,17020855,"Hal Zweiman","2026-10-08 12:03:59",0.12,5,halzweiman
+1739,16958999,"Shan Zahra","2026-10-13 11:44:50",0.12,7,sukananaqvi
+1740,16951438,HITL,"2026-10-06 15:34:56",0.12,8,"atharvjandial,darshdhawan"
+1741,16985375,SnapShot,"2026-10-16 13:20:03",0.12,7,"mahakagarwal07,officialabhinavsingh"
+1742,17044915,"INAM ULLAH","2026-10-06 18:35:17",0.12,1,enginamullah
+1743,16991816,Eddy87,"2026-10-16 15:02:52",0.12,9,"anurag0306,eddy87"
+1744,17045876,"Vadim Pryakhin","2026-10-06 20:36:10",0.12,1,vadimpryakhin
+1745,16957217,mikebeth,"2026-10-06 20:46:59",0.12,1,miguelbeta
+1746,16980750,Salavat,"2026-10-12 10:16:14",0.12,7,salavat1k
+1747,17035085,"Aakash Kavuru","2026-10-13 00:08:43",0.12,2,aakashkavuru
+1748,17011310,Jet,"2026-10-08 05:14:24",0.12,7,drkongvis
+1749,17019812,topabaem,"2026-10-08 16:11:50",0.12,3,topabaem
+1750,17047147,MYOUCER,"2026-10-07 02:46:08",0.12,1,myoucer
+1751,16975215,Aker,"2026-10-16 01:36:55",0.12,17,johnsonaker
+1752,16966961,src,"2026-10-15 08:23:37",0.12,12,skthtu
+1753,16950659,Gendaijin,"2026-10-12 14:38:34",0.12,5,gendaijin
+1754,16961964,"Jaghadish Rajagopalan","2026-10-07 05:53:29",0.12,4,jaghadish
+1755,17021799,Serene,"2026-10-07 06:17:41",0.12,3,serenearyal
+1756,17047876,KyubumHwang,"2026-10-08 00:48:39",0.12,2,kyubumhwnag
+1757,16956044,Deepakexplores,"2026-10-16 18:01:49",0.12,8,deepakexplores
 1758,17036786,"A Sky Synapster","2026-10-07 10:21:54",0.12,3,askysynapster
 1759,16965450,Jayadhev,"2026-10-07 10:35:37",0.12,3,jayadhev
 1760,17011212,"Nishant Kumar","2026-10-08 16:37:03",0.12,6,lifezbeautiful
@@ -1821,7 +1821,7 @@ Rank,TeamId,TeamName,LastSubmissionDate,Score,SubmissionCount,TeamMemberUserName
 1820,17074061,大师在流浪,"2026-10-13 09:17:36",0.12,2,jyshane
 1821,16961979,"rutashubanyuma nestory","2026-10-16 20:28:36",0.12,18,rutashubanyuma
 1822,17037464,woochangho,"2026-10-11 15:44:16",0.12,1,woochangho
-1823,16980529,"Snigdha Chandan","2026-10-11 16:21:43",0.12,1,nityasevak
+1823,16980529,"Snigdha Chandan","2026-10-16 22:30:20",0.12,2,nityasevak
 1824,16955551,"Mohamed IDRISSI GHALMI","2026-10-11 16:35:13",0.12,1,mohamedidrissighalmi
 1825,16982956,kingofeverything,"2026-10-11 17:27:27",0.12,3,"kingofeverything,skyyyang"
 1826,17080455,"Dr. Katsuyama","2026-10-12 01:00:34",0.12,1,drkatsuyama
@@ -2556,7 +2556,7 @@ Rank,TeamId,TeamName,LastSubmissionDate,Score,SubmissionCount,TeamMemberUserName
 2555,17054460,MortenMiddelfart,"2026-10-15 00:00:56",0.06,8,drmorton
 2556,17081897,"Tanmay Mane","2026-10-11 19:50:55",0.06,1,tanmaymane18
 2557,17040114,zelele,"2026-10-12 00:33:00",0.06,1,xvzfbr0
-2558,17010926,King-damon,"2026-10-16 00:00:45",0.06,14,kingdamon
+2558,17010926,King-damon,"2026-10-17 00:01:27",0.06,15,kingdamon
 2559,17089541,"Nick Knyazev","2026-10-12 23:00:41",0.06,1,rumata
 2560,17010909,"hao imba","2026-10-13 04:05:34",0.06,4,haoimba
 2561,16992699,"Adity Kushawaha","2026-10-13 14:05:23",0.06,1,anandkushawaha
