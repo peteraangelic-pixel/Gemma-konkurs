@@ -1,0 +1,17 @@
+{
+  "stage": "done",
+  "adapter_source": "random",
+  "adapter_bytes": 36198138,
+  "server_started": true,
+  "base_url": "http://127.0.0.1:8000/v1",
+  "base": {
+    "status": 404,
+    "text": "{\"detail\":\"Not Found\"}"
+  },
+  "adapter": {
+    "status": 404,
+    "text": "{\"detail\":\"Not Found\"}"
+  },
+  "adapter_changed_output": false,
+  "models_endpoint": "{\"detail\":\"Not Found\"}"
+}
