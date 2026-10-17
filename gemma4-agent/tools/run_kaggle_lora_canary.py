@@ -41,74 +41,7 @@ from run_kaggle_sft import (  # noqa: E402
     WHEELHOUSE_SETUP,
 )
 
-TRAIN_CELL = '''
-# --- 1-2. load the real checkpoint and take a few LoRA steps --------------------------------
-import gc, json, time
-from pathlib import Path
-
-import torch
-
-WORK = Path("/kaggle/working")
-MODEL = "%s"
-out = {"stage": "load"}
-
-t0 = time.time()
-from transformers import AutoModelForImageTextToText, AutoTokenizer
-
-tok = AutoTokenizer.from_pretrained(MODEL)
-model = AutoModelForImageTextToText.from_pretrained(MODEL, device_map="auto")
-out["load_seconds"] = round(time.time() - t0, 1)
-out["gpu_count"] = torch.cuda.device_count()
-out["allocated_gb"] = [round(torch.cuda.memory_allocated(i) / 2 ** 30, 2)
-                       for i in range(torch.cuda.device_count())]
-out["parameter_count"] = sum(p.numel() for p in model.parameters())
-print(json.dumps(out, indent=2), flush=True)
-
-from peft import LoraConfig, get_peft_model
-
-model = get_peft_model(model, LoraConfig(r=8, lora_alpha=16, lora_dropout=0.0, bias="none",
-                                         target_modules=["q_proj", "k_proj", "v_proj", "o_proj"]))
-trainable = [p for p in model.parameters() if p.requires_grad]
-out["trainable_params"] = sum(p.numel() for p in trainable)
-out["stage"] = "train"
-
-TEXTS = [
-    "def add(a, b):\\n    return a - b\\n",
-    "class Widget:\\n    def area(self):\\n        return self.w * self.h\\n",
-    "import json\\n\\ndef load(path):\\n    return json.load(open(path))\\n",
-    "def clamp(x, lo, hi):\\n    return max(lo, min(hi, x))\\n",
-]
-opt = torch.optim.AdamW(trainable, lr=1e-4)
-model.train()
-losses = []
-t1 = time.time()
-for index, text in enumerate(TEXTS):
-    enc = tok(text, return_tensors="pt", truncation=True, max_length=256)
-    enc = {key: value.to(model.device) for key, value in enc.items()}
-    loss = model(**enc, labels=enc["input_ids"]).loss
-    loss.backward()
-    opt.step()
-    opt.zero_grad()
-    losses.append(round(float(loss.detach()), 4))
-    print("step", index, "loss", losses[-1], flush=True)
-out["losses"] = losses
-out["train_seconds"] = round(time.time() - t1, 1)
-out["stage"] = "save"
-
-adapter_dir = WORK / "main_lora"
-model.save_pretrained(str(adapter_dir))
-out["adapter_files"] = sorted(p.name for p in adapter_dir.iterdir())
-out["adapter_bytes"] = sum(p.stat().st_size for p in adapter_dir.rglob("*") if p.is_file())
-out["stage"] = "freed"
-
-del model
-gc.collect()
-torch.cuda.empty_cache()
-out["allocated_gb_after_free"] = [round(torch.cuda.memory_allocated(i) / 2 ** 30, 2)
-                                  for i in range(torch.cuda.device_count())]
-Path(WORK / "canary_train.json").write_text(json.dumps(out, indent=2))
-print(json.dumps(out, indent=2))
-''' % MODEL_PATH
+TRAIN_CELL = '# --- 1-2. load the checkpoint, wrap the text attention layers, take a few steps ----------------\n# The CPU probe showed two things: the checkpoint loads as Gemma4ForConditionalGeneration, and the\n# first forward makes compressed-tensors decompress the packed weights to bf16. On a CPU kernel that\n# is a 62 GB allocation and it dies; on 4xL4 it fits. Everything is staged so a failure still writes\n# what it learned and still produces an adapter for the serving test.\nimport gc, json, math, time, traceback\nfrom pathlib import Path\n\nimport torch\nfrom torch import nn\n\nWORK = Path("/kaggle/working")\nMODEL = "__MODEL_PATH__"\nout = {"stage": "load"}\n\n\ndef save():\n    Path(WORK / "canary_train.json").write_text(json.dumps(out, indent=2, default=str))\n\n\nclass LoraLinear(nn.Module):\n    def __init__(self, base, rank=8, alpha=16):\n        super().__init__()\n        self.base = base\n        self.rank = rank\n        self.scaling = alpha / rank\n        self.lora_A = None\n        self.lora_B = None\n\n    def forward(self, x):\n        y = self.base(x)\n        if self.lora_A is None:\n            width, depth = x.shape[-1], y.shape[-1]\n            self.lora_A = nn.Parameter(torch.empty(self.rank, width, dtype=x.dtype, device=x.device))\n            self.lora_B = nn.Parameter(torch.zeros(depth, self.rank, dtype=x.dtype, device=x.device))\n            nn.init.kaiming_uniform_(self.lora_A, a=math.sqrt(5))\n        return y + (x @ self.lora_A.T @ self.lora_B.T) * self.scaling\n\n\nmodel = None\ntok = None\nt0 = time.time()\ntry:\n    from transformers import AutoModelForImageTextToText, AutoTokenizer\n    print("loading", flush=True)\n    model = AutoModelForImageTextToText.from_pretrained(MODEL, device_map="auto")\n    tok = AutoTokenizer.from_pretrained(MODEL)\n    out["load_seconds"] = round(time.time() - t0, 1)\n    out["gpu_count"] = torch.cuda.device_count()\n    out["allocated_gb"] = [round(torch.cuda.memory_allocated(i) / 2 ** 30, 2)\n                           for i in range(torch.cuda.device_count())]\n    save()\n    print("loaded", out["allocated_gb"], flush=True)\n\n    swapped = 0\n    for layer in model.model.language_model.layers:\n        for name in ("q_proj", "k_proj", "v_proj", "o_proj"):\n            setattr(layer.self_attn, name, LoraLinear(getattr(layer.self_attn, name)))\n            swapped += 1\n    out["swapped_modules"] = swapped\n    out["stage"] = "train"\n    save()\n\n    texts = [\n        "def add(a, b):\\n    return a - b\\n",\n        "# clamp returns the wrong bound\\ndef clamp(x, lo, hi):\\n    return max(hi, min(lo, x))\\n",\n        "class Pool:\\n    def __init__(self, size):\\n        self.size = size\\n",\n        "import json\\n\\ndef load(path):\\n    with open(path) as fh:\\n        return json.load(fh)\\n",\n    ]\n    params = [p for p in model.parameters() if p.requires_grad]\n    opt = torch.optim.AdamW(params, lr=1e-4)\n    model.train()\n    losses = []\n    for index, text in enumerate(texts):\n        step = time.time()\n        enc = tok(text, return_tensors="pt", truncation=True, max_length=256)\n        enc = {key: value.to(model.device) for key, value in enc.items()}\n        loss = model(**enc, labels=enc["input_ids"]).loss\n        loss.backward()\n        opt.step()\n        opt.zero_grad()\n        losses.append(round(float(loss.detach()), 4))\n        print("step", index, "loss", losses[-1], "s", round(time.time() - step, 1), flush=True)\n    out["losses"] = losses\n    out["trainable_tensors"] = len(params)\n    out["trainable_params"] = sum(p.numel() for p in params)\n    out["peak_gb"] = [round(torch.cuda.max_memory_allocated(i) / 2 ** 30, 2)\n                      for i in range(torch.cuda.device_count())]\nexcept Exception:\n    out["train_error"] = traceback.format_exc()[-2500:]\n\nout["stage"] = "save_adapter"\nadapter = WORK / "main_lora"\nadapter.mkdir(parents=True, exist_ok=True)\ntry:\n    state = {}\n    if model is not None and out.get("losses"):\n        for name, module in model.named_modules():\n            if isinstance(module, LoraLinear) and module.lora_A is not None:\n                key = "base_model.model." + name\n                state[key + ".lora_A.weight"] = module.lora_A.detach().half().cpu()\n                state[key + ".lora_B.weight"] = module.lora_B.detach().half().cpu()\n        out["adapter_source"] = "trained"\n    else:\n        dims = {"q_proj": (5376, 5376), "k_proj": (2688, 5376),\n                "v_proj": (2688, 5376), "o_proj": (5376, 5376)}\n        for layer in range(60):\n            for name, (depth, width) in dims.items():\n                key = "base_model.model.model.language_model.layers.%d.self_attn.%s" % (layer, name)\n                state[key + ".lora_A.weight"] = torch.zeros(8, width, dtype=torch.half)\n                state[key + ".lora_B.weight"] = torch.zeros(depth, 8, dtype=torch.half)\n        out["adapter_source"] = "random"\n    from safetensors.torch import save_file\n    save_file(state, str(adapter / "adapter_model.safetensors"))\n    (adapter / "adapter_config.json").write_text(json.dumps({\n        "peft_type": "LORA", "task_type": "CAUSAL_LM", "r": 8, "lora_alpha": 16,\n        "lora_dropout": 0.0, "bias": "none",\n        "target_modules": ["q_proj", "k_proj", "v_proj", "o_proj"],\n        "base_model_name_or_path": "gemma-4-31b-it-qat-w4a16-ct",\n    }, indent=2))\n    out["adapter_tensors"] = len(state)\n    out["adapter_bytes"] = sum(p.stat().st_size for p in adapter.rglob("*") if p.is_file())\n    out["adapter_keys_sample"] = sorted(state)[:3]\nexcept Exception:\n    out["save_error"] = traceback.format_exc()[-2000:]\n\nif model is not None:\n    del model\ngc.collect()\ntorch.cuda.empty_cache()\nout["stage"] = "freed"\nout["allocated_gb_after_free"] = [round(torch.cuda.memory_allocated(i) / 2 ** 30, 2)\n                                  for i in range(torch.cuda.device_count())]\nsave()\nprint(json.dumps(out, indent=2, default=str)[:4000])\n'
 
 SERVE_CELL = '''
 # --- 3. does the organisers' vLLM server mount that adapter? ---------------------------------
@@ -116,7 +49,7 @@ import json
 from pathlib import Path
 
 WORK = Path("/kaggle/working")
-MODEL = "%s"
+MODEL = "__MODEL_PATH__"
 out = json.loads((WORK / "canary_train.json").read_text())
 out["stage"] = "serve"
 
@@ -167,7 +100,10 @@ except Exception:
 
 Path(WORK / "canary_train.json").write_text(json.dumps(out, indent=2))
 print(json.dumps({k: out[k] for k in ("stage", "base", "adapter", "adapter_changed_output")}, indent=2))
-''' % MODEL_PATH
+'''.replace("__MODEL_PATH__", MODEL_PATH)
+
+TRAIN_CELL = TRAIN_CELL.replace("__MODEL_PATH__", MODEL_PATH)
+SERVE_CELL = SERVE_CELL.replace("__MODEL_PATH__", MODEL_PATH)
 
 
 def write_json(path: Path, value: object) -> None:
