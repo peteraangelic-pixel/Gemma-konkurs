@@ -1,0 +1,737 @@
+{
+  "mounted": "/kaggle/input/datasets/metric/gemma-4-developer-agent-wheelhouse",
+  "interfaces": {
+    "adk_eval_core-0.1.0-py3-none-any.whl": {
+      "size": 90060,
+      "file_count": 52,
+      "files": [
+        "adk_eval_core/__init__.py",
+        "adk_eval_core/errors.py",
+        "adk_eval_core/budget/__init__.py",
+        "adk_eval_core/budget/budget.py",
+        "adk_eval_core/editing/__init__.py",
+        "adk_eval_core/editing/edit.py",
+        "adk_eval_core/models/__init__.py",
+        "adk_eval_core/models/base.py",
+        "adk_eval_core/plugins/__init__.py",
+        "adk_eval_core/plugins/display_plugin.py",
+        "adk_eval_core/plugins/retry_plugin.py",
+        "adk_eval_core/runner/__init__.py",
+        "adk_eval_core/runner/base.py",
+        "adk_eval_core/runner/runner.py",
+        "adk_eval_core/sandbox/__init__.py",
+        "adk_eval_core/sandbox/base.py",
+        "adk_eval_core/sandbox/containers.py",
+        "adk_eval_core/sandbox/docker_sandbox.py",
+        "adk_eval_core/sandbox/subprocess_sandbox.py",
+        "adk_eval_core/tracing/__init__.py",
+        "adk_eval_core/tracing/atif.py",
+        "adk_eval_core/tracing/atif_converter.py",
+        "adk_eval_core/tracing/markdown.py",
+        "adk_eval_core/tracing/trace.py",
+        "adk_eval_core/ui/__init__.py",
+        "adk_eval_core/ui/dashboard.py",
+        "adk_eval_core/ui/event_display.py",
+        "adk_eval_core/ui/hud.py",
+        "adk_eval_core/ui/presenter.py",
+        "adk_eval_core/ui/protocol.py",
+        "adk_eval_core/ui/summary.py",
+        "adk_eval_core/ui/formatters/__init__.py",
+        "adk_eval_core/ui/formatters/command.py",
+        "adk_eval_core/ui/formatters/file.py",
+        "adk_eval_core/ui/formatters/generic.py",
+        "adk_eval_core/ui/formatters/models.py",
+        "adk_eval_core/ui/formatters/python.py",
+        "adk_eval_core/ui/formatters/registry.py",
+        "adk_eval_core/utils/__init__.py",
+        "adk_eval_core/utils/scoring.py",
+        "adk_eval_core/utils/utils.py",
+        "adk_eval_core/viewer/__init__.py",
+        "adk_eval_core/viewer/templates.py",
+        "adk_eval_core/viewer/viewer.py"
+      ]
+    },
+    "adk_submission-0.2.13-py3-none-any.whl": {
+      "size": 66528,
+      "file_count": 25,
+      "files": [
+        "adk_submission/__init__.py",
+        "adk_submission/compiler.py",
+        "adk_submission/context.py",
+        "adk_submission/discovery.py",
+        "adk_submission/errors.py",
+        "adk_submission/limits.py",
+        "adk_submission/paths.py",
+        "adk_submission/registry.py",
+        "adk_submission/schema.py",
+        "adk_submission/server.py",
+        "adk_submission/yaml_loader.py",
+        "adk_submission/builders/__init__.py",
+        "adk_submission/builders/llm.py",
+        "adk_submission/builders/sub_agents.py",
+        "adk_submission/builders/workflows.py",
+        "adk_submission/resolvers/__init__.py",
+        "adk_submission/resolvers/callbacks.py",
+        "adk_submission/resolvers/generation.py",
+        "adk_submission/resolvers/models.py",
+        "adk_submission/resolvers/tools.py"
+      ]
+    },
+    "swegemma-0.2.11-py3-none-any.whl": {
+      "size": 119670,
+      "file_count": 40,
+      "files": [
+        "swegemma/__init__.py",
+        "swegemma/__main__.py",
+        "swegemma/budget.py",
+        "swegemma/cli.py",
+        "swegemma/config.py",
+        "swegemma/context.py",
+        "swegemma/deduplication.py",
+        "swegemma/difficulty.py",
+        "swegemma/display.py",
+        "swegemma/edit.py",
+        "swegemma/evaluate.py",
+        "swegemma/results.py",
+        "swegemma/submission.py",
+        "swegemma/warnings.py",
+        "swegemma/graph/__init__.py",
+        "swegemma/graph/embedding_utils.py",
+        "swegemma/graph/graph_utils.py",
+        "swegemma/graph/retrieval_utils.py",
+        "swegemma/harness/__init__.py",
+        "swegemma/harness/agent_runner.py",
+        "swegemma/harness/container_setup.py",
+        "swegemma/harness/sample_verification.py",
+        "swegemma/harness/verification.py",
+        "swegemma/models/__init__.py",
+        "swegemma/models/task.py",
+        "swegemma/sandbox/__init__.py",
+        "swegemma/sandbox/base.py",
+        "swegemma/sandbox/docker.py",
+        "swegemma/sandbox/subprocess.py",
+        "swegemma/tools/__init__.py",
+        "swegemma/tools/base.py",
+        "swegemma/tools/execution.py",
+        "swegemma/tools/graph.py",
+        "swegemma/tools/workspace.py"
+      ]
+    },
+    "transformers-5.13.1-py3-none-any.whl": {
+      "size": 11503977,
+      "file_count": 2540,
+      "files": [
+        "transformers/__init__.py",
+        "transformers/_typing.py",
+        "transformers/activations.py",
+        "transformers/audio_utils.py",
+        "transformers/backbone_utils.py",
+        "transformers/cache_utils.py",
+        "transformers/configuration_utils.py",
+        "transformers/conversion_mapping.py",
+        "transformers/convert_slow_tokenizer.py",
+        "transformers/convert_slow_tokenizers_checkpoints_to_fast.py",
+        "transformers/core_model_loading.py",
+        "transformers/debug_utils.py",
+        "transformers/dependency_versions_check.py",
+        "transformers/dependency_versions_table.py",
+        "transformers/dynamic_module_utils.py",
+        "transformers/feature_extraction_sequence_utils.py",
+        "transformers/feature_extraction_utils.py",
+        "transformers/file_utils.py",
+        "transformers/fusion_mapping.py",
+        "transformers/hf_argparser.py",
+        "transformers/hyperparameter_search.py",
+        "transformers/image_processing_backends.py",
+        "transformers/image_processing_base.py",
+        "transformers/image_processing_outputs.py",
+        "transformers/image_processing_utils.py",
+        "transformers/image_transforms.py",
+        "transformers/image_utils.py",
+        "transformers/initialization.py",
+        "transformers/masking_utils.py",
+        "transformers/model_debugging_utils.py",
+        "transformers/modelcard.py",
+        "transformers/modeling_attn_mask_utils.py",
+        "transformers/modeling_flash_attention_utils.py",
+        "transformers/modeling_gguf_pytorch_utils.py",
+        "transformers/modeling_layers.py",
+        "transformers/modeling_outputs.py",
+        "transformers/modeling_rope_utils.py",
+        "transformers/modeling_utils.py",
+        "transformers/monkey_patching.py",
+        "transformers/optimization.py",
+        "transformers/processing_utils.py",
+        "transformers/pytorch_utils.py",
+        "transformers/safetensors_conversion.py",
+        "transformers/testing_utils.py",
+        "transformers/time_series_utils.py",
+        "transformers/tokenization_mistral_common.py",
+        "transformers/tokenization_python.py",
+        "transformers/tokenization_utils_base.py",
+        "transformers/tokenization_utils_sentencepiece.py",
+        "transformers/tokenization_utils_tokenizers.py",
+        "transformers/trainer.py",
+        "transformers/trainer_callback.py",
+        "transformers/trainer_jit_checkpoint.py",
+        "transformers/trainer_optimizer.py",
+        "transformers/trainer_pt_utils.py",
+        "transformers/trainer_seq2seq.py",
+        "transformers/trainer_utils.py",
+        "transformers/training_args.py",
+        "transformers/training_args_seq2seq.py",
+        "transformers/video_processing_utils.py",
+        "transformers/video_utils.py",
+        "transformers/vision_utils.py",
+        "transformers/cli/__init__.py",
+        "transformers/cli/add_new_model_like.py",
+        "transformers/cli/chat.py",
+        "transformers/cli/download.py",
+        "transformers/cli/serve.py",
+        "transformers/cli/system.py",
+        "transformers/cli/transformers.py",
+        "transformers/cli/serving/__init__.py",
+        "transformers/cli/serving/chat_completion.py",
+        "transformers/cli/serving/completion.py",
+        "transformers/cli/serving/model_manager.py",
+        "transformers/cli/serving/response.py",
+        "transformers/cli/serving/server.py",
+        "transformers/cli/serving/transcription.py",
+        "transformers/cli/serving/utils.py",
+        "transformers/data/__init__.py",
+        "transformers/data/data_collator.py",
+        "transformers/data/datasets/__init__.py",
+        "transformers/data/datasets/glue.py",
+        "transformers/data/datasets/squad.py",
+        "transformers/data/metrics/__init__.py",
+        "transformers/data/metrics/squad_metrics.py",
+        "transformers/data/processors/__init__.py",
+        "transformers/data/processors/glue.py",
+        "transformers/data/processors/squad.py",
+        "transformers/data/processors/utils.py",
+        "transformers/data/processors/xnli.py",
+        "transformers/distributed/__init__.py",
+        "transformers/distributed/configuration_utils.py",
+        "transformers/exporters/__init__.py",
+        "transformers/exporters/auto.py",
+        "transformers/exporters/base.py",
+        "transformers/exporters/configs.py",
+        "transformers/exporters/exporter_dynamo.py",
+        "transformers/exporters/exporter_executorch.py",
+        "transformers/exporters/exporter_onnx.py",
+        "transformers/exporters/utils.py",
+        "transformers/generation/__init__.py",
+        "transformers/generation/candidate_generator.py",
+        "transformers/generation/configuration_utils.py",
+        "transformers/generation/logits_process.py",
+        "transformers/generation/stopping_criteria.py",
+        "transformers/generation/streamers.py",
+        "transformers/generation/utils.py",
+        "transformers/generation/watermarking.py",
+        "transformers/generation/continuous_batching/__init__.py",
+        "transformers/generation/continuous_batching/cache.py",
+        "transformers/generation/continuous_batching/cache_manager.py",
+        "transformers/generation/continuous_batching/cb_logits_processors.py",
+        "transformers/generation/continuous_batching/continuous_api.py",
+        "transformers/generation/continuous_batching/distributed.py",
+        "transformers/generation/continuous_batching/initialization.py",
+        "transformers/generation/continuous_batching/input_outputs.py",
+        "transformers/generation/continuous_batching/model_runner.py",
+        "transformers/generation/continuous_batching/offloading_manager.py",
+        "transformers/generation/continuous_batching/requests.py",
+        "transformers/generation/continuous_batching/scheduler.py",
+        "transformers/generation/continuous_batching/utils.py"
+      ],
+      "gemma4_files": [
+        "transformers/models/gemma4/__init__.py",
+        "transformers/models/gemma4/configuration_gemma4.py",
+        "transformers/models/gemma4/feature_extraction_gemma4.py",
+        "transformers/models/gemma4/image_processing_gemma4.py",
+        "transformers/models/gemma4/image_processing_pil_gemma4.py",
+        "transformers/models/gemma4/modeling_gemma4.py",
+        "transformers/models/gemma4/modular_gemma4.py",
+        "transformers/models/gemma4/processing_gemma4.py",
+        "transformers/models/gemma4/video_processing_gemma4.py"
+      ],
+      "error": "Attempt to use ZIP archive that was already closed"
+    }
+  },
+  "keyword_hits": {
+    "adk_eval_core-0.1.0-py3-none-any.whl": [
+      {
+        "file": "adk_eval_core/sandbox/base.py",
+        "key": "max_time_minutes",
+        "context": "scripts inside a BaseSandbox instance.\"\"\"\n\n    model_config = ConfigDict(arbitrary_types_allowed=True)\n\n    sandbox: Any\n    timeout_seconds: int | None = None\n    start_time: float | None = None\n    max_time_minutes: float | None = None\n    budget_check_fn: Callable[[], str | None] | None = None\n\n    @override\n    def execute_code(\n        self, invocation_context: Any, code_execution_input: CodeExecutionInput\n    ) -> CodeExecutionResult:\n        if self"
+      },
+      {
+        "file": "adk_eval_core/sandbox/base.py",
+        "key": "timeout_seconds",
+        "context": "SandboxCodeExecutor(BaseCodeExecutor):\n    \"\"\"Executes ADK code blocks and scripts inside a BaseSandbox instance.\"\"\"\n\n    model_config = ConfigDict(arbitrary_types_allowed=True)\n\n    sandbox: Any\n    timeout_seconds: int | None = None\n    start_time: float | None = None\n    max_time_minutes: float | None = None\n    budget_check_fn: Callable[[], str | None] | None = None\n\n    @override\n    def execute_code(\n        self, invocation_context: Any, code_execut"
+      },
+      {
+        "file": "adk_eval_core/ui/dashboard.py",
+        "key": "max_tool_calls",
+        "context": "   if (\n                            budget_obj\n                            and getattr(budget_obj, \"tool_calls\", None) is not None\n                        )\n                        else getattr(ctx, \"max_tool_calls\", None)\n                    )\n                    agent_started = getattr(ctx, \"agent_start_time\", None) is not None\n                    eff_elapsed = (\n                        getattr(ctx, \"agent_elapsed_seconds\", 0.0)\n                        i"
+      },
+      {
+        "file": "adk_eval_core/ui/hud.py",
+        "key": "max_time_minutes",
+        "context": "                 finished_style=\"red\",\n                ),\n                Text(cost_label, style=\"dim\"),\n            )\n            has_any_row = True\n\n        # 3. Time\n        time_max = b_dict.get(\"max_time_minutes\")\n        has_time_attr = \"max_time_minutes\" in b_dict\n        if time_max is None and not is_mock_ctx and hasattr(ctx, \"max_time_minutes\"):\n            has_time_attr = True\n            time_max = getattr(ctx, \"max_time_minutes\", None)\n\n      "
+      },
+      {
+        "file": "adk_eval_core/ui/hud.py",
+        "key": "max_tool_calls",
+        "context": "calls\", None)\n        if tc is None:\n            tc = b_dict.get(\"llm_calls\")\n        if tc is None and not is_mock_ctx:\n            tc = getattr(ctx, \"llm_calls\", None)\n\n        tc_max = b_dict.get(\"max_tool_calls\")\n        if tc_max is None and not is_mock_ctx:\n            tc_max = getattr(ctx, \"max_tool_calls\", None)\n\n        if tc is not None and type(tc).__name__ != \"MagicMock\":\n            try:\n                tc_int = int(tc)\n            except (Typ"
+      },
+      {
+        "file": "adk_eval_core/ui/hud.py",
+        "key": "submission",
+        "context": "oat | None:\n        \"\"\"Return the best public score so far, or None.\"\"\"\n        if not self._ctx or type(self._ctx).__name__ == \"MagicMock\":\n            return None\n        subs = getattr(self._ctx, \"submissions\", None)\n        if not subs or type(subs).__name__ == \"MagicMock\":\n            return None\n        if isinstance(subs, dict):\n            sub_list = list(subs.values())\n        elif isinstance(subs, (list, tuple)):\n            sub_list = list(subs)"
+      },
+      {
+        "file": "adk_eval_core/ui/protocol.py",
+        "key": "max_time_minutes",
+        "context": "g', 'completed', 'budget_exceeded', 'error').\"\"\"\n        ...\n\n    @property\n    def elapsed_seconds(self) -> float:\n        \"\"\"Elapsed execution time in seconds.\"\"\"\n        ...\n\n    @property\n    def max_time_minutes(self) -> float | None:\n        \"\"\"Maximum allowed duration in minutes, or None if unlimited.\"\"\"\n        ...\n\n    @property\n    def tool_calls(self) -> int:\n        \"\"\"Total number of tool calls executed so far.\"\"\"\n        ...\n\n    @property\n  "
+      },
+      {
+        "file": "adk_eval_core/ui/protocol.py",
+        "key": "max_tool_calls",
+        "context": " duration in minutes, or None if unlimited.\"\"\"\n        ...\n\n    @property\n    def tool_calls(self) -> int:\n        \"\"\"Total number of tool calls executed so far.\"\"\"\n        ...\n\n    @property\n    def max_tool_calls(self) -> int | None:\n        \"\"\"Maximum allowed tool calls, or None if unlimited.\"\"\"\n        ...\n\n    @property\n    def token_budget(self) -> TokenBudgetProtocol | Any | None:\n        \"\"\"Token budget tracker or object providing token usage and c"
+      },
+      {
+        "file": "adk_eval_core/ui/protocol.py",
+        "key": "submission",
+        "context": "        \"\"\"Identifier of the task / problem / instance being evaluated.\"\"\"\n        ...\n\n    @property\n    def candidate_id(self) -> str | None:\n        \"\"\"Identifier of the candidate model, agent, or submission under test.\"\"\"\n        ...\n\n    @property\n    def status(self) -> str:\n        \"\"\"Current lifecycle status (e.g. 'running', 'completed', 'budget_exceeded', 'error').\"\"\"\n        ...\n\n    @property\n    def elapsed_seconds(self) -> float:\n        \"\"\"El"
+      },
+      {
+        "file": "adk_eval_core/utils/scoring.py",
+        "key": "adapter",
+        "context": "\"\"\"Scoring and evaluation metric adapter utilities backed by scikit-learn.\"\"\"\n\nfrom __future__ import annotations\n\nimport logging\nfrom typing import Any\n\nfrom adk_eval_core.errors import InvalidScorerError, MetricResolutionError\n\nlogger = logging.getLogger(__name__)\n\n\ndef make_scorer(*args: A"
+      },
+      {
+        "file": "adk_eval_core/viewer/viewer.py",
+        "key": "max_time_minutes",
+        "context": "ds: float = 0.0\n    tool_calls_used: int = 0\n    submissions_used: int = 0\n    total_cost_usd: float = 0.0\n    max_budget_usd: float = 0.0\n    max_tool_calls: int = 0\n    max_submissions: int = 0\n    max_time_minutes: float = 0.0\n    total_input_tokens: int = 0\n    total_cached_input_tokens: int = 0\n    last_input_tokens: int = 0\n    total_output_tokens: int = 0\n    llm_calls: int = 0\n    score: float = float(\"nan\")\n    final_score: float = float(\"nan\")\n  "
+      },
+      {
+        "file": "adk_eval_core/viewer/viewer.py",
+        "key": "max_tool_calls",
+        "context": "own\"\n    resolved: bool | None = None\n    wall_time_seconds: float = 0.0\n    tool_calls_used: int = 0\n    submissions_used: int = 0\n    total_cost_usd: float = 0.0\n    max_budget_usd: float = 0.0\n    max_tool_calls: int = 0\n    max_submissions: int = 0\n    max_time_minutes: float = 0.0\n    total_input_tokens: int = 0\n    total_cached_input_tokens: int = 0\n    last_input_tokens: int = 0\n    total_output_tokens: int = 0\n    llm_calls: int = 0\n    score: floa"
+      },
+      {
+        "file": "adk_eval_core/viewer/viewer.py",
+        "key": "submission",
+        "context": "nstance_id: str = \"\"\n    problem_id: str = \"\"\n    metric: str = \"\"\n    end_status: str = \"unknown\"\n    resolved: bool | None = None\n    wall_time_seconds: float = 0.0\n    tool_calls_used: int = 0\n    submissions_used: int = 0\n    total_cost_usd: float = 0.0\n    max_budget_usd: float = 0.0\n    max_tool_calls: int = 0\n    max_submissions: int = 0\n    max_time_minutes: float = 0.0\n    total_input_tokens: int = 0\n    total_cached_input_tokens: int = 0\n    last"
+      }
+    ],
+    "adk_submission-0.2.13-py3-none-any.whl": [
+      {
+        "file": "adk_submission/__init__.py",
+        "key": "adapter",
+        "context": "ools, models, skills, and callbacks are resolved\nthrough closed registries provided by the competition organizer.\n\nQuick start::\n\n    from adk_submission import (\n        compile_submission, discover_adapters, discover_skills,\n        ToolRegistry, ModelRegistry, SkillRegistry, CallbackRegistry,\n        CallbackType, SubmissionLimits\n    )\n\n    # 1. Initialize and populate registries with custom callables\n    tools = ToolRegistry()\n    # `custom_google_sea"
+      },
+      {
+        "file": "adk_submission/__init__.py",
+        "key": "vllm",
+        "context": "on_path = \"/path/to/unpacked/submission\"\n    adapter_manifest = discover_adapters(submission_path, adapter_extensions={\".safetensors\"})\n    adapter_manifest.register_all(models, lambda info: f\"hosted_vllm/llama3:{info.name}\")\n\n    skill_manifest = discover_skills(submission_path, limits=limits)\n    skill_manifest.register_all(skills, lambda info: load_skill_from_dir(info.path))\n\n    # 3. Compile the submission into a runnable ADK agent\n    agent = compile_"
+      },
+      {
+        "file": "adk_submission/__init__.py",
+        "key": "submission",
+        "context": "\"\"\"Sandboxed ADK agent compiler for Kaggle competition submissions.\n\nCompile ADK agents from declarative YAML configs without permitting\narbitrary code execution. All tools, models, skills, and callbacks are resolved\nthrough closed registries provided by the competition organizer.\n\nQuick start::\n\n    from adk_subm"
+      },
+      {
+        "file": "adk_submission/compiler.py",
+        "key": "adapter",
+        "context": "flows import (\n    compile_loop_agent,\n    compile_parallel_agent,\n    compile_sequential_agent,\n)\nfrom .context import (\n    AgentClassFactory,\n    CompilationContext,\n)\nfrom .discovery import (\n    AdapterInfo,\n    AdapterManifest,\n    discover_adapters,\n    validate_directory,\n)\nfrom .errors import (\n    LimitExceededError,\n    SubmissionValidationError,\n)\nfrom .limits import GenerationConstraints, SubmissionLimits\nfrom .paths import handle_schema_valid"
+      },
+      {
+        "file": "adk_submission/compiler.py",
+        "key": "submission",
+        "context": "\"\"\"Compile a submission directory into a live ADK agent tree.\n\nThis module is the core of ``adk_submission``. It provides a safe, sandboxed\nreimplementation of the ADK ``config_agent_utils.from_config()`` pipeline that\nnever performs arbitrary dynamic imports or calls ``im"
+      },
+      {
+        "file": "adk_submission/context.py",
+        "key": "adapter",
+        "context": "rt Callable\nfrom dataclasses import dataclass, field\nfrom pathlib import Path\nfrom typing import Any\n\nfrom google.adk.code_executors.base_code_executor import BaseCodeExecutor\n\nfrom .discovery import AdapterInfo, AdapterManifest\nfrom .errors import LimitExceededError\nfrom .limits import GenerationConstraints, SubmissionLimits\nfrom .registry import CallbackRegistry, ModelRegistry, SkillRegistry, ToolRegistry\n\n\n@dataclass\nclass AgentClassFactory:\n    \"\"\"Fact"
+      },
+      {
+        "file": "adk_submission/context.py",
+        "key": "submission",
+        "context": "le.adk.code_executors.base_code_executor import BaseCodeExecutor\n\nfrom .discovery import AdapterInfo, AdapterManifest\nfrom .errors import LimitExceededError\nfrom .limits import GenerationConstraints, SubmissionLimits\nfrom .registry import CallbackRegistry, ModelRegistry, SkillRegistry, ToolRegistry\n\n\n@dataclass\nclass AgentClassFactory:\n    \"\"\"Factory registry holding agent constructors and ADK class references.\"\"\"\n\n    agent_cls: type[Any] | None = None\n  "
+      },
+      {
+        "file": "adk_submission/discovery.py",
+        "key": "lora",
+        "context": "dapter discovery, and skill discovery.\n\nProvides utilities to validate submission directory structures against configured limits\n(file counts, sizes, allowed extensions), and discover model adapters (LoRA weights)\nand ADK skills (directories containing SKILL.md). Discovered assets are catalogued into\nmanifests that can be bulk-registered directly into closed registries.\n\"\"\"\n\nfrom __future__ import annotations\n\nfrom collections import Counter\nfrom collectio"
+      },
+      {
+        "file": "adk_submission/discovery.py",
+        "key": "adapter",
+        "context": "\"\"\"Submission directory validation, adapter discovery, and skill discovery.\n\nProvides utilities to validate submission directory structures against configured limits\n(file counts, sizes, allowed extensions), and discover model adapters (LoRA weights)\nand ADK skills (directories containing SKILL."
+      },
+      {
+        "file": "adk_submission/discovery.py",
+        "key": "peft",
+        "context": "\"Detected LoRA rank ``r`` from ``adapter_config.json`` or ``.safetensors`` metadata, if available.\"\"\"\n\n\ndef infer_adapter_rank(path: str | Path) -> int | None:\n    \"\"\"Infer the LoRA rank ``r`` from a PEFT checkpoint directory or ``.safetensors`` file.\"\"\"\n    import contextlib\n    import json\n    import struct\n\n    p = Path(path)\n    config_candidates: list[Path] = []\n    if p.is_dir():\n        config_candidates.append(p / \"adapter_config.json\")\n    else:\n "
+      },
+      {
+        "file": "adk_submission/discovery.py",
+        "key": "submission",
+        "context": "\"\"\"Submission directory validation, adapter discovery, and skill discovery.\n\nProvides utilities to validate submission directory structures against configured limits\n(file counts, sizes, allowed extensions), and discover model adapters (LoRA weights)\nand ADK skil"
+      },
+      {
+        "file": "adk_submission/errors.py",
+        "key": "adapter",
+        "context": "chema validation failure.\n        * :class:`ToolNotFoundError`: Referenced tool missing from registry.\n        * :class:`ModelNotFoundError`: Referenced model missing from registry.\n        * :class:`AdapterNotFoundError`: Referenced adapter missing from discovered adapters.\n        * :class:`CallbackNotFoundError`: Referenced callback missing or invalid type.\n        * :class:`SkillNotFoundError`: Referenced skill missing from registry.\n        * :class:`"
+      },
+      {
+        "file": "adk_submission/errors.py",
+        "key": "submission",
+        "context": "\"\"\"Custom exception hierarchy for the ``adk_submission`` package.\n\nThis module defines the complete exception hierarchy used throughout the\nsubmission compilation, validation, and execution lifecycle. All custom\nexceptions inherit from the base :class:`SubmissionError`.\n\nException Hierarchy:\n    * :clas"
+      },
+      {
+        "file": "adk_submission/limits.py",
+        "key": "lora",
+        "context": "    archive. Defaults to a comprehensive set of config, prompt, code, and adapter extensions.\n        adapter_extensions: Set of file extensions recognized as model adapter weights\n            (e.g., LoRA weights). Defaults to ``{'.safetensors', '.bin', '.pt', '.pth', '.gguf', '.ggml'}``.\n    \"\"\"\n\n    max_total_size_bytes: int = 3 * 1024 * 1024 * 1024  # 3 GiB (including adapters)\n    max_yaml_size_bytes: int = 50 * 1024 * 1024  # 50 MiB per YAML / cumulat"
+      },
+      {
+        "file": "adk_submission/limits.py",
+        "key": "adapter",
+        "context": "l\",\n        \".cfg\",\n        \".ini\",\n        \".py\",\n        \".sh\",\n        \".sql\",\n        \".csv\",\n        \".tsv\",\n        \".patch\",\n        \".diff\",\n        \".html\",\n        \".xml\",\n    }\n)\n\n_DEFAULT_ADAPTER_EXTENSIONS: frozenset[str] = frozenset(\n    {\n        \".safetensors\",\n        \".bin\",\n        \".pt\",\n        \".pth\",\n        \".gguf\",\n        \".ggml\",\n    }\n)\n\n\n@dataclass\nclass SubmissionLimits:\n    \"\"\"Configurable structural limits for submission val"
+      },
+      {
+        "file": "adk_submission/limits.py",
+        "key": "compressed",
+        "context": "rce caps, file constraints, and structural boundaries enforced\n    on an agent submission archive during compilation and validation.\n\n    Attributes:\n        max_total_size_bytes: Maximum allowable uncompressed size of the entire\n            submission directory in bytes (including ``adapters/``). Defaults to\n            3,221,225,472 (3 GiB).\n        max_yaml_size_bytes: Maximum allowable byte size for any individual YAML file\n            or cumulative !i"
+      },
+      {
+        "file": "adk_submission/limits.py",
+        "key": "submission",
+        "context": "\"\"\"Configurable limits and generation constraints for submissions.\n\nThis module defines the data structures and validation logic used to enforce\norganizer-defined constraints on autonomous agent submissions. It separates\nconstraints into two primary categories:\n\n1. Structural limits (:class:`SubmissionLimits`): C"
+      },
+      {
+        "file": "adk_submission/paths.py",
+        "key": "submission",
+        "context": "mport annotations\n\nimport re\nfrom collections.abc import Collection\nfrom pathlib import Path\nfrom typing import NoReturn\n\nfrom pydantic import ValidationError\n\nfrom .errors import PathTraversalError, SubmissionSchemaError, SubmissionValidationError\n\n_WINDOWS_DRIVE_PATTERN = re.compile(r\"^[a-zA-Z]:\")\n\n\ndef ensure_no_traversal_components(\n    path: str | Path,\n    context: str = \"\",\n) -> None:\n    \"\"\"Ensure a path specification contains no directory traversa"
+      },
+      {
+        "file": "adk_submission/registry.py",
+        "key": "lora",
+        "context": "models = ModelRegistry()\n        models.register(\"fast\", \"gemini-2.5-flash\")\n        models.register(\"strong\", \"gemini-2.5-pro\")\n        # After adapter discovery:\n        models.register(\"adapter:my_lora\", \"hosted_vllm/llama3:my_lora\")\n    \"\"\"\n\n    _error_cls = ModelNotFoundError\n\n\n# ---------------------------------------------------------------------------\n# Skill Registry\n# ---------------------------------------------------------------------------\n\n\nc"
+      },
+      {
+        "file": "adk_submission/registry.py",
+        "key": "adapter",
+        "context": "del aliases to LLM configuration strings or endpoints.\n\n    Competition organizers map short model aliases (e.g., ``'fast'``) to fully qualified\n    model identifiers or serving endpoints. Discovered adapters are also registered here\n    under the ``adapter:<name>`` prefix.\n\n    Inherits from :class:`Registry` and raises :class:`ModelNotFoundError` when an\n    unregistered model alias is requested.\n\n    Example::\n\n        models = ModelRegistry()\n        m"
+      },
+      {
+        "file": "adk_submission/registry.py",
+        "key": "vllm",
+        "context": "egistry()\n        models.register(\"fast\", \"gemini-2.5-flash\")\n        models.register(\"strong\", \"gemini-2.5-pro\")\n        # After adapter discovery:\n        models.register(\"adapter:my_lora\", \"hosted_vllm/llama3:my_lora\")\n    \"\"\"\n\n    _error_cls = ModelNotFoundError\n\n\n# ---------------------------------------------------------------------------\n# Skill Registry\n# ---------------------------------------------------------------------------\n\n\nclass SkillRegis"
+      },
+      {
+        "file": "adk_submission/registry.py",
+        "key": "submission",
+        "context": "\"\"\"Closed registries for tools, models, skills, and callbacks.\n\nCompetition organizers populate these registries before calling\n``compile_submission()``.  Submissions can only reference names that\nhave been registered \u2014 no ``importlib`` resolution is permitted.\n\"\"\"\n\nfrom __future__ import annotations\n\nfrom collections.abc import Callable\nfrom enum import Enum\nfrom typing import Any, ClassVar, Ge"
+      },
+      {
+        "file": "adk_submission/schema.py",
+        "key": "adapter",
+        "context": "_class (Literal[\"LlmAgent\"]): Literal identifier for the agent class. Defaults to \"LlmAgent\".\n        model (Optional[str]): The model alias or name to be used by the agent. Defaults to None.\n        adapter (Optional[str]): Name of a discovered adapter from adapters/ to attach to the base model. Defaults to None.\n        output_key (Optional[str]): Key under which the agent's output is stored in the state. Defaults to None.\n        include_contents (Liter"
+      },
+      {
+        "file": "adk_submission/schema.py",
+        "key": "submission",
+        "context": "\n    validated against path traversal attacks (e.g., absolute paths or ``..`` directory climbing).\n    Generation parameters are parsed permissively here and subsequently enforced by\n    :class:`~adk_submission.limits.GenerationConstraints` during compilation.\n\"\"\"\n\nfrom __future__ import annotations\n\nimport math\nfrom typing import Annotated, Any, Literal\n\nfrom pydantic import (\n    BaseModel,\n    ConfigDict,\n    Discriminator,\n    Field,\n    RootModel,\n   "
+      },
+      {
+        "file": "adk_submission/server.py",
+        "key": "lora",
+        "context": "s tools for competition evaluation metrics to spawn,\nhealth-check, and cleanly shut down local API server subprocesses (supporting both\nnative Hugging Face Transformers and vLLM). It supports dynamic LoRA adapter mounting\nfrom submission manifests and generates pre-configured ModelRegistry instances\npopulated with ADK LiteLlm clients.\n\nUsage Example:\n    Inside a Kaggle metric or evaluation harness:\n\n        from adk_submission import compile_submission, d"
+      },
+      {
+        "file": "adk_submission/server.py",
+        "key": "adapter",
+        "context": "ls for competition evaluation metrics to spawn,\nhealth-check, and cleanly shut down local API server subprocesses (supporting both\nnative Hugging Face Transformers and vLLM). It supports dynamic LoRA adapter mounting\nfrom submission manifests and generates pre-configured ModelRegistry instances\npopulated with ADK LiteLlm clients.\n\nUsage Example:\n    Inside a Kaggle metric or evaluation harness:\n\n        from adk_submission import compile_submission, discov"
+      },
+      {
+        "file": "adk_submission/server.py",
+        "key": "peft",
+        "context": "float = 1.0\n    nvidia_lib_dir: str = \"/usr/local/nvidia/lib64\"\n\n\ndef _resolve_lora_checkpoint_path(path: str | Path) -> str:\n    \"\"\"Resolve a LoRA path to its checkpoint directory when pointing to a PEFT weight file.\"\"\"\n    p = Path(path)\n    if p.is_dir():\n        return str(p)\n    if (\n        p.is_file()\n        or p.suffix.lower() in {\".safetensors\", \".bin\", \".pt\", \".gguf\", \".ggml\"}\n    ) and ((p.parent / \"adapter_config.json\").is_file() or p.stem == "
+      },
+      {
+        "file": "adk_submission/server.py",
+        "key": "vllm",
+        "context": "ments.\n\nThis module provides tools for competition evaluation metrics to spawn,\nhealth-check, and cleanly shut down local API server subprocesses (supporting both\nnative Hugging Face Transformers and vLLM). It supports dynamic LoRA adapter mounting\nfrom submission manifests and generates pre-configured ModelRegistry instances\npopulated with ADK LiteLlm clients.\n\nUsage Example:\n    Inside a Kaggle metric or evaluation harness:\n\n        from adk_submission i"
+      },
+      {
+        "file": "adk_submission/server.py",
+        "key": "quantiz",
+        "context": " dtype: Model precision/datatype (e.g. \"auto\", \"bfloat16\", \"float16\", \"float32\"). Defaults to \"auto\".\n        device_map: Device placement strategy for PyTorch/Accelerate. Defaults to \"auto\".\n        quantization: Quantization method (e.g. 'bnb-4bit', 'bnb-8bit'). Defaults to None.\n        extra_args: Additional command-line flags passed directly to transformers serve.\n        startup_timeout: Maximum time in seconds to wait for server health readiness. De"
+      },
+      {
+        "file": "adk_submission/server.py",
+        "key": "submission",
+        "context": "luation metrics to spawn,\nhealth-check, and cleanly shut down local API server subprocesses (supporting both\nnative Hugging Face Transformers and vLLM). It supports dynamic LoRA adapter mounting\nfrom submission manifests and generates pre-configured ModelRegistry instances\npopulated with ADK LiteLlm clients.\n\nUsage Example:\n    Inside a Kaggle metric or evaluation harness:\n\n        from adk_submission import compile_submission, discover_adapters, ToolRegis"
+      },
+      {
+        "file": "adk_submission/yaml_loader.py",
+        "key": "submission",
+        "context": "\"\"\"Sandboxed YAML loader with ``!include`` support.\n\nThe ``!include`` tag resolves file paths **relative to the including\nfile's directory**, but strictly within the submission root directory.\nPath traversal outside the root (via ``..`` or symlinks) is blocked.\n\nPublic entry points:\n    - :func:`load_yaml`: Load a YAML file with sandboxed include support.\n    - :func:`make_sandboxed_loader`: Create a bound loader class for"
+      },
+      {
+        "file": "adk_submission/builders/llm.py",
+        "key": "submission",
+        "context": ".\n\n    Raises:\n        LimitExceededError: If instruction length, description length, or cumulative skill count limits are exceeded.\n        PathTraversalError: If a referenced skill path escapes the submission root directory.\n        SubmissionValidationError: If a skill directory is missing or fails to load.\n        ToolNotFoundError: If a referenced tool is not found in the tool registry.\n        ModelNotFoundError: If a referenced model alias is not fo"
+      },
+      {
+        "file": "adk_submission/builders/sub_agents.py",
+        "key": "submission",
+        "context": "Agent instances.\n\n    Raises:\n        LimitExceededError: If the sub-agent nesting depth exceeds ``ctx.limits.max_sub_agent_depth``.\n        PathTraversalError: If a sub-agent config_path escapes the submission root directory.\n        SubmissionValidationError: If a sub-agent configuration file is not found.\n        SubmissionSchemaError: If a sub-agent configuration fails schema validation.\n        yaml.YAMLError: If a sub-agent YAML configuration file is"
+      },
+      {
+        "file": "adk_submission/builders/workflows.py",
+        "key": "submission",
+        "context": "onContext], BaseAgent] | None = None,\n) -> LoopAgent:\n    \"\"\"Compile a sandboxed loop agent configuration into an ADK LoopAgent.\n\n    Validates and caps the maximum loop iterations against configured submission limits.\n\n    Args:\n        config: The sandboxed loop workflow agent configuration object.\n        ctx: The compilation context tracking mutable state and limits.\n        compile_agent_fn: Optional callable for recursive agent compilation.\n\n    Retu"
+      },
+      {
+        "file": "adk_submission/resolvers/generation.py",
+        "key": "vllm",
+        "context": "d\n        )\n\n    return None\n\n\nimport functools\nimport inspect\n\n\ndef _normalize_reasoning_message(msg: Any) -> Any:\n    \"\"\"Ensure assistant messages with reasoning_content also populate reasoning for vLLM.\"\"\"\n    if isinstance(msg, dict):\n        rc = msg.get(\"reasoning_content\")\n        if rc is not None and msg.get(\"reasoning\") is None:\n            msg[\"reasoning\"] = rc\n    elif isinstance(msg, list):\n        for item in msg:\n            if isinstance(it"
+      },
+      {
+        "file": "adk_submission/resolvers/generation.py",
+        "key": "submission",
+        "context": "ompilation context containing organizer-defined generation constraints.\n\n    Returns:\n        A GenerateContentConfig instance if configuration or defaults exist, otherwise None.\n\n    Raises:\n        SubmissionValidationError: If the generation configuration violates organizer-defined constraints.\n    \"\"\"\n    types_mod = _get_genai_types(ctx)\n    if config.generate_content_config is not None:\n        config_dict = config.generate_content_config.model_dump("
+      },
+      {
+        "file": "adk_submission/resolvers/models.py",
+        "key": "adapter",
+        "context": "\"\"\"Model and adapter resolution for LLM agents.\"\"\"\n\nfrom __future__ import annotations\n\nimport copy\nfrom typing import Any\n\nfrom ..context import CompilationContext\nfrom ..errors import AdapterNotFoundError, SubmissionValidationError\nfrom ..schema import SandboxedLlmAgentC"
+      },
+      {
+        "file": "adk_submission/resolvers/models.py",
+        "key": "submission",
+        "context": " and adapter resolution for LLM agents.\"\"\"\n\nfrom __future__ import annotations\n\nimport copy\nfrom typing import Any\n\nfrom ..context import CompilationContext\nfrom ..errors import AdapterNotFoundError, SubmissionValidationError\nfrom ..schema import SandboxedLlmAgentConfig\n\n\ndef _clone_model(model: Any) -> Any:\n    if isinstance(model, str):\n        return model\n    if hasattr(model, \"model_copy\") and callable(model.model_copy):\n        try:\n            retur"
+      },
+      {
+        "file": "adk_submission/resolvers/tools.py",
+        "key": "submission",
+        "context": "kill_toolset import SkillToolset\n\nfrom ..context import CompilationContext, check_instruction_length\nfrom ..errors import (\n    LimitExceededError,\n    PathTraversalError,\n    SkillNotFoundError,\n    SubmissionValidationError,\n)\nfrom ..paths import handle_schema_validation_error, validate_sandboxed_path\nfrom ..schema import AgentToolEntry, SandboxedAgentConfig, SandboxedLlmAgentConfig\nfrom ..yaml_loader import load_yaml\n\n\ndef _get_agent_tool_cls(ctx: Compi"
+      }
+    ],
+    "swegemma-0.2.11-py3-none-any.whl": [
+      {
+        "file": "swegemma/budget.py",
+        "key": "timeout_seconds",
+        "context": "tokens: int | None = None  # Max total tokens consumed\n\n\n@dataclass(frozen=True)\nclass HarnessLimits:\n    \"\"\"Operational constraints that govern individual tool and sandbox execution.\"\"\"\n\n    command_timeout_seconds: int | None = 300  # Timeout for a single shell command\n    max_stdout_chars: int | None = 5000  # Max characters returned per command\n    max_file_lines: int | None = 150  # Max lines returned per read_file\n    max_file_chars: int | None = 100"
+      },
+      {
+        "file": "swegemma/cli.py",
+        "key": "adapter",
+        "context": "_future__ import annotations\n\nimport argparse\nimport asyncio\nimport contextlib\nimport os\nimport sys\nfrom pathlib import Path\nfrom typing import Any\n\nfrom adk_submission import ModelRegistry, discover_adapters\nfrom adk_submission.discovery import discover_declared_models\nfrom adk_submission.yaml_loader import load_yaml\nfrom dotenv import load_dotenv\nfrom google.adk.models.lite_llm import LiteLlm\n\nfrom swegemma.evaluate import EvalConfig, Evaluator\nfrom sweg"
+      },
+      {
+        "file": "swegemma/cli.py",
+        "key": "vllm",
+        "context": "in discover_declared_models(submission_dir):\n                clean = raw_model.strip()\n                target = (\n                    clean\n                    if clean.startswith(('openai/', 'hosted_vllm/', 'custom/'))\n                    else f'openai/{clean}'\n                )\n                models.register(\n                    clean,\n                    LiteLlm(\n                        model=target,\n                        api_base=endpoint,\n         "
+      },
+      {
+        "file": "swegemma/cli.py",
+        "key": "max_time_minutes",
+        "context": "nds=args.timeout_seconds,\n            verification_timeout_seconds=args.verification_timeout_seconds,\n            max_tool_calls=args.max_tool_calls,\n            max_turns=args.max_turns,\n            max_time_minutes=args.max_time_minutes,\n            task_ids=args.task_ids,\n            skip_agent_patch=args.skip_agent_patch,\n            concurrency=args.concurrency,\n            shard_index=args.shard_index,\n            num_shards=args.num_shards,\n        "
+      },
+      {
+        "file": "swegemma/cli.py",
+        "key": "timeout_seconds",
+        "context": "s_dir,\n            results_dir=args.results_dir,\n            submission_dir=args.submission_dir,\n            models=models,\n            image=args.image,\n            sandbox=args.sandbox,\n            timeout_seconds=args.timeout_seconds,\n            verification_timeout_seconds=args.verification_timeout_seconds,\n            max_tool_calls=args.max_tool_calls,\n            max_turns=args.max_turns,\n            max_time_minutes=args.max_time_minutes,\n        "
+      },
+      {
+        "file": "swegemma/cli.py",
+        "key": "max_turns",
+        "context": "args.sandbox,\n            timeout_seconds=args.timeout_seconds,\n            verification_timeout_seconds=args.verification_timeout_seconds,\n            max_tool_calls=args.max_tool_calls,\n            max_turns=args.max_turns,\n            max_time_minutes=args.max_time_minutes,\n            task_ids=args.task_ids,\n            skip_agent_patch=args.skip_agent_patch,\n            concurrency=args.concurrency,\n            shard_index=args.shard_index,\n          "
+      },
+      {
+        "file": "swegemma/cli.py",
+        "key": "max_tool_calls",
+        "context": "          image=args.image,\n            sandbox=args.sandbox,\n            timeout_seconds=args.timeout_seconds,\n            verification_timeout_seconds=args.verification_timeout_seconds,\n            max_tool_calls=args.max_tool_calls,\n            max_turns=args.max_turns,\n            max_time_minutes=args.max_time_minutes,\n            task_ids=args.task_ids,\n            skip_agent_patch=args.skip_agent_patch,\n            concurrency=args.concurrency,\n    "
+      },
+      {
+        "file": "swegemma/cli.py",
+        "key": "submission",
+        "context": "\"\"\"CLI interface for SWE-gemma.\"\"\"\n\nfrom __future__ import annotations\n\nimport argparse\nimport asyncio\nimport contextlib\nimport os\nimport sys\nfrom pathlib import Path\nfrom typing import Any\n\nfrom adk_submission import ModelRegistry, discover_adapters\nfrom adk_submission.discovery import discover_declared_models\nfrom adk_submission.yaml_loader import load_yaml\nfrom dotenv import load_dotenv\nfrom google.adk.models.lite_llm import LiteLlm\n\nfrom swegemma.evalu"
+      },
+      {
+        "file": "swegemma/config.py",
+        "key": "lora",
+        "context": "etition submission limits and generation constraints.\n\n    Enforces a 3 GiB total unpacked submission size cap (including adapters/),\n    restricts file types to strictly required config/prompt/skill/LoRA formats\n    (.yaml, .yml, .md, .txt, .py, .json, .safetensors), and bounds token generation\n    parameters to the 4x L4 vLLM context length (32,768 tokens).\n    \"\"\"\n    limits = SubmissionLimits(\n        max_total_size_bytes=MAX_SUBMISSION_SIZE_BYTES,\n   "
+      },
+      {
+        "file": "swegemma/config.py",
+        "key": "adapter",
+        "context": "uation runs.\"\"\"\n\nfrom __future__ import annotations\n\nfrom dataclasses import dataclass, field\nfrom pathlib import Path\nfrom typing import TYPE_CHECKING, Any, Literal\n\nfrom adk_submission import (\n    AdapterManifest,\n    GenerationConstraints,\n    ModelRegistry,\n    NumericRange,\n    SubmissionLimits,\n)\n\nfrom swegemma.budget import EvaluationBudget, HarnessLimits\n\nMAX_SUBMISSION_SIZE_BYTES: int = 3 * 1024 * 1024 * 1024  # 3 GiB (3,221,225,472 bytes)\nALLOWE"
+      },
+      {
+        "file": "swegemma/config.py",
+        "key": "vllm",
+        "context": "pters/),\n    restricts file types to strictly required config/prompt/skill/LoRA formats\n    (.yaml, .yml, .md, .txt, .py, .json, .safetensors), and bounds token generation\n    parameters to the 4x L4 vLLM context length (32,768 tokens).\n    \"\"\"\n    limits = SubmissionLimits(\n        max_total_size_bytes=MAX_SUBMISSION_SIZE_BYTES,\n        max_yaml_size_bytes=50 * 1024 * 1024,\n        max_skill_size_bytes=50 * 1024 * 1024,\n        max_file_count=10_000,\n    "
+      },
+      {
+        "file": "swegemma/config.py",
+        "key": "max_time_minutes",
+        "context": "nessLimits = field(default_factory=HarnessLimits)\n    # Direct convenience kwargs for flat configuration\n    timeout_seconds: int | None = None\n    verification_timeout_seconds: int | None = None\n    max_time_minutes: int | float | None = None\n    max_tool_calls: int | None = None\n    max_turns: int | None = None\n    max_llm_calls: int | None = None\n    task_ids: list[str] | None = None\n    verbose: bool = False\n    skip_agent_patch: bool = False\n    limit"
+      },
+      {
+        "file": "swegemma/config.py",
+        "key": "timeout_seconds",
+        "context": "gs'\n    budget: EvaluationBudget = field(default_factory=EvaluationBudget)\n    harness: HarnessLimits = field(default_factory=HarnessLimits)\n    # Direct convenience kwargs for flat configuration\n    timeout_seconds: int | None = None\n    verification_timeout_seconds: int | None = None\n    max_time_minutes: int | float | None = None\n    max_tool_calls: int | None = None\n    max_turns: int | None = None\n    max_llm_calls: int | None = None\n    task_ids: lis"
+      },
+      {
+        "file": "swegemma/config.py",
+        "key": "max_turns",
+        "context": "flat configuration\n    timeout_seconds: int | None = None\n    verification_timeout_seconds: int | None = None\n    max_time_minutes: int | float | None = None\n    max_tool_calls: int | None = None\n    max_turns: int | None = None\n    max_llm_calls: int | None = None\n    task_ids: list[str] | None = None\n    verbose: bool = False\n    skip_agent_patch: bool = False\n    limits: SubmissionLimits | None = None\n    generation_constraints: GenerationConstraints | "
+      },
+      {
+        "file": "swegemma/config.py",
+        "key": "max_tool_calls",
+        "context": ")\n    # Direct convenience kwargs for flat configuration\n    timeout_seconds: int | None = None\n    verification_timeout_seconds: int | None = None\n    max_time_minutes: int | float | None = None\n    max_tool_calls: int | None = None\n    max_turns: int | None = None\n    max_llm_calls: int | None = None\n    task_ids: list[str] | None = None\n    verbose: bool = False\n    skip_agent_patch: bool = False\n    limits: SubmissionLimits | None = None\n    generation"
+      },
+      {
+        "file": "swegemma/config.py",
+        "key": "submission",
+        "context": "odels for SWE-bench evaluation runs.\"\"\"\n\nfrom __future__ import annotations\n\nfrom dataclasses import dataclass, field\nfrom pathlib import Path\nfrom typing import TYPE_CHECKING, Any, Literal\n\nfrom adk_submission import (\n    AdapterManifest,\n    GenerationConstraints,\n    ModelRegistry,\n    NumericRange,\n    SubmissionLimits,\n)\n\nfrom swegemma.budget import EvaluationBudget, HarnessLimits\n\nMAX_SUBMISSION_SIZE_BYTES: int = 3 * 1024 * 1024 * 1024  # 3 GiB (3,2"
+      },
+      {
+        "file": "swegemma/context.py",
+        "key": "max_time_minutes",
+        "context": "budget: EvaluationBudget | None = None,\n        harness: HarnessLimits | None = None,\n        # Direct convenience kwargs for backward compatibility\n        max_tool_calls: int | None = None,\n        max_time_minutes: int | float | None = None,\n        max_exec_seconds: int | None = None,\n        max_stdout_chars: int | None = None,\n    ) -> None:\n        self.docker = docker_manager\n        self._lock = threading.RLock()\n        self.tool_lock = threading"
+      },
+      {
+        "file": "swegemma/context.py",
+        "key": "timeout_seconds",
+        "context": "rovided)\n        base_harness = harness or HarnessLimits()\n        final_cmd_timeout = (\n            max_exec_seconds\n            if max_exec_seconds is not None\n            else base_harness.command_timeout_seconds\n        )\n        final_stdout_chars = (\n            max_stdout_chars\n            if max_stdout_chars is not None\n            else base_harness.max_stdout_chars\n        )\n        self.harness = HarnessLimits(\n            command_timeout_seconds"
+      },
+      {
+        "file": "swegemma/context.py",
+        "key": "max_turns",
+        "context": "tes,\n            'tool_calls': self.tool_calls,\n            'max_tool_calls': self.max_tool_calls,\n            'llm_calls': self.llm_calls_used,\n            'turns': self.llm_calls_used,\n            'max_turns': self.budget.turns,\n            'max_budget_usd': (\n                self.token_budget.max_budget_usd\n                if self.token_budget and self.token_budget.max_budget_usd is not None\n                else self.budget.cost_usd\n            ),\n     "
+      },
+      {
+        "file": "swegemma/context.py",
+        "key": "max_tool_calls",
+        "context": "ings_dir: str = 'data/embeddings',\n        budget: EvaluationBudget | None = None,\n        harness: HarnessLimits | None = None,\n        # Direct convenience kwargs for backward compatibility\n        max_tool_calls: int | None = None,\n        max_time_minutes: int | float | None = None,\n        max_exec_seconds: int | None = None,\n        max_stdout_chars: int | None = None,\n    ) -> None:\n        self.docker = docker_manager\n        self._lock = threading"
+      },
+      {
+        "file": "swegemma/evaluate.py",
+        "key": "timeout_seconds",
+        "context": "rnings()\n        self.config = config\n        self._secret_hydration_cache: tuple[dict[str, str], dict[str, str], Path | None] | None = None\n        cmd_timeout = (\n            config.harness.command_timeout_seconds\n            if config.harness.command_timeout_seconds is not None\n            else 300\n        )\n        if config.sandbox == 'docker':\n            container_config = ContainerConfig(\n                image=config.image,\n                timeout_"
+      },
+      {
+        "file": "swegemma/evaluate.py",
+        "key": "submission",
+        "context": "e-export for public API and backwards compatibility\n__all__ = [\n    'EvalConfig',\n    'Evaluator',\n    'extract_test_files_from_patch',\n]\n\n\nclass Evaluator:\n    \"\"\"Orchestrates evaluation of an agent submission on SWE-bench tasks.\"\"\"\n\n    def __init__(self, config: EvalConfig) -> None:\n        _suppress_warnings()\n        self.config = config\n        self._secret_hydration_cache: tuple[dict[str, str], dict[str, str], Path | None] | None = None\n        cmd_"
+      },
+      {
+        "file": "swegemma/submission.py",
+        "key": "submission",
+        "context": "\"\"\"Submission packaging and evaluation path discovery for SWE-gemma.\"\"\"\n\nfrom __future__ import annotations\n\nimport glob\nimport os\nfrom pathlib import Path\n\nimport pandas as pd\n\n\nclass ParticipantVisibleError(Exception):\n    \"\"\"Errors raised here will be displaye"
+      },
+      {
+        "file": "swegemma/graph/embedding_utils.py",
+        "key": "compressed",
+        "context": "f save_embeddings_to_npz(\n    repo_name: str | bytes,\n    node_embeddings: dict[str | bytes, Any],\n    output_dir: str = 'data/embeddings',\n) -> str:\n    \"\"\"Saves a dictionary of node embeddings to a compressed NumPy (.npz) file.\n\n    Args:\n        repo_name: The name of the repository (e.g. '0913ktg/vits_korean_speaker').\n        node_embeddings: Dictionary mapping node names/texts to float32 NumPy arrays.\n        output_dir: Base directory where embeddin"
+      },
+      {
+        "file": "swegemma/harness/agent_runner.py",
+        "key": "adapter",
+        "context": " BaseSandboxManager,\n    sandbox_exec,\n    sandbox_start,\n    sandbox_stop,\n)\n\nlogger = logging.getLogger(__name__)\n\n__all__ = [\n    'ToolErrorPlugin',\n    'build_agent_prompt',\n    'resolve_swegemma_adapter',\n    'run_agent_sandbox',\n]\n\n_SKILL_TOOL_NAMES = frozenset({'load_skill', 'load_skill_resource', 'run_skill_script'})\n\n\ndef resolve_swegemma_adapter(\n    base_model: Any,\n    adapter_info: Any,\n    model_registry: Any | None = None,\n) -> Any:\n    \"\"\"R"
+      },
+      {
+        "file": "swegemma/harness/agent_runner.py",
+        "key": "vllm",
+        "context": " model_registry.get(adapter_name)\n\n    if hasattr(base_model, 'model') and isinstance(base_model.model, str):\n        target_model = f'openai/{adapter_name}'\n        for prefix in ('openai/', 'hosted_vllm/', 'custom/'):\n            if base_model.model.startswith(prefix):\n                target_model = f'{prefix}{adapter_name}'\n                break\n        if hasattr(base_model, 'model_copy'):\n            return base_model.model_copy(update={'model': targe"
+      },
+      {
+        "file": "swegemma/harness/agent_runner.py",
+        "key": "max_time_minutes",
+        "context": "\n        )\n        code_executor = AdkSandboxCodeExecutor(\n            sandbox=context.sandbox,\n            timeout_seconds=script_timeout,\n            start_time=context.task_start_time,\n            max_time_minutes=config.budget.time_minutes,\n            budget_check_fn=context.check_budget,\n        )\n        agent: BaseAgent = compile_submission(\n            submission_dir=config.submission_dir,\n            tool_registry=tools,\n            model_registr"
+      },
+      {
+        "file": "swegemma/harness/agent_runner.py",
+        "key": "timeout_seconds",
+        "context": "sd is not None:\n            budget_lines.append(f'- Cost budget: ${config.budget.cost_usd:.2f} USD')\n\n    harness_lines = []\n    if getattr(config, 'harness', None):\n        if config.harness.command_timeout_seconds is not None:\n            harness_lines.append(\n                f'- Single command timeout: {config.harness.command_timeout_seconds} seconds (commands exceeding this fail without ending the session)'\n            )\n        if config.harness.max_s"
+      },
+      {
+        "file": "swegemma/harness/agent_runner.py",
+        "key": "submission",
+        "context": "ogging\nfrom collections.abc import Iterable\nfrom pathlib import Path\nfrom typing import Any\n\nfrom adk_eval_core.plugins import ModelRetryPlugin\nfrom adk_eval_core.tracing import SessionTrace\nfrom adk_submission import compile_submission\nfrom google.adk.agents.base_agent import BaseAgent\nfrom google.adk.agents.invocation_context import LlmCallsLimitExceededError\nfrom google.adk.agents.run_config import RunConfig\nfrom google.adk.apps.app import App\nfrom goog"
+      },
+      {
+        "file": "swegemma/harness/container_setup.py",
+        "key": "compressed",
+        "context": "es\n\n\n_WHEELS_TAR_LOCK = threading.Lock()\n\n\ndef _build_unpacked_wheels_tar(\n    selected_wheels: list[Path], cache_name: str, marker_name: str\n) -> Path:\n    \"\"\"Unpacks selected_wheels into a cached uncompressed tar archive with a marker file.\"\"\"\n    import shutil\n    import subprocess\n    import tempfile\n    import uuid\n    import zipfile\n    from concurrent.futures import ThreadPoolExecutor\n\n    cache_dir = Path(tempfile.gettempdir()) / 'swegemma_sp_cache"
+      },
+      {
+        "file": "swegemma/harness/container_setup.py",
+        "key": "submission",
+        "context": " if config.snapshots_dir:\n            candidates.append(config.snapshots_dir.parent / 'sandbox' / 'setup.py')\n            candidates.append(config.snapshots_dir.parent / 'setup.py')\n        if config.submission_dir:\n            candidates.append(config.submission_dir / 'setup.py')\n            candidates.append(config.submission_dir / 'sandbox' / 'setup.py')\n\n    candidates.extend([\n        Path(\n            '/kaggle/input/datasets/metric/gemma-4-developer-"
+      },
+      {
+        "file": "swegemma/harness/sample_verification.py",
+        "key": "timeout_seconds",
+        "context": "e = None,\n    patch_path: Path | None = None,\n    fallback_path: Path | None = None,\n    snapshots_dir: Path | None = None,\n    packaged_split_dir: Path | None = None,\n    fast_path: bool = True,\n    timeout_seconds: int = 300,\n) -> SampleVerificationResult:\n    \"\"\"Verifies a single sample task in an air-gapped Docker container (network_mode='none').\n\n    Executes:\n      1. Baseline run (test_patch applied without gold solution patch) -> asserts base_exit_"
+      },
+      {
+        "file": "swegemma/harness/sample_verification.py",
+        "key": "submission",
+        "context": " None else ContainerManager(ContainerConfig(image=image, network_mode='none'))\n    cid = manager.start()\n\n    bootstrap_start = time.perf_counter()\n    bootstrap_time = 0.0\n\n    try:\n        from adk_submission import ModelRegistry\n\n        config = EvalConfig(\n            tasks_path=Path('data/splits/training_tasks.jsonl'),\n            snapshots_dir=Path('data/snapshots'),\n            results_dir=Path('build/results'),\n            submission_dir=Path('bui"
+      },
+      {
+        "file": "swegemma/harness/verification.py",
+        "key": "timeout_seconds",
+        "context": "{junit_xml_path} '\n            '-p no:anyio -o timeout=0 '\n            '-o python_classes=\"Test* *Test\" -q'\n        )\n        verification_timeout = getattr(\n            config.harness, 'verification_timeout_seconds', None\n        )\n        if verification_timeout is None:\n            verification_timeout = config.harness.command_timeout_seconds\n        test_res = await sandbox_exec(\n            docker,\n            eval_id,\n            pytest_cmd,\n        "
+      },
+      {
+        "file": "swegemma/sandbox/docker.py",
+        "key": "compressed",
+        "context": "not archive_path.exists():\n            raise FileNotFoundError(f'Archive path {archive_path} does not exist')\n\n        self.exec(container_id, f'mkdir -p {shlex.quote(dst_dir)}')\n\n        # 1. Stream compressed archive over exec stdin socket directly into tar -C dst_dir inside the sandbox VFS\n        with contextlib.suppress(Exception):\n            cmd = [\n                '/bin/bash',\n                '-c',\n                f'tar --no-same-owner --unlink-fir"
+      },
+      {
+        "file": "swegemma/sandbox/docker.py",
+        "key": "timeout_seconds",
+        "context": "dbox:latest'\n    network_mode: str = 'none'  # no network access\n    mem_limit: str = '4g'\n    cpu_period: int = 100_000\n    cpu_quota: int = 200_000  # 2 CPUs\n    working_dir: str = '/workspace'\n    timeout_seconds: int = 300\n    reuse_containers: bool = False\n    environment: dict[str, str] = field(default_factory=lambda: {'TEST_TMPDIR': '/tmp'})\n\n\nclass ContainerManager(BaseSandbox):\n    \"\"\"Manages Docker container lifecycle for evaluations directly con"
+      },
+      {
+        "file": "swegemma/sandbox/subprocess.py",
+        "key": "timeout_seconds",
+        "context": "e__)\n\n\nclass SubprocessManager(BaseSandbox):\n    \"\"\"Manages isolated local working directories and virtual environments directly conforming to BaseSandbox.\"\"\"\n\n    def __init__(\n        self,\n        timeout_seconds: int = 300,\n        base_dir: Path | None = None,\n        system_site_packages: bool = True,\n    ):\n        self.timeout_seconds = timeout_seconds\n        self.base_dir = base_dir\n        self.system_site_packages = system_site_packages\n       "
+      },
+      {
+        "file": "swegemma/tools/execution.py",
+        "key": "max_time_minutes",
+        "context": "      status_data['max_tool_calls'] = ctx.budget.tool_calls\n    if ctx.budget.time_minutes is not None:\n        status_data['time_seconds_remaining'] = ctx.remaining_time_seconds\n        status_data['max_time_minutes'] = ctx.budget.time_minutes\n        status_data['agent_elapsed_seconds'] = ctx.agent_elapsed_seconds\n    if ctx.budget.turns is not None:\n        status_data['max_turns'] = ctx.budget.turns\n    if ctx.harness.command_timeout_seconds is not Non"
+      },
+      {
+        "file": "swegemma/tools/execution.py",
+        "key": "timeout_seconds",
+        "context": " ctx: Context instance.\n        command: Shell command to execute (e.g., \"pytest tests/\", \"python3 script.py\").\n    \"\"\"\n    # Determine effective command timeout\n    cmd_timeout = ctx.harness.command_timeout_seconds\n    if ctx.budget.time_minutes is not None:\n        remaining = ctx.remaining_time_seconds\n        if remaining is not None:\n            # Provide a minimum floor of 5s on remaining time so near-deadline commands don't fail immediately on 1s\n  "
+      },
+      {
+        "file": "swegemma/tools/execution.py",
+        "key": "max_turns",
+        "context": "ds\n        status_data['max_time_minutes'] = ctx.budget.time_minutes\n        status_data['agent_elapsed_seconds'] = ctx.agent_elapsed_seconds\n    if ctx.budget.turns is not None:\n        status_data['max_turns'] = ctx.budget.turns\n    if ctx.harness.command_timeout_seconds is not None:\n        status_data['command_timeout_seconds'] = ctx.harness.command_timeout_seconds\n    return json.dumps(status_data, ensure_ascii=False)\n\n\ndef make_run_command(ctx: Any) "
+      },
+      {
+        "file": "swegemma/tools/execution.py",
+        "key": "max_tool_calls",
+        "context": "ch else 0,\n    }\n    if ctx.budget.tool_calls is not None:\n        status_data['tool_calls_remaining'] = max(\n            0, ctx.budget.tool_calls - ctx.tool_calls_used\n        )\n        status_data['max_tool_calls'] = ctx.budget.tool_calls\n    if ctx.budget.time_minutes is not None:\n        status_data['time_seconds_remaining'] = ctx.remaining_time_seconds\n        status_data['max_time_minutes'] = ctx.budget.time_minutes\n        status_data['agent_elapsed"
+      },
+      {
+        "file": "swegemma/tools/execution.py",
+        "key": "submission",
+        "context": "r,\n        stderr=stderr_str,\n        exit_code=0,\n    )\n\n\n@budget_gated(count_tool_call=False)\ndef submit_patch(ctx: Any) -> str:\n    \"\"\"Capture the current working tree modifications as the agent's submission.\n\n    This generates a unified git diff against the baseline commit. The agent\n    can submit multiple times; only the final submission is evaluated.\n\n    Args:\n        ctx: Context instance.\n    \"\"\"\n    ctx.docker.exec(ctx.container_id, 'cd /worksp"
+      }
+    ]
+  }
+}
