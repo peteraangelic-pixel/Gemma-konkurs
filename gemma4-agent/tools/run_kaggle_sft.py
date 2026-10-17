@@ -178,15 +178,22 @@ def main() -> int:
         write_json(outdir / "run.json", state)
         pushed = kaggle(["kernels", "push", "--path", str(kernel_dir), "--timeout", str(args.max_wait_minutes * 60 + 900)])
         state["push_exit_code"] = pushed.returncode
-        state["push_stdout_tail"] = (pushed.stdout or "")[-800:]
+        state["push_stdout_tail"] = (pushed.stdout or "")[-1200:]
+        state["push_stderr_tail"] = (pushed.stderr or "")[-1200:]
         write_json(outdir / "run.json", state)
         text = ((pushed.stdout or "") + "\n" + (pushed.stderr or "")).lower()
         if "quota" in text and "reached" in text:
             state.update({"status": "gpu_quota_exceeded", "error": "weekly GPU quota exhausted"})
             write_json(outdir / "run.json", state)
             return 7
-        if "error" in text and "successfully pushed" not in text:
-            state.update({"status": "push_failed", "error": "Kaggle refused the push; see push_stdout_tail"})
+        if "successfully pushed" not in text:
+            detail = ((pushed.stderr or "") or (pushed.stdout or "")).strip().splitlines()
+            state.update({
+                "status": "push_failed",
+                "error": "Kaggle refused the push",
+                "push_message": detail[-1] if detail else "no output from the CLI",
+            })
+            print("PUSH FAILED:", state["push_message"])
             write_json(outdir / "run.json", state)
             return 7
 
