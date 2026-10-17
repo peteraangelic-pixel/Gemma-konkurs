@@ -76,10 +76,11 @@ for wheel in WH.glob("*.whl"):
         os.symlink(wheel, target)
 wheels = sorted(str(p) for p in tmp.glob("*.whl"))
 if wheels:
-    proc = subprocess.run([sys.executable, "-m", "pip", "install", "-q", "--no-deps",
+    proc = subprocess.run([sys.executable, "-m", "pip", "install", "--no-deps",
                            "--force-reinstall", *wheels], capture_output=True, text=True)
     report["install_returncode"] = proc.returncode
-    report["install_stderr_tail"] = proc.stderr[-800:]
+    report["install_stdout_tail"] = proc.stdout[-1500:]
+    report["install_stderr_tail"] = proc.stderr[-1500:]
 importlib.invalidate_caches()
 report["after_install"] = versions()
 
@@ -118,7 +119,79 @@ except Exception as exc:
 report["transformers_like_wheels"] = [w for w in report.get("wheels", [])
                                       if any(k in w.lower() for k in ("transformers", "trl", "swegemma", "adk", "peft"))]
 
+# --- what the competition packages actually say -------------------------------------------
+import re, zipfile
+KEY = ("lora", "adapter", "peft", "vllm", "compressed", "quantiz", "max_time_minutes",
+       "timeout_seconds", "max_turns", "max_tool_calls", "adapter_path", "submission")
+probe = {"mounted": str(WH)}
+interfaces = {}
+
+
+def zip_text(wheel, predicate, limit=400000):
+    parts, total = [], 0
+    with zipfile.ZipFile(wheel) as zf:
+        for name in zf.namelist():
+            if not name.endswith(".py") or not predicate(name):
+                continue
+            body = zf.read(name).decode("utf-8", "replace")
+            parts.append("\n\n### FILE " + name + "\n" + body)
+            total += len(body)
+            if total > limit:
+                break
+    return "".join(parts)
+
+
+for wheel in sorted(WH.glob("*.whl")):
+    if not any(k in wheel.name.lower() for k in ("swegemma", "adk_submission", "adk_eval_core", "transformers")):
+        continue
+    entry = {"size": wheel.stat().st_size}
+    try:
+        with zipfile.ZipFile(wheel) as zf:
+            names = zf.namelist()
+        entry["file_count"] = len(names)
+        entry["files"] = [n for n in names if n.endswith(".py")][:120]
+        if wheel.name.startswith("transformers"):
+            entry["gemma4_files"] = [n for n in names if "models/gemma4/" in n][:20]
+            meta = [n for n in names if n.endswith("METADATA")]
+            if meta:
+                entry["metadata_head"] = zf.read(meta[0]).decode("utf-8", "replace")[:300]
+    except Exception as exc:
+        entry["error"] = str(exc)
+    interfaces[wheel.name] = entry
+
+hits = {}
+for wheel in sorted(WH.glob("*.whl")):
+    if not any(k in wheel.name.lower() for k in ("swegemma", "adk_submission", "adk_eval_core")):
+        continue
+    per_wheel = []
+    try:
+        with zipfile.ZipFile(wheel) as zf:
+            for name in zf.namelist():
+                if not name.endswith((".py", ".yaml", ".json", ".md", ".jinja")):
+                    continue
+                body = zf.read(name).decode("utf-8", "replace")
+                low = body.lower()
+                for key in KEY:
+                    at = low.find(key)
+                    if at >= 0:
+                        per_wheel.append({"file": name, "key": key,
+                                          "context": body[max(0, at - 200):at + 260]})
+    except Exception as exc:
+        per_wheel.append({"error": str(exc)})
+    hits[wheel.name] = per_wheel[:160]
+probe["interfaces"] = interfaces
+probe["keyword_hits"] = hits
+Path("/kaggle/working/wheel_probe.json").write_text(json.dumps(probe, indent=2))
+
+swegemma = [w for w in WH.glob("swegemma-*.whl")]
+text = ""
+if swegemma:
+    text = zip_text(swegemma[0], lambda n: True, limit=600000)
+Path("/kaggle/working/swegemma_source.txt").write_text(text)
+
 print(json.dumps(report, indent=2)[:12000])
+print("WHEEL PROBE written:", len(json.dumps(probe)))
+print("SWEGEMMA SOURCE bytes:", len(text))
 Path("/kaggle/working/env_report.json").write_text(json.dumps(report, indent=2))
 '''
 
@@ -133,6 +206,8 @@ def main() -> int:
     parser.add_argument("--outdir", type=Path, required=True)
     parser.add_argument("--owner", default=os.environ.get("KAGGLE_USERNAME", ""))
     parser.add_argument("--max-wait-minutes", type=int, default=40)
+    parser.add_argument("--image", choices=("default", "competition"), default="default",
+                        help="competition = the private BYOD image the scored harness uses")
     args = parser.parse_args()
     outdir: Path = args.outdir
     outdir.mkdir(parents=True, exist_ok=True)
@@ -152,13 +227,14 @@ def main() -> int:
                 "nbformat": 4, "nbformat_minor": 5}
     state = {"created_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
              "status": "preparing", "kernel_ref": kernel_ref, "cpu_only": True,
+             "image": args.image,
              "competition_submission_created": False}
     write_json(outdir / "run.json", state)
 
     with tempfile.TemporaryDirectory(prefix="gemma-env-") as temporary:
         kernel_dir = Path(temporary)
         (kernel_dir / "diagnose.ipynb").write_text(json.dumps(notebook, ensure_ascii=False), encoding="utf-8")
-        (kernel_dir / "kernel-metadata.json").write_text(json.dumps({
+        metadata = {
             "id": kernel_ref,
             "title": f"Gemma4 env diagnose {run_tag}",
             "code_file": "diagnose.ipynb",
@@ -172,7 +248,12 @@ def main() -> int:
             "competition_sources": [COMPETITION],
             "kernel_sources": [],
             "model_sources": [MODEL_SOURCE],
-        }, indent=2) + "\n", encoding="utf-8")
+        }
+        if args.image == "competition":
+            metadata["docker_image"] = IMAGE
+            metadata["docker_image_pinning_type"] = "original"
+        (kernel_dir / "kernel-metadata.json").write_text(json.dumps(metadata, indent=2) + "\n",
+                                                         encoding="utf-8")
         pushed = subprocess.run(["kaggle", "kernels", "push", "--path", str(kernel_dir),
                                  "--timeout", str(args.max_wait_minutes * 60)],
                                 capture_output=True, text=True)
