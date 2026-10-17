@@ -1,0 +1,196 @@
+[{"stream_name":"stderr","time":9.965065333,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":9.965120005,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":9.96512642,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":9.965130395,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":10.760768212,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":10.760803629,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":10.760808813,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":10.760812969,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stdout","time":232.893633577,"data":"{\n"}
+,{"stream_name":"stdout","time":232.893701866,"data":"  \"python\": \"3.12.13\",\n"}
+,{"stream_name":"stdout","time":232.893710335,"data":"  \"wheelhouse_mounted\": true,\n"}
+,{"stream_name":"stdout","time":232.893715638,"data":"  \"wheel_count\": 41,\n"}
+,{"stream_name":"stdout","time":232.893720325,"data":"  \"wheels\": [\n"}
+,{"stream_name":"stdout","time":232.893725028,"data":"    \"adk_eval_core-0.1.0-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":232.893729695,"data":"    \"adk_submission-0.2.13-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":232.893734348,"data":"    \"anthropic-1.4.0-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":232.89373951,"data":"    \"apache_tvm_ffi-0.1.13.post3-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":232.893743268,"data":"    \"astor-0.8.1-py2.py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":232.893746155,"data":"    \"bitsandbytes-0.46.1-py3-none-manylinux_2_24_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":232.893749041,"data":"    \"cbor2-6.1.4-cp312-cp312-manylinux_2_28_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":232.89375231,"data":"    \"compressed_tensors-0.15.0.1-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":232.893755141,"data":"    \"depyf-0.20.0-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":232.893758014,"data":"    \"diskcache-5.6.3-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":232.89376082,"data":"    \"flashinfer_cubin-0.6.6-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":232.893763797,"data":"    \"flashinfer_python-0.6.6-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":232.893766634,"data":"    \"gguf-0.19.0-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":232.893769448,"data":"    \"google_adk-1.36.1-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":232.893772281,"data":"    \"google_genai-2.11.0-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":232.893775156,"data":"    \"ijson-3.5.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":232.893778706,"data":"    \"interegular-0.3.3-py37-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":232.893783378,"data":"    \"llguidance-1.3.0-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":232.893788488,"data":"    \"lm_format_enforcer-0.11.3-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":232.893793702,"data":"    \"loguru-0.7.3-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":232.893832979,"data":"    \"mistral_common-1.11.7-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":232.89383876,"data":"    \"model_hosting_container_standards-0.1.16-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":232.893842788,"data":"    \"msgspec-0.21.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":232.893846799,"data":"    \"nvidia_cudnn_frontend-1.18.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":232.893850674,"data":"    \"openai_harmony-0.0.8-cp38-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":232.893854624,"data":"    \"opentelemetry_exporter_otlp-1.44.0-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":232.893857437,"data":"    \"opentelemetry_semantic_conventions_ai-0.5.1-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":232.893859768,"data":"    \"outlines_core-0.2.11-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":232.893862415,"data":"    \"partial_json_parser-0.2.1.1.post7-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":232.893864793,"data":"    \"prometheus_fastapi_instrumentator-8.1.0-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":232.893867221,"data":"    \"pybase64-1.5.0-cp312-cp312-manylinux1_x86_64.manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_5_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":232.893869723,"data":"    \"pycountry-26.2.16-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":232.893874787,"data":"    \"pydantic_extra_types-2.11.2-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":232.893879373,"data":"    \"quack_kernels-0.6.4-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":232.89388347,"data":"    \"safetensors-0.8.0-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":232.893887175,"data":"    \"setproctitle-1.3.7-cp312-cp312-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":232.893891666,"data":"    \"swegemma-0.2.11-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":232.893895421,"data":"    \"tokenizers-0.22.2-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":232.893899714,"data":"    \"transformers-5.13.1-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":232.89390334,"data":"    \"vllm-0.19.1-cp38-abi3-manylinux_2_31_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":232.893907168,"data":"    \"xgrammar-0.2.5.post1-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl\"\n"}
+,{"stream_name":"stdout","time":232.893911061,"data":"  ],\n"}
+,{"stream_name":"stdout","time":232.89391459,"data":"  \"before_install\": {\n"}
+,{"stream_name":"stdout","time":232.893918265,"data":"    \"torch\": \"2.10.0+cu128\",\n"}
+,{"stream_name":"stdout","time":232.893922313,"data":"    \"transformers\": \"5.0.0\",\n"}
+,{"stream_name":"stdout","time":232.893926091,"data":"    \"peft\": \"0.19.1\",\n"}
+,{"stream_name":"stdout","time":232.893929821,"data":"    \"trl\": \"NOT IMPORTABLE (ModuleNotFoundError)\",\n"}
+,{"stream_name":"stdout","time":232.893933693,"data":"    \"vllm\": \"NOT IMPORTABLE (ModuleNotFoundError)\",\n"}
+,{"stream_name":"stdout","time":232.893937496,"data":"    \"swegemma\": \"NOT IMPORTABLE (ModuleNotFoundError)\",\n"}
+,{"stream_name":"stdout","time":232.893941295,"data":"    \"adk_submission\": \"NOT IMPORTABLE (ModuleNotFoundError)\",\n"}
+,{"stream_name":"stdout","time":232.893945125,"data":"    \"accelerate\": \"1.13.0\",\n"}
+,{"stream_name":"stdout","time":232.893948903,"data":"    \"datasets\": \"5.0.0\",\n"}
+,{"stream_name":"stdout","time":232.893970779,"data":"    \"bitsandbytes\": \"NOT IMPORTABLE (ModuleNotFoundError)\",\n"}
+,{"stream_name":"stdout","time":232.893976814,"data":"    \"safetensors\": \"0.7.0\",\n"}
+,{"stream_name":"stdout","time":232.893980766,"data":"    \"compressed_tensors\": \"NOT IMPORTABLE (ModuleNotFoundError)\"\n"}
+,{"stream_name":"stdout","time":232.893985199,"data":"  },\n"}
+,{"stream_name":"stdout","time":232.893989011,"data":"  \"install_returncode\": 0,\n"}
+,{"stream_name":"stdout","time":232.894018177,"data":"  \"install_stdout_tail\": \"sting installation: google-genai 1.68.0\\n    Uninstalling google-genai-1.68.0:\\n      Successfully uninstalled google-genai-1.68.0\\n  Attempting uninstall: google-adk\\n    Found existing installation: google-adk 1.29.0\\n    Uninstalling google-adk-1.29.0:\\n      Successfully uninstalled google-adk-1.29.0\\nSuccessfully installed adk-eval-core-0.1.0 adk-submission-0.2.13 anthropic-1.4.0 apache-tvm-ffi-0.1.13.post3 astor-0.8.1 bitsandbytes-0.46.1 cbor2-6.1.4 compressed-tensors-0.15.0.1 depyf-0.20.0 diskcache-5.6.3 flashinfer-cubin-0.6.6 flashinfer-python-0.6.6 gguf-0.19.0 google-adk-1.36.1 google-genai-2.11.0 ijson-3.5.1 interegular-0.3.3 llguidance-1.3.0 lm-format-enforcer-0.11.3 loguru-0.7.3 mistral-common-1.11.7 model-hosting-container-standards-0.1.16 msgspec-0.21.1 nvidia-cudnn-frontend-1.18.0 openai-harmony-0.0.8 opentelemetry-exporter-otlp-1.44.0 opentelemetry-semantic-conventions-ai-0.5.1 outlines-core-0.2.11 partial-json-parser-0.2.1.1.post7 prometheus-fastapi-instrumentator-8.1.0 pybase64-1.5.0 pycountry-26.2.16 pydantic-extra-types-2.11.2 quack-kernels-0.6.4 safetensors-0.8.0 setproctitle-1.3.7 swegemma-0.2.11 tokenizers-0.22.2 transformers-5.13.1 vllm-0.19.1 xgrammar-0.2.5.post1\\n\",\n"}
+,{"stream_name":"stdout","time":232.894056725,"data":"  \"install_stderr_tail\": \"\",\n"}
+,{"stream_name":"stdout","time":232.894060474,"data":"  \"after_install\": {\n"}
+,{"stream_name":"stdout","time":232.894064224,"data":"    \"torch\": \"2.10.0+cu128\",\n"}
+,{"stream_name":"stdout","time":232.894068414,"data":"    \"transformers\": \"5.13.1\",\n"}
+,{"stream_name":"stdout","time":232.894072417,"data":"    \"peft\": \"0.19.1\",\n"}
+,{"stream_name":"stdout","time":232.894076189,"data":"    \"trl\": \"NOT IMPORTABLE (ModuleNotFoundError)\",\n"}
+,{"stream_name":"stdout","time":232.894079815,"data":"    \"vllm\": \"0.19.1\",\n"}
+,{"stream_name":"stdout","time":232.894083739,"data":"    \"swegemma\": \"0.2.11\",\n"}
+,{"stream_name":"stdout","time":232.894087355,"data":"    \"adk_submission\": \"0.2.13\",\n"}
+,{"stream_name":"stdout","time":232.894091042,"data":"    \"accelerate\": \"1.13.0\",\n"}
+,{"stream_name":"stdout","time":232.894094705,"data":"    \"datasets\": \"5.0.0\",\n"}
+,{"stream_name":"stdout","time":232.894098604,"data":"    \"bitsandbytes\": \"0.46.1\",\n"}
+,{"stream_name":"stdout","time":232.894102367,"data":"    \"safetensors\": \"0.8.0\",\n"}
+,{"stream_name":"stdout","time":232.894106053,"data":"    \"compressed_tensors\": \"0.15.0.1\"\n"}
+,{"stream_name":"stdout","time":232.894109845,"data":"  },\n"}
+,{"stream_name":"stdout","time":232.894113362,"data":"  \"model_dir\": true,\n"}
+,{"stream_name":"stdout","time":232.894117071,"data":"  \"model_files\": [\n"}
+,{"stream_name":"stdout","time":232.894120712,"data":"    \"README.md\",\n"}
+,{"stream_name":"stdout","time":232.894124305,"data":"    \"chat_template.jinja\",\n"}
+,{"stream_name":"stdout","time":232.894128243,"data":"    \"config.json\",\n"}
+,{"stream_name":"stdout","time":232.894132038,"data":"    \"generation_config.json\",\n"}
+,{"stream_name":"stdout","time":232.894135727,"data":"    \"model.safetensors\",\n"}
+,{"stream_name":"stdout","time":232.894158113,"data":"    \"processor_config.json\",\n"}
+,{"stream_name":"stdout","time":232.894163687,"data":"    \"tokenizer.json\",\n"}
+,{"stream_name":"stdout","time":232.894167699,"data":"    \"tokenizer_config.json\"\n"}
+,{"stream_name":"stdout","time":232.894171613,"data":"  ],\n"}
+,{"stream_name":"stdout","time":232.894175538,"data":"  \"config_model_type\": \"gemma4\",\n"}
+,{"stream_name":"stdout","time":232.894179191,"data":"  \"config_architectures\": [\n"}
+,{"stream_name":"stdout","time":232.894182978,"data":"    \"Gemma4ForConditionalGeneration\"\n"}
+,{"stream_name":"stdout","time":232.894186768,"data":"  ],\n"}
+,{"stream_name":"stdout","time":232.894190617,"data":"  \"config_keys\": [\n"}
+,{"stream_name":"stdout","time":232.894194288,"data":"    \"architectures\",\n"}
+,{"stream_name":"stdout","time":232.894197999,"data":"    \"audio_config\",\n"}
+,{"stream_name":"stdout","time":232.894201626,"data":"    \"audio_token_id\",\n"}
+,{"stream_name":"stdout","time":232.894205253,"data":"    \"boa_token_id\",\n"}
+,{"stream_name":"stdout","time":232.89420888,"data":"    \"boi_token_id\",\n"}
+,{"stream_name":"stdout","time":232.894236035,"data":"    \"dtype\",\n"}
+,{"stream_name":"stdout","time":232.894238736,"data":"    \"eoa_token_id\",\n"}
+,{"stream_name":"stdout","time":232.8942412,"data":"    \"eoa_token_index\",\n"}
+,{"stream_name":"stdout","time":232.894246091,"data":"    \"eoi_token_id\",\n"}
+,{"stream_name":"stdout","time":232.894249814,"data":"    \"eos_token_id\",\n"}
+,{"stream_name":"stdout","time":232.894253568,"data":"    \"hidden_act\",\n"}
+,{"stream_name":"stdout","time":232.894257306,"data":"    \"hidden_size\",\n"}
+,{"stream_name":"stdout","time":232.894261306,"data":"    \"image_token_id\",\n"}
+,{"stream_name":"stdout","time":232.894265132,"data":"    \"initializer_range\",\n"}
+,{"stream_name":"stdout","time":232.894277296,"data":"    \"intermediate_size\",\n"}
+,{"stream_name":"stdout","time":232.894281076,"data":"    \"model_type\",\n"}
+,{"stream_name":"stdout","time":232.894284736,"data":"    \"moe_intermediate_size\",\n"}
+,{"stream_name":"stdout","time":232.894288414,"data":"    \"num_experts\",\n"}
+,{"stream_name":"stdout","time":232.894314864,"data":"    \"num_experts_per_tok\",\n"}
+,{"stream_name":"stdout","time":232.894324456,"data":"    \"quantization_config\",\n"}
+,{"stream_name":"stdout","time":232.894328395,"data":"    \"text_config\",\n"}
+,{"stream_name":"stdout","time":232.894332898,"data":"    \"tie_word_embeddings\",\n"}
+,{"stream_name":"stdout","time":232.894336702,"data":"    \"transformers_version\",\n"}
+,{"stream_name":"stdout","time":232.894340454,"data":"    \"video_token_id\",\n"}
+,{"stream_name":"stdout","time":232.894344139,"data":"    \"vision_config\"\n"}
+,{"stream_name":"stdout","time":232.894357297,"data":"  ],\n"}
+,{"stream_name":"stdout","time":232.894360895,"data":"  \"autoconfig_plain\": \"OK (Gemma4Config)\",\n"}
+,{"stream_name":"stdout","time":232.89436478,"data":"  \"transformers_gemma_dirs\": [\n"}
+,{"stream_name":"stdout","time":232.894368474,"data":"    \"gemma\",\n"}
+,{"stream_name":"stdout","time":232.894372061,"data":"    \"gemma2\",\n"}
+,{"stream_name":"stdout","time":232.894375707,"data":"    \"gemma3\",\n"}
+,{"stream_name":"stdout","time":232.894379969,"data":"    \"gemma3n\",\n"}
+,{"stream_name":"stdout","time":232.89438307,"data":"    \"gemma4\",\n"}
+,{"stream_name":"stdout","time":232.894386371,"data":"    \"gemma4_assistant\",\n"}
+,{"stream_name":"stdout","time":232.894389943,"data":"    \"gemma4_unified\",\n"}
+,{"stream_name":"stdout","time":232.89441701,"data":"    \"gemma4_unified_assistant\"\n"}
+,{"stream_name":"stdout","time":232.894422724,"data":"  ],\n"}
+,{"stream_name":"stdout","time":232.894427338,"data":"  \"transformers_version_loaded\": \"5.13.1\",\n"}
+,{"stream_name":"stdout","time":232.894431171,"data":"  \"transformers_like_wheels\": [\n"}
+,{"stream_name":"stdout","time":232.894434961,"data":"    \"adk_eval_core-0.1.0-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":232.894438694,"data":"    \"adk_submission-0.2.13-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":232.894443958,"data":"    \"google_adk-1.36.1-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":232.89444773,"data":"    \"swegemma-0.2.11-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":232.894451795,"data":"    \"transformers-5.13.1-py3-none-any.whl\"\n"}
+,{"stream_name":"stdout","time":232.894455615,"data":"  ]\n"}
+,{"stream_name":"stdout","time":232.894459202,"data":"}\n"}
+,{"stream_name":"stdout","time":232.944337891,"data":"config read\n"}
+,{"stream_name":"stdout","time":232.945498044,"data":"loading\n"}
+,{"stream_name":"stderr","time":235.856070231,"data":"\rCompressing model:   0%|          | 0/1763 [00:00\u003c?, ?it/s]\n"}
+,{"stream_name":"stderr","time":235.958008622,"data":"\rCompressing model:   0%|          | 0/1763 [00:00\u003c?, ?it/s]\rCompressing model:  42%|████▏     | 736/1763 [00:00\u003c00:00, 7269.65it/s]\n"}
+,{"stream_name":"stderr","time":236.783413073,"data":"\rCompressing model:  42%|████▏     | 736/1763 [00:00\u003c00:00, 7269.65it/s]\rCompressing model:  83%|████████▎ | 1463/1763 [00:00\u003c00:00, 1385.37it/s]\n"}
+,{"stream_name":"stderr","time":237.122688661,"data":"\rCompressing model:  83%|████████▎ | 1463/1763 [00:00\u003c00:00, 1385.37it/s]\rCompressing model: 100%|██████████| 1763/1763 [00:01\u003c00:00, 1408.97it/s]\n"}
+,{"stream_name":"stderr","time":237.319486287,"data":"\rCompressing model: 100%|██████████| 1763/1763 [00:01\u003c00:00, 1408.97it/s]\n"}
+,{"stream_name":"stderr","time":237.31952739,"data":"\n"}
+,{"stream_name":"stderr","time":237.319532339,"data":"\n"}
+,{"stream_name":"stdout","time":255.271974335,"data":"loaded\n"}
+,{"stream_name":"stderr","time":255.764028375,"data":"The installed version of bitsandbytes was compiled without GPU support. 8-bit optimizers and GPU quantization are unavailable.\n"}
+,{"stream_name":"stderr","time":255.764064013,"data":"\n"}
+,{"stream_name":"stderr","time":255.764068901,"data":"The installed version of bitsandbytes was compiled without GPU support. 8-bit optimizers and GPU quantization are unavailable.\n"}
+,{"stream_name":"stdout","time":256.206403217,"data":"{\n"}
+,{"stream_name":"stdout","time":256.206450916,"data":"  \"model_dir\": true,\n"}
+,{"stream_name":"stdout","time":256.20645773,"data":"  \"quantization\": {\n"}
+,{"stream_name":"stdout","time":256.206461791,"data":"    \"quant_method\": \"compressed-tensors\",\n"}
+,{"stream_name":"stdout","time":256.206465883,"data":"    \"format\": \"pack-quantized\",\n"}
+,{"stream_name":"stdout","time":256.206470179,"data":"    \"num_bits\": 4,\n"}
+,{"stream_name":"stdout","time":256.206473907,"data":"    \"group_size\": 32,\n"}
+,{"stream_name":"stdout","time":256.206477978,"data":"    \"ignore_count\": 192\n"}
+,{"stream_name":"stdout","time":256.206481713,"data":"  },\n"}
+,{"stream_name":"stdout","time":256.206492143,"data":"  \"geometry\": {\n"}
+,{"stream_name":"stdout","time":256.206494656,"data":"    \"num_hidden_layers\": 60,\n"}
+,{"stream_name":"stdout","time":256.206497159,"data":"    \"hidden_size\": 5376,\n"}
+,{"stream_name":"stdout","time":256.206520463,"data":"    \"num_attention_heads\": 32,\n"}
+,{"stream_name":"stdout","time":256.206524674,"data":"    \"num_key_value_heads\": 16\n"}
+,{"stream_name":"stdout","time":256.206528332,"data":"  },\n"}
+,{"stream_name":"stdout","time":256.206531714,"data":"  \"config_class\": \"Gemma4Config\",\n"}
+,{"stream_name":"stdout","time":256.206535542,"data":"  \"loaded\": true,\n"}
+,{"stream_name":"stdout","time":256.206538965,"data":"  \"load_seconds\": 22.3,\n"}
+,{"stream_name":"stdout","time":256.206542704,"data":"  \"dtype\": \"torch.bfloat16\",\n"}
+,{"stream_name":"stdout","time":256.206546932,"data":"  \"text_q_proj_class\": \"Linear\",\n"}
+,{"stream_name":"stdout","time":256.206550968,"data":"  \"text_mlp_class\": \"Linear\",\n"}
+,{"stream_name":"stdout","time":256.206556741,"data":"  \"load_error\": \"Traceback (most recent call last):\\n  File \\\"/tmp/ipykernel_16/1821660593.py\\\", line 51, in \u003ccell line: 0\u003e\\n    out[\\\"q_proj_weight_class\\\"] = type(text_layer.self_attn.q_proj.weight).__name__\\n                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \\\"/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py\\\", line 1965, in __getattr__\\n    raise AttributeError(\\nAttributeError: 'Linear' object has no attribute 'weight'\\n\",\n"}
+,{"stream_name":"stdout","time":256.206570066,"data":"  \"peft_version\": \"0.19.1\",\n"}
+,{"stream_name":"stdout","time":256.20657884,"data":"  \"lora_error_regex_language_model\": \" dispatch_default\\n    new_module = Linear(target, adapter_name, config=config, **kwargs)\\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \\\"/usr/local/lib/python3.12/dist-packages/peft/tuners/lora/layer.py\\\", line 782, in __init__\\n    LoraLayer.__init__(self, base_layer, **kwargs)\\n  File \\\"/usr/local/lib/python3.12/dist-packages/peft/tuners/lora/layer.py\\\", line 132, in __init__\\n    in_features, out_features = self._get_in_out_features(base_layer)\\n                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \\\"/usr/local/lib/python3.12/dist-packages/peft/tuners/lora/layer.py\\\", line 137, in _get_in_out_features\\n    return _get_in_out_features(module)\\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \\\"/usr/local/lib/python3.12/dist-packages/peft/tuners/tuners_utils.py\\\", line 173, in _get_in_out_features\\n    if _torch_supports_distributed and isinstance(module.weight, torch.distributed.tensor.DTensor):\\n                                                  ^^^^^^^^^^^^^\\n  File \\\"/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py\\\", line 1965, in __getattr__\\n    raise AttributeError(\\nAttributeError: 'Linear' object has no attribute 'weight'\\n\",\n"}
+,{"stream_name":"stdout","time":256.206606732,"data":"  \"lora_error_suffix_without_vision\": \"^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \\\"/usr/local/lib/python3.12/dist-packages/peft/tuners/tuners_utils.py\\\", line 315, in __init__\\n    self.inject_adapter(self.model, adapter_name, low_cpu_mem_usage=low_cpu_mem_usage, state_dict=state_dict)\\n  File \\\"/usr/local/lib/python3.12/dist-packages/peft/tuners/tuners_utils.py\\\", line 913, in inject_adapter\\n    self._create_and_replace(\\n  File \\\"/usr/local/lib/python3.12/dist-packages/peft/tuners/lora/model.py\\\", line 269, in _create_and_replace\\n    new_module = self._create_new_module(lora_config, adapter_name, target, device_map=device_map, **kwargs)\\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \\\"/usr/local/lib/python3.12/dist-packages/peft/tuners/lora/model.py\\\", line 424, in _create_new_module\\n    raise ValueError(\\nValueError: Target module Gemma4ClippableLinear(\\n  (linear): Linear(in_features=1152, out_features=1152, bias=False)\\n) is not supported. Currently, only the following modules are supported: `torch.nn.Linear`, `torch.nn.Embedding`, `torch.nn.Conv1d`, `torch.nn.Conv2d`, `torch.nn.Conv3d`, `transformers.pytorch_utils.Conv1D`, `torch.nn.MultiheadAttention.`.\\n\"\n"}
+,{"stream_name":"stdout","time":256.206617188,"data":"}\n"}
+,{"stream_name":"stderr","time":262.562939006,"data":"/usr/local/lib/python3.12/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":262.562991074,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":262.797361876,"data":"/usr/local/lib/python3.12/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":262.797389397,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":263.705867688,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":264.092106426,"data":"[NbConvertApp] Writing 38361 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":267.436724814,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":268.523868432,"data":"[NbConvertApp] Writing 343843 bytes to __results__.html\n"}
+]
