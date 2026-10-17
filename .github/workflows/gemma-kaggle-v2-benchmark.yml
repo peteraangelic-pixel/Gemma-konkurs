@@ -37,6 +37,7 @@ on:
       - gemma4-agent/kaggle_smoke/sft-diagnose.trigger
       - gemma4-agent/kaggle_smoke/sft-trainprobe.trigger
       - gemma4-agent/kaggle_smoke/sft-lora-canary.trigger
+      - gemma4-agent/kaggle_smoke/sft-lora-train.trigger
 
 permissions:
   contents: write
@@ -132,9 +133,16 @@ jobs:
           if [ -f gemma4-agent/kaggle_smoke/sft-lora-canary.trigger ]; then
             mode=lora_canary
           fi
+          if [ -f gemma4-agent/kaggle_smoke/sft-lora-train.trigger ]; then
+            mode=lora_canary
+          fi
           if [ "$mode" = "lora_canary" ]; then
-            echo "Mode: lora canary (GPU: load, 5 steps, mount on vLLM)"
-            python gemma4-agent/tools/run_kaggle_lora_canary.py --outdir gemma4-agent/kaggle_results/lora-canary --max-wait-minutes 70 2>&1 | tee gemma4-agent/kaggle_results/canary-step.log
+            canary_mode=serve
+            if [ -f gemma4-agent/kaggle_smoke/sft-lora-train.trigger ]; then
+              canary_mode=train
+            fi
+            echo "Mode: lora canary ($canary_mode)"
+            python gemma4-agent/tools/run_kaggle_lora_canary.py --outdir gemma4-agent/kaggle_results/lora-canary --mode "$canary_mode" --max-wait-minutes 70 2>&1 | tee gemma4-agent/kaggle_results/canary-step.log
             exit "${PIPESTATUS[0]}"
           fi
           if [ "$mode" = "trainprobe" ]; then
@@ -224,7 +232,8 @@ jobs:
             gemma4-agent/kaggle_smoke/sft-logfetch.trigger \
             gemma4-agent/kaggle_smoke/sft-diagnose.trigger \
             gemma4-agent/kaggle_smoke/sft-trainprobe.trigger \
-            gemma4-agent/kaggle_smoke/sft-lora-canary.trigger
+            gemma4-agent/kaggle_smoke/sft-lora-canary.trigger \
+            gemma4-agent/kaggle_smoke/sft-lora-train.trigger
           if [ -z "$(git diff --cached --name-only)" ]; then
             echo "Nothing to record."
             exit 0

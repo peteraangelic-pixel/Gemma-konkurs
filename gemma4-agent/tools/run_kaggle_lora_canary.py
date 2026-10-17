@@ -41,66 +41,9 @@ from run_kaggle_sft import (  # noqa: E402
     WHEELHOUSE_SETUP,
 )
 
-TRAIN_CELL = '# --- 1-2. load the checkpoint, wrap the text attention layers, take a few steps ----------------\n# The CPU probe showed two things: the checkpoint loads as Gemma4ForConditionalGeneration, and the\n# first forward makes compressed-tensors decompress the packed weights to bf16. On a CPU kernel that\n# is a 62 GB allocation and it dies; on 4xL4 it fits. Everything is staged so a failure still writes\n# what it learned and still produces an adapter for the serving test.\nimport gc, json, math, time, traceback\nfrom pathlib import Path\n\nimport torch\nfrom torch import nn\n\nWORK = Path("/kaggle/working")\nMODEL = "__MODEL_PATH__"\nout = {"stage": "load"}\n\n\ndef save():\n    Path(WORK / "canary_train.json").write_text(json.dumps(out, indent=2, default=str))\n\n\nclass LoraLinear(nn.Module):\n    def __init__(self, base, rank=8, alpha=16):\n        super().__init__()\n        self.base = base\n        self.rank = rank\n        self.scaling = alpha / rank\n        self.lora_A = None\n        self.lora_B = None\n\n    def forward(self, x):\n        y = self.base(x)\n        if self.lora_A is None:\n            width, depth = x.shape[-1], y.shape[-1]\n            self.lora_A = nn.Parameter(torch.empty(self.rank, width, dtype=x.dtype, device=x.device))\n            self.lora_B = nn.Parameter(torch.zeros(depth, self.rank, dtype=x.dtype, device=x.device))\n            nn.init.kaiming_uniform_(self.lora_A, a=math.sqrt(5))\n        return y + (x @ self.lora_A.T @ self.lora_B.T) * self.scaling\n\n\nmodel = None\ntok = None\nt0 = time.time()\ntry:\n    from transformers import AutoModelForImageTextToText, AutoTokenizer\n    print("loading", flush=True)\n    model = AutoModelForImageTextToText.from_pretrained(MODEL, device_map="auto")\n    tok = AutoTokenizer.from_pretrained(MODEL)\n    out["load_seconds"] = round(time.time() - t0, 1)\n    out["gpu_count"] = torch.cuda.device_count()\n    out["allocated_gb"] = [round(torch.cuda.memory_allocated(i) / 2 ** 30, 2)\n                           for i in range(torch.cuda.device_count())]\n    save()\n    print("loaded", out["allocated_gb"], flush=True)\n\n    swapped = 0\n    for layer in model.model.language_model.layers:\n        for name in ("q_proj", "k_proj", "v_proj", "o_proj"):\n            setattr(layer.self_attn, name, LoraLinear(getattr(layer.self_attn, name)))\n            swapped += 1\n    out["swapped_modules"] = swapped\n    out["stage"] = "train"\n    save()\n\n    texts = [\n        "def add(a, b):\\n    return a - b\\n",\n        "# clamp returns the wrong bound\\ndef clamp(x, lo, hi):\\n    return max(hi, min(lo, x))\\n",\n        "class Pool:\\n    def __init__(self, size):\\n        self.size = size\\n",\n        "import json\\n\\ndef load(path):\\n    with open(path) as fh:\\n        return json.load(fh)\\n",\n    ]\n    params = [p for p in model.parameters() if p.requires_grad]\n    opt = torch.optim.AdamW(params, lr=1e-4)\n    model.train()\n    losses = []\n    for index, text in enumerate(texts):\n        step = time.time()\n        enc = tok(text, return_tensors="pt", truncation=True, max_length=256)\n        enc = {key: value.to(model.device) for key, value in enc.items()}\n        loss = model(**enc, labels=enc["input_ids"]).loss\n        loss.backward()\n        opt.step()\n        opt.zero_grad()\n        losses.append(round(float(loss.detach()), 4))\n        print("step", index, "loss", losses[-1], "s", round(time.time() - step, 1), flush=True)\n    out["losses"] = losses\n    out["trainable_tensors"] = len(params)\n    out["trainable_params"] = sum(p.numel() for p in params)\n    out["peak_gb"] = [round(torch.cuda.max_memory_allocated(i) / 2 ** 30, 2)\n                      for i in range(torch.cuda.device_count())]\nexcept Exception:\n    out["train_error"] = traceback.format_exc()[-2500:]\n\nout["stage"] = "save_adapter"\nadapter = WORK / "main_lora"\nadapter.mkdir(parents=True, exist_ok=True)\ntry:\n    state = {}\n    if model is not None and out.get("losses"):\n        for name, module in model.named_modules():\n            if isinstance(module, LoraLinear) and module.lora_A is not None:\n                key = "base_model.model." + name\n                state[key + ".lora_A.weight"] = module.lora_A.detach().half().cpu()\n                state[key + ".lora_B.weight"] = module.lora_B.detach().half().cpu()\n        out["adapter_source"] = "trained"\n    else:\n        dims = {"q_proj": (5376, 5376), "k_proj": (2688, 5376),\n                "v_proj": (2688, 5376), "o_proj": (5376, 5376)}\n        for layer in range(60):\n            for name, (depth, width) in dims.items():\n                key = "base_model.model.model.language_model.layers.%d.self_attn.%s" % (layer, name)\n                state[key + ".lora_A.weight"] = torch.zeros(8, width, dtype=torch.half)\n                state[key + ".lora_B.weight"] = torch.zeros(depth, 8, dtype=torch.half)\n        out["adapter_source"] = "random"\n    from safetensors.torch import save_file\n    save_file(state, str(adapter / "adapter_model.safetensors"))\n    (adapter / "adapter_config.json").write_text(json.dumps({\n        "peft_type": "LORA", "task_type": "CAUSAL_LM", "r": 8, "lora_alpha": 16,\n        "lora_dropout": 0.0, "bias": "none",\n        "target_modules": ["q_proj", "k_proj", "v_proj", "o_proj"],\n        "base_model_name_or_path": "gemma-4-31b-it-qat-w4a16-ct",\n    }, indent=2))\n    out["adapter_tensors"] = len(state)\n    out["adapter_bytes"] = sum(p.stat().st_size for p in adapter.rglob("*") if p.is_file())\n    out["adapter_keys_sample"] = sorted(state)[:3]\nexcept Exception:\n    out["save_error"] = traceback.format_exc()[-2000:]\n\nif model is not None:\n    del model\ngc.collect()\ntorch.cuda.empty_cache()\nout["stage"] = "freed"\nout["allocated_gb_after_free"] = [round(torch.cuda.memory_allocated(i) / 2 ** 30, 2)\n                                  for i in range(torch.cuda.device_count())]\nsave()\nprint(json.dumps(out, indent=2, default=str)[:4000])\n'
+TRAIN_CELL = '# --- 1-2. load the checkpoint, wrap the text attention layers, take a few steps ----------------\n# The CPU probe showed two things: the checkpoint loads as Gemma4ForConditionalGeneration, and the\n# first forward makes compressed-tensors decompress the packed weights to bf16. On a CPU kernel that\n# is a 62 GB allocation and it dies; on 4xL4 it fits. Everything is staged so a failure still writes\n# what it learned and still produces an adapter for the serving test.\nimport gc, json, math, os, time, traceback\nfrom pathlib import Path\n\n# The first GPU attempt died 442 MiB short inside compressed-tensors decompression, which\n# materialises every packed weight as bf16 on the first forward. Less fragmentation, and no vision\n# tower - text-only training never touches its 27 layers of bf16 weights.\nos.environ.setdefault("PYTORCH_ALLOC_CONF", "expandable_segments:True")\n\nimport torch\nfrom torch import nn\n\nWORK = Path("/kaggle/working")\nMODEL = "/kaggle/input/models/google/gemma-4/other/gemma-4-31b-it-qat-w4a16-ct/2"\nout = {"stage": "load"}\n\n\ndef save():\n    Path(WORK / "canary_train.json").write_text(json.dumps(out, indent=2, default=str))\n\n\nclass LoraLinear(nn.Module):\n    def __init__(self, base, rank=8, alpha=16):\n        super().__init__()\n        self.base = base\n        self.rank = rank\n        self.scaling = alpha / rank\n        self.lora_A = None\n        self.lora_B = None\n\n    def forward(self, x):\n        y = self.base(x)\n        if self.lora_A is None:\n            width, depth = x.shape[-1], y.shape[-1]\n            self.lora_A = nn.Parameter(torch.empty(self.rank, width, dtype=x.dtype, device=x.device))\n            self.lora_B = nn.Parameter(torch.zeros(depth, self.rank, dtype=x.dtype, device=x.device))\n            nn.init.kaiming_uniform_(self.lora_A, a=math.sqrt(5))\n        return y + (x @ self.lora_A.T @ self.lora_B.T) * self.scaling\n\n\nmodel = None\ntok = None\nt0 = time.time()\ntry:\n    from transformers import AutoModelForImageTextToText, AutoTokenizer\n    print("loading", flush=True)\n    model = AutoModelForImageTextToText.from_pretrained(MODEL, device_map="auto")\n    tok = AutoTokenizer.from_pretrained(MODEL)\n    out["load_seconds"] = round(time.time() - t0, 1)\n    try:\n        vision = getattr(model.model, "vision_tower", None)\n        if vision is not None:\n            model.model.vision_tower = None\n            del vision\n            gc.collect(); torch.cuda.empty_cache()\n            out["vision_dropped"] = True\n    except Exception:\n        out["vision_dropped"] = False\n    out["gpu_count"] = torch.cuda.device_count()\n    out["allocated_gb"] = [round(torch.cuda.memory_allocated(i) / 2 ** 30, 2)\n                           for i in range(torch.cuda.device_count())]\n    save()\n    print("loaded", out["allocated_gb"], flush=True)\n\n    swapped = 0\n    for layer in model.model.language_model.layers:\n        for name in ("q_proj", "k_proj", "v_proj", "o_proj"):\n            setattr(layer.self_attn, name, LoraLinear(getattr(layer.self_attn, name)))\n            swapped += 1\n    out["swapped_modules"] = swapped\n    out["stage"] = "train"\n    save()\n\n    texts = [\n        "def add(a, b):\\n    return a - b\\n",\n        "# clamp returns the wrong bound\\ndef clamp(x, lo, hi):\\n    return max(hi, min(lo, x))\\n",\n        "class Pool:\\n    def __init__(self, size):\\n        self.size = size\\n",\n        "import json\\n\\ndef load(path):\\n    with open(path) as fh:\\n        return json.load(fh)\\n",\n    ]\n    params = [p for p in model.parameters() if p.requires_grad]\n    opt = torch.optim.AdamW(params, lr=1e-4)\n    model.train()\n    losses = []\n    for index, text in enumerate(texts):\n        step = time.time()\n        enc = tok(text, return_tensors="pt", truncation=True, max_length=128)\n        enc = {key: value.to(model.device) for key, value in enc.items()}\n        loss = model(**enc, labels=enc["input_ids"]).loss\n        loss.backward()\n        opt.step()\n        opt.zero_grad()\n        losses.append(round(float(loss.detach()), 4))\n        print("step", index, "loss", losses[-1], "s", round(time.time() - step, 1), flush=True)\n    out["losses"] = losses\n    out["trainable_tensors"] = len(params)\n    out["trainable_params"] = sum(p.numel() for p in params)\n    out["peak_gb"] = [round(torch.cuda.max_memory_allocated(i) / 2 ** 30, 2)\n                      for i in range(torch.cuda.device_count())]\nexcept Exception:\n    out["train_error"] = traceback.format_exc()[-2500:]\n\nout["stage"] = "save_adapter"\nadapter = WORK / "main_lora"\nadapter.mkdir(parents=True, exist_ok=True)\ntry:\n    state = {}\n    if model is not None and out.get("losses"):\n        for name, module in model.named_modules():\n            if isinstance(module, LoraLinear) and module.lora_A is not None:\n                key = "base_model.model." + name\n                state[key + ".lora_A.weight"] = module.lora_A.detach().half().cpu()\n                state[key + ".lora_B.weight"] = module.lora_B.detach().half().cpu()\n        out["adapter_source"] = "trained"\n    else:\n        dims = {"q_proj": (5376, 5376), "k_proj": (2688, 5376),\n                "v_proj": (2688, 5376), "o_proj": (5376, 5376)}\n        for layer in range(60):\n            for name, (depth, width) in dims.items():\n                key = "base_model.model.model.language_model.layers.%d.self_attn.%s" % (layer, name)\n                state[key + ".lora_A.weight"] = torch.zeros(8, width, dtype=torch.half)\n                state[key + ".lora_B.weight"] = torch.zeros(depth, 8, dtype=torch.half)\n        out["adapter_source"] = "random"\n    from safetensors.torch import save_file\n    save_file(state, str(adapter / "adapter_model.safetensors"))\n    (adapter / "adapter_config.json").write_text(json.dumps({\n        "peft_type": "LORA", "task_type": "CAUSAL_LM", "r": 8, "lora_alpha": 16,\n        "lora_dropout": 0.0, "bias": "none",\n        "target_modules": ["q_proj", "k_proj", "v_proj", "o_proj"],\n        "base_model_name_or_path": "gemma-4-31b-it-qat-w4a16-ct",\n    }, indent=2))\n    out["adapter_tensors"] = len(state)\n    out["adapter_bytes"] = sum(p.stat().st_size for p in adapter.rglob("*") if p.is_file())\n    out["adapter_keys_sample"] = sorted(state)[:3]\nexcept Exception:\n    out["save_error"] = traceback.format_exc()[-2000:]\n\nif model is not None:\n    del model\ngc.collect()\ntorch.cuda.empty_cache()\nout["stage"] = "freed"\nout["allocated_gb_after_free"] = [round(torch.cuda.memory_allocated(i) / 2 ** 30, 2)\n                                  for i in range(torch.cuda.device_count())]\nsave()\nprint(json.dumps(out, indent=2, default=str)[:4000])\n'
 
-SERVE_CELL = '''
-# --- 3. does the organisers' vLLM server mount that adapter? ---------------------------------
-import json
-from pathlib import Path
-
-WORK = Path("/kaggle/working")
-MODEL = "__MODEL_PATH__"
-out = json.loads((WORK / "canary_train.json").read_text())
-out["stage"] = "serve"
-
-try:
-    from adk_submission.server import VllmConfig, VllmServer
-
-    server = VllmServer(
-        VllmConfig(model=MODEL, tensor_parallel_size=4, max_model_len=8192,
-                   gpu_memory_utilization=0.85, enable_lora=True, max_loras=4),
-        lora_modules={"main_lora": str(WORK / "main_lora")},
-    )
-    server.start()
-    out["server_started"] = True
-    out["base_url"] = server.base_url
-except Exception as exc:
-    out["server_error"] = type(exc).__name__ + ": " + str(exc)[:800]
-    Path(WORK / "canary_train.json").write_text(json.dumps(out, indent=2))
-    print(json.dumps(out, indent=2))
-    raise
-
-import requests
-
-PROMPT = "Rewrite this function so it adds instead of subtracts. Reply with the code only.\\n\\ndef add(a, b):\\n    return a - b\\n"
-
-
-def ask(model_name):
-    payload = {"model": model_name,
-               "messages": [{"role": "user", "content": PROMPT}],
-               "max_tokens": 48, "temperature": 0.0}
-    response = requests.post(server.base_url + "/v1/chat/completions", json=payload, timeout=240)
-    try:
-        body = response.json()
-        text = body["choices"][0]["message"].get("content", "")
-    except Exception:
-        text = response.text[:400]
-    return {"status": response.status_code, "text": text[:400]}
-
-
-out["base"] = ask(server.config.model)
-out["adapter"] = ask("main_lora")
-out["adapter_changed_output"] = out["base"]["text"] != out["adapter"]["text"]
-out["models_endpoint"] = requests.get(server.base_url + "/v1/models", timeout=60).text[:600]
-out["stage"] = "done"
-try:
-    server.stop()
-except Exception:
-    pass
-
-Path(WORK / "canary_train.json").write_text(json.dumps(out, indent=2))
-print(json.dumps({k: out[k] for k in ("stage", "base", "adapter", "adapter_changed_output")}, indent=2))
-'''.replace("__MODEL_PATH__", MODEL_PATH)
+SERVE_CELL = '\n# --- 3. does the organisers\' vLLM server mount that adapter? ---------------------------------\nimport json\nfrom pathlib import Path\n\nWORK = Path("/kaggle/working")\nMODEL = "/kaggle/input/models/google/gemma-4/other/gemma-4-31b-it-qat-w4a16-ct/2"\nreport_path = WORK / "canary_train.json"\nout = json.loads(report_path.read_text()) if report_path.exists() else {"stage": "serve_only"}\nout["stage"] = "serve"\n\ntry:\n    from adk_submission.server import VllmConfig, VllmServer\n\n    server = VllmServer(\n        VllmConfig(model=MODEL, tensor_parallel_size=4, max_model_len=8192,\n                   gpu_memory_utilization=0.85, enable_lora=True, max_loras=4),\n        lora_modules={"main_lora": str(WORK / "main_lora")},\n    )\n    server.start()\n    out["server_started"] = True\n    out["base_url"] = server.base_url\nexcept Exception as exc:\n    out["server_error"] = type(exc).__name__ + ": " + str(exc)[:800]\n    Path(WORK / "canary_train.json").write_text(json.dumps(out, indent=2))\n    print(json.dumps(out, indent=2))\n    raise\n\nimport requests\n\nPROMPT = "Rewrite this function so it adds instead of subtracts. Reply with the code only.\\n\\ndef add(a, b):\\n    return a - b\\n"\n\n\ndef ask(model_name):\n    payload = {"model": model_name,\n               "messages": [{"role": "user", "content": PROMPT}],\n               "max_tokens": 48, "temperature": 0.0}\n    response = requests.post(server.base_url + "/v1/chat/completions", json=payload, timeout=240)\n    try:\n        body = response.json()\n        text = body["choices"][0]["message"].get("content", "")\n    except Exception:\n        text = response.text[:400]\n    return {"status": response.status_code, "text": text[:400]}\n\n\nout["base"] = ask(server.config.model)\nout["adapter"] = ask("main_lora")\nout["adapter_changed_output"] = out["base"]["text"] != out["adapter"]["text"]\nout["models_endpoint"] = requests.get(server.base_url + "/v1/models", timeout=60).text[:600]\nout["stage"] = "done"\ntry:\n    server.stop()\nexcept Exception:\n    pass\n\nPath(WORK / "canary_train.json").write_text(json.dumps(out, indent=2))\nprint(json.dumps({k: out[k] for k in ("stage", "base", "adapter", "adapter_changed_output")}, indent=2))\n'
 
 TRAIN_CELL = TRAIN_CELL.replace("__MODEL_PATH__", MODEL_PATH)
 SERVE_CELL = SERVE_CELL.replace("__MODEL_PATH__", MODEL_PATH)
@@ -115,6 +58,8 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--outdir", type=Path, required=True)
     parser.add_argument("--owner", default=os.environ.get("KAGGLE_USERNAME", ""))
+    parser.add_argument("--mode", choices=("both", "train", "serve"), default="both",
+                        help="serve skips training and mounts a random adapter; train skips vLLM")
     parser.add_argument("--max-wait-minutes", type=int, default=60)
     args = parser.parse_args()
     if not args.owner:
@@ -130,11 +75,13 @@ def main() -> int:
          "source": ["# LoRA canary: load, train five steps, mount on the organisers' vLLM server\n"]},
         {"cell_type": "code", "id": "c1", "execution_count": None, "metadata": {}, "outputs": [],
          "source": WHEELHOUSE_SETUP.splitlines(keepends=True)},
-        {"cell_type": "code", "id": "c2", "execution_count": None, "metadata": {}, "outputs": [],
-         "source": TRAIN_CELL.splitlines(keepends=True)},
-        {"cell_type": "code", "id": "c3", "execution_count": None, "metadata": {}, "outputs": [],
-         "source": SERVE_CELL.splitlines(keepends=True)},
     ]
+    if args.mode in ("both", "train"):
+        cells.append({"cell_type": "code", "id": "c2", "execution_count": None, "metadata": {},
+                      "outputs": [], "source": TRAIN_CELL.splitlines(keepends=True)})
+    if args.mode in ("both", "serve"):
+        cells.append({"cell_type": "code", "id": "c3", "execution_count": None, "metadata": {},
+                      "outputs": [], "source": SERVE_CELL.splitlines(keepends=True)})
     notebook = {
         "cells": cells,
         "metadata": {"kernelspec": {"display_name": "Python 3", "language": "python", "name": "python3"},
@@ -142,7 +89,7 @@ def main() -> int:
         "nbformat": 4, "nbformat_minor": 5,
     }
     state = {"created_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-             "status": "preparing", "kernel_ref": kernel_ref, "gpu": True,
+             "status": "preparing", "kernel_ref": kernel_ref, "gpu": True, "mode": args.mode,
              "competition_submission_created": False}
     write_json(outdir / "run.json", state)
 
