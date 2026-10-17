@@ -32,6 +32,7 @@ on:
       - arena/c4eeb067-gemma-konkurs
     paths:
       - gemma4-agent/kaggle_smoke/v2-benchmark.trigger
+      - gemma4-agent/kaggle_smoke/sft-logfetch.trigger
 
 permissions:
   contents: write
@@ -73,7 +74,32 @@ jobs:
           chmod 600 "$HOME/.kaggle/access_token"
           echo "Kaggle CLI configured; token value was not logged."
 
+      - name: Fetch the failed kernel's log instead of launching a new one
+        id: logfetch
+        run: |
+          set -euo pipefail
+          if [ ! -f gemma4-agent/kaggle_smoke/sft-logfetch.trigger ]; then
+            echo "should_fetch=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "should_fetch=true" >> "$GITHUB_OUTPUT"
+          for d in gemma4-agent/kaggle_results/sft-smoke gemma4-agent/kaggle_results/sft-full; do
+            if [ -s "$d/run.json" ]; then
+              echo "fetching logs for $d"
+              python gemma4-agent/tools/fetch_kaggle_kernel_log.py --run-json "$d/run.json" --output-dir "$RUNNER_TEMP/kernellogs" || true
+            fi
+          done
+          if [ -f "$RUNNER_TEMP/kernellogs/kernel.log" ]; then
+            echo "=== last 200 log lines ==="
+            tail -200 "$RUNNER_TEMP/kernellogs/kernel.log"
+            echo "=== python tracebacks ==="
+            grep -n -A12 -E "Traceback \(most recent" "$RUNNER_TEMP/kernellogs/kernel.log" | tail -120 || echo "(no traceback)"
+          else
+            echo "no log retrieved"
+          fi
+
       - name: Run the LoRA pipeline on competition GPU
+        if: steps.logfetch.outputs.should_fetch != 'true'
         env:
           KAGGLE_USERNAME: petersharps
           REQUESTED_MODE: ${{ github.event.inputs.mode }}
@@ -115,6 +141,7 @@ jobs:
           path: |
             gemma4-agent/kaggle_results/sft-smoke
             gemma4-agent/kaggle_results/sft-full
+            ${{ runner.temp }}/kernellogs/
           if-no-files-found: warn
           retention-days: 14
 
@@ -143,7 +170,8 @@ jobs:
             fi
           done
           git add gemma4-agent/kaggle_results 2>/dev/null || true
-          git rm -q --ignore-unmatch gemma4-agent/kaggle_smoke/v2-benchmark.trigger
+          git rm -q --ignore-unmatch gemma4-agent/kaggle_smoke/v2-benchmark.trigger \
+            gemma4-agent/kaggle_smoke/sft-logfetch.trigger
           if [ -z "$(git diff --cached --name-only)" ]; then
             echo "Nothing to record."
             exit 0
