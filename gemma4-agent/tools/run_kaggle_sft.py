@@ -52,7 +52,63 @@ def kaggle(args: list[str], timeout: int = 300) -> subprocess.CompletedProcess[s
     return subprocess.run(["kaggle", *args], capture_output=True, text=True, timeout=timeout)
 
 
-def patch_notebook(nb: dict, *, smoke: bool, base_dir: str, locator_from: str = "submission-v6.11") -> dict:
+
+EMBED_FILES = (
+    "gemma4-agent/tools/build_sft_dataset.py",
+    "gemma4-agent/submission-v5/agent.yaml",
+    "gemma4-agent/submission-v5/eval_config.yaml",
+    "gemma4-agent/submission-v5/configs/sampling.yaml",
+    "gemma4-agent/submission-v5/prompts/system.md",
+    "gemma4-agent/submission-v6.11/tools/locate.py",
+)
+
+
+def embedded_repo_cell(root: Path) -> dict:
+    """Materialise the files the notebook needs, so the kernel needs no internet for a clone."""
+    import base64
+
+    payload = {}
+    for rel in EMBED_FILES:
+        path = root / rel
+        if not path.is_file():
+            raise SystemExit(f"cannot embed {rel}: not present in the checkout")
+        payload[rel] = base64.b64encode(path.read_bytes()).decode("ascii")
+    blob = base64.b64encode(json.dumps(payload).encode("utf-8")).decode("ascii")
+    lines = [
+        "# --- the repository files this run needs, embedded at push time ---------------------------\n",
+        "# The kernel has no internet (Kaggle refused the push with it enabled), so the clone cell is\n",
+        "# replaced by this: the exact bytes from the commit under test, sha256-printed for provenance.\n",
+        "import base64 as _b64, json as _json, hashlib as _hashlib\n",
+        f"_PAYLOAD = _b64.b64decode({blob!r})\n",
+        "for _rel, _enc in _json.loads(_PAYLOAD).items():\n",
+        "    _p = REPO_DIR / _rel\n",
+        "    _p.parent.mkdir(parents=True, exist_ok=True)\n",
+        "    _bytes = _b64.b64decode(_enc)\n",
+        "    _p.write_bytes(_bytes)\n",
+        "    print(f'{_rel:<52} {len(_bytes):>7} B  sha256 {_hashlib.sha256(_bytes).hexdigest()[:16]}')\n",
+        "print('embedded files:', len(_json.loads(_PAYLOAD)))\n",
+    ]
+    return {"cell_type": "code", "execution_count": None, "metadata": {}, "outputs": [], "source": lines}
+
+
+def normalize_notebook(nb: dict) -> dict:
+    """Make the file nbformat-4.5 compliant, which Kaggle validates on SaveKernel.
+
+    The committed notebook has nbformat 4.5 but no cell ids, and its code cells carry no
+    execution_count/outputs. Kaggle answers SaveKernel with a bare HTTP 400 for that - which is how
+    two pushes were lost before the metadata was compared with the launcher that does work.
+    """
+    for index, cell in enumerate(nb["cells"]):
+        cell["id"] = f"cell-{index:03d}"
+        if cell["cell_type"] == "code":
+            cell.setdefault("execution_count", None)
+            cell.setdefault("outputs", [])
+        cell.setdefault("metadata", {})
+    return nb
+
+
+def patch_notebook(nb: dict, *, smoke: bool, base_dir: str, locator_from: str = "submission-v6.11",
+                   repo_root: Path | None = None) -> dict:
     """Patch in place; every replacement must actually happen."""
     applied: dict[str, int] = {}
     for cell in nb["cells"]:
@@ -88,6 +144,19 @@ def patch_notebook(nb: dict, *, smoke: bool, base_dir: str, locator_from: str = 
         if not applied.get(key):
             raise SystemExit(f"patch {key!r} did not apply - refusing to push a half-patched notebook")
 
+    normalize_notebook(nb)
+
+    if repo_root is not None:
+        # Replace the git-clone cell (the kernel has no internet) with the embedded-file cell.
+        for index, cell in enumerate(nb["cells"]):
+            source = "".join(cell["source"])
+            if cell["cell_type"] == "code" and "git" in source and "clone" in source:
+                nb["cells"][index] = embedded_repo_cell(repo_root)
+                applied["embed"] = 1
+                break
+        if not applied.get("embed"):
+            raise SystemExit("could not find the clone cell to replace - refusing to push")
+
     # Verification cell: prove the patches landed before anything expensive runs.
     expected_smoke = "True" if smoke else "False"
     guard = {
@@ -106,7 +175,7 @@ def patch_notebook(nb: dict, *, smoke: bool, base_dir: str, locator_from: str = 
         ],
     }
     nb["cells"].insert(1, guard)
-    return nb
+    return normalize_notebook(nb)
 
 
 def main() -> int:
@@ -121,6 +190,11 @@ def main() -> int:
     parser.add_argument("--max-wait-minutes", type=int, default=300)
     parser.add_argument("--poll-interval-seconds", type=int, default=60)
     parser.add_argument("--owner", default=os.environ.get("KAGGLE_USERNAME", ""))
+    parser.add_argument("--embed-repo", dest="embed_repo", action="store_true", default=True,
+                        help="write the repository files into the notebook (no internet needed)")
+    parser.add_argument("--no-embed-repo", dest="embed_repo", action="store_false")
+    parser.add_argument("--internet", action="store_true",
+                        help="request internet for the kernel (Kaggle refused this with HTTP 400)")
     args = parser.parse_args()
 
     smoke = not args.full
@@ -128,7 +202,9 @@ def main() -> int:
     outdir.mkdir(parents=True, exist_ok=True)
 
     notebook = json.loads(args.notebook.read_text(encoding="utf-8"))
-    patched = patch_notebook(notebook, smoke=smoke, base_dir=args.base_dir, locator_from=args.locator_from)
+    repo_root = Path(".").resolve() if args.embed_repo else None
+    patched = patch_notebook(notebook, smoke=smoke, base_dir=args.base_dir,
+                             locator_from=args.locator_from, repo_root=repo_root)
 
     owner = args.owner
     if not owner:
@@ -142,6 +218,7 @@ def main() -> int:
         "status": "preparing",
         "mode": "smoke" if smoke else "full",
         "base_dir": args.base_dir,
+        "internet": bool(args.internet),
         "kernel_ref": kernel_ref,
         "model_path": MODEL_PATH,
         "competition_submission_created": False,
@@ -163,7 +240,7 @@ def main() -> int:
             "enable_tpu": False,
             # Training libraries are not guaranteed to be in the image; the run needs pip. This is a
             # training experiment, never the scored agent, so internet is acceptable here.
-            "enable_internet": True,
+            "enable_internet": bool(args.internet),
             "machine_shape": MACHINE_SHAPE,
             "docker_image": DOCKER_IMAGE,
             "docker_image_pinning_type": "original",
