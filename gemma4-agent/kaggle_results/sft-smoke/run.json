@@ -1,14 +1,14 @@
 {
-  "created_utc": "2026-10-17T10:09:57+00:00",
+  "created_utc": "2026-10-17T12:26:40+00:00",
   "status": "error",
   "mode": "smoke",
   "base_dir": "submission-v5",
   "internet": false,
-  "kernel_ref": "petersharps/gemma-4-sft-smoke-20261017-100957",
+  "kernel_ref": "petersharps/gemma-4-sft-smoke-20261017-122640",
   "model_path": "/kaggle/input/models/google/gemma-4/other/gemma-4-31b-it-qat-w4a16-ct/2",
   "competition_submission_created": false,
   "push_exit_code": 0,
-  "push_stdout_tail": "Kernel version 1 successfully pushed.  Please check progress at https://www.kaggle.com/code/petersharps/gemma-4-sft-smoke-20261017-100957\n",
+  "push_stdout_tail": "Kernel version 1 successfully pushed.  Please check progress at https://www.kaggle.com/code/petersharps/gemma-4-sft-smoke-20261017-122640\n",
   "push_stderr_tail": "",
   "kaggle_status": "ERROR",
   "error": "the kernel ended without producing a result"
