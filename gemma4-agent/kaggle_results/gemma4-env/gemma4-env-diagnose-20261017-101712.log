@@ -1,0 +1,154 @@
+[{"stream_name":"stderr","time":7.471921669,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":7.471996489,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":7.472004989,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":7.472008678,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":8.046134149,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":8.046170818,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":8.046175098,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":8.046178558,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stdout","time":41.805897401,"data":"{\n"}
+,{"stream_name":"stdout","time":41.805927751,"data":"  \"python\": \"3.13.15\",\n"}
+,{"stream_name":"stdout","time":41.805933641,"data":"  \"wheelhouse_mounted\": true,\n"}
+,{"stream_name":"stdout","time":41.805938501,"data":"  \"wheels\": [\n"}
+,{"stream_name":"stdout","time":41.805943201,"data":"    \"adk_eval_core-0.1.0-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":41.805948051,"data":"    \"adk_submission-0.2.13-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":41.805953231,"data":"    \"anthropic-1.4.0-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":41.805979171,"data":"    \"apache_tvm_ffi-0.1.13.post3-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":41.805987251,"data":"    \"astor-0.8.1-py2.py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":41.805991801,"data":"    \"bitsandbytes-0.46.1-py3-none-manylinux_2_24_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":41.805996231,"data":"    \"cbor2-6.1.4-cp312-cp312-manylinux_2_28_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":41.806000951,"data":"    \"compressed_tensors-0.15.0.1-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":41.806006051,"data":"    \"depyf-0.20.0-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":41.806010781,"data":"    \"diskcache-5.6.3-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":41.806015381,"data":"    \"flashinfer_cubin-0.6.6-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":41.806020351,"data":"    \"flashinfer_python-0.6.6-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":41.806024911,"data":"    \"gguf-0.19.0-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":41.806030091,"data":"    \"google_adk-1.36.1-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":41.806034801,"data":"    \"google_genai-2.11.0-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":41.806039471,"data":"    \"ijson-3.5.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":41.806044131,"data":"    \"interegular-0.3.3-py37-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":41.806048581,"data":"    \"llguidance-1.3.0-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":41.806052981,"data":"    \"lm_format_enforcer-0.11.3-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":41.806057251,"data":"    \"loguru-0.7.3-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":41.806062581,"data":"    \"mistral_common-1.11.7-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":41.806080721,"data":"    \"model_hosting_container_standards-0.1.16-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":41.806084881,"data":"    \"msgspec-0.21.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":41.806088751,"data":"    \"nvidia_cudnn_frontend-1.18.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":41.806092341,"data":"    \"openai_harmony-0.0.8-cp38-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":41.806095941,"data":"    \"opentelemetry_exporter_otlp-1.44.0-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":41.806099381,"data":"    \"opentelemetry_semantic_conventions_ai-0.5.1-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":41.806102671,"data":"    \"outlines_core-0.2.11-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":41.806106251,"data":"    \"partial_json_parser-0.2.1.1.post7-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":41.806109791,"data":"    \"prometheus_fastapi_instrumentator-8.1.0-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":41.806113261,"data":"    \"pybase64-1.5.0-cp312-cp312-manylinux1_x86_64.manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_5_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":41.806116771,"data":"    \"pycountry-26.2.16-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":41.806122631,"data":"    \"pydantic_extra_types-2.11.2-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":41.806126041,"data":"    \"quack_kernels-0.6.4-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":41.806129481,"data":"    \"safetensors-0.8.0-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":41.806132761,"data":"    \"setproctitle-1.3.7-cp312-cp312-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":41.806136001,"data":"    \"swegemma-0.2.11-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":41.806139281,"data":"    \"tokenizers-0.22.2-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":41.806142501,"data":"    \"transformers-5.13.1-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":41.806145601,"data":"    \"vllm-0.19.1-cp38-abi3-manylinux_2_31_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":41.806149161,"data":"    \"xgrammar-0.2.5.post1-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl\"\n"}
+,{"stream_name":"stdout","time":41.806152631,"data":"  ],\n"}
+,{"stream_name":"stdout","time":41.806155901,"data":"  \"wheel_count\": 41,\n"}
+,{"stream_name":"stdout","time":41.806159851,"data":"  \"before_install\": {\n"}
+,{"stream_name":"stdout","time":41.806163201,"data":"    \"torch\": \"2.11.0+cpu\",\n"}
+,{"stream_name":"stdout","time":41.806166511,"data":"    \"transformers\": \"5.16.1\",\n"}
+,{"stream_name":"stdout","time":41.806170101,"data":"    \"peft\": \"0.20.0\",\n"}
+,{"stream_name":"stdout","time":41.806173501,"data":"    \"trl\": \"NOT IMPORTABLE (ModuleNotFoundError)\",\n"}
+,{"stream_name":"stdout","time":41.806177081,"data":"    \"vllm\": \"NOT IMPORTABLE (ModuleNotFoundError)\",\n"}
+,{"stream_name":"stdout","time":41.806180701,"data":"    \"swegemma\": \"NOT IMPORTABLE (ModuleNotFoundError)\",\n"}
+,{"stream_name":"stdout","time":41.806184221,"data":"    \"adk_submission\": \"NOT IMPORTABLE (ModuleNotFoundError)\",\n"}
+,{"stream_name":"stdout","time":41.806187841,"data":"    \"accelerate\": \"1.14.0\",\n"}
+,{"stream_name":"stdout","time":41.806191331,"data":"    \"datasets\": \"4.8.5\",\n"}
+,{"stream_name":"stdout","time":41.806199501,"data":"    \"bitsandbytes\": \"NOT IMPORTABLE (ModuleNotFoundError)\",\n"}
+,{"stream_name":"stdout","time":41.806202911,"data":"    \"safetensors\": \"0.8.0\"\n"}
+,{"stream_name":"stdout","time":41.806206071,"data":"  },\n"}
+,{"stream_name":"stdout","time":41.806209051,"data":"  \"install_returncode\": 1,\n"}
+,{"stream_name":"stdout","time":41.806212391,"data":"  \"install_stderr_tail\": \"ERROR: apache_tvm_ffi-0.1.13.post3-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl is not a supported wheel on this platform.\\n\",\n"}
+,{"stream_name":"stdout","time":41.806216401,"data":"  \"after_install\": {\n"}
+,{"stream_name":"stdout","time":41.806220101,"data":"    \"torch\": \"2.11.0+cpu\",\n"}
+,{"stream_name":"stdout","time":41.806223881,"data":"    \"transformers\": \"5.16.1\",\n"}
+,{"stream_name":"stdout","time":41.806227281,"data":"    \"peft\": \"0.20.0\",\n"}
+,{"stream_name":"stdout","time":41.806230981,"data":"    \"trl\": \"NOT IMPORTABLE (ModuleNotFoundError)\",\n"}
+,{"stream_name":"stdout","time":41.806234581,"data":"    \"vllm\": \"NOT IMPORTABLE (ModuleNotFoundError)\",\n"}
+,{"stream_name":"stdout","time":41.806238041,"data":"    \"swegemma\": \"NOT IMPORTABLE (ModuleNotFoundError)\",\n"}
+,{"stream_name":"stdout","time":41.806241671,"data":"    \"adk_submission\": \"NOT IMPORTABLE (ModuleNotFoundError)\",\n"}
+,{"stream_name":"stdout","time":41.806245251,"data":"    \"accelerate\": \"1.14.0\",\n"}
+,{"stream_name":"stdout","time":41.806248721,"data":"    \"datasets\": \"4.8.5\",\n"}
+,{"stream_name":"stdout","time":41.806252191,"data":"    \"bitsandbytes\": \"NOT IMPORTABLE (ModuleNotFoundError)\",\n"}
+,{"stream_name":"stdout","time":41.806255651,"data":"    \"safetensors\": \"0.8.0\"\n"}
+,{"stream_name":"stdout","time":41.806259241,"data":"  },\n"}
+,{"stream_name":"stdout","time":41.806262521,"data":"  \"model_dir\": true,\n"}
+,{"stream_name":"stdout","time":41.806266661,"data":"  \"model_files\": [\n"}
+,{"stream_name":"stdout","time":41.806270151,"data":"    \"README.md\",\n"}
+,{"stream_name":"stdout","time":41.806273791,"data":"    \"chat_template.jinja\",\n"}
+,{"stream_name":"stdout","time":41.806277681,"data":"    \"config.json\",\n"}
+,{"stream_name":"stdout","time":41.806281581,"data":"    \"generation_config.json\",\n"}
+,{"stream_name":"stdout","time":41.806285221,"data":"    \"model.safetensors\",\n"}
+,{"stream_name":"stdout","time":41.806288581,"data":"    \"processor_config.json\",\n"}
+,{"stream_name":"stdout","time":41.806291801,"data":"    \"tokenizer.json\",\n"}
+,{"stream_name":"stdout","time":41.806294821,"data":"    \"tokenizer_config.json\"\n"}
+,{"stream_name":"stdout","time":41.806298081,"data":"  ],\n"}
+,{"stream_name":"stdout","time":41.806301241,"data":"  \"config_model_type\": \"gemma4\",\n"}
+,{"stream_name":"stdout","time":41.806304511,"data":"  \"config_architectures\": [\n"}
+,{"stream_name":"stdout","time":41.806307721,"data":"    \"Gemma4ForConditionalGeneration\"\n"}
+,{"stream_name":"stdout","time":41.806311081,"data":"  ],\n"}
+,{"stream_name":"stdout","time":41.806315381,"data":"  \"config_keys\": [\n"}
+,{"stream_name":"stdout","time":41.806318951,"data":"    \"architectures\",\n"}
+,{"stream_name":"stdout","time":41.806322121,"data":"    \"audio_config\",\n"}
+,{"stream_name":"stdout","time":41.806325321,"data":"    \"audio_token_id\",\n"}
+,{"stream_name":"stdout","time":41.806328291,"data":"    \"boa_token_id\",\n"}
+,{"stream_name":"stdout","time":41.806331461,"data":"    \"boi_token_id\",\n"}
+,{"stream_name":"stdout","time":41.806335171,"data":"    \"dtype\",\n"}
+,{"stream_name":"stdout","time":41.806346671,"data":"    \"eoa_token_id\",\n"}
+,{"stream_name":"stdout","time":41.806350311,"data":"    \"eoa_token_index\",\n"}
+,{"stream_name":"stdout","time":41.806353231,"data":"    \"eoi_token_id\",\n"}
+,{"stream_name":"stdout","time":41.806355791,"data":"    \"eos_token_id\",\n"}
+,{"stream_name":"stdout","time":41.806358561,"data":"    \"hidden_act\",\n"}
+,{"stream_name":"stdout","time":41.806361261,"data":"    \"hidden_size\",\n"}
+,{"stream_name":"stdout","time":41.806364161,"data":"    \"image_token_id\",\n"}
+,{"stream_name":"stdout","time":41.806367101,"data":"    \"initializer_range\",\n"}
+,{"stream_name":"stdout","time":41.806370601,"data":"    \"intermediate_size\",\n"}
+,{"stream_name":"stdout","time":41.806373271,"data":"    \"model_type\",\n"}
+,{"stream_name":"stdout","time":41.806376131,"data":"    \"moe_intermediate_size\",\n"}
+,{"stream_name":"stdout","time":41.806379391,"data":"    \"num_experts\",\n"}
+,{"stream_name":"stdout","time":41.806382531,"data":"    \"num_experts_per_tok\",\n"}
+,{"stream_name":"stdout","time":41.806385691,"data":"    \"quantization_config\",\n"}
+,{"stream_name":"stdout","time":41.806388551,"data":"    \"text_config\",\n"}
+,{"stream_name":"stdout","time":41.806391540999996,"data":"    \"tie_word_embeddings\",\n"}
+,{"stream_name":"stdout","time":41.806394431,"data":"    \"transformers_version\",\n"}
+,{"stream_name":"stdout","time":41.806397671,"data":"    \"video_token_id\",\n"}
+,{"stream_name":"stdout","time":41.806400661,"data":"    \"vision_config\"\n"}
+,{"stream_name":"stdout","time":41.806403591,"data":"  ],\n"}
+,{"stream_name":"stdout","time":41.806406521,"data":"  \"autoconfig_plain\": \"OK (Gemma4Config)\",\n"}
+,{"stream_name":"stdout","time":41.806409691,"data":"  \"autoconfig_after_swegemma\": \"ModuleNotFoundError: No module named 'swegemma'\",\n"}
+,{"stream_name":"stdout","time":41.806412701,"data":"  \"transformers_gemma_dirs\": [\n"}
+,{"stream_name":"stdout","time":41.806415811,"data":"    \"gemma\",\n"}
+,{"stream_name":"stdout","time":41.806418881,"data":"    \"gemma2\",\n"}
+,{"stream_name":"stdout","time":41.806422071,"data":"    \"gemma3\",\n"}
+,{"stream_name":"stdout","time":41.806424951,"data":"    \"gemma3n\",\n"}
+,{"stream_name":"stdout","time":41.806427691,"data":"    \"gemma4\",\n"}
+,{"stream_name":"stdout","time":41.806430661,"data":"    \"gemma4_assistant\",\n"}
+,{"stream_name":"stdout","time":41.806433651,"data":"    \"gemma4_unified\",\n"}
+,{"stream_name":"stdout","time":41.806436541,"data":"    \"gemma4_unified_assistant\"\n"}
+,{"stream_name":"stdout","time":41.806439681,"data":"  ],\n"}
+,{"stream_name":"stdout","time":41.806442321,"data":"  \"transformers_like_wheels\": [\n"}
+,{"stream_name":"stdout","time":41.806445631,"data":"    \"adk_eval_core-0.1.0-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":41.806448791,"data":"    \"adk_submission-0.2.13-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":41.806451901,"data":"    \"google_adk-1.36.1-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":41.806454721,"data":"    \"swegemma-0.2.11-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":41.806457750999996,"data":"    \"transformers-5.13.1-py3-none-any.whl\"\n"}
+,{"stream_name":"stdout","time":41.806460761,"data":"  ]\n"}
+,{"stream_name":"stdout","time":41.806473711,"data":"}\n"}
+,{"stream_name":"stderr","time":45.769429833,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":45.769462873,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":45.936576984,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":45.936598694,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":46.736112452,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":46.797350639,"data":"[NbConvertApp] Writing 13643 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":49.295535158,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":49.743678825,"data":"[NbConvertApp] Writing 300518 bytes to __results__.html\n"}
+]
