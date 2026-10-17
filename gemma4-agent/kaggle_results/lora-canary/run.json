@@ -1,0 +1,10 @@
+{
+  "created_utc": "2026-10-17T11:35:01+00:00",
+  "status": "error",
+  "kernel_ref": "petersharps/gemma4-lora-canary-20261017-113501",
+  "gpu": true,
+  "competition_submission_created": false,
+  "push_exit_code": 0,
+  "push_out": "Kernel version 1 successfully pushed.  Please check progress at https://www.kaggle.com/code/petersharps/gemma4-lora-canary-20261017-113501\n",
+  "kaggle_status": "ERROR"
+}
