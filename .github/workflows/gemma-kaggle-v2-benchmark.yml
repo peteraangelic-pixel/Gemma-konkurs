@@ -35,6 +35,7 @@ on:
       - gemma4-agent/kaggle_smoke/v2-benchmark.trigger
       - gemma4-agent/kaggle_smoke/sft-logfetch.trigger
       - gemma4-agent/kaggle_smoke/sft-diagnose.trigger
+      - gemma4-agent/kaggle_smoke/sft-trainprobe.trigger
 
 permissions:
   contents: write
@@ -124,6 +125,14 @@ jobs:
           if [ -f gemma4-agent/kaggle_smoke/sft-diagnose.trigger ]; then
             mode=diagnose
           fi
+          if [ -f gemma4-agent/kaggle_smoke/sft-trainprobe.trigger ]; then
+            mode=trainprobe
+          fi
+          if [ "$mode" = "trainprobe" ]; then
+            echo "Mode: trainprobe (CPU only: load the 31B, attach LoRA, one step)"
+            python gemma4-agent/tools/diagnose_gemma4_env.py --outdir gemma4-agent/kaggle_results/gemma4-train-probe --image competition --phase train --max-wait-minutes 90
+            exit $?
+          fi
           if [ "$mode" = "diagnose" ]; then
             echo "Mode: diagnose (CPU only, no GPU quota)"
             python gemma4-agent/tools/diagnose_gemma4_env.py --outdir gemma4-agent/kaggle_results/gemma4-env-competition --image competition --max-wait-minutes 40
@@ -166,6 +175,7 @@ jobs:
             gemma4-agent/kaggle_results/sft-full
             gemma4-agent/kaggle_results/gemma4-env
             gemma4-agent/kaggle_results/gemma4-env-competition
+            gemma4-agent/kaggle_results/gemma4-train-probe
             ${{ runner.temp }}/kernellogs/
           if-no-files-found: warn
           retention-days: 14
@@ -186,7 +196,7 @@ jobs:
           cp -r gemma4-agent/kaggle_results/sft-full /tmp/keep/ 2>/dev/null || true
           git reset --hard "origin/$GITHUB_REF_NAME"
           mkdir -p gemma4-agent/kaggle_results
-          for d in sft-smoke sft-full gemma4-env gemma4-env-competition; do
+          for d in sft-smoke sft-full gemma4-env gemma4-env-competition gemma4-train-probe; do
             if [ -d "/tmp/keep/$d" ]; then
               mkdir -p "gemma4-agent/kaggle_results/$d"
               cp /tmp/keep/$d/*.json "gemma4-agent/kaggle_results/$d/" 2>/dev/null || true
@@ -197,7 +207,8 @@ jobs:
           git add gemma4-agent/kaggle_results 2>/dev/null || true
           git rm -q --ignore-unmatch gemma4-agent/kaggle_smoke/v2-benchmark.trigger \
             gemma4-agent/kaggle_smoke/sft-logfetch.trigger \
-            gemma4-agent/kaggle_smoke/sft-diagnose.trigger
+            gemma4-agent/kaggle_smoke/sft-diagnose.trigger \
+            gemma4-agent/kaggle_smoke/sft-trainprobe.trigger
           if [ -z "$(git diff --cached --name-only)" ]; then
             echo "Nothing to record."
             exit 0
