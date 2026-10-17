@@ -122,6 +122,11 @@ wheels = sorted(str(w) for w in tmp.glob("*.whl"))
 print(f"installing {len(wheels)} offline wheels from the competition wheelhouse")
 subprocess.run([sys.executable, "-m", "pip", "install", "-q", "--no-deps", "--force-reinstall", *wheels], check=True)
 importlib.invalidate_caches()
+# pip installed transformers 5.13.1 (it is in the wheelhouse), but this notebook already imported
+# 5.0.0 in its preflight cell and an installed wheel never replaces a cached module. That single
+# fact produced the "Transformers does not recognize this architecture" wall on two GPU runs.
+for _name in [m for m in list(sys.modules) if m == "transformers" or m.startswith("transformers.")]:
+    del sys.modules[_name]
 import transformers
 print("transformers", transformers.__version__)
 print("gemma4 recognised:", "gemma4" in getattr(transformers.models, "__name__", "") or any("gemma4" in m for m in dir(transformers.models)))

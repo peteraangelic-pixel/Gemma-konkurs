@@ -82,6 +82,12 @@ if wheels:
     report["install_stdout_tail"] = proc.stdout[-1500:]
     report["install_stderr_tail"] = proc.stderr[-1500:]
 importlib.invalidate_caches()
+# The kernel's own preflight already imported transformers 5.0.0, and pip installing 5.13.1 does
+# not replace a module that is already in sys.modules - that is the entire "gemma4 unsupported"
+# wall. Purge it and import again.
+for _name in [m for m in list(sys.modules) if m == "transformers" or m.startswith("transformers.")]:
+    del sys.modules[_name]
+report["purged_modules"] = True
 report["after_install"] = versions()
 
 # the decisive question: can anything read the model config?
@@ -196,6 +202,9 @@ Path("/kaggle/working/env_report.json").write_text(json.dumps(report, indent=2))
 '''
 
 
+ADAPTER_CONTRACT = '# --- adapter contract: can a submission declare a LoRA adapter? --------------------------------\n# The schema field exists, so the question is whether discovery and validation accept a real\n# adapters/<name>/ directory. Everything here runs on CPU.\nimport inspect, json, shutil, textwrap\nfrom pathlib import Path\n\ncontract = {}\nsub = Path("/kaggle/working/fake_submission")\nshutil.rmtree(sub, ignore_errors=True)\n(sub / "adapters" / "main_lora").mkdir(parents=True)\n(sub / "prompts").mkdir()\n(sub / "prompts" / "system.md").write_text("probe system prompt\\n")\n(sub / "agent.yaml").write_text(textwrap.dedent("""\n    agent_class: LlmAgent\n    name: probe_agent\n    model: gemma-4-31b-it-qat-w4a16-ct\n    adapter: main_lora\n    instruction: !include prompts/system.md\n    tools:\n      - run_command\n"""))\n\nimport torch\nfrom safetensors.torch import save_file\nsave_file({\n    "base_model.model.model.language_model.layers.0.self_attn.q_proj.lora_A.weight": torch.zeros(8, 16),\n    "base_model.model.model.language_model.layers.0.self_attn.q_proj.lora_B.weight": torch.zeros(16, 8),\n}, str(sub / "adapters" / "main_lora" / "adapter_model.safetensors"))\n(sub / "adapters" / "main_lora" / "adapter_config.json").write_text(json.dumps({\n    "peft_type": "LORA", "task_type": "CAUSAL_LM", "r": 8, "lora_alpha": 16,\n    "lora_dropout": 0.0, "bias": "none", "target_modules": ["q_proj", "k_proj", "v_proj", "o_proj"],\n    "base_model_name_or_path": "gemma-4-31b-it-qat-w4a16-ct",\n}, indent=2))\n\nfrom adk_submission import discovery\ncontract["signature_discover_adapters"] = str(inspect.signature(discovery.discover_adapters))\ntry:\n    manifest = discovery.discover_adapters(sub)\n    contract["adapters"] = {name: {"path": str(info.path), "rank": getattr(info, "rank", None)}\n                            for name, info in manifest.adapters.items()}\n    contract["manifest_type"] = type(manifest).__name__\nexcept Exception as exc:\n    contract["discover_adapters_error"] = repr(exc)\n\ntry:\n    validator = getattr(discovery, "validate_directory", None)\n    contract["signature_validate_directory"] = str(inspect.signature(validator)) if validator else None\n    if validator:\n        contract["validate_directory"] = str(validator(sub))\nexcept Exception as exc:\n    contract["validate_directory_error"] = repr(exc)\n\ntry:\n    from adk_submission.yaml_loader import load_yaml\n    data = load_yaml(sub / "agent.yaml", sub)\n    contract["agent_yaml_loaded"] = bool(data)\n    contract["agent_yaml_keys"] = sorted(data or {})\n    from adk_submission.schema import SandboxedLlmAgentConfig\n    contract["schema_fields"] = sorted(getattr(SandboxedLlmAgentConfig, "model_fields", {}))\n    cfg = SandboxedLlmAgentConfig(**data)\n    contract["adapter_resolved"] = getattr(cfg, "adapter", "<missing>")\nexcept Exception as exc:\n    contract["schema_error"] = repr(exc)\n\ntry:\n    from adk_submission import server\n    contract["server_functions"] = [n for n, _ in inspect.getmembers(server, inspect.isfunction)]\n    contract["server_classes"] = [n for n, _ in inspect.getmembers(server, inspect.isclass)]\n    src = Path(server.__file__).read_text(encoding="utf-8")\n    Path("/kaggle/working/adk_server_source.txt").write_text(src)\n    for flag in ("enable_lora", "lora_modules", "max_lora_rank", "max_loras",\n                 "quantization", "compressed", "gemma-4"):\n        at = src.find(flag)\n        if at >= 0:\n            contract["server_" + flag] = src[max(0, at - 120):at + 240]\nexcept Exception as exc:\n    contract["server_error"] = repr(exc)\n\nPath("/kaggle/working/adapter_contract.json").write_text(json.dumps(contract, indent=2))\nprint(json.dumps(contract, indent=2)[:8000])\n'
+
+
 def write_json(path: Path, value: object) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(value, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
@@ -221,6 +230,8 @@ def main() -> int:
          "source": ["# Gemma 4 environment diagnosis (CPU only, no training)\n"]},
         {"cell_type": "code", "id": "c1", "execution_count": None, "metadata": {}, "outputs": [],
          "source": DIAGNOSE.splitlines(keepends=True)},
+        {"cell_type": "code", "id": "c2", "execution_count": None, "metadata": {}, "outputs": [],
+         "source": ADAPTER_CONTRACT.splitlines(keepends=True)},
     ]
     notebook = {"cells": cells, "metadata": {"kernelspec": {"display_name": "Python 3", "language": "python", "name": "python3"},
                                             "language_info": {"name": "python", "version": "3.12"}},
