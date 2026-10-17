@@ -134,18 +134,18 @@ jobs:
           fi
           if [ "$mode" = "lora_canary" ]; then
             echo "Mode: lora canary (GPU: load, 5 steps, mount on vLLM)"
-            python gemma4-agent/tools/run_kaggle_lora_canary.py --outdir gemma4-agent/kaggle_results/lora-canary --max-wait-minutes 70
-            exit $?
+            python gemma4-agent/tools/run_kaggle_lora_canary.py --outdir gemma4-agent/kaggle_results/lora-canary --max-wait-minutes 70 2>&1 | tee gemma4-agent/kaggle_results/canary-step.log
+            exit "${PIPESTATUS[0]}"
           fi
           if [ "$mode" = "trainprobe" ]; then
             echo "Mode: trainprobe (CPU only: load the 31B, attach LoRA, one step)"
-            python gemma4-agent/tools/diagnose_gemma4_env.py --outdir gemma4-agent/kaggle_results/gemma4-train-probe --image competition --phase train --max-wait-minutes 90
-            exit $?
+            python gemma4-agent/tools/diagnose_gemma4_env.py --outdir gemma4-agent/kaggle_results/gemma4-train-probe --image competition --phase train --max-wait-minutes 90 2>&1 | tee gemma4-agent/kaggle_results/trainprobe-step.log
+            exit "${PIPESTATUS[0]}"
           fi
           if [ "$mode" = "diagnose" ]; then
             echo "Mode: diagnose (CPU only, no GPU quota)"
-            python gemma4-agent/tools/diagnose_gemma4_env.py --outdir gemma4-agent/kaggle_results/gemma4-env-competition --image competition --max-wait-minutes 40
-            exit $?
+            python gemma4-agent/tools/diagnose_gemma4_env.py --outdir gemma4-agent/kaggle_results/gemma4-env-competition --image competition --max-wait-minutes 40 2>&1 | tee gemma4-agent/kaggle_results/diagnose-step.log
+            exit "${PIPESTATUS[0]}"
           fi
           if [ "$mode" = "full" ]; then
             outdir=gemma4-agent/kaggle_results/sft-full
