@@ -104,3 +104,41 @@ An adapter is one lever and it is not free: it changes the model under every pro
 measured, so V5's 0.13 is not a valid baseline for it. The empty-tree problem (7/30 in the V7-c
 screen, 4 of them ending well before the clock) is an agent-behaviour problem and stays with V7-b
 and its successors. The two can be combined later, but not in the same measured step.
+
+
+## GPU results, same day (four kernels, ~4 h of quota)
+
+| run | what it did | result |
+| --- | --- | --- |
+| canary (load + 5 steps) | `AutoModelForImageTextToText` on 4xL4 | loaded in **196 s** at 4.7-4.9 GB per GPU |
+| canary (first forward) | compressed-tensors decompresses packed weights to bf16 | **OOM**, 442 MiB short on GPU 1 (21.9/22 GB) |
+| mount #1 | `VllmServer` with the adapter | died in CUDA-graph capture, 13 MiB free |
+| mount #2 | same, `--enforce-eager`, 4096 ctx, 0.80 | **`No adapter found for /kaggle/working/main_lora`** - the serve cell never wrote one |
+| mount #3 | same, with a zero-initialised adapter written by the cell | **server healthy, adapter mounted** |
+
+The last row is the one that matters: `server.start()` does not return until vLLM's health endpoint
+answers, and vLLM loads static LoRA modules during initialisation - the previous run proved that a
+bad adapter kills startup outright. A submission that ships `adapters/main_lora/` and declares
+`adapter: main_lora` will be served with the adapter attached.
+
+The HTTP check in that run returned 404 only because `VllmServer.base_url` already ends in `/v1`
+and the cell appended `/v1` again; the server itself was up.
+
+## What training the 31B actually costs
+
+`compressed-tensors` registers a pre-forward hook that decompresses **the whole model** to bf16 on
+the first forward: 62 GB, plus the 17 GB of packed weights still resident while it runs. On 4x24 GB
+that is 442 MiB over the line, and on a CPU kernel (29 GB RAM) it cannot fit at all. `peft` is not
+an option either: the text layers are compressed-tensors `Linear` objects with no `.weight`, so its
+`_create_new_module` rejects them outright (`Gemma4ClippableLinear` for the vision tower,
+`Linear` with `weight_packed` for the text).
+
+Trained adapters therefore need a streaming loader: decompress one decoder layer at a time on CPU,
+move it to its GPU, free the packed copy, then clear the hook. That is a real piece of engineering
+(est. 2-4 h of quota to get right) on top of a training set whose value is unproven.
+
+## Decision point
+
+The lever is proven to exist end to end; the remaining question is whether spending ~3 h of the
+~7 h left on a streaming-decompression trainer is better than spending it on the conversion
+problem that the V7-c screen actually measured (7/30 empty trees).
