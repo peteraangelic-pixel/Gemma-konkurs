@@ -1,0 +1,21 @@
+{
+  "competition": "gemma-4-developer-agent",
+  "filename": "submission.zip",
+  "message": "V7b",
+  "sha256_expected": "e35f20ab1361450d1877010188620d130117e657492a7b48d2c49d681086886e",
+  "status": "daily_slot_guard_blocked",
+  "official_submission_requested": true,
+  "sha256_actual": "e35f20ab1361450d1877010188620d130117e657492a7b48d2c49d681086886e",
+  "submission_created": false,
+  "recent_submission": {
+    "ref": "57247888",
+    "file_name": "submission.zip",
+    "date": "2026-10-16 00:05:07.063000",
+    "description": "V6.12",
+    "status": "SubmissionStatus.COMPLETE",
+    "public_score": "0.08",
+    "private_score": ""
+  },
+  "daily_slot_guard": "One submission today or within the last 24 hours was found; no upload attempted.",
+  "checked_utc": "2026-10-17T00:05:05+00:00"
+}
