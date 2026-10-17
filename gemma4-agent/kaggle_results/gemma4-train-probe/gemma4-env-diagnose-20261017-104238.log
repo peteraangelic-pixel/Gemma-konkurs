@@ -1,0 +1,319 @@
+[{"stream_name":"stderr","time":10.513657362,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":10.513758282,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":10.513764722,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":10.513768272,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":11.237138332,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":11.237173903,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":11.237177292,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":11.237179512,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stdout","time":221.481886452,"data":"{\n"}
+,{"stream_name":"stdout","time":221.481920072,"data":"  \"python\": \"3.12.13\",\n"}
+,{"stream_name":"stdout","time":221.481926842,"data":"  \"wheelhouse_mounted\": true,\n"}
+,{"stream_name":"stdout","time":221.481931782,"data":"  \"wheel_count\": 41,\n"}
+,{"stream_name":"stdout","time":221.481936852,"data":"  \"wheels\": [\n"}
+,{"stream_name":"stdout","time":221.481941912,"data":"    \"adk_eval_core-0.1.0-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":221.481946852,"data":"    \"adk_submission-0.2.13-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":221.481974012,"data":"    \"anthropic-1.4.0-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":221.481981992,"data":"    \"apache_tvm_ffi-0.1.13.post3-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":221.481986992,"data":"    \"astor-0.8.1-py2.py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":221.481991562,"data":"    \"bitsandbytes-0.46.1-py3-none-manylinux_2_24_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":221.481996522,"data":"    \"cbor2-6.1.4-cp312-cp312-manylinux_2_28_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":221.482001312,"data":"    \"compressed_tensors-0.15.0.1-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":221.482007072,"data":"    \"depyf-0.20.0-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":221.482012802,"data":"    \"diskcache-5.6.3-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":221.482017582,"data":"    \"flashinfer_cubin-0.6.6-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":221.482022282,"data":"    \"flashinfer_python-0.6.6-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":221.482027342,"data":"    \"gguf-0.19.0-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":221.482032153,"data":"    \"google_adk-1.36.1-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":221.482037122,"data":"    \"google_genai-2.11.0-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":221.482041742,"data":"    \"ijson-3.5.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":221.482046322,"data":"    \"interegular-0.3.3-py37-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":221.482050753,"data":"    \"llguidance-1.3.0-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":221.482055132,"data":"    \"lm_format_enforcer-0.11.3-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":221.482059652,"data":"    \"loguru-0.7.3-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":221.482074372,"data":"    \"mistral_common-1.11.7-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":221.482078122,"data":"    \"model_hosting_container_standards-0.1.16-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":221.482081832,"data":"    \"msgspec-0.21.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":221.482085252,"data":"    \"nvidia_cudnn_frontend-1.18.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":221.482088862,"data":"    \"openai_harmony-0.0.8-cp38-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":221.482092492,"data":"    \"opentelemetry_exporter_otlp-1.44.0-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":221.482095982,"data":"    \"opentelemetry_semantic_conventions_ai-0.5.1-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":221.482099472,"data":"    \"outlines_core-0.2.11-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":221.482102992,"data":"    \"partial_json_parser-0.2.1.1.post7-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":221.482106352,"data":"    \"prometheus_fastapi_instrumentator-8.1.0-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":221.482109822,"data":"    \"pybase64-1.5.0-cp312-cp312-manylinux1_x86_64.manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_5_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":221.482113442,"data":"    \"pycountry-26.2.16-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":221.482119822,"data":"    \"pydantic_extra_types-2.11.2-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":221.482123212,"data":"    \"quack_kernels-0.6.4-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":221.482126592,"data":"    \"safetensors-0.8.0-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":221.482130842,"data":"    \"setproctitle-1.3.7-cp312-cp312-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":221.482134502,"data":"    \"swegemma-0.2.11-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":221.482137992,"data":"    \"tokenizers-0.22.2-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":221.482141522,"data":"    \"transformers-5.13.1-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":221.482144612,"data":"    \"vllm-0.19.1-cp38-abi3-manylinux_2_31_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":221.482148622,"data":"    \"xgrammar-0.2.5.post1-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl\"\n"}
+,{"stream_name":"stdout","time":221.482151962,"data":"  ],\n"}
+,{"stream_name":"stdout","time":221.482155122,"data":"  \"before_install\": {\n"}
+,{"stream_name":"stdout","time":221.482158392,"data":"    \"torch\": \"2.10.0+cu128\",\n"}
+,{"stream_name":"stdout","time":221.482161552,"data":"    \"transformers\": \"5.0.0\",\n"}
+,{"stream_name":"stdout","time":221.482165312,"data":"    \"peft\": \"0.19.1\",\n"}
+,{"stream_name":"stdout","time":221.482168692,"data":"    \"trl\": \"NOT IMPORTABLE (ModuleNotFoundError)\",\n"}
+,{"stream_name":"stdout","time":221.482172263,"data":"    \"vllm\": \"NOT IMPORTABLE (ModuleNotFoundError)\",\n"}
+,{"stream_name":"stdout","time":221.482175643,"data":"    \"swegemma\": \"NOT IMPORTABLE (ModuleNotFoundError)\",\n"}
+,{"stream_name":"stdout","time":221.482179183,"data":"    \"adk_submission\": \"NOT IMPORTABLE (ModuleNotFoundError)\",\n"}
+,{"stream_name":"stdout","time":221.482182912,"data":"    \"accelerate\": \"1.13.0\",\n"}
+,{"stream_name":"stdout","time":221.482186112,"data":"    \"datasets\": \"5.0.0\",\n"}
+,{"stream_name":"stdout","time":221.482194752,"data":"    \"bitsandbytes\": \"NOT IMPORTABLE (ModuleNotFoundError)\",\n"}
+,{"stream_name":"stdout","time":221.482198392,"data":"    \"safetensors\": \"0.7.0\",\n"}
+,{"stream_name":"stdout","time":221.482201892,"data":"    \"compressed_tensors\": \"NOT IMPORTABLE (ModuleNotFoundError)\"\n"}
+,{"stream_name":"stdout","time":221.482205703,"data":"  },\n"}
+,{"stream_name":"stdout","time":221.482209112,"data":"  \"install_returncode\": 0,\n"}
+,{"stream_name":"stdout","time":221.482216722,"data":"  \"install_stdout_tail\": \"sting installation: google-genai 1.68.0\\n    Uninstalling google-genai-1.68.0:\\n      Successfully uninstalled google-genai-1.68.0\\n  Attempting uninstall: google-adk\\n    Found existing installation: google-adk 1.29.0\\n    Uninstalling google-adk-1.29.0:\\n      Successfully uninstalled google-adk-1.29.0\\nSuccessfully installed adk-eval-core-0.1.0 adk-submission-0.2.13 anthropic-1.4.0 apache-tvm-ffi-0.1.13.post3 astor-0.8.1 bitsandbytes-0.46.1 cbor2-6.1.4 compressed-tensors-0.15.0.1 depyf-0.20.0 diskcache-5.6.3 flashinfer-cubin-0.6.6 flashinfer-python-0.6.6 gguf-0.19.0 google-adk-1.36.1 google-genai-2.11.0 ijson-3.5.1 interegular-0.3.3 llguidance-1.3.0 lm-format-enforcer-0.11.3 loguru-0.7.3 mistral-common-1.11.7 model-hosting-container-standards-0.1.16 msgspec-0.21.1 nvidia-cudnn-frontend-1.18.0 openai-harmony-0.0.8 opentelemetry-exporter-otlp-1.44.0 opentelemetry-semantic-conventions-ai-0.5.1 outlines-core-0.2.11 partial-json-parser-0.2.1.1.post7 prometheus-fastapi-instrumentator-8.1.0 pybase64-1.5.0 pycountry-26.2.16 pydantic-extra-types-2.11.2 quack-kernels-0.6.4 safetensors-0.8.0 setproctitle-1.3.7 swegemma-0.2.11 tokenizers-0.22.2 transformers-5.13.1 vllm-0.19.1 xgrammar-0.2.5.post1\\n\",\n"}
+,{"stream_name":"stdout","time":221.482228192,"data":"  \"install_stderr_tail\": \"\",\n"}
+,{"stream_name":"stdout","time":221.482231582,"data":"  \"after_install\": {\n"}
+,{"stream_name":"stdout","time":221.482234872,"data":"    \"torch\": \"2.10.0+cu128\",\n"}
+,{"stream_name":"stdout","time":221.482238212,"data":"    \"transformers\": \"5.13.1\",\n"}
+,{"stream_name":"stdout","time":221.482241542,"data":"    \"peft\": \"0.19.1\",\n"}
+,{"stream_name":"stdout","time":221.482245362,"data":"    \"trl\": \"NOT IMPORTABLE (ModuleNotFoundError)\",\n"}
+,{"stream_name":"stdout","time":221.482249122,"data":"    \"vllm\": \"0.19.1\",\n"}
+,{"stream_name":"stdout","time":221.482252352,"data":"    \"swegemma\": \"0.2.11\",\n"}
+,{"stream_name":"stdout","time":221.482255412,"data":"    \"adk_submission\": \"0.2.13\",\n"}
+,{"stream_name":"stdout","time":221.482258532,"data":"    \"accelerate\": \"1.13.0\",\n"}
+,{"stream_name":"stdout","time":221.482261752,"data":"    \"datasets\": \"5.0.0\",\n"}
+,{"stream_name":"stdout","time":221.482265102,"data":"    \"bitsandbytes\": \"0.46.1\",\n"}
+,{"stream_name":"stdout","time":221.482268462,"data":"    \"safetensors\": \"0.8.0\",\n"}
+,{"stream_name":"stdout","time":221.482271792,"data":"    \"compressed_tensors\": \"0.15.0.1\"\n"}
+,{"stream_name":"stdout","time":221.482275342,"data":"  },\n"}
+,{"stream_name":"stdout","time":221.482278752,"data":"  \"model_dir\": true,\n"}
+,{"stream_name":"stdout","time":221.482281992,"data":"  \"model_files\": [\n"}
+,{"stream_name":"stdout","time":221.482285502,"data":"    \"README.md\",\n"}
+,{"stream_name":"stdout","time":221.482288912,"data":"    \"chat_template.jinja\",\n"}
+,{"stream_name":"stdout","time":221.482292142,"data":"    \"config.json\",\n"}
+,{"stream_name":"stdout","time":221.482295412,"data":"    \"generation_config.json\",\n"}
+,{"stream_name":"stdout","time":221.482309693,"data":"    \"model.safetensors\",\n"}
+,{"stream_name":"stdout","time":221.482321433,"data":"    \"processor_config.json\",\n"}
+,{"stream_name":"stdout","time":221.482325233,"data":"    \"tokenizer.json\",\n"}
+,{"stream_name":"stdout","time":221.482328462,"data":"    \"tokenizer_config.json\"\n"}
+,{"stream_name":"stdout","time":221.482331853,"data":"  ],\n"}
+,{"stream_name":"stdout","time":221.482335042,"data":"  \"config_model_type\": \"gemma4\",\n"}
+,{"stream_name":"stdout","time":221.482339673,"data":"  \"config_architectures\": [\n"}
+,{"stream_name":"stdout","time":221.482343253,"data":"    \"Gemma4ForConditionalGeneration\"\n"}
+,{"stream_name":"stdout","time":221.482346642,"data":"  ],\n"}
+,{"stream_name":"stdout","time":221.482349873,"data":"  \"config_keys\": [\n"}
+,{"stream_name":"stdout","time":221.482352993,"data":"    \"architectures\",\n"}
+,{"stream_name":"stdout","time":221.482356373,"data":"    \"audio_config\",\n"}
+,{"stream_name":"stdout","time":221.482359613,"data":"    \"audio_token_id\",\n"}
+,{"stream_name":"stdout","time":221.482362762,"data":"    \"boa_token_id\",\n"}
+,{"stream_name":"stdout","time":221.482365882,"data":"    \"boi_token_id\",\n"}
+,{"stream_name":"stdout","time":221.482368833,"data":"    \"dtype\",\n"}
+,{"stream_name":"stdout","time":221.482371662,"data":"    \"eoa_token_id\",\n"}
+,{"stream_name":"stdout","time":221.482374602,"data":"    \"eoa_token_index\",\n"}
+,{"stream_name":"stdout","time":221.482377522,"data":"    \"eoi_token_id\",\n"}
+,{"stream_name":"stdout","time":221.482380382,"data":"    \"eos_token_id\",\n"}
+,{"stream_name":"stdout","time":221.482383392,"data":"    \"hidden_act\",\n"}
+,{"stream_name":"stdout","time":221.482386392,"data":"    \"hidden_size\",\n"}
+,{"stream_name":"stdout","time":221.482389732,"data":"    \"image_token_id\",\n"}
+,{"stream_name":"stdout","time":221.482393352,"data":"    \"initializer_range\",\n"}
+,{"stream_name":"stdout","time":221.482396702,"data":"    \"intermediate_size\",\n"}
+,{"stream_name":"stdout","time":221.482400142,"data":"    \"model_type\",\n"}
+,{"stream_name":"stdout","time":221.482403552,"data":"    \"moe_intermediate_size\",\n"}
+,{"stream_name":"stdout","time":221.482407122,"data":"    \"num_experts\",\n"}
+,{"stream_name":"stdout","time":221.482410292,"data":"    \"num_experts_per_tok\",\n"}
+,{"stream_name":"stdout","time":221.482413862,"data":"    \"quantization_config\",\n"}
+,{"stream_name":"stdout","time":221.482417332,"data":"    \"text_config\",\n"}
+,{"stream_name":"stdout","time":221.482420682,"data":"    \"tie_word_embeddings\",\n"}
+,{"stream_name":"stdout","time":221.482424052,"data":"    \"transformers_version\",\n"}
+,{"stream_name":"stdout","time":221.482427462,"data":"    \"video_token_id\",\n"}
+,{"stream_name":"stdout","time":221.482430622,"data":"    \"vision_config\"\n"}
+,{"stream_name":"stdout","time":221.482433812,"data":"  ],\n"}
+,{"stream_name":"stdout","time":221.482437072,"data":"  \"autoconfig_plain\": \"OK (Gemma4Config)\",\n"}
+,{"stream_name":"stdout","time":221.482440663,"data":"  \"transformers_gemma_dirs\": [\n"}
+,{"stream_name":"stdout","time":221.482444023,"data":"    \"gemma\",\n"}
+,{"stream_name":"stdout","time":221.482447203,"data":"    \"gemma2\",\n"}
+,{"stream_name":"stdout","time":221.482451263,"data":"    \"gemma3\",\n"}
+,{"stream_name":"stdout","time":221.482454932,"data":"    \"gemma3n\",\n"}
+,{"stream_name":"stdout","time":221.482458263,"data":"    \"gemma4\",\n"}
+,{"stream_name":"stdout","time":221.482461732,"data":"    \"gemma4_assistant\",\n"}
+,{"stream_name":"stdout","time":221.482465172,"data":"    \"gemma4_unified\",\n"}
+,{"stream_name":"stdout","time":221.482473592,"data":"    \"gemma4_unified_assistant\"\n"}
+,{"stream_name":"stdout","time":221.482477223,"data":"  ],\n"}
+,{"stream_name":"stdout","time":221.482480383,"data":"  \"transformers_version_loaded\": \"5.13.1\",\n"}
+,{"stream_name":"stdout","time":221.482483852,"data":"  \"transformers_like_wheels\": [\n"}
+,{"stream_name":"stdout","time":221.482487192,"data":"    \"adk_eval_core-0.1.0-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":221.482490683,"data":"    \"adk_submission-0.2.13-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":221.482495103,"data":"    \"google_adk-1.36.1-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":221.482498512,"data":"    \"swegemma-0.2.11-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":221.482502092,"data":"    \"transformers-5.13.1-py3-none-any.whl\"\n"}
+,{"stream_name":"stdout","time":221.482505383,"data":"  ]\n"}
+,{"stream_name":"stdout","time":221.482508763,"data":"}\n"}
+,{"stream_name":"stderr","time":223.574067127,"data":"\rCompressing model:   0%|          | 0/1763 [00:00\u003c?, ?it/s]\n"}
+,{"stream_name":"stderr","time":223.676148649,"data":"\rCompressing model:   0%|          | 0/1763 [00:00\u003c?, ?it/s]\rCompressing model:  43%|████▎     | 753/1763 [00:00\u003c00:00, 7443.90it/s]\n"}
+,{"stream_name":"stderr","time":224.276223307,"data":"\rCompressing model:  43%|████▎     | 753/1763 [00:00\u003c00:00, 7443.90it/s]\rCompressing model:  85%|████████▍ | 1498/1763 [00:00\u003c00:00, 1895.54it/s]\n"}
+,{"stream_name":"stderr","time":224.513473321,"data":"\rCompressing model:  85%|████████▍ | 1498/1763 [00:00\u003c00:00, 1895.54it/s]\rCompressing model: 100%|██████████| 1763/1763 [00:00\u003c00:00, 1942.28it/s]\n"}
+,{"stream_name":"stderr","time":224.713041234,"data":"\rCompressing model: 100%|██████████| 1763/1763 [00:00\u003c00:00, 1942.28it/s]\n"}
+,{"stream_name":"stderr","time":224.713077364,"data":"\n"}
+,{"stream_name":"stderr","time":224.713081494,"data":"\n"}
+,{"stream_name":"stderr","time":252.624827842,"data":"The installed version of bitsandbytes was compiled without GPU support. 8-bit optimizers and GPU quantization are unavailable.\n"}
+,{"stream_name":"stderr","time":252.624856182,"data":"\n"}
+,{"stream_name":"stderr","time":252.624860222,"data":"The installed version of bitsandbytes was compiled without GPU support. 8-bit optimizers and GPU quantization are unavailable.\n"}
+,{"stream_name":"stdout","time":253.017638969,"data":"{\n"}
+,{"stream_name":"stdout","time":253.017670279,"data":"  \"model_dir\": true,\n"}
+,{"stream_name":"stdout","time":253.017676109,"data":"  \"quantization_config\": {\n"}
+,{"stream_name":"stdout","time":253.017680939,"data":"    \"config_groups\": {\n"}
+,{"stream_name":"stdout","time":253.017715599,"data":"      \"group_0\": {\n"}
+,{"stream_name":"stdout","time":253.017721449,"data":"        \"format\": \"pack-quantized\",\n"}
+,{"stream_name":"stdout","time":253.017726019,"data":"        \"input_activations\": null,\n"}
+,{"stream_name":"stdout","time":253.017730819,"data":"        \"output_activations\": null,\n"}
+,{"stream_name":"stdout","time":253.017735569,"data":"        \"targets\": [\n"}
+,{"stream_name":"stdout","time":253.017741169,"data":"          \"Linear\"\n"}
+,{"stream_name":"stdout","time":253.017746019,"data":"        ],\n"}
+,{"stream_name":"stdout","time":253.017750589,"data":"        \"weights\": {\n"}
+,{"stream_name":"stdout","time":253.017755169,"data":"          \"actorder\": null,\n"}
+,{"stream_name":"stdout","time":253.017759699,"data":"          \"block_structure\": null,\n"}
+,{"stream_name":"stdout","time":253.017774839,"data":"          \"dynamic\": false,\n"}
+,{"stream_name":"stdout","time":253.017778369,"data":"          \"group_size\": 32,\n"}
+,{"stream_name":"stdout","time":253.017781789,"data":"          \"num_bits\": 4,\n"}
+,{"stream_name":"stdout","time":253.017785369,"data":"          \"observer\": \"memoryless_minmax\",\n"}
+,{"stream_name":"stdout","time":253.017788829,"data":"          \"observer_kwargs\": {},\n"}
+,{"stream_name":"stdout","time":253.017792429,"data":"          \"scale_dtype\": null,\n"}
+,{"stream_name":"stdout","time":253.017795999,"data":"          \"strategy\": \"group\",\n"}
+,{"stream_name":"stdout","time":253.017799659,"data":"          \"symmetric\": true,\n"}
+,{"stream_name":"stdout","time":253.017803839,"data":"          \"type\": \"int\",\n"}
+,{"stream_name":"stdout","time":253.017807499,"data":"          \"zp_dtype\": null\n"}
+,{"stream_name":"stdout","time":253.017810609,"data":"        }\n"}
+,{"stream_name":"stdout","time":253.017813999,"data":"      }\n"}
+,{"stream_name":"stdout","time":253.017817149,"data":"    },\n"}
+,{"stream_name":"stdout","time":253.017820509,"data":"    \"format\": \"pack-quantized\",\n"}
+,{"stream_name":"stdout","time":253.017824109,"data":"    \"global_compression_ratio\": null,\n"}
+,{"stream_name":"stdout","time":253.017827849,"data":"    \"ignore\": [\n"}
+,{"stream_name":"stdout","time":253.017831239,"data":"      \"model.vision_tower.patch_embedder.input_proj\",\n"}
+,{"stream_name":"stdout","time":253.017834699,"data":"      \"model.vision_tower.encoder.layers.0.self_attn.q_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.017838359,"data":"      \"model.vision_tower.encoder.layers.0.self_attn.k_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.017841779,"data":"      \"model.vision_tower.encoder.layers.0.self_attn.v_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.017845499,"data":"      \"model.vision_tower.encoder.layers.0.self_attn.o_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.017849329,"data":"      \"model.vision_tower.encoder.layers.0.mlp.gate_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.017853039,"data":"      \"model.vision_tower.encoder.layers.0.mlp.up_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.017856339,"data":"      \"model.vision_tower.encoder.layers.0.mlp.down_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.017859579,"data":"      \"model.vision_tower.encoder.layers.1.self_attn.q_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.017862479,"data":"      \"model.vision_tower.encoder.layers.1.self_attn.k_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.017865679,"data":"      \"model.vision_tower.encoder.layers.1.self_attn.v_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.017869049,"data":"      \"model.vision_tower.encoder.layers.1.self_attn.o_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.017872469,"data":"      \"model.vision_tower.encoder.layers.1.mlp.gate_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.017875719,"data":"      \"model.vision_tower.encoder.layers.1.mlp.up_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.017879149,"data":"      \"model.vision_tower.encoder.layers.1.mlp.down_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.017882659,"data":"      \"model.vision_tower.encoder.layers.2.self_attn.q_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.017886169,"data":"      \"model.vision_tower.encoder.layers.2.self_attn.k_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.017889289,"data":"      \"model.vision_tower.encoder.layers.2.self_attn.v_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.017897529,"data":"      \"model.vision_tower.encoder.layers.2.self_attn.o_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.017902899,"data":"      \"model.vision_tower.encoder.layers.2.mlp.gate_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.017906299,"data":"      \"model.vision_tower.encoder.layers.2.mlp.up_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.017909529,"data":"      \"model.vision_tower.encoder.layers.2.mlp.down_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.017913219,"data":"      \"model.vision_tower.encoder.layers.3.self_attn.q_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.017916679,"data":"      \"model.vision_tower.encoder.layers.3.self_attn.k_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.017920329,"data":"      \"model.vision_tower.encoder.layers.3.self_attn.v_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.017923739,"data":"      \"model.vision_tower.encoder.layers.3.self_attn.o_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.017926809,"data":"      \"model.vision_tower.encoder.layers.3.mlp.gate_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.017930229,"data":"      \"model.vision_tower.encoder.layers.3.mlp.up_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.017933349,"data":"      \"model.vision_tower.encoder.layers.3.mlp.down_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.017936549,"data":"      \"model.vision_tower.encoder.layers.4.self_attn.q_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.017939749,"data":"      \"model.vision_tower.encoder.layers.4.self_attn.k_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.017942969,"data":"      \"model.vision_tower.encoder.layers.4.self_attn.v_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.017946369,"data":"      \"model.vision_tower.encoder.layers.4.self_attn.o_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.017949939,"data":"      \"model.vision_tower.encoder.layers.4.mlp.gate_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.017974199,"data":"      \"model.vision_tower.encoder.layers.4.mlp.up_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.017977839,"data":"      \"model.vision_tower.encoder.layers.4.mlp.down_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.017981299,"data":"      \"model.vision_tower.encoder.layers.5.self_attn.q_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.017984459,"data":"      \"model.vision_tower.encoder.layers.5.self_attn.k_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.017987709,"data":"      \"model.vision_tower.encoder.layers.5.self_attn.v_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.017991269,"data":"      \"model.vision_tower.encoder.layers.5.self_attn.o_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.017994619,"data":"      \"model.vision_tower.encoder.layers.5.mlp.gate_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.017997569,"data":"      \"model.vision_tower.encoder.layers.5.mlp.up_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018000669,"data":"      \"model.vision_tower.encoder.layers.5.mlp.down_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018003909,"data":"      \"model.vision_tower.encoder.layers.6.self_attn.q_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018007129,"data":"      \"model.vision_tower.encoder.layers.6.self_attn.k_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018010859,"data":"      \"model.vision_tower.encoder.layers.6.self_attn.v_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018014429,"data":"      \"model.vision_tower.encoder.layers.6.self_attn.o_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018022729,"data":"      \"model.vision_tower.encoder.layers.6.mlp.gate_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018026069,"data":"      \"model.vision_tower.encoder.layers.6.mlp.up_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018030239,"data":"      \"model.vision_tower.encoder.layers.6.mlp.down_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018033849,"data":"      \"model.vision_tower.encoder.layers.7.self_attn.q_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018037769,"data":"      \"model.vision_tower.encoder.layers.7.self_attn.k_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018040899,"data":"      \"model.vision_tower.encoder.layers.7.self_attn.v_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018044259,"data":"      \"model.vision_tower.encoder.layers.7.self_attn.o_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018048229,"data":"      \"model.vision_tower.encoder.layers.7.mlp.gate_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018051629,"data":"      \"model.vision_tower.encoder.layers.7.mlp.up_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018054859,"data":"      \"model.vision_tower.encoder.layers.7.mlp.down_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018058539,"data":"      \"model.vision_tower.encoder.layers.8.self_attn.q_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018061609,"data":"      \"model.vision_tower.encoder.layers.8.self_attn.k_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018064959,"data":"      \"model.vision_tower.encoder.layers.8.self_attn.v_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018068209,"data":"      \"model.vision_tower.encoder.layers.8.self_attn.o_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018071659,"data":"      \"model.vision_tower.encoder.layers.8.mlp.gate_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018075119,"data":"      \"model.vision_tower.encoder.layers.8.mlp.up_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018078159,"data":"      \"model.vision_tower.encoder.layers.8.mlp.down_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018081109,"data":"      \"model.vision_tower.encoder.layers.9.self_attn.q_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018083989,"data":"      \"model.vision_tower.encoder.layers.9.self_attn.k_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018087279,"data":"      \"model.vision_tower.encoder.layers.9.self_attn.v_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018090789,"data":"      \"model.vision_tower.encoder.layers.9.self_attn.o_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018094529,"data":"      \"model.vision_tower.encoder.layers.9.mlp.gate_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018097469,"data":"      \"model.vision_tower.encoder.layers.9.mlp.up_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018100779,"data":"      \"model.vision_tower.encoder.layers.9.mlp.down_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018104189,"data":"      \"model.vision_tower.encoder.layers.10.self_attn.q_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018107849,"data":"      \"model.vision_tower.encoder.layers.10.self_attn.k_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018111119,"data":"      \"model.vision_tower.encoder.layers.10.self_attn.v_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018114679,"data":"      \"model.vision_tower.encoder.layers.10.self_attn.o_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018118109,"data":"      \"model.vision_tower.encoder.layers.10.mlp.gate_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018121549,"data":"      \"model.vision_tower.encoder.layers.10.mlp.up_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018129949,"data":"      \"model.vision_tower.encoder.layers.10.mlp.down_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018133559,"data":"      \"model.vision_tower.encoder.layers.11.self_attn.q_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018136539,"data":"      \"model.vision_tower.encoder.layers.11.self_attn.k_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018140329,"data":"      \"model.vision_tower.encoder.layers.11.self_attn.v_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018143669,"data":"      \"model.vision_tower.encoder.layers.11.self_attn.o_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018146879,"data":"      \"model.vision_tower.encoder.layers.11.mlp.gate_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018149949,"data":"      \"model.vision_tower.encoder.layers.11.mlp.up_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018153119,"data":"      \"model.vision_tower.encoder.layers.11.mlp.down_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018156199,"data":"      \"model.vision_tower.encoder.layers.12.self_attn.q_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018159589,"data":"      \"model.vision_tower.encoder.layers.12.self_attn.k_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018162789,"data":"      \"model.vision_tower.encoder.layers.12.self_attn.v_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018165989,"data":"      \"model.vision_tower.encoder.layers.12.self_attn.o_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018169229,"data":"      \"model.vision_tower.encoder.layers.12.mlp.gate_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018172349,"data":"      \"model.vision_tower.encoder.layers.12.mlp.up_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018175819,"data":"      \"model.vision_tower.encoder.layers.12.mlp.down_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018179129,"data":"      \"model.vision_tower.encoder.layers.13.self_attn.q_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018182399,"data":"      \"model.vision_tower.encoder.layers.13.self_attn.k_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018185659,"data":"      \"model.vision_tower.encoder.layers.13.self_attn.v_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018189249,"data":"      \"model.vision_tower.encoder.layers.13.self_attn.o_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018192299,"data":"      \"model.vision_tower.encoder.layers.13.mlp.gate_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018195509,"data":"      \"model.vision_tower.encoder.layers.13.mlp.up_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018198509,"data":"      \"model.vision_tower.encoder.layers.13.mlp.down_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018201449,"data":"      \"model.vision_tower.encoder.layers.14.self_attn.q_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018204489,"data":"      \"model.vision_tower.encoder.layers.14.self_attn.k_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018207729,"data":"      \"model.vision_tower.encoder.layers.14.self_attn.v_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018210989,"data":"      \"model.vision_tower.encoder.layers.14.self_attn.o_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018214409,"data":"      \"model.vision_tower.encoder.layers.14.mlp.gate_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018217719,"data":"      \"model.vision_tower.encoder.layers.14.mlp.up_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018221199,"data":"      \"model.vision_tower.encoder.layers.14.mlp.down_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018229719,"data":"      \"model.vision_tower.encoder.layers.15.self_attn.q_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018233029,"data":"      \"model.vision_tower.encoder.layers.15.self_attn.k_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018236299,"data":"      \"model.vision_tower.encoder.layers.15.self_attn.v_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018240309,"data":"      \"model.vision_tower.encoder.layers.15.self_attn.o_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018243809,"data":"      \"model.vision_tower.encoder.layers.15.mlp.gate_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018247109,"data":"      \"model.vision_tower.encoder.layers.15.mlp.up_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018250249,"data":"      \"model.vision_tower.encoder.layers.15.mlp.down_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018253459,"data":"      \"model.vision_tower.encoder.layers.16.self_attn.q_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018256689,"data":"      \"model.vision_tower.encoder.layers.16.self_attn.k_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018260429,"data":"      \"model.vision_tower.encoder.layers.16.self_attn.v_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018263759,"data":"      \"model.vision_tower.encoder.layers.16.self_attn.o_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018267059,"data":"      \"model.vision_tower.encoder.layers.16.mlp.gate_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018270429,"data":"      \"model.vision_tower.encoder.layers.16.mlp.up_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018273759,"data":"      \"model.vision_tower.encoder.layers.16.mlp.down_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018276949,"data":"      \"model.vision_tower.encoder.layers.17.self_attn.q_proj.linear\",\n"}
+,{"stream_name":"stdout","time":253.018280539,"data":"      \"model.vision_tower.encoder.layers.17.self_attn.k_pr\n"}
+,{"stream_name":"stderr","time":258.491574182,"data":"/usr/local/lib/python3.12/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":258.491616272,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":258.675010668,"data":"/usr/local/lib/python3.12/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":258.675044768,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":259.605295143,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":259.883430473,"data":"[NbConvertApp] Writing 44544 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":262.740269617,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":263.545987184,"data":"[NbConvertApp] Writing 348270 bytes to __results__.html\n"}
+]
