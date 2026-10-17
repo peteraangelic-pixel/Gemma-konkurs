@@ -200,8 +200,11 @@ def patch_notebook(nb: dict, *, smoke: bool, base_dir: str, locator_from: str = 
 
     normalize_notebook(nb)
 
-    # The wheelhouse install must be the FIRST code that touches transformers, so it goes right
-    # after the configuration cell.
+    # The wheelhouse install must be the FIRST code in the notebook. Inserting it after the
+    # preflight cell is what produced the "gemma4 unsupported" wall: the preflight imports
+    # transformers 5.0.0 and safetensors 0.7.0, pip then installs 5.13.1 / 0.8.0 on disk, and the
+    # already-imported modules keep answering - safetensors cannot even be re-imported, because PyO3
+    # refuses a second initialisation per process. Nothing may import either package before this.
     install_index = None
     for index, cell in enumerate(nb["cells"]):
         source = "".join(cell["source"])
@@ -210,7 +213,7 @@ def patch_notebook(nb: dict, *, smoke: bool, base_dir: str, locator_from: str = 
             break
     if install_index is None:
         raise SystemExit("could not find the configuration cell for the wheelhouse install")
-    nb["cells"].insert(install_index + 1, {
+    nb["cells"].insert(0, {
         "cell_type": "code", "execution_count": None, "metadata": {}, "outputs": [],
         "source": WHEELHOUSE_SETUP.splitlines(keepends=True),
     })

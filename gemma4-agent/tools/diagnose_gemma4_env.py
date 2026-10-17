@@ -40,32 +40,44 @@ IMAGE = (
 )
 
 DIAGNOSE = r'''# --- environment report: no GPU, no training, just facts --------------------------------
-import glob, importlib, json, os, subprocess, sys
+import glob, json, os, subprocess, sys, zipfile
 from pathlib import Path
 
-report = {"python": sys.version.split()[0]}
 WH = Path("/kaggle/input/datasets/metric/gemma-4-developer-agent-wheelhouse")
-report["wheelhouse_mounted"] = WH.is_dir()
-try:
-    report["wheels"] = sorted(p.name for p in WH.glob("*.whl"))[:60]
-    report["wheel_count"] = len(list(WH.glob("*.whl")))
-except Exception as exc:
-    report["wheels"] = [f"error: {exc}"]
+MODEL = "/kaggle/input/models/google/gemma-4/other/gemma-4-31b-it-qat-w4a16-ct/2"
+
+# Every version check runs in a SUBPROCESS. Importing transformers or safetensors here, before the
+# wheelhouse is installed, poisons this interpreter: pip replaces the files but not sys.modules, and
+# safetensors cannot even be re-imported afterwards (PyO3 refuses a second initialisation).
+VERSIONS = (
+    "import importlib, json\n"
+    "out = {}\n"
+    "for mod in ('torch', 'transformers', 'peft', 'trl', 'vllm', 'swegemma', 'adk_submission',\n"
+    "            'accelerate', 'datasets', 'bitsandbytes', 'safetensors', 'compressed_tensors'):\n"
+    "    try:\n"
+    "        m = importlib.import_module(mod)\n"
+    "        out[mod] = getattr(m, '__version__', 'imported-no-version')\n"
+    "    except Exception as exc:\n"
+    "        out[mod] = 'NOT IMPORTABLE (' + type(exc).__name__ + ')'\n"
+    "print(json.dumps(out))\n"
+)
+
 
 def versions():
-    out = {}
-    for mod in ("torch", "transformers", "peft", "trl", "vllm", "swegemma", "adk_submission",
-                "accelerate", "datasets", "bitsandbytes", "safetensors"):
-        try:
-            m = importlib.import_module(mod)
-            out[mod] = getattr(m, "__version__", "imported-no-version")
-        except Exception as exc:
-            out[mod] = f"NOT IMPORTABLE ({type(exc).__name__})"
-    return out
+    proc = subprocess.run([sys.executable, "-c", VERSIONS], capture_output=True, text=True)
+    try:
+        return json.loads(proc.stdout.strip().splitlines()[-1])
+    except Exception:
+        return {"error": (proc.stdout + proc.stderr)[-600:]}
 
+
+report = {"python": sys.version.split()[0]}
+report["wheelhouse_mounted"] = WH.is_dir()
+report["wheel_count"] = len(list(WH.glob("*.whl")))
+report["wheels"] = sorted(p.name for p in WH.glob("*.whl"))
 report["before_install"] = versions()
 
-# install the wheelhouse exactly as the scored harness does
+# install the wheelhouse exactly as the scored harness does, before anything imports it
 tmp = Path("/tmp/wheelhouse"); tmp.mkdir(parents=True, exist_ok=True)
 for wheel in WH.glob("*.whl"):
     if "cutlass" in wheel.name.lower():
@@ -79,132 +91,42 @@ if wheels:
     proc = subprocess.run([sys.executable, "-m", "pip", "install", "--no-deps",
                            "--force-reinstall", *wheels], capture_output=True, text=True)
     report["install_returncode"] = proc.returncode
-    report["install_stdout_tail"] = proc.stdout[-1500:]
-    report["install_stderr_tail"] = proc.stderr[-1500:]
-importlib.invalidate_caches()
-# The kernel's own preflight already imported transformers 5.0.0, and pip installing 5.13.1 does
-# not replace a module that is already in sys.modules - that is the entire "gemma4 unsupported"
-# wall. Purge it and import again.
-# Same trap for every wheel-installed package the notebook may have imported already: the stale
-# safetensors 0.7.0 rejected the `backend=` argument that transformers 5.13.1 passes to safe_open,
-# which is what killed the first CPU load attempt.
-_PURGE = ("transformers", "safetensors", "tokenizers", "huggingface_hub", "compressed_tensors",
-          "peft", "accelerate", "bitsandbytes", "vllm")
-_removed = [m for m in list(sys.modules)
-            if any(m == p or m.startswith(p + ".") for p in _PURGE)]
-for _name in _removed:
-    del sys.modules[_name]
-report["purged_modules"] = len(_removed)
+    report["install_stdout_tail"] = proc.stdout[-1200:]
+    report["install_stderr_tail"] = proc.stderr[-1200:]
 report["after_install"] = versions()
 
 # the decisive question: can anything read the model config?
-MODEL = "/kaggle/input/models/google/gemma-4/other/gemma-4-31b-it-qat-w4a16-ct/2"
 report["model_dir"] = Path(MODEL).is_dir()
 try:
     report["model_files"] = sorted(p.name for p in Path(MODEL).iterdir())[:20]
 except Exception as exc:
-    report["model_files"] = [f"error: {exc}"]
+    report["model_files"] = ["error: " + str(exc)]
 try:
     raw = json.loads((Path(MODEL) / "config.json").read_text())
     report["config_model_type"] = raw.get("model_type")
     report["config_architectures"] = raw.get("architectures")
     report["config_keys"] = sorted(raw.keys())[:25]
 except Exception as exc:
-    report["config_error"] = f"{type(exc).__name__}: {exc}"
+    report["config_error"] = type(exc).__name__ + ": " + str(exc)
 
-for label, attempt in (("plain", lambda: __import__("transformers").AutoConfig.from_pretrained(MODEL)),
-                       ("after_swegemma", lambda: (__import__("swegemma"), __import__("transformers").AutoConfig.from_pretrained(MODEL))[1])):
-    try:
-        cfg = attempt()
-        report[f"autoconfig_{label}"] = f"OK ({type(cfg).__name__})"
-    except Exception as exc:
-        report[f"autoconfig_{label}"] = f"{type(exc).__name__}: {str(exc)[:200]}"
-
-# does any transformers module register gemma4?
+import transformers
+cfg = None
 try:
-    import transformers
+    cfg = transformers.AutoConfig.from_pretrained(MODEL)
+    report["autoconfig_plain"] = "OK (" + type(cfg).__name__ + ")"
+except Exception as exc:
+    report["autoconfig_plain"] = type(exc).__name__ + ": " + str(exc)[:200]
+try:
     models_dir = Path(transformers.__file__).parent / "models"
     report["transformers_gemma_dirs"] = sorted(p.name for p in models_dir.glob("gemma*"))
+    report["transformers_version_loaded"] = transformers.__version__
 except Exception as exc:
-    report["transformers_gemma_dirs"] = f"error: {exc}"
+    report["transformers_gemma_dirs"] = "error: " + str(exc)
 
-# what do the wheel filenames say about a transformers fork?
 report["transformers_like_wheels"] = [w for w in report.get("wheels", [])
                                       if any(k in w.lower() for k in ("transformers", "trl", "swegemma", "adk", "peft"))]
 
-# --- what the competition packages actually say -------------------------------------------
-import re, zipfile
-KEY = ("lora", "adapter", "peft", "vllm", "compressed", "quantiz", "max_time_minutes",
-       "timeout_seconds", "max_turns", "max_tool_calls", "adapter_path", "submission")
-probe = {"mounted": str(WH)}
-interfaces = {}
-
-
-def zip_text(wheel, predicate, limit=400000):
-    parts, total = [], 0
-    with zipfile.ZipFile(wheel) as zf:
-        for name in zf.namelist():
-            if not name.endswith(".py") or not predicate(name):
-                continue
-            body = zf.read(name).decode("utf-8", "replace")
-            parts.append("\n\n### FILE " + name + "\n" + body)
-            total += len(body)
-            if total > limit:
-                break
-    return "".join(parts)
-
-
-for wheel in sorted(WH.glob("*.whl")):
-    if not any(k in wheel.name.lower() for k in ("swegemma", "adk_submission", "adk_eval_core", "transformers")):
-        continue
-    entry = {"size": wheel.stat().st_size}
-    try:
-        with zipfile.ZipFile(wheel) as zf:
-            names = zf.namelist()
-        entry["file_count"] = len(names)
-        entry["files"] = [n for n in names if n.endswith(".py")][:120]
-        if wheel.name.startswith("transformers"):
-            entry["gemma4_files"] = [n for n in names if "models/gemma4/" in n][:20]
-            meta = [n for n in names if n.endswith("METADATA")]
-            if meta:
-                entry["metadata_head"] = zf.read(meta[0]).decode("utf-8", "replace")[:300]
-    except Exception as exc:
-        entry["error"] = str(exc)
-    interfaces[wheel.name] = entry
-
-hits = {}
-for wheel in sorted(WH.glob("*.whl")):
-    if not any(k in wheel.name.lower() for k in ("swegemma", "adk_submission", "adk_eval_core")):
-        continue
-    per_wheel = []
-    try:
-        with zipfile.ZipFile(wheel) as zf:
-            for name in zf.namelist():
-                if not name.endswith((".py", ".yaml", ".json", ".md", ".jinja")):
-                    continue
-                body = zf.read(name).decode("utf-8", "replace")
-                low = body.lower()
-                for key in KEY:
-                    at = low.find(key)
-                    if at >= 0:
-                        per_wheel.append({"file": name, "key": key,
-                                          "context": body[max(0, at - 200):at + 260]})
-    except Exception as exc:
-        per_wheel.append({"error": str(exc)})
-    hits[wheel.name] = per_wheel[:160]
-probe["interfaces"] = interfaces
-probe["keyword_hits"] = hits
-Path("/kaggle/working/wheel_probe.json").write_text(json.dumps(probe, indent=2))
-
-swegemma = [w for w in WH.glob("swegemma-*.whl")]
-text = ""
-if swegemma:
-    text = zip_text(swegemma[0], lambda n: True, limit=600000)
-Path("/kaggle/working/swegemma_source.txt").write_text(text)
-
 print(json.dumps(report, indent=2)[:12000])
-print("WHEEL PROBE written:", len(json.dumps(probe)))
-print("SWEGEMMA SOURCE bytes:", len(text))
 Path("/kaggle/working/env_report.json").write_text(json.dumps(report, indent=2))
 '''
 
