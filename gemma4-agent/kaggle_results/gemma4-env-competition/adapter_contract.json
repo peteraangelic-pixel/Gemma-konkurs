@@ -1,0 +1,75 @@
+{
+  "signature_discover_adapters": "(submission_dir: 'str | Path', adapter_extensions: 'frozenset[str] | None' = None) -> 'AdapterManifest'",
+  "adapters": {
+    "main_lora": {
+      "path": "/kaggle/working/fake_submission/adapters/main_lora/adapter_model.safetensors",
+      "rank": 8
+    }
+  },
+  "manifest_type": "AdapterManifest",
+  "signature_validate_directory": "(submission_dir: 'str | Path', limits: 'SubmissionLimits | None' = None) -> 'SubmissionDirectory'",
+  "validate_directory": "SubmissionDirectory(root_dir=PosixPath('/kaggle/working/fake_submission'), config_path=PosixPath('/kaggle/working/fake_submission/agent.yaml'), prompt_files=[PosixPath('/kaggle/working/fake_submission/prompts/system.md')], adapter_files=[PosixPath('/kaggle/working/fake_submission/adapters/main_lora/adapter_model.safetensors')], yaml_files=[PosixPath('/kaggle/working/fake_submission/agent.yaml')], all_files=[PosixPath('/kaggle/working/fake_submission/adapters/main_lora/adapter_config.json'), PosixPath('/kaggle/working/fake_submission/adapters/main_lora/adapter_model.safetensors'), PosixPath('/kaggle/working/fake_submission/agent.yaml'), PosixPath('/kaggle/working/fake_submission/prompts/system.md')])",
+  "agent_yaml_loaded": true,
+  "agent_yaml_keys": [
+    "adapter",
+    "agent_class",
+    "instruction",
+    "model",
+    "name",
+    "tools"
+  ],
+  "schema_fields": [
+    "adapter",
+    "after_agent_callbacks",
+    "after_model_callbacks",
+    "after_tool_callbacks",
+    "agent_class",
+    "before_agent_callbacks",
+    "before_model_callbacks",
+    "before_tool_callbacks",
+    "description",
+    "disallow_transfer_to_parent",
+    "disallow_transfer_to_peers",
+    "generate_content_config",
+    "include_contents",
+    "instruction",
+    "model",
+    "name",
+    "output_key",
+    "skills",
+    "sub_agents",
+    "tools"
+  ],
+  "adapter_resolved": "main_lora",
+  "server_functions": [
+    "_resolve_lora_checkpoint_path",
+    "_round_up_vllm_lora_rank",
+    "dataclass",
+    "field",
+    "infer_adapter_rank",
+    "spawn_server",
+    "spawn_transformers_server",
+    "spawn_vllm_server"
+  ],
+  "server_classes": [
+    "AdapterManifest",
+    "Any",
+    "BaseInferenceServer",
+    "Mapping",
+    "ModelRegistry",
+    "Path",
+    "Sequence",
+    "ServerStartupError",
+    "SubmissionValidationError",
+    "TransformersConfig",
+    "TransformersServer",
+    "VllmConfig",
+    "VllmServer"
+  ],
+  "server_enable_lora": "efaults to 0.90.\n        enable_auto_tool_choice: Whether to enable auto tool choice in vLLM. Defaults to True.\n        enable_lora: Whether to enable LoRA adapter serving. Defaults to True.\n        max_loras: Maximum number of active LoRA adapters simultaneously loaded. Defaults to 1.\n        max_lora_rank: Fallback maximum LoRA rank supported when adapter ",
+  "server_lora_modules": "self,\n        config: TransformersConfig | VllmConfig,\n        adapter_manifest: AdapterManifest | None = None,\n        lora_modules: Mapping[str, str | Path] | None = None,\n    ):\n        self.config = config\n        self.adapter_manifest = adapter_manifest\n        self.lora_modules = dict(lora_modules) if lora_modules else {}\n        self.process: subproce",
+  "server_max_lora_rank": ", 512)\n\n\ndef _round_up_vllm_lora_rank(rank: int) -> int:\n    \"\"\"Round an adapter rank up to the smallest supported vLLM max_lora_rank bucket.\"\"\"\n    for valid_rank in _VALID_VLLM_LORA_RANKS:\n        if valid_rank >= rank:\n            return valid_rank\n    return _VALID_VLLM_LORA_RANKS[-1]\n\n\n@dataclass\nclass TransformersConfig:\n    \"\"\"Configuration options fo",
+  "server_max_loras": "hoice in vLLM. Defaults to True.\n        enable_lora: Whether to enable LoRA adapter serving. Defaults to True.\n        max_loras: Maximum number of active LoRA adapters simultaneously loaded. Defaults to 1.\n        max_lora_rank: Fallback maximum LoRA rank supported when adapter rank cannot be inferred. Defaults to 128.\n        scheduler_reserve_full_isl: W",
+  "server_quantization": ". Defaults to \"auto\".\n        device_map: Device placement strategy for PyTorch/Accelerate. Defaults to \"auto\".\n        quantization: Quantization method (e.g. 'bnb-4bit', 'bnb-8bit'). Defaults to None.\n        extra_args: Additional command-line flags passed directly to transformers serve.\n        startup_timeout: Maximum time in seconds to wait for server ",
+  "server_gemma-4": "bmission.server import TransformersConfig, spawn_transformers_server\n\n        config = TransformersConfig(model=\"google/gemma-4-26b-a4b-it\", port=8000)\n        adapters = discover_adapters(submission_dir)\n\n        with spawn_transformers_server(config, adapter_manifest=adapters) as server:\n            models = server.create_model_registry({\"fast\": \"google/ge"
+}

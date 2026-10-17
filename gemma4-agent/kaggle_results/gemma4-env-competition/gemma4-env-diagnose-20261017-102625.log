@@ -1,0 +1,239 @@
+[{"stream_name":"stderr","time":8.053561853,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":8.053613498,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":8.053620864,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":8.053625665,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":8.789913757,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":8.789949315,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":8.789955204,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":8.789960144,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":128.711967895,"data":"The installed version of bitsandbytes was compiled without GPU support. 8-bit optimizers and GPU quantization are unavailable.\n"}
+,{"stream_name":"stderr","time":128.712001818,"data":"\n"}
+,{"stream_name":"stderr","time":128.712008471,"data":"The installed version of bitsandbytes was compiled without GPU support. 8-bit optimizers and GPU quantization are unavailable.\n"}
+,{"stream_name":"stderr","time":191.254986915,"data":"\u001b[92m10:29:43 - LiteLLM:WARNING\u001b[0m: get_model_cost_map.py:271 - LiteLLM: Failed to fetch remote model cost map from https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json: [Errno -3] Temporary failure in name resolution. Falling back to local backup.\n"}
+,{"stream_name":"stderr","time":191.255024991,"data":"\n"}
+,{"stream_name":"stderr","time":191.255032051,"data":"\u001b[92m10:29:43 - LiteLLM:WARNING\u001b[0m: get_model_cost_map.py:271 - LiteLLM: Failed to fetch remote model cost map from https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json: [Errno -3] Temporary failure in name resolution. Falling back to local backup.\n"}
+,{"stream_name":"stdout","time":196.36190936,"data":"{\n"}
+,{"stream_name":"stdout","time":196.36194802,"data":"  \"python\": \"3.12.13\",\n"}
+,{"stream_name":"stdout","time":196.361955621,"data":"  \"wheelhouse_mounted\": true,\n"}
+,{"stream_name":"stdout","time":196.361961841,"data":"  \"wheels\": [\n"}
+,{"stream_name":"stdout","time":196.361967535,"data":"    \"adk_eval_core-0.1.0-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":196.361973725,"data":"    \"adk_submission-0.2.13-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":196.361980021,"data":"    \"anthropic-1.4.0-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":196.361986334,"data":"    \"apache_tvm_ffi-0.1.13.post3-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":196.361993051,"data":"    \"astor-0.8.1-py2.py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":196.361998609,"data":"    \"bitsandbytes-0.46.1-py3-none-manylinux_2_24_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":196.362004328,"data":"    \"cbor2-6.1.4-cp312-cp312-manylinux_2_28_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":196.362010167,"data":"    \"compressed_tensors-0.15.0.1-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":196.362016555,"data":"    \"depyf-0.20.0-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":196.362022229,"data":"    \"diskcache-5.6.3-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":196.362028053,"data":"    \"flashinfer_cubin-0.6.6-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":196.362049034,"data":"    \"flashinfer_python-0.6.6-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":196.36205427,"data":"    \"gguf-0.19.0-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":196.362058821,"data":"    \"google_adk-1.36.1-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":196.362063371,"data":"    \"google_genai-2.11.0-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":196.362068075,"data":"    \"ijson-3.5.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":196.362073413,"data":"    \"interegular-0.3.3-py37-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":196.362152225,"data":"    \"llguidance-1.3.0-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":196.36215765,"data":"    \"lm_format_enforcer-0.11.3-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":196.362162359,"data":"    \"loguru-0.7.3-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":196.36216781,"data":"    \"mistral_common-1.11.7-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":196.36217239,"data":"    \"model_hosting_container_standards-0.1.16-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":196.362177732,"data":"    \"msgspec-0.21.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":196.362182941,"data":"    \"nvidia_cudnn_frontend-1.18.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":196.362188055,"data":"    \"openai_harmony-0.0.8-cp38-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":196.362193243,"data":"    \"opentelemetry_exporter_otlp-1.44.0-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":196.362198147,"data":"    \"opentelemetry_semantic_conventions_ai-0.5.1-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":196.362203169,"data":"    \"outlines_core-0.2.11-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":196.3622083,"data":"    \"partial_json_parser-0.2.1.1.post7-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":196.362213067,"data":"    \"prometheus_fastapi_instrumentator-8.1.0-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":196.362217874,"data":"    \"pybase64-1.5.0-cp312-cp312-manylinux1_x86_64.manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_5_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":196.362223286,"data":"    \"pycountry-26.2.16-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":196.36224749,"data":"    \"pydantic_extra_types-2.11.2-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":196.362253257,"data":"    \"quack_kernels-0.6.4-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":196.362257978,"data":"    \"safetensors-0.8.0-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":196.362263238,"data":"    \"setproctitle-1.3.7-cp312-cp312-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":196.362268397,"data":"    \"swegemma-0.2.11-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":196.362273209,"data":"    \"tokenizers-0.22.2-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":196.362277972,"data":"    \"transformers-5.13.1-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":196.362282472,"data":"    \"vllm-0.19.1-cp38-abi3-manylinux_2_31_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":196.362287213,"data":"    \"xgrammar-0.2.5.post1-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl\"\n"}
+,{"stream_name":"stdout","time":196.362299772,"data":"  ],\n"}
+,{"stream_name":"stdout","time":196.362308057,"data":"  \"wheel_count\": 41,\n"}
+,{"stream_name":"stdout","time":196.362313295,"data":"  \"before_install\": {\n"}
+,{"stream_name":"stdout","time":196.362318207,"data":"    \"torch\": \"2.10.0+cu128\",\n"}
+,{"stream_name":"stdout","time":196.362323569,"data":"    \"transformers\": \"5.0.0\",\n"}
+,{"stream_name":"stdout","time":196.362328655,"data":"    \"peft\": \"0.19.1\",\n"}
+,{"stream_name":"stdout","time":196.362334701,"data":"    \"trl\": \"NOT IMPORTABLE (ModuleNotFoundError)\",\n"}
+,{"stream_name":"stdout","time":196.36234,"data":"    \"vllm\": \"NOT IMPORTABLE (ModuleNotFoundError)\",\n"}
+,{"stream_name":"stdout","time":196.362345037,"data":"    \"swegemma\": \"NOT IMPORTABLE (ModuleNotFoundError)\",\n"}
+,{"stream_name":"stdout","time":196.362350297,"data":"    \"adk_submission\": \"NOT IMPORTABLE (ModuleNotFoundError)\",\n"}
+,{"stream_name":"stdout","time":196.362355696,"data":"    \"accelerate\": \"1.13.0\",\n"}
+,{"stream_name":"stdout","time":196.362360775,"data":"    \"datasets\": \"5.0.0\",\n"}
+,{"stream_name":"stdout","time":196.362367615,"data":"    \"bitsandbytes\": \"NOT IMPORTABLE (ModuleNotFoundError)\",\n"}
+,{"stream_name":"stdout","time":196.362372873,"data":"    \"safetensors\": \"0.7.0\"\n"}
+,{"stream_name":"stdout","time":196.3623779,"data":"  },\n"}
+,{"stream_name":"stdout","time":196.362382486,"data":"  \"install_returncode\": 0,\n"}
+,{"stream_name":"stdout","time":196.362390793,"data":"  \"install_stdout_tail\": \"nstalling tokenizers-0.22.2:\\n      Successfully uninstalled tokenizers-0.22.2\\n  Attempting uninstall: safetensors\\n    Found existing installation: safetensors 0.7.0\\n    Uninstalling safetensors-0.7.0:\\n      Successfully uninstalled safetensors-0.7.0\\n  Attempting uninstall: google-genai\\n    Found existing installation: google-genai 1.68.0\\n    Uninstalling google-genai-1.68.0:\\n      Successfully uninstalled google-genai-1.68.0\\n  Attempting uninstall: google-adk\\n    Found existing installation: google-adk 1.29.0\\n    Uninstalling google-adk-1.29.0:\\n      Successfully uninstalled google-adk-1.29.0\\nSuccessfully installed adk-eval-core-0.1.0 adk-submission-0.2.13 anthropic-1.4.0 apache-tvm-ffi-0.1.13.post3 astor-0.8.1 bitsandbytes-0.46.1 cbor2-6.1.4 compressed-tensors-0.15.0.1 depyf-0.20.0 diskcache-5.6.3 flashinfer-cubin-0.6.6 flashinfer-python-0.6.6 gguf-0.19.0 google-adk-1.36.1 google-genai-2.11.0 ijson-3.5.1 interegular-0.3.3 llguidance-1.3.0 lm-format-enforcer-0.11.3 loguru-0.7.3 mistral-common-1.11.7 model-hosting-container-standards-0.1.16 msgspec-0.21.1 nvidia-cudnn-frontend-1.18.0 openai-harmony-0.0.8 opentelemetry-exporter-otlp-1.44.0 opentelemetry-semantic-conventions-ai-0.5.1 outlines-core-0.2.11 partial-json-parser-0.2.1.1.post7 prometheus-fastapi-instrumentator-8.1.0 pybase64-1.5.0 pycountry-26.2.16 pydantic-extra-types-2.11.2 quack-kernels-0.6.4 safetensors-0.8.0 setproctitle-1.3.7 swegemma-0.2.11 tokenizers-0.22.2 transformers-5.13.1 vllm-0.19.1 xgrammar-0.2.5.post1\\n\",\n"}
+,{"stream_name":"stdout","time":196.362406749,"data":"  \"install_stderr_tail\": \"\",\n"}
+,{"stream_name":"stdout","time":196.362411803,"data":"  \"purged_modules\": true,\n"}
+,{"stream_name":"stdout","time":196.362416784,"data":"  \"after_install\": {\n"}
+,{"stream_name":"stdout","time":196.36242168,"data":"    \"torch\": \"2.10.0+cu128\",\n"}
+,{"stream_name":"stdout","time":196.362426656,"data":"    \"transformers\": \"5.13.1\",\n"}
+,{"stream_name":"stdout","time":196.362431661,"data":"    \"peft\": \"0.19.1\",\n"}
+,{"stream_name":"stdout","time":196.362436698,"data":"    \"trl\": \"NOT IMPORTABLE (ModuleNotFoundError)\",\n"}
+,{"stream_name":"stdout","time":196.362446067,"data":"    \"vllm\": \"0.19.1\",\n"}
+,{"stream_name":"stdout","time":196.362451177,"data":"    \"swegemma\": \"NOT IMPORTABLE (TypeError)\",\n"}
+,{"stream_name":"stdout","time":196.362456219,"data":"    \"adk_submission\": \"NOT IMPORTABLE (TypeError)\",\n"}
+,{"stream_name":"stdout","time":196.362461295,"data":"    \"accelerate\": \"1.13.0\",\n"}
+,{"stream_name":"stdout","time":196.362466287,"data":"    \"datasets\": \"5.0.0\",\n"}
+,{"stream_name":"stdout","time":196.362471068,"data":"    \"bitsandbytes\": \"0.46.1\",\n"}
+,{"stream_name":"stdout","time":196.362475891,"data":"    \"safetensors\": \"0.7.0\"\n"}
+,{"stream_name":"stdout","time":196.362480788,"data":"  },\n"}
+,{"stream_name":"stdout","time":196.36248544,"data":"  \"model_dir\": true,\n"}
+,{"stream_name":"stdout","time":196.362490357,"data":"  \"model_files\": [\n"}
+,{"stream_name":"stdout","time":196.362494885,"data":"    \"README.md\",\n"}
+,{"stream_name":"stdout","time":196.362499345,"data":"    \"chat_template.jinja\",\n"}
+,{"stream_name":"stdout","time":196.362505019,"data":"    \"config.json\",\n"}
+,{"stream_name":"stdout","time":196.362509913,"data":"    \"generation_config.json\",\n"}
+,{"stream_name":"stdout","time":196.362514832,"data":"    \"model.safetensors\",\n"}
+,{"stream_name":"stdout","time":196.362519815,"data":"    \"processor_config.json\",\n"}
+,{"stream_name":"stdout","time":196.362524428,"data":"    \"tokenizer.json\",\n"}
+,{"stream_name":"stdout","time":196.36252912,"data":"    \"tokenizer_config.json\"\n"}
+,{"stream_name":"stdout","time":196.362533694,"data":"  ],\n"}
+,{"stream_name":"stdout","time":196.36253824,"data":"  \"config_model_type\": \"gemma4\",\n"}
+,{"stream_name":"stdout","time":196.362543285,"data":"  \"config_architectures\": [\n"}
+,{"stream_name":"stdout","time":196.362549136,"data":"    \"Gemma4ForConditionalGeneration\"\n"}
+,{"stream_name":"stdout","time":196.362554183,"data":"  ],\n"}
+,{"stream_name":"stdout","time":196.362558817,"data":"  \"config_keys\": [\n"}
+,{"stream_name":"stdout","time":196.362563622,"data":"    \"architectures\",\n"}
+,{"stream_name":"stdout","time":196.362568677,"data":"    \"audio_config\",\n"}
+,{"stream_name":"stdout","time":196.362573382,"data":"    \"audio_token_id\",\n"}
+,{"stream_name":"stdout","time":196.362577625,"data":"    \"boa_token_id\",\n"}
+,{"stream_name":"stdout","time":196.362582299,"data":"    \"boi_token_id\",\n"}
+,{"stream_name":"stdout","time":196.362586619,"data":"    \"dtype\",\n"}
+,{"stream_name":"stdout","time":196.362591804,"data":"    \"eoa_token_id\",\n"}
+,{"stream_name":"stdout","time":196.36259665,"data":"    \"eoa_token_index\",\n"}
+,{"stream_name":"stdout","time":196.36260132,"data":"    \"eoi_token_id\",\n"}
+,{"stream_name":"stdout","time":196.362606031,"data":"    \"eos_token_id\",\n"}
+,{"stream_name":"stdout","time":196.36261059,"data":"    \"hidden_act\",\n"}
+,{"stream_name":"stdout","time":196.362615019,"data":"    \"hidden_size\",\n"}
+,{"stream_name":"stdout","time":196.362619752,"data":"    \"image_token_id\",\n"}
+,{"stream_name":"stdout","time":196.362624027,"data":"    \"initializer_range\",\n"}
+,{"stream_name":"stdout","time":196.362628527,"data":"    \"intermediate_size\",\n"}
+,{"stream_name":"stdout","time":196.362633364,"data":"    \"model_type\",\n"}
+,{"stream_name":"stdout","time":196.36263788,"data":"    \"moe_intermediate_size\",\n"}
+,{"stream_name":"stdout","time":196.362642841,"data":"    \"num_experts\",\n"}
+,{"stream_name":"stdout","time":196.3626475,"data":"    \"num_experts_per_tok\",\n"}
+,{"stream_name":"stdout","time":196.362656984,"data":"    \"quantization_config\",\n"}
+,{"stream_name":"stdout","time":196.362661532,"data":"    \"text_config\",\n"}
+,{"stream_name":"stdout","time":196.36266634,"data":"    \"tie_word_embeddings\",\n"}
+,{"stream_name":"stdout","time":196.362671206,"data":"    \"transformers_version\",\n"}
+,{"stream_name":"stdout","time":196.362676091,"data":"    \"video_token_id\",\n"}
+,{"stream_name":"stdout","time":196.362680796,"data":"    \"vision_config\"\n"}
+,{"stream_name":"stdout","time":196.362685878,"data":"  ],\n"}
+,{"stream_name":"stdout","time":196.362690456,"data":"  \"autoconfig_plain\": \"OK (Gemma4Config)\",\n"}
+,{"stream_name":"stdout","time":196.362695425,"data":"  \"autoconfig_after_swegemma\": \"OK (Gemma4Config)\",\n"}
+,{"stream_name":"stdout","time":196.362700439,"data":"  \"transformers_gemma_dirs\": [\n"}
+,{"stream_name":"stdout","time":196.36270673,"data":"    \"gemma\",\n"}
+,{"stream_name":"stdout","time":196.362711571,"data":"    \"gemma2\",\n"}
+,{"stream_name":"stdout","time":196.362716044,"data":"    \"gemma3\",\n"}
+,{"stream_name":"stdout","time":196.362720553,"data":"    \"gemma3n\",\n"}
+,{"stream_name":"stdout","time":196.362725358,"data":"    \"gemma4\",\n"}
+,{"stream_name":"stdout","time":196.362729725,"data":"    \"gemma4_assistant\",\n"}
+,{"stream_name":"stdout","time":196.362734467,"data":"    \"gemma4_unified\",\n"}
+,{"stream_name":"stdout","time":196.362739179,"data":"    \"gemma4_unified_assistant\"\n"}
+,{"stream_name":"stdout","time":196.362744283,"data":"  ],\n"}
+,{"stream_name":"stdout","time":196.362749121,"data":"  \"transformers_like_wheels\": [\n"}
+,{"stream_name":"stdout","time":196.362754169,"data":"    \"adk_eval_core-0.1.0-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":196.362759394,"data":"    \"adk_submission-0.2.13-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":196.362764648,"data":"    \"google_adk-1.36.1-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":196.362769844,"data":"    \"swegemma-0.2.11-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":196.362774724,"data":"    \"transformers-5.13.1-py3-none-any.whl\"\n"}
+,{"stream_name":"stdout","time":196.362780115,"data":"  ]\n"}
+,{"stream_name":"stdout","time":196.362784631,"data":"}\n"}
+,{"stream_name":"stdout","time":196.362788903,"data":"WHEEL PROBE written: 59619\n"}
+,{"stream_name":"stdout","time":196.362793332,"data":"SWEGEMMA SOURCE bytes: 478691\n"}
+,{"stream_name":"stdout","time":196.402161796,"data":"{\n"}
+,{"stream_name":"stdout","time":196.402193273,"data":"  \"signature_discover_adapters\": \"(submission_dir: 'str | Path', adapter_extensions: 'frozenset[str] | None' = None) -\u003e 'AdapterManifest'\",\n"}
+,{"stream_name":"stdout","time":196.402200157,"data":"  \"adapters\": {\n"}
+,{"stream_name":"stdout","time":196.402205166,"data":"    \"main_lora\": {\n"}
+,{"stream_name":"stdout","time":196.402210169,"data":"      \"path\": \"/kaggle/working/fake_submission/adapters/main_lora/adapter_model.safetensors\",\n"}
+,{"stream_name":"stdout","time":196.402216167,"data":"      \"rank\": 8\n"}
+,{"stream_name":"stdout","time":196.402220382,"data":"    }\n"}
+,{"stream_name":"stdout","time":196.402223429,"data":"  },\n"}
+,{"stream_name":"stdout","time":196.402249057,"data":"  \"manifest_type\": \"AdapterManifest\",\n"}
+,{"stream_name":"stdout","time":196.402256859,"data":"  \"signature_validate_directory\": \"(submission_dir: 'str | Path', limits: 'SubmissionLimits | None' = None) -\u003e 'SubmissionDirectory'\",\n"}
+,{"stream_name":"stdout","time":196.40226642,"data":"  \"validate_directory\": \"SubmissionDirectory(root_dir=PosixPath('/kaggle/working/fake_submission'), config_path=PosixPath('/kaggle/working/fake_submission/agent.yaml'), prompt_files=[PosixPath('/kaggle/working/fake_submission/prompts/system.md')], adapter_files=[PosixPath('/kaggle/working/fake_submission/adapters/main_lora/adapter_model.safetensors')], yaml_files=[PosixPath('/kaggle/working/fake_submission/agent.yaml')], all_files=[PosixPath('/kaggle/working/fake_submission/adapters/main_lora/adapter_config.json'), PosixPath('/kaggle/working/fake_submission/adapters/main_lora/adapter_model.safetensors'), PosixPath('/kaggle/working/fake_submission/agent.yaml'), PosixPath('/kaggle/working/fake_submission/prompts/system.md')])\",\n"}
+,{"stream_name":"stdout","time":196.4022901,"data":"  \"agent_yaml_loaded\": true,\n"}
+,{"stream_name":"stdout","time":196.402295394,"data":"  \"agent_yaml_keys\": [\n"}
+,{"stream_name":"stdout","time":196.402299507,"data":"    \"adapter\",\n"}
+,{"stream_name":"stdout","time":196.402304197,"data":"    \"agent_class\",\n"}
+,{"stream_name":"stdout","time":196.40230877,"data":"    \"instruction\",\n"}
+,{"stream_name":"stdout","time":196.4023134,"data":"    \"model\",\n"}
+,{"stream_name":"stdout","time":196.402317927,"data":"    \"name\",\n"}
+,{"stream_name":"stdout","time":196.402322399,"data":"    \"tools\"\n"}
+,{"stream_name":"stdout","time":196.402327245,"data":"  ],\n"}
+,{"stream_name":"stdout","time":196.402331683,"data":"  \"schema_fields\": [\n"}
+,{"stream_name":"stdout","time":196.402336317,"data":"    \"adapter\",\n"}
+,{"stream_name":"stdout","time":196.402340762,"data":"    \"after_agent_callbacks\",\n"}
+,{"stream_name":"stdout","time":196.40234558,"data":"    \"after_model_callbacks\",\n"}
+,{"stream_name":"stdout","time":196.402349956,"data":"    \"after_tool_callbacks\",\n"}
+,{"stream_name":"stdout","time":196.402354752,"data":"    \"agent_class\",\n"}
+,{"stream_name":"stdout","time":196.402359389,"data":"    \"before_agent_callbacks\",\n"}
+,{"stream_name":"stdout","time":196.402364095,"data":"    \"before_model_callbacks\",\n"}
+,{"stream_name":"stdout","time":196.402368634,"data":"    \"before_tool_callbacks\",\n"}
+,{"stream_name":"stdout","time":196.402373374,"data":"    \"description\",\n"}
+,{"stream_name":"stdout","time":196.40237784,"data":"    \"disallow_transfer_to_parent\",\n"}
+,{"stream_name":"stdout","time":196.402382664,"data":"    \"disallow_transfer_to_peers\",\n"}
+,{"stream_name":"stdout","time":196.402387432,"data":"    \"generate_content_config\",\n"}
+,{"stream_name":"stdout","time":196.402392104,"data":"    \"include_contents\",\n"}
+,{"stream_name":"stdout","time":196.402396724,"data":"    \"instruction\",\n"}
+,{"stream_name":"stdout","time":196.402401257,"data":"    \"model\",\n"}
+,{"stream_name":"stdout","time":196.402405916,"data":"    \"name\",\n"}
+,{"stream_name":"stdout","time":196.402410419,"data":"    \"output_key\",\n"}
+,{"stream_name":"stdout","time":196.402415007,"data":"    \"skills\",\n"}
+,{"stream_name":"stdout","time":196.402419553,"data":"    \"sub_agents\",\n"}
+,{"stream_name":"stdout","time":196.402424104,"data":"    \"tools\"\n"}
+,{"stream_name":"stdout","time":196.402428569,"data":"  ],\n"}
+,{"stream_name":"stdout","time":196.402432955,"data":"  \"adapter_resolved\": \"main_lora\",\n"}
+,{"stream_name":"stdout","time":196.402437617,"data":"  \"server_functions\": [\n"}
+,{"stream_name":"stdout","time":196.402441933,"data":"    \"_resolve_lora_checkpoint_path\",\n"}
+,{"stream_name":"stdout","time":196.402446129,"data":"    \"_round_up_vllm_lora_rank\",\n"}
+,{"stream_name":"stdout","time":196.402450665,"data":"    \"dataclass\",\n"}
+,{"stream_name":"stdout","time":196.40245856,"data":"    \"field\",\n"}
+,{"stream_name":"stdout","time":196.402462953,"data":"    \"infer_adapter_rank\",\n"}
+,{"stream_name":"stdout","time":196.402467415,"data":"    \"spawn_server\",\n"}
+,{"stream_name":"stdout","time":196.40247351,"data":"    \"spawn_transformers_server\",\n"}
+,{"stream_name":"stdout","time":196.402478017,"data":"    \"spawn_vllm_server\"\n"}
+,{"stream_name":"stdout","time":196.402482707,"data":"  ],\n"}
+,{"stream_name":"stdout","time":196.402486859,"data":"  \"server_classes\": [\n"}
+,{"stream_name":"stdout","time":196.402491219,"data":"    \"AdapterManifest\",\n"}
+,{"stream_name":"stdout","time":196.402495614,"data":"    \"Any\",\n"}
+,{"stream_name":"stdout","time":196.402500094,"data":"    \"BaseInferenceServer\",\n"}
+,{"stream_name":"stdout","time":196.40250472,"data":"    \"Mapping\",\n"}
+,{"stream_name":"stdout","time":196.402509333,"data":"    \"ModelRegistry\",\n"}
+,{"stream_name":"stdout","time":196.402513817,"data":"    \"Path\",\n"}
+,{"stream_name":"stdout","time":196.402518362,"data":"    \"Sequence\",\n"}
+,{"stream_name":"stdout","time":196.402522942,"data":"    \"ServerStartupError\",\n"}
+,{"stream_name":"stdout","time":196.402527613,"data":"    \"SubmissionValidationError\",\n"}
+,{"stream_name":"stdout","time":196.402531967,"data":"    \"TransformersConfig\",\n"}
+,{"stream_name":"stdout","time":196.402536635,"data":"    \"TransformersServer\",\n"}
+,{"stream_name":"stdout","time":196.402541159,"data":"    \"VllmConfig\",\n"}
+,{"stream_name":"stdout","time":196.402545736,"data":"    \"VllmServer\"\n"}
+,{"stream_name":"stdout","time":196.402550285,"data":"  ],\n"}
+,{"stream_name":"stdout","time":196.40255498,"data":"  \"server_enable_lora\": \"efaults to 0.90.\\n        enable_auto_tool_choice: Whether to enable auto tool choice in vLLM. Defaults to True.\\n        enable_lora: Whether to enable LoRA adapter serving. Defaults to True.\\n        max_loras: Maximum number of active LoRA adapters simultaneously loaded. Defaults to 1.\\n        max_lora_rank: Fallback maximum LoRA rank supported when adapter \",\n"}
+,{"stream_name":"stdout","time":196.402561945,"data":"  \"server_lora_modules\": \"self,\\n        config: TransformersConfig | VllmConfig,\\n        adapter_manifest: AdapterManifest | None = None,\\n        lora_modules: Mapping[str, str | Path] | None = None,\\n    ):\\n        self.config = config\\n        self.adapter_manifest = adapter_manifest\\n        self.lora_modules = dict(lora_modules) if lora_modules else {}\\n        self.process: subproce\",\n"}
+,{"stream_name":"stdout","time":196.402568525,"data":"  \"server_max_lora_rank\": \", 512)\\n\\n\\ndef _round_up_vllm_lora_rank(rank: int) -\u003e int:\\n    \\\"\\\"\\\"Round an adapter rank up to the smallest supported vLLM max_lora_rank bucket.\\\"\\\"\\\"\\n    for valid_rank in _VALID_VLLM_LORA_RANKS:\\n        if valid_rank \u003e= rank:\\n            return valid_rank\\n    return _VALID_VLLM_LORA_RANKS[-1]\\n\\n\\n@dataclass\\nclass TransformersConfig:\\n    \\\"\\\"\\\"Configuration options fo\",\n"}
+,{"stream_name":"stdout","time":196.402576206,"data":"  \"server_max_loras\": \"hoice in vLLM. Defaults to True.\\n        enable_lora: Whether to enable LoRA adapter serving. Defaults to True.\\n        max_loras: Maximum number of active LoRA adapters simultaneously loaded. Defaults to 1.\\n        max_lora_rank: Fallback maximum LoRA rank supported when adapter rank cannot be inferred. Defaults to 128.\\n        scheduler_reserve_full_isl: W\",\n"}
+,{"stream_name":"stdout","time":196.402584256,"data":"  \"server_quantization\": \". Defaults to \\\"auto\\\".\\n        device_map: Device placement strategy for PyTorch/Accelerate. Defaults to \\\"auto\\\".\\n        quantization: Quantization method (e.g. 'bnb-4bit', 'bnb-8bit'). Defaults to None.\\n        extra_args: Additional command-line flags passed directly to transformers serve.\\n        startup_timeout: Maximum time in seconds to wait for server \",\n"}
+,{"stream_name":"stdout","time":196.402595187,"data":"  \"server_gemma-4\": \"bmission.server import TransformersConfig, spawn_transformers_server\\n\\n        config = TransformersConfig(model=\\\"google/gemma-4-26b-a4b-it\\\", port=8000)\\n        adapters = discover_adapters(submission_dir)\\n\\n        with spawn_transformers_server(config, adapter_manifest=adapters) as server:\\n            models = server.create_model_registry({\\\"fast\\\": \\\"google/ge\"\n"}
+,{"stream_name":"stdout","time":196.402602637,"data":"}\n"}
+,{"stream_name":"stderr","time":202.413722415,"data":"/usr/local/lib/python3.12/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":202.413762863,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":202.601312667,"data":"/usr/local/lib/python3.12/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":202.601340551,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":203.516544595,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":203.918084499,"data":"[NbConvertApp] Writing 30893 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":207.459520153,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":208.547507143,"data":"[NbConvertApp] Writing 347070 bytes to __results__.html\n"}
+]
