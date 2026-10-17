@@ -1,0 +1,190 @@
+[{"stream_name":"stderr","time":9.972706522,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":9.972861791,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":9.972871758,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":9.972876085,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":10.759258574,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":10.759297692,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":10.759302182,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":10.759305207,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":127.759148414,"data":"The installed version of bitsandbytes was compiled without GPU support. 8-bit optimizers and GPU quantization are unavailable.\n"}
+,{"stream_name":"stderr","time":127.759197095,"data":"\n"}
+,{"stream_name":"stderr","time":127.759203958,"data":"The installed version of bitsandbytes was compiled without GPU support. 8-bit optimizers and GPU quantization are unavailable.\n"}
+,{"stream_name":"stderr","time":188.452937493,"data":"\u001b[92m10:40:09 - LiteLLM:WARNING\u001b[0m: get_model_cost_map.py:271 - LiteLLM: Failed to fetch remote model cost map from https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json: [Errno -3] Temporary failure in name resolution. Falling back to local backup.\n"}
+,{"stream_name":"stderr","time":188.453007093,"data":"\n"}
+,{"stream_name":"stderr","time":188.453012867,"data":"\u001b[92m10:40:09 - LiteLLM:WARNING\u001b[0m: get_model_cost_map.py:271 - LiteLLM: Failed to fetch remote model cost map from https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json: [Errno -3] Temporary failure in name resolution. Falling back to local backup.\n"}
+,{"stream_name":"stdout","time":195.096547377,"data":"{\n"}
+,{"stream_name":"stdout","time":195.096606008,"data":"  \"python\": \"3.12.13\",\n"}
+,{"stream_name":"stdout","time":195.096612957,"data":"  \"wheelhouse_mounted\": true,\n"}
+,{"stream_name":"stdout","time":195.096617818,"data":"  \"wheels\": [\n"}
+,{"stream_name":"stdout","time":195.096622797,"data":"    \"adk_eval_core-0.1.0-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":195.09662801,"data":"    \"adk_submission-0.2.13-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":195.0966334,"data":"    \"anthropic-1.4.0-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":195.096638663,"data":"    \"apache_tvm_ffi-0.1.13.post3-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":195.096643845,"data":"    \"astor-0.8.1-py2.py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":195.096648701,"data":"    \"bitsandbytes-0.46.1-py3-none-manylinux_2_24_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":195.096653546,"data":"    \"cbor2-6.1.4-cp312-cp312-manylinux_2_28_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":195.096658548,"data":"    \"compressed_tensors-0.15.0.1-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":195.096663217,"data":"    \"depyf-0.20.0-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":195.0966679,"data":"    \"diskcache-5.6.3-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":195.09667293,"data":"    \"flashinfer_cubin-0.6.6-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":195.096720551,"data":"    \"flashinfer_python-0.6.6-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":195.096726411,"data":"    \"gguf-0.19.0-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":195.096730699,"data":"    \"google_adk-1.36.1-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":195.096734536,"data":"    \"google_genai-2.11.0-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":195.096738609,"data":"    \"ijson-3.5.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":195.096742771,"data":"    \"interegular-0.3.3-py37-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":195.096746757,"data":"    \"llguidance-1.3.0-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":195.096750803,"data":"    \"lm_format_enforcer-0.11.3-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":195.096755068,"data":"    \"loguru-0.7.3-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":195.096759068,"data":"    \"mistral_common-1.11.7-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":195.096763586,"data":"    \"model_hosting_container_standards-0.1.16-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":195.096776736,"data":"    \"msgspec-0.21.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":195.096781161,"data":"    \"nvidia_cudnn_frontend-1.18.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":195.096785412,"data":"    \"openai_harmony-0.0.8-cp38-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":195.096789672,"data":"    \"opentelemetry_exporter_otlp-1.44.0-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":195.096793855,"data":"    \"opentelemetry_semantic_conventions_ai-0.5.1-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":195.096798052,"data":"    \"outlines_core-0.2.11-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":195.096802204,"data":"    \"partial_json_parser-0.2.1.1.post7-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":195.096806451,"data":"    \"prometheus_fastapi_instrumentator-8.1.0-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":195.096810785,"data":"    \"pybase64-1.5.0-cp312-cp312-manylinux1_x86_64.manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_5_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":195.096815239,"data":"    \"pycountry-26.2.16-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":195.096821163,"data":"    \"pydantic_extra_types-2.11.2-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":195.096825216,"data":"    \"quack_kernels-0.6.4-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":195.096829488,"data":"    \"safetensors-0.8.0-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":195.096833502,"data":"    \"setproctitle-1.3.7-cp312-cp312-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":195.096837735,"data":"    \"swegemma-0.2.11-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":195.096841464,"data":"    \"tokenizers-0.22.2-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":195.096845471,"data":"    \"transformers-5.13.1-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":195.096849348,"data":"    \"vllm-0.19.1-cp38-abi3-manylinux_2_31_x86_64.whl\",\n"}
+,{"stream_name":"stdout","time":195.096853268,"data":"    \"xgrammar-0.2.5.post1-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl\"\n"}
+,{"stream_name":"stdout","time":195.096885444,"data":"  ],\n"}
+,{"stream_name":"stdout","time":195.096890695,"data":"  \"wheel_count\": 41,\n"}
+,{"stream_name":"stdout","time":195.096894779,"data":"  \"before_install\": {\n"}
+,{"stream_name":"stdout","time":195.096898381,"data":"    \"torch\": \"2.10.0+cu128\",\n"}
+,{"stream_name":"stdout","time":195.096902335,"data":"    \"transformers\": \"5.0.0\",\n"}
+,{"stream_name":"stdout","time":195.096906252,"data":"    \"peft\": \"0.19.1\",\n"}
+,{"stream_name":"stdout","time":195.096910032,"data":"    \"trl\": \"NOT IMPORTABLE (ModuleNotFoundError)\",\n"}
+,{"stream_name":"stdout","time":195.096914218,"data":"    \"vllm\": \"NOT IMPORTABLE (ModuleNotFoundError)\",\n"}
+,{"stream_name":"stdout","time":195.096918603,"data":"    \"swegemma\": \"NOT IMPORTABLE (ModuleNotFoundError)\",\n"}
+,{"stream_name":"stdout","time":195.096922722,"data":"    \"adk_submission\": \"NOT IMPORTABLE (ModuleNotFoundError)\",\n"}
+,{"stream_name":"stdout","time":195.096926859,"data":"    \"accelerate\": \"1.13.0\",\n"}
+,{"stream_name":"stdout","time":195.096930835,"data":"    \"datasets\": \"5.0.0\",\n"}
+,{"stream_name":"stdout","time":195.096934799,"data":"    \"bitsandbytes\": \"NOT IMPORTABLE (ModuleNotFoundError)\",\n"}
+,{"stream_name":"stdout","time":195.096938808,"data":"    \"safetensors\": \"0.7.0\"\n"}
+,{"stream_name":"stdout","time":195.096942758,"data":"  },\n"}
+,{"stream_name":"stdout","time":195.096946358,"data":"  \"install_returncode\": 0,\n"}
+,{"stream_name":"stdout","time":195.096972542,"data":"  \"install_stdout_tail\": \"nstalling tokenizers-0.22.2:\\n      Successfully uninstalled tokenizers-0.22.2\\n  Attempting uninstall: safetensors\\n    Found existing installation: safetensors 0.7.0\\n    Uninstalling safetensors-0.7.0:\\n      Successfully uninstalled safetensors-0.7.0\\n  Attempting uninstall: google-genai\\n    Found existing installation: google-genai 1.68.0\\n    Uninstalling google-genai-1.68.0:\\n      Successfully uninstalled google-genai-1.68.0\\n  Attempting uninstall: google-adk\\n    Found existing installation: google-adk 1.29.0\\n    Uninstalling google-adk-1.29.0:\\n      Successfully uninstalled google-adk-1.29.0\\nSuccessfully installed adk-eval-core-0.1.0 adk-submission-0.2.13 anthropic-1.4.0 apache-tvm-ffi-0.1.13.post3 astor-0.8.1 bitsandbytes-0.46.1 cbor2-6.1.4 compressed-tensors-0.15.0.1 depyf-0.20.0 diskcache-5.6.3 flashinfer-cubin-0.6.6 flashinfer-python-0.6.6 gguf-0.19.0 google-adk-1.36.1 google-genai-2.11.0 ijson-3.5.1 interegular-0.3.3 llguidance-1.3.0 lm-format-enforcer-0.11.3 loguru-0.7.3 mistral-common-1.11.7 model-hosting-container-standards-0.1.16 msgspec-0.21.1 nvidia-cudnn-frontend-1.18.0 openai-harmony-0.0.8 opentelemetry-exporter-otlp-1.44.0 opentelemetry-semantic-conventions-ai-0.5.1 outlines-core-0.2.11 partial-json-parser-0.2.1.1.post7 prometheus-fastapi-instrumentator-8.1.0 pybase64-1.5.0 pycountry-26.2.16 pydantic-extra-types-2.11.2 quack-kernels-0.6.4 safetensors-0.8.0 setproctitle-1.3.7 swegemma-0.2.11 tokenizers-0.22.2 transformers-5.13.1 vllm-0.19.1 xgrammar-0.2.5.post1\\n\",\n"}
+,{"stream_name":"stdout","time":195.096994586,"data":"  \"install_stderr_tail\": \"\",\n"}
+,{"stream_name":"stdout","time":195.096998586,"data":"  \"purged_modules\": 449,\n"}
+,{"stream_name":"stdout","time":195.097002489,"data":"  \"after_install\": {\n"}
+,{"stream_name":"stdout","time":195.097006423,"data":"    \"torch\": \"2.10.0+cu128\",\n"}
+,{"stream_name":"stdout","time":195.097010543,"data":"    \"transformers\": \"5.13.1\",\n"}
+,{"stream_name":"stdout","time":195.097014497,"data":"    \"peft\": \"NOT IMPORTABLE (ImportError)\",\n"}
+,{"stream_name":"stdout","time":195.097018459,"data":"    \"trl\": \"NOT IMPORTABLE (ModuleNotFoundError)\",\n"}
+,{"stream_name":"stdout","time":195.097040726,"data":"    \"vllm\": \"0.19.1\",\n"}
+,{"stream_name":"stdout","time":195.097046557,"data":"    \"swegemma\": \"NOT IMPORTABLE (TypeError)\",\n"}
+,{"stream_name":"stdout","time":195.097050679,"data":"    \"adk_submission\": \"NOT IMPORTABLE (TypeError)\",\n"}
+,{"stream_name":"stdout","time":195.097054875,"data":"    \"accelerate\": \"NOT IMPORTABLE (ImportError)\",\n"}
+,{"stream_name":"stdout","time":195.097058743,"data":"    \"datasets\": \"5.0.0\",\n"}
+,{"stream_name":"stdout","time":195.097062401,"data":"    \"bitsandbytes\": \"0.46.1\",\n"}
+,{"stream_name":"stdout","time":195.097066004,"data":"    \"safetensors\": \"NOT IMPORTABLE (ImportError)\"\n"}
+,{"stream_name":"stdout","time":195.097070182,"data":"  },\n"}
+,{"stream_name":"stdout","time":195.097096624,"data":"  \"model_dir\": true,\n"}
+,{"stream_name":"stdout","time":195.097101277,"data":"  \"model_files\": [\n"}
+,{"stream_name":"stdout","time":195.097104877,"data":"    \"README.md\",\n"}
+,{"stream_name":"stdout","time":195.097109398,"data":"    \"chat_template.jinja\",\n"}
+,{"stream_name":"stdout","time":195.097113055,"data":"    \"config.json\",\n"}
+,{"stream_name":"stdout","time":195.097116966,"data":"    \"generation_config.json\",\n"}
+,{"stream_name":"stdout","time":195.097121143,"data":"    \"model.safetensors\",\n"}
+,{"stream_name":"stdout","time":195.097125107,"data":"    \"processor_config.json\",\n"}
+,{"stream_name":"stdout","time":195.097129063,"data":"    \"tokenizer.json\",\n"}
+,{"stream_name":"stdout","time":195.097132901,"data":"    \"tokenizer_config.json\"\n"}
+,{"stream_name":"stdout","time":195.097136731,"data":"  ],\n"}
+,{"stream_name":"stdout","time":195.097140507,"data":"  \"config_model_type\": \"gemma4\",\n"}
+,{"stream_name":"stdout","time":195.097144658,"data":"  \"config_architectures\": [\n"}
+,{"stream_name":"stdout","time":195.097148663,"data":"    \"Gemma4ForConditionalGeneration\"\n"}
+,{"stream_name":"stdout","time":195.097152401,"data":"  ],\n"}
+,{"stream_name":"stdout","time":195.097156217,"data":"  \"config_keys\": [\n"}
+,{"stream_name":"stdout","time":195.097159832,"data":"    \"architectures\",\n"}
+,{"stream_name":"stdout","time":195.097163812,"data":"    \"audio_config\",\n"}
+,{"stream_name":"stdout","time":195.09716805,"data":"    \"audio_token_id\",\n"}
+,{"stream_name":"stdout","time":195.097172251,"data":"    \"boa_token_id\",\n"}
+,{"stream_name":"stdout","time":195.09717569,"data":"    \"boi_token_id\",\n"}
+,{"stream_name":"stdout","time":195.097179602,"data":"    \"dtype\",\n"}
+,{"stream_name":"stdout","time":195.097183647,"data":"    \"eoa_token_id\",\n"}
+,{"stream_name":"stdout","time":195.097187564,"data":"    \"eoa_token_index\",\n"}
+,{"stream_name":"stdout","time":195.097191222,"data":"    \"eoi_token_id\",\n"}
+,{"stream_name":"stdout","time":195.097195224,"data":"    \"eos_token_id\",\n"}
+,{"stream_name":"stdout","time":195.097199121,"data":"    \"hidden_act\",\n"}
+,{"stream_name":"stdout","time":195.097202981,"data":"    \"hidden_size\",\n"}
+,{"stream_name":"stdout","time":195.097206675,"data":"    \"image_token_id\",\n"}
+,{"stream_name":"stdout","time":195.097210527,"data":"    \"initializer_range\",\n"}
+,{"stream_name":"stdout","time":195.097214733,"data":"    \"intermediate_size\",\n"}
+,{"stream_name":"stdout","time":195.097218615,"data":"    \"model_type\",\n"}
+,{"stream_name":"stdout","time":195.097222317,"data":"    \"moe_intermediate_size\",\n"}
+,{"stream_name":"stdout","time":195.097226275,"data":"    \"num_experts\",\n"}
+,{"stream_name":"stdout","time":195.097229966,"data":"    \"num_experts_per_tok\",\n"}
+,{"stream_name":"stdout","time":195.097258607,"data":"    \"quantization_config\",\n"}
+,{"stream_name":"stdout","time":195.09726438,"data":"    \"text_config\",\n"}
+,{"stream_name":"stdout","time":195.09726837,"data":"    \"tie_word_embeddings\",\n"}
+,{"stream_name":"stdout","time":195.097272425,"data":"    \"transformers_version\",\n"}
+,{"stream_name":"stdout","time":195.097276532,"data":"    \"video_token_id\",\n"}
+,{"stream_name":"stdout","time":195.097280162,"data":"    \"vision_config\"\n"}
+,{"stream_name":"stdout","time":195.097283727,"data":"  ],\n"}
+,{"stream_name":"stdout","time":195.097289527,"data":"  \"autoconfig_plain\": \"ImportError: PyO3 modules compiled for CPython 3.8 or older may only be initialized once per interpreter process\",\n"}
+,{"stream_name":"stdout","time":195.097294378,"data":"  \"autoconfig_after_swegemma\": \"ImportError: PyO3 modules compiled for CPython 3.8 or older may only be initialized once per interpreter process\",\n"}
+,{"stream_name":"stdout","time":195.097298545,"data":"  \"transformers_gemma_dirs\": [\n"}
+,{"stream_name":"stdout","time":195.097302625,"data":"    \"gemma\",\n"}
+,{"stream_name":"stdout","time":195.097306697,"data":"    \"gemma2\",\n"}
+,{"stream_name":"stdout","time":195.097310624,"data":"    \"gemma3\",\n"}
+,{"stream_name":"stdout","time":195.097314405,"data":"    \"gemma3n\",\n"}
+,{"stream_name":"stdout","time":195.09731813,"data":"    \"gemma4\",\n"}
+,{"stream_name":"stdout","time":195.097321846,"data":"    \"gemma4_assistant\",\n"}
+,{"stream_name":"stdout","time":195.097326081,"data":"    \"gemma4_unified\",\n"}
+,{"stream_name":"stdout","time":195.097330005,"data":"    \"gemma4_unified_assistant\"\n"}
+,{"stream_name":"stdout","time":195.097333966,"data":"  ],\n"}
+,{"stream_name":"stdout","time":195.097337687,"data":"  \"transformers_like_wheels\": [\n"}
+,{"stream_name":"stdout","time":195.097341713,"data":"    \"adk_eval_core-0.1.0-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":195.097345289,"data":"    \"adk_submission-0.2.13-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":195.097349386,"data":"    \"google_adk-1.36.1-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":195.097353189,"data":"    \"swegemma-0.2.11-py3-none-any.whl\",\n"}
+,{"stream_name":"stdout","time":195.097357351,"data":"    \"transformers-5.13.1-py3-none-any.whl\"\n"}
+,{"stream_name":"stdout","time":195.097361431,"data":"  ]\n"}
+,{"stream_name":"stdout","time":195.097365313,"data":"}\n"}
+,{"stream_name":"stdout","time":195.097368879,"data":"WHEEL PROBE written: 59619\n"}
+,{"stream_name":"stdout","time":195.097372859,"data":"SWEGEMMA SOURCE bytes: 478691\n"}
+,{"stream_name":"stdout","time":195.212573627,"data":"{\n"}
+,{"stream_name":"stdout","time":195.212608857,"data":"  \"model_dir\": true,\n"}
+,{"stream_name":"stdout","time":195.212614095,"data":"  \"config_error\": \"ils/type_validators.py\\\", line 19, in \u003cmodule\u003e\\n    from ..activations import ACT2FN\\n  File \\\"/usr/local/lib/python3.12/dist-packages/transformers/activations.py\\\", line 22, in \u003cmodule\u003e\\n    from .integrations.hub_kernels import use_kernel_forward_from_hub\\n  File \\\"/usr/local/lib/python3.12/dist-packages/transformers/integrations/hub_kernels.py\\\", line 24, in \u003cmodule\u003e\\n    from ..conversion_mapping import get_checkpoint_conversion_mapping, register_checkpoint_conversion_mapping\\n  File \\\"/usr/local/lib/python3.12/dist-packages/transformers/conversion_mapping.py\\\", line 21, in \u003cmodule\u003e\\n    from .core_model_loading import (\\n  File \\\"/usr/local/lib/python3.12/dist-packages/transformers/core_model_loading.py\\\", line 33, in \u003cmodule\u003e\\n    from .integrations.accelerate import get_device, offload_weight\\n  File \\\"/usr/local/lib/python3.12/dist-packages/transformers/integrations/accelerate.py\\\", line 27, in \u003cmodule\u003e\\n    from safetensors import safe_open\\n  File \\\"/usr/local/lib/python3.12/dist-packages/safetensors/__init__.py\\\", line 2, in \u003cmodule\u003e\\n    from ._safetensors_rust import (  # noqa: F401\\nImportError: PyO3 modules compiled for CPython 3.8 or older may only be initialized once per interpreter process\\n\",\n"}
+,{"stream_name":"stdout","time":195.212692247,"data":"  \"tensor_count\": 2009,\n"}
+,{"stream_name":"stdout","time":195.212699074,"data":"  \"tensor_examples\": [\n"}
+,{"stream_name":"stdout","time":195.21270292,"data":"    \"model.language_model.layers.0.mlp.down_proj.weight_shape\",\n"}
+,{"stream_name":"stdout","time":195.212711245,"data":"    \"model.language_model.layers.0.mlp.gate_proj.weight_shape\",\n"}
+,{"stream_name":"stdout","time":195.212715376,"data":"    \"model.language_model.layers.0.mlp.up_proj.weight_shape\",\n"}
+,{"stream_name":"stdout","time":195.212719426,"data":"    \"model.language_model.layers.0.self_attn.k_proj.weight_shape\",\n"}
+,{"stream_name":"stdout","time":195.212749375,"data":"    \"model.language_model.layers.0.self_attn.o_proj.weight_shape\",\n"}
+,{"stream_name":"stdout","time":195.212753394,"data":"    \"model.language_model.layers.0.self_attn.q_proj.weight_shape\",\n"}
+,{"stream_name":"stdout","time":195.212757684,"data":"    \"model.language_model.layers.0.self_attn.v_proj.weight_shape\",\n"}
+,{"stream_name":"stdout","time":195.212761896,"data":"    \"model.language_model.layers.1.mlp.down_proj.weight_shape\",\n"}
+,{"stream_name":"stdout","time":195.212765953,"data":"    \"model.language_model.layers.1.mlp.gate_proj.weight_shape\",\n"}
+,{"stream_name":"stdout","time":195.21276997,"data":"    \"model.language_model.layers.1.mlp.up_proj.weight_shape\",\n"}
+,{"stream_name":"stdout","time":195.212774134,"data":"    \"model.language_model.layers.1.self_attn.k_proj.weight_shape\",\n"}
+,{"stream_name":"stdout","time":195.212780817,"data":"    \"model.language_model.layers.1.self_attn.o_proj.weight_shape\",\n"}
+,{"stream_name":"stdout","time":195.212784839,"data":"    \"model.language_model.layers.1.self_attn.q_proj.weight_shape\",\n"}
+,{"stream_name":"stdout","time":195.21278874,"data":"    \"model.language_model.layers.1.self_attn.v_proj.weight_shape\"\n"}
+,{"stream_name":"stdout","time":195.212792596,"data":"  ],\n"}
+,{"stream_name":"stdout","time":195.212796127,"data":"  \"has_compressed\": 820,\n"}
+,{"stream_name":"stdout","time":195.21280001,"data":"  \"auto_AutoModelForCausalLM\": \"ImportError('PyO3 modules compiled for CPython 3.8 or older may only be initialized once per interpreter process')\",\n"}
+,{"stream_name":"stdout","time":195.212804345,"data":"  \"auto_AutoModelForImageTextToText\": \"ImportError('PyO3 modules compiled for CPython 3.8 or older may only be initialized once per interpreter process')\",\n"}
+,{"stream_name":"stdout","time":195.212809093,"data":"  \"auto_AutoModel\": \"ImportError('PyO3 modules compiled for CPython 3.8 or older may only be initialized once per interpreter process')\",\n"}
+,{"stream_name":"stdout","time":195.212837128,"data":"  \"load_error\": \"lass_to_module[name])\\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \\\"/usr/local/lib/python3.12/dist-packages/transformers/utils/import_utils.py\\\", line 2539, in _get_module\\n    raise e\\n  File \\\"/usr/local/lib/python3.12/dist-packages/transformers/utils/import_utils.py\\\", line 2537, in _get_module\\n    return importlib.import_module(\\\".\\\" + module_name, self.__name__)\\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \\\"/usr/lib/python3.12/importlib/__init__.py\\\", line 90, in import_module\\n    return _bootstrap._gcd_import(name[level:], package, level)\\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \\\"/usr/local/lib/python3.12/dist-packages/transformers/models/auto/modeling_auto.py\\\", line 21, in \u003cmodule\u003e\\n    from .auto_factory import (\\n  File \\\"/usr/local/lib/python3.12/dist-packages/transformers/models/auto/auto_factory.py\\\", line 42, in \u003cmodule\u003e\\n    from ...generation import GenerationMixin\\n  File \\\"/usr/local/lib/python3.12/dist-packages/transformers/utils/import_utils.py\\\", line 2305, in __getattr__\\n    module = self._get_module(self._class_to_module[name])\\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \\\"/usr/local/lib/python3.12/dist-packages/transformers/utils/import_utils.py\\\", line 2539, in _get_module\\n    raise e\\n  File \\\"/usr/local/lib/python3.12/dist-packages/transformers/utils/import_utils.py\\\", line 2537, in _get_module\\n    return importlib.import_module(\\\".\\\" + module_name, self.__name__)\\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \\\"/usr/lib/python3.12/importlib/__init__.py\\\", line 90, in import_module\\n    return _bootstrap._gcd_import(name[level:], package, level)\\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \\\"/usr/local/lib/python3.12/dist-packages/transformers/generation/utils.py\\\", line 53, in \u003cmodule\u003e\\n    from .candidate_generator import (\\n  File \\\"/usr/local/lib/python3.12/dist-packages/transformers/generation/candidate_generator.py\\\", line 24, in \u003cmodule\u003e\\n    from ..pytorch_utils import prune_linear_layer\\n  File \\\"/usr/local/lib/python3.12/dist-packages/transformers/pytorch_utils.py\\\", line 21, in \u003cmodule\u003e\\n    from safetensors.torch import storage_ptr, storage_size\\n  File \\\"/usr/local/lib/python3.12/dist-packages/safetensors/__init__.py\\\", line 2, in \u003cmodule\u003e\\n    from ._safetensors_rust import (  # noqa: F401\\nImportError: PyO3 modules compiled for CPython 3.8 or older may only be initialized once per interpreter process\\n\"\n"}
+,{"stream_name":"stdout","time":195.212890822,"data":"}\n"}
+,{"stream_name":"stderr","time":201.508893181,"data":"/usr/local/lib/python3.12/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":201.508927927,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":201.747198073,"data":"/usr/local/lib/python3.12/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":201.74723114,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":202.654584984,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":203.042922508,"data":"[NbConvertApp] Writing 32582 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":206.333446171,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":207.44462098,"data":"[NbConvertApp] Writing 355184 bytes to __results__.html\n"}
+]
