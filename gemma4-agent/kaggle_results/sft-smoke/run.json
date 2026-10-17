@@ -1,12 +1,14 @@
 {
-  "created_utc": "2026-10-17T01:32:27+00:00",
+  "created_utc": "2026-10-17T01:33:23+00:00",
   "status": "push_failed",
   "mode": "smoke",
   "base_dir": "submission-v5",
-  "kernel_ref": "petersharps/gemma-4-sft-smoke-20261017-013227",
+  "kernel_ref": "petersharps/gemma-4-sft-smoke-20261017-013323",
   "model_path": "/kaggle/input/models/google/gemma-4/other/gemma-4-31b-it-qat-w4a16-ct/2",
   "competition_submission_created": false,
   "push_exit_code": 1,
   "push_stdout_tail": "",
-  "error": "Kaggle refused the push; see push_stdout_tail"
+  "push_stderr_tail": "400 Client Error: Bad Request for url: https://api.kaggle.com/v1/kernels.KernelsApiService/SaveKernel\n",
+  "error": "Kaggle refused the push",
+  "push_message": "400 Client Error: Bad Request for url: https://api.kaggle.com/v1/kernels.KernelsApiService/SaveKernel"
 }
