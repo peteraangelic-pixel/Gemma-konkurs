@@ -34,6 +34,7 @@ on:
     paths:
       - gemma4-agent/kaggle_smoke/v2-benchmark.trigger
       - gemma4-agent/kaggle_smoke/sft-logfetch.trigger
+      - gemma4-agent/kaggle_smoke/sft-diagnose.trigger
 
 permissions:
   contents: write
@@ -120,6 +121,9 @@ jobs:
         run: |
           set -uo pipefail
           mode="${REQUESTED_MODE:-smoke}"
+          if [ -f gemma4-agent/kaggle_smoke/sft-diagnose.trigger ]; then
+            mode=diagnose
+          fi
           if [ "$mode" = "diagnose" ]; then
             echo "Mode: diagnose (CPU only, no GPU quota)"
             python gemma4-agent/tools/diagnose_gemma4_env.py               --outdir gemma4-agent/kaggle_results/gemma4-env               --max-wait-minutes 40
@@ -191,7 +195,8 @@ jobs:
           done
           git add gemma4-agent/kaggle_results 2>/dev/null || true
           git rm -q --ignore-unmatch gemma4-agent/kaggle_smoke/v2-benchmark.trigger \
-            gemma4-agent/kaggle_smoke/sft-logfetch.trigger
+            gemma4-agent/kaggle_smoke/sft-logfetch.trigger \
+            gemma4-agent/kaggle_smoke/sft-diagnose.trigger
           if [ -z "$(git diff --cached --name-only)" ]; then
             echo "Nothing to record."
             exit 0
