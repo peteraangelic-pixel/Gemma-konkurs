@@ -122,12 +122,15 @@ def build_notebook(
     submission_sha256: str,
     task_count: int = 1,
     seed: int = 20261009,
+    concurrency: int = 1,
+    excluded_repos: list[str] | None = None,
     task_id: str = TASK_ID,
     task_ids: list[str] | None = None,
 ) -> dict[str, Any]:
     encoded_zip = json.dumps(base64.b64encode(submission_zip).decode("ascii"))
     encoded_selection = json.dumps(
         json.dumps({"task_count": task_count, "seed": seed, "task_id": task_id,
+                     "excluded_repos": list(excluded_repos or []),
                     **({"task_ids": list(task_ids)} if task_ids else {})})
     )
     extract_cell = r'''import base64
@@ -226,6 +229,9 @@ for item in selected_tasks:
     repo_counts[item.repo] = repo_counts.get(item.repo, 0) + 1
 print(f'Submission SHA-256: {actual_sha256}')
 print(f'Public development tasks available: {len(all_tasks)}')
+# Concurrency>1 runs several sessions against one vLLM server. The per-task budget is wall-clock,
+# so a session that waits on a slower CPU still burns its own clock: measured, not assumed.
+print(f'Task concurrency: {int(TASK_SELECTION.get("concurrency") or 1)}')
 print(f'Seeded stratified sample ({len(selected_tasks)} tasks, seed={TASK_SELECTION["seed"]}): {repo_counts}')
 print('Selected task IDs: ' + ', '.join(item.instance_id for item in selected_tasks))
 '''.replace("__TASK_SELECTION_JSON__", encoded_selection).replace(
@@ -424,6 +430,7 @@ eval_config = EvalConfig(
     graph_dir=DATA_DIR / 'graphs',
     embeddings_dir=DATA_DIR / 'embeddings',
     wheels_dir=DATA_DIR / 'wheels',
+    concurrency=int(TASK_SELECTION.get('concurrency') or 1),
     verbose=False,
 )
 
@@ -455,6 +462,8 @@ def persist_results():
         'visible_gpu_count': torch.cuda.device_count(),
         'submission_sha256': actual_sha256,
         'sample_seed': int(TASK_SELECTION['seed']),
+        'concurrency': int(TASK_SELECTION.get('concurrency') or 1),
+        'excluded_repos': sorted(_excluded),
         'repo_counts': repo_counts,
         'task_ids': [item.instance_id for item in selected_tasks],
         'tasks': per_task_results,
@@ -630,6 +639,10 @@ def main() -> int:
     parser.add_argument("--task-id", default=TASK_ID, help="fixed public task used when --task-count=1 and reserved in larger samples")
     parser.add_argument("--task-ids", default="", help="comma-separated explicit public task ids (mini-screen of diagnosed cases); overrides the stratified sample")
     parser.add_argument("--seed", type=int, default=20261009, help="deterministic sample seed")
+    parser.add_argument("--concurrency", type=int, default=1,
+                        help="parallel task sessions (one vLLM server serves all of them)")
+    parser.add_argument("--exclude-repos", default="",
+                        help="comma-separated repositories to hold out entirely (leave-one-repo-out)")
     parser.add_argument("--max-wait-minutes", type=int, default=300)
     parser.add_argument("--poll-interval-seconds", type=int, default=45)
     args = parser.parse_args()

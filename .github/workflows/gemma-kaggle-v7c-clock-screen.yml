@@ -30,6 +30,7 @@ on:
       - arena/c4eeb067-gemma-konkurs
     paths:
       - gemma4-agent/kaggle_smoke/v7c-benchmark.trigger
+      - gemma4-agent/kaggle_smoke/screen-v8.trigger
 
 permissions:
   contents: write
@@ -115,20 +116,38 @@ jobs:
           chmod 600 "$HOME/.kaggle/access_token"
           echo "Kaggle CLI configured; token value was not logged."
 
-      - name: Start the 30-task V7-c clock screen (bounded poll, kernel keeps running)
+      - name: Start the screen (v7c clock screen, or a screen-v8 config if one is present)
         continue-on-error: true
         env:
           KAGGLE_USERNAME: petersharps
         run: |
           set -uo pipefail
-          timeout 600 python gemma4-agent/tools/run_kaggle_v1_smoke.py \
-            --submission gemma4-agent/submission-v7c.zip \
-            --outdir gemma4-agent/kaggle_results/v7-c-benchmark \
-            --task-count 30 \
-            --task-id fastapi_15588 \
-            --seed 20261009 \
-            --max-wait-minutes 300 \
-            --poll-interval-seconds 45
+          if [ -f gemma4-agent/kaggle_smoke/screen-v8.json ]; then
+            # A screen-v8 run is fully described by its JSON: which archive, which tasks, how many
+            # at once and where the record goes. Keeping it in one file is what lets the same
+            # workflow measure concurrency, a repository holdout, or an A/B pair without new code.
+            OUTDIR=$(python3 -c "import json;print(json.load(open('gemma4-agent/kaggle_smoke/screen-v8.json'))['outdir'])")
+            SUBMISSION=$(python3 -c "import json;print(json.load(open('gemma4-agent/kaggle_smoke/screen-v8.json'))['submission'])")
+            TASKS=$(python3 -c "import json;print(','.join(json.load(open('gemma4-agent/kaggle_smoke/screen-v8.json'))['task_ids']))")
+            COUNT=$(python3 -c "import json;print(len(json.load(open('gemma4-agent/kaggle_smoke/screen-v8.json'))['task_ids']))")
+            CONC=$(python3 -c "import json;print(json.load(open('gemma4-agent/kaggle_smoke/screen-v8.json')).get('concurrency',1))")
+            SEED=$(python3 -c "import json;print(json.load(open('gemma4-agent/kaggle_smoke/screen-v8.json')).get('seed',20261009))")
+            WAIT=$(python3 -c "import json;print(json.load(open('gemma4-agent/kaggle_smoke/screen-v8.json')).get('max_wait_minutes',120))")
+            echo "screen-v8: $OUTDIR | $COUNT tasks | concurrency $CONC"
+            timeout 900 python gemma4-agent/tools/run_kaggle_v1_smoke.py \
+              --submission "$SUBMISSION" --outdir "$OUTDIR" \
+              --task-count "$COUNT" --task-ids "$TASKS" --seed "$SEED" \
+              --concurrency "$CONC" --max-wait-minutes "$WAIT" --poll-interval-seconds 45
+          else
+            timeout 600 python gemma4-agent/tools/run_kaggle_v1_smoke.py \
+              --submission gemma4-agent/submission-v7c.zip \
+              --outdir gemma4-agent/kaggle_results/v7-c-benchmark \
+              --task-count 30 \
+              --task-id fastapi_15588 \
+              --seed 20261009 \
+              --max-wait-minutes 300 \
+              --poll-interval-seconds 45
+          fi
           code=$?
           echo "Launcher exit: $code (124 = the polling window was cut; the kernel itself continues)."
           exit 0
@@ -141,7 +160,9 @@ jobs:
           ref=$(python3 - <<'PY'
           import json
           from pathlib import Path
-          path = Path("gemma4-agent/kaggle_results/v7-c-benchmark/run.json")
+          cfg = Path("gemma4-agent/kaggle_smoke/screen-v8.json")
+          outdir = Path(json.loads(cfg.read_text())["outdir"]) if cfg.is_file() else Path("gemma4-agent/kaggle_results/v7-c-benchmark")
+          path = outdir / "run.json"
           print(json.loads(path.read_text()).get("kernel_ref", "") if path.is_file() else "")
           PY
           )
@@ -155,12 +176,17 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git fetch origin "$GITHUB_REF_NAME"
+          OUTDIR="gemma4-agent/kaggle_results/v7-c-benchmark"
+          if [ -f gemma4-agent/kaggle_smoke/screen-v8.json ]; then
+            OUTDIR=$(python3 -c "import json;print(json.load(open('gemma4-agent/kaggle_smoke/screen-v8.json'))['outdir'])")
+          fi
+          NAME=$(basename "$OUTDIR")
           rm -rf /tmp/keep && mkdir -p /tmp/keep
-          cp -r gemma4-agent/kaggle_results/v7-c-benchmark /tmp/keep/ 2>/dev/null || true
+          cp -r "$OUTDIR" /tmp/keep/ 2>/dev/null || true
           git reset --hard "origin/$GITHUB_REF_NAME"
           mkdir -p gemma4-agent/kaggle_results
-          cp -r /tmp/keep/v7-c-benchmark gemma4-agent/kaggle_results/ 2>/dev/null || true
-          git add gemma4-agent/kaggle_results/v7-c-benchmark 2>/dev/null || true
+          cp -r "/tmp/keep/$NAME" "gemma4-agent/kaggle_results/" 2>/dev/null || true
+          git add "gemma4-agent/kaggle_results/$NAME" 2>/dev/null || true
           if [ -z "$(git diff --cached --name-only)" ]; then
             echo "Nothing to record."
             exit 0
@@ -202,12 +228,25 @@ jobs:
           chmod 600 "$HOME/.kaggle/access_token"
           echo "Kaggle CLI configured; token value was not logged."
 
+      - name: Resolve the screen directory
+        id: screen
+        run: |
+          set -euo pipefail
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+          from pathlib import Path
+          cfg = Path("gemma4-agent/kaggle_smoke/screen-v8.json")
+          outdir = json.loads(cfg.read_text())["outdir"] if cfg.is_file() else "gemma4-agent/kaggle_results/v7-c-benchmark"
+          print(f"outdir={outdir}")
+          print(f"name={Path(outdir).name}")
+          PY
+
       - name: Wait for the kernel and fetch its result
         env:
           KAGGLE_USERNAME: petersharps
         run: |
           python gemma4-agent/tools/poll_kernel_until_done.py \
-            --run-json gemma4-agent/kaggle_results/v7-c-benchmark/run.json \
+            --run-json "${{ steps.screen.outputs.outdir }}/run.json" \
             --max-wait-minutes 340 \
             --poll-interval-seconds 90
 
@@ -215,9 +254,9 @@ jobs:
         if: failure()
         continue-on-error: true
         run: |
-          if [ -s gemma4-agent/kaggle_results/v7-c-benchmark/run.json ]; then
+          if [ -s "${{ steps.screen.outputs.outdir }}/run.json" ]; then
             python gemma4-agent/tools/fetch_kaggle_kernel_log.py \
-              --run-json gemma4-agent/kaggle_results/v7-c-benchmark/run.json \
+              --run-json "${{ steps.screen.outputs.outdir }}/run.json" \
               --output-dir "$RUNNER_TEMP/gemma-v7c-kernel-logs"
             python gemma4-agent/tools/summarize_kaggle_kernel_log.py \
               "$RUNNER_TEMP/gemma-v7c-kernel-logs/kernel.log"
@@ -227,16 +266,16 @@ jobs:
 
       - name: Remove raw task patches before persistence
         if: always()
-        run: rm -f gemma4-agent/kaggle_results/v7-c-benchmark/agent_benchmark_patches.txt
+        run: rm -f "${{ steps.screen.outputs.outdir }}/agent_benchmark_patches.txt"
 
       - name: Upload the V7-c screen summary
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: gemma-v7c-clock-screen-${{ github.run_id }}
+          name: gemma-screen-${{ steps.screen.outputs.name }}-${{ github.run_id }}
           path: |
-            gemma4-agent/kaggle_results/v7-c-benchmark/run.json
-            gemma4-agent/kaggle_results/v7-c-benchmark/agent_benchmark_result.json
+            ${{ steps.screen.outputs.outdir }}/run.json
+            ${{ steps.screen.outputs.outdir }}/agent_benchmark_result.json
           if-no-files-found: warn
 
       - name: Commit the V7-c result to this branch
@@ -249,14 +288,15 @@ jobs:
           # SAFE PATTERN (see GATES_V6_3.md): take the REMOTE tree first, then re-apply this run's
           # outputs, so commits pushed while the kernel ran are never reverted.
           rm -rf /tmp/keep && mkdir -p /tmp/keep
-          cp -r gemma4-agent/kaggle_results/v7-c-benchmark /tmp/keep/ 2>/dev/null || true
+          cp -r "${{ steps.screen.outputs.outdir }}" /tmp/keep/ 2>/dev/null || true
           git reset --hard "origin/$GITHUB_REF_NAME"
           mkdir -p gemma4-agent/kaggle_results
-          cp -r /tmp/keep/v7-c-benchmark gemma4-agent/kaggle_results/ 2>/dev/null || true
-          git add gemma4-agent/kaggle_results/v7-c-benchmark 2>/dev/null || true
+          cp -r "/tmp/keep/${{ steps.screen.outputs.name }}" "gemma4-agent/kaggle_results/" 2>/dev/null || true
+          git add "gemma4-agent/kaggle_results/${{ steps.screen.outputs.name }}" 2>/dev/null || true
           python gemma4-agent/tools/compare_screenings.py || true
           git add gemma4-agent/kaggle_results/screening_history.md || true
-          git rm -q --ignore-unmatch gemma4-agent/kaggle_smoke/v7c-benchmark.trigger
+          git rm -q --ignore-unmatch gemma4-agent/kaggle_smoke/v7c-benchmark.trigger \
+            gemma4-agent/kaggle_smoke/screen-v8.trigger
           if [ -z "$(git diff --cached --name-only)" ]; then
             echo "No result files were produced; nothing to commit."
             exit 0
