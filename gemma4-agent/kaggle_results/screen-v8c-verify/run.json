@@ -1,6 +1,6 @@
 {
-  "created_utc": "2026-10-18T12:02:39+00:00",
-  "status": "complete",
+  "created_utc": "2026-10-18T12:57:53+00:00",
+  "status": "running",
   "submission_sha256": "c32a37dc1075dc0be05784b14b6c1c256fdca7e751ab5215336458a0ae94b8ad",
   "fixed_task_id": "fastapi_15588",
   "task_count_requested": 30,
@@ -19,31 +19,14 @@
   "gpu_quota_used": null,
   "gpu_quota_usage_status": "unconfirmed",
   "kaggle_running_status_observed": true,
-  "updated_utc": "2026-10-18T12:17:10+00:00",
-  "kernel_ref": "petersharps/gemma-agent-benchmark-c32a37dc-20261018-120239",
-  "kernel_url": "https://www.kaggle.com/code/petersharps/gemma-agent-benchmark-c32a37dc-20261018-120239",
+  "updated_utc": "2026-10-18T13:12:43+00:00",
+  "kernel_ref": "petersharps/gemma-agent-benchmark-c32a37dc-20261018-125753",
+  "kernel_url": "https://www.kaggle.com/code/petersharps/gemma-agent-benchmark-c32a37dc-20261018-125753",
   "push_exit_code": 0,
-  "push_stdout_tail": "Kernel version 1 successfully pushed.  Please check progress at https://www.kaggle.com/code/petersharps/gemma-agent-benchmark-c32a37dc-20261018-120239\n",
+  "push_stdout_tail": "Kernel version 1 successfully pushed.  Please check progress at https://www.kaggle.com/code/petersharps/gemma-agent-benchmark-c32a37dc-20261018-125753\n",
   "push_stderr_tail": "",
   "gpu_requested": true,
   "push_verified": true,
-  "push_probe_raw": "petersharps/gemma-agent-benchmark-c32a37dc-20261018-120239 has status \"KernelWorkerStatus.QUEUED\"",
-  "kaggle_status": "COMPLETE",
-  "poll_checked_utc": "2026-10-18T12:57:14+00:00",
-  "result": {
-    "tasks_completed_or_failed": 30,
-    "task_count_selected": 30,
-    "resolved_count": 9,
-    "score_estimate": 0.3,
-    "score_ci95_wilson": [
-      0.16664562643958933,
-      0.4787612101166018
-    ],
-    "mean_task_duration_seconds": 248.8036740853667,
-    "total_task_duration_seconds": 7464.110222561001,
-    "benchmark_wall_seconds": 2651.2183194179997,
-    "per_task_max_time_minutes": 5.25,
-    "submission_sha256": "c32a37dc1075dc0be05784b14b6c1c256fdca7e751ab5215336458a0ae94b8ad"
-  },
-  "fetched_utc": "2026-10-18T12:57:32+00:00"
+  "push_probe_raw": "petersharps/gemma-agent-benchmark-c32a37dc-20261018-125753 has status \"KernelWorkerStatus.RUNNING\"",
+  "kaggle_status": "KernelWorkerStatus.RUNNING"
 }
