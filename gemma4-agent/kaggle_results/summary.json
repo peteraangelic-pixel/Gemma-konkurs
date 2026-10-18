@@ -1,8 +1,8 @@
 {
-  "fetched_utc": "2026-10-17T12:40:33+00:00",
+  "fetched_utc": "2026-10-18T04:14:58+00:00",
   "competition": "gemma-4-developer-agent",
   "team_filter": null,
-  "leaderboard_rows": 3037,
+  "leaderboard_rows": 3084,
   "submission_rows": 4,
   "our_leaderboard_rows": [],
   "top10": [
@@ -10,9 +10,9 @@
       "Rank": "1",
       "TeamId": "16948405",
       "TeamName": "Yurnero",
-      "LastSubmissionDate": "2026-10-16 04:51:40",
+      "LastSubmissionDate": "2026-10-17 06:40:15",
       "Score": "0.24",
-      "SubmissionCount": "15",
+      "SubmissionCount": "16",
       "TeamMemberUserNames": "samson8"
     },
     {
@@ -46,9 +46,9 @@
       "Rank": "5",
       "TeamId": "16956138",
       "TeamName": "Ayush Barai",
-      "LastSubmissionDate": "2026-10-16 03:57:53",
+      "LastSubmissionDate": "2026-10-17 05:56:15",
       "Score": "0.22",
-      "SubmissionCount": "20",
+      "SubmissionCount": "21",
       "TeamMemberUserNames": "ayush04barai"
     },
     {
@@ -73,9 +73,9 @@
       "Rank": "8",
       "TeamId": "17039226",
       "TeamName": "Vibhanshu Singh",
-      "LastSubmissionDate": "2026-10-16 00:29:32",
+      "LastSubmissionDate": "2026-10-17 06:10:17",
       "Score": "0.22",
-      "SubmissionCount": "6",
+      "SubmissionCount": "7",
       "TeamMemberUserNames": "vibhanshus"
     },
     {
@@ -105,8 +105,8 @@
       "fileName": "submission.zip",
       "date": "2026-10-17 01:30:25.227000",
       "description": "V7b",
-      "status": "SubmissionStatus.PENDING",
-      "publicScore": "",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.10",
       "privateScore": ""
     },
     {

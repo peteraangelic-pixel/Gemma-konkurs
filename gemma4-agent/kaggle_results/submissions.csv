@@ -1,5 +1,5 @@
 ref,fileName,date,description,status,publicScore,privateScore
-57290417,submission.zip,2026-10-17 01:30:25.227000,V7b,SubmissionStatus.PENDING,,
+57290417,submission.zip,2026-10-17 01:30:25.227000,V7b,SubmissionStatus.COMPLETE,0.10,
 57247888,submission.zip,2026-10-16 00:05:07.063000,V6.12,SubmissionStatus.COMPLETE,0.08,
 57188055,submission.zip,2026-10-14 15:58:54.433000,V5,SubmissionStatus.COMPLETE,0.13,
 57045226,submission.zip,2026-10-10 14:51:48.940000,V4,SubmissionStatus.COMPLETE,0.03,
