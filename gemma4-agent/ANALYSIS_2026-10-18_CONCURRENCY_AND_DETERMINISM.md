@@ -82,3 +82,20 @@ Do tego — niespodziewanie — przycisk „uruchom LoRA SFT": commit `c6a1479` 
 (`39123433910`, start 11:29 UTC). Kernel canary zajął slot GPU i zablokował dwie próby ekranu
 („Maximum batch GPU session count of 2 reached"). **Zasada: w tym repo nigdy `git add -A`; tylko
 jawne ścieżki.** Plików `*.trigger` nie wolno dotykać nawet usunięciem — usunięcie też wyzwala.
+
+## 6. Korekta po analizie V8: jeden znany flake (dopisane 13:40 UTC)
+
+Twierdzenie o pełnym determinizmie trzeba zawęzić. `fastapi_14851` w przebiegu V7-c: **pusty patch,
+`test_exit_code 0`, `resolved=true`**; w przebiegu V8 (też pusty patch, ta sama pusta zmiana):
+**`resolved=false`**. Identyczny graded diff, przeciwny werdykt — czyli determinizm obowiązuje
+„przy tym samym diffie i środowisku, z wyjątkiem co najmniej jednego zadania na 30".
+
+Co to zmienia praktycznie:
+
+- **1/30 = 3,3 pp.** Wszystkie dzisiejsze porównania parowane mają tę niepewność w tle; nie
+  zmienia to werdyktu V8 (−1 netto to nie 3 pp) ani wniosku o concurrency (12/12 zgodnych).
+- **Nie wolno liczyć tego zadania jako wygranej.** Nasz realny wynik na 30 zadaniach to 9/30,
+  a fastapi 2/16, nie 3/16. W oficjalnej punktacji 0,13 taka „darmowa" pozycja też może siedzieć,
+  czego nie da się sprawdzić z zewnątrz.
+- **Kandydat na przyszłość:** zanim uznamy jakiekolwiek zadanie za łatwe/trudne, sprawdzić je
+  drugim przebiegiem — to koszt 1/30 ekranu i jedyny sposób odsiać flaki od umiejętności.

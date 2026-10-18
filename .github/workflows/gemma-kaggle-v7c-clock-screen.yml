@@ -142,18 +142,35 @@ jobs:
             # A screen-v8 run is fully described by its JSON: which archive, which tasks, how many
             # at once and where the record goes. Keeping it in one file is what lets the same
             # workflow measure concurrency, a repository holdout, or an A/B pair without new code.
-            OUTDIR=$(python3 -c "import json;print(json.load(open('gemma4-agent/kaggle_smoke/screen-v8.json'))['outdir'])")
-            SUBMISSION=$(python3 -c "import json;print(json.load(open('gemma4-agent/kaggle_smoke/screen-v8.json'))['submission'])")
-            TASKS=$(python3 -c "import json;print(','.join(json.load(open('gemma4-agent/kaggle_smoke/screen-v8.json'))['task_ids']))")
-            COUNT=$(python3 -c "import json;print(len(json.load(open('gemma4-agent/kaggle_smoke/screen-v8.json'))['task_ids']))")
-            CONC=$(python3 -c "import json;print(json.load(open('gemma4-agent/kaggle_smoke/screen-v8.json')).get('concurrency',1))")
-            SEED=$(python3 -c "import json;print(json.load(open('gemma4-agent/kaggle_smoke/screen-v8.json')).get('seed',20261009))")
-            WAIT=$(python3 -c "import json;print(json.load(open('gemma4-agent/kaggle_smoke/screen-v8.json')).get('max_wait_minutes',120))")
-            echo "screen-v8: $OUTDIR | $COUNT tasks | concurrency $CONC"
+            # One config file, read once, into shell variables - the previous version repeated the
+            # same json.load seven times and only ever supported named task_ids, which is why a
+            # repository-holdout config (task_count + exclude_repos, no ids) could not be staged
+            # without editing this step.
+            python3 - <<'CFG' > /tmp/screen-v8.env
+            import json
+            import shlex
+            from pathlib import Path
+
+            cfg = json.loads(Path("gemma4-agent/kaggle_smoke/screen-v8.json").read_text())
+            ids = [str(item) for item in (cfg.get("task_ids") or [])]
+            excluded = [str(item) for item in (cfg.get("exclude_repos") or [])]
+            print(f"OUTDIR={shlex.quote(str(cfg['outdir']))}")
+            print(f"SUBMISSION={shlex.quote(str(cfg['submission']))}")
+            print(f"TASKS={shlex.quote(','.join(ids))}")
+            print(f"COUNT={len(ids) if ids else int(cfg.get('task_count', 30))}")
+            print(f"CONC={int(cfg.get('concurrency', 1))}")
+            print(f"SEED={int(cfg.get('seed', 20261009))}")
+            print(f"WAIT={int(cfg.get('max_wait_minutes', 120))}")
+            print(f"EXCLUDE={shlex.quote(','.join(excluded))}")
+            CFG
+            # shellcheck disable=SC1091
+            . /tmp/screen-v8.env
+            echo "screen-v8: $OUTDIR | $COUNT tasks | concurrency $CONC | exclude ${EXCLUDE:-none}"
             timeout 900 python gemma4-agent/tools/run_kaggle_v1_smoke.py \
               --submission "$SUBMISSION" --outdir "$OUTDIR" \
               --task-count "$COUNT" --task-ids "$TASKS" --seed "$SEED" \
-              --concurrency "$CONC" --max-wait-minutes "$WAIT" --poll-interval-seconds 45
+              --concurrency "$CONC" --exclude-repos "$EXCLUDE" \
+              --max-wait-minutes "$WAIT" --poll-interval-seconds 45
           else
             timeout 600 python gemma4-agent/tools/run_kaggle_v1_smoke.py \
               --submission gemma4-agent/submission-v7c.zip \

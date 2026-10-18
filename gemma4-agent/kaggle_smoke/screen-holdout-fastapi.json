@@ -1,0 +1,15 @@
+{
+  "label": "holdout: fastapi/fastapi removed before the draw (V5 archive)",
+  "why": "V5 scores 0.13 officially and 9/30 on our own screen, but 6 of those 9 wins are Textualize/rich and only 2 are fastapi (the third fastapi 'win' resolved with an empty patch and is an anomaly, not a solve). This screen removes fastapi/fastapi before the stratified draw, so no task from it can appear: does accuracy survive on the repositories the prompt was not iterated against, or is 0.13 prompt memory of four known layouts? Request 30 tasks, capped to the survivors, concurrency 3, V5 archive unchanged.",
+  "submission": "gemma4-agent/submission-v5.zip",
+  "outdir": "gemma4-agent/kaggle_results/holdout-fastapi",
+  "task_ids": [],
+  "task_count": 30,
+  "concurrency": 3,
+  "exclude_repos": [
+    "fastapi/fastapi"
+  ],
+  "seed": 20261009,
+  "max_wait_minutes": 90,
+  "start_now": true
+}

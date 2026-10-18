@@ -1,2 +1,7 @@
 __pycache__/
 *.pyc
+
+# An untracked leftover of the SFT carrier. `git add -A` swept this into a commit once and it
+# launched a 31-minute LoRA canary that took the GPU slot from a screen already in flight.
+# Triggers are armed deliberately, never in bulk.
+gemma4-agent/kaggle_smoke/v2-benchmark.trigger

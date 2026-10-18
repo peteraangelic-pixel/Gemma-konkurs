@@ -186,9 +186,11 @@ if explicit_ids:
     missing = [item for item in explicit_ids if item not in task_by_id]
     assert not missing, f"Explicit task ids are not in the public set: {missing}"
     selected_tasks = [task_by_id[item] for item in explicit_ids]
+    # A holdout is only a holdout if nothing from the excluded repositories sneaks back in
+    # through a named task, and requested_count=1 must also obey the holdout.
+    leaked = sorted({item.repo for item in selected_tasks if item.repo in _excluded})
+    assert not leaked, f'Explicit task ids come from held-out repositories: {leaked}'
     requested_count = len(selected_tasks)
-elif requested_count == 1:
-    selected_tasks = [fixed_task]
 else:
     grouped = {}
     for item in all_tasks:
@@ -199,12 +201,23 @@ else:
         _kept = sum(len(group) for group in grouped.values())
         print(f'Repository holdout: excluded {_excluded}; {len(all_tasks) - _kept} tasks dropped, {_kept} remain')
     assert grouped, f'Every task was excluded by --exclude-repos {_excluded}'
+    # The reserved reference task must obey the holdout too, otherwise every leave-one-repo-out
+    # screen silently contains one task from the repository it claims to have removed.
+    if fixed_task is not None and fixed_task.repo in _excluded:
+        print(f'Reference task {fixed_task.instance_id} is in a held-out repository; dropping it.')
+        fixed_task = None
+    _available = sum(len(group) for group in grouped.values())
+    if requested_count > _available:
+        print(f'Requested {requested_count} tasks but only {_available} survive the holdout; sampling {_available}.')
+        requested_count = _available
     candidate_groups = {
-        repo: [item for item in group if item.instance_id != fixed_task.instance_id]
+        repo: [item for item in group if fixed_task is None or item.instance_id != fixed_task.instance_id]
         for repo, group in grouped.items()
     }
     candidate_groups = {repo: group for repo, group in candidate_groups.items() if group}
-    remaining_count = requested_count - 1
+    remaining_count = requested_count - (1 if fixed_task is not None else 0)
+    assert sum(len(g) for g in candidate_groups.values()) >= remaining_count, (
+        f'holdout leaves too few tasks for a request of {requested_count}')
     candidate_total = sum(len(group) for group in candidate_groups.values())
     exact_quotas = {
         repo: remaining_count * len(group) / candidate_total
@@ -226,7 +239,7 @@ else:
         repo = min(candidates, key=lambda key: exact_quotas[key] - quotas[key])
         quotas[repo] -= 1
     rng = random.Random(int(TASK_SELECTION['seed']))
-    selected_tasks = [fixed_task]
+    selected_tasks = [fixed_task] if fixed_task is not None else []
     for repo in sorted(candidate_groups):
         candidates = sorted(candidate_groups[repo], key=lambda item: item.instance_id)
         rng.shuffle(candidates)
