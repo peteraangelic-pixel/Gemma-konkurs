@@ -1,8 +1,8 @@
 {
-  "label": "concurrency-3 replication of 12 V7-c tasks",
-  "why": "V7-c ran 12 of these tasks at concurrency 1 and took 2919 s of task time (5/12 resolved). Same archive, same task ids, same seed - only the number of parallel sessions changes. This answers whether a screen can be made 3x cheaper without changing what it measures.",
+  "label": "concurrency-3, fixed launcher",
+  "why": "The first launch was a dud: `concurrency` never reached the notebook (TASK_SELECTION had no such key) and `_excluded` was a NameError. tools/check_notebook_names.py now fails the workflow before a launch. Same 12 paired tasks, same seed, concurrency 3: does batching four sessions against one vLLM server cost accuracy, and how much wall clock does it save against the serial baseline (5/12, 2919 s, 2 empties)?",
   "submission": "gemma4-agent/submission-v7c.zip",
-  "outdir": "gemma4-agent/kaggle_results/screen-v8-concurrency",
+  "outdir": "gemma4-agent/kaggle_results/screen-v8b-concurrency",
   "task_ids": [
     "requests_6644",
     "rich_3934",

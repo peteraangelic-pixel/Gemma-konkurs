@@ -130,6 +130,7 @@ def build_notebook(
     encoded_zip = json.dumps(base64.b64encode(submission_zip).decode("ascii"))
     encoded_selection = json.dumps(
         json.dumps({"task_count": task_count, "seed": seed, "task_id": task_id,
+                     "concurrency": int(concurrency),
                      "excluded_repos": list(excluded_repos or []),
                     **({"task_ids": list(task_ids)} if task_ids else {})})
     )
@@ -150,6 +151,9 @@ WORKING_DIR.mkdir(parents=True, exist_ok=True)
 TASKS_PATH = DATA_DIR / 'tasks.jsonl'
 AGENT_DIR = WORKING_DIR / 'candidate_submission'
 TASK_SELECTION = json.loads(__TASK_SELECTION_JSON__)
+# Repository holdout: whole repositories removed BEFORE the stratified draw, so the sample
+# measures transfer to unseen projects instead of prompt memory of a known layout.
+_excluded = sorted({str(item) for item in (TASK_SELECTION.get('excluded_repos') or [])})
 
 SUBMISSION_ZIP_B64 = __SUBMISSION_B64__
 EXPECTED_SUBMISSION_SHA256 = '__SUBMISSION_SHA256__'
@@ -188,7 +192,13 @@ elif requested_count == 1:
 else:
     grouped = {}
     for item in all_tasks:
+        if item.repo in _excluded:
+            continue
         grouped.setdefault(item.repo, []).append(item)
+    if _excluded:
+        _kept = sum(len(group) for group in grouped.values())
+        print(f'Repository holdout: excluded {_excluded}; {len(all_tasks) - _kept} tasks dropped, {_kept} remain')
+    assert grouped, f'Every task was excluded by --exclude-repos {_excluded}'
     candidate_groups = {
         repo: [item for item in group if item.instance_id != fixed_task.instance_id]
         for repo, group in grouped.items()

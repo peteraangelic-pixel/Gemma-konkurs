@@ -124,6 +124,12 @@ jobs:
           chmod 600 "$HOME/.kaggle/access_token"
           echo "Kaggle CLI configured; token value was not logged."
 
+      - name: Check the launcher before spending GPU
+        # Twice the launcher recorded a knob in run.json and never passed it to the notebook:
+        # concurrency stayed 1 and _excluded was a NameError waiting for the first task. The
+        # notebook is a string, so ast.parse on the launcher cannot see either. This fails fast.
+        run: python3 gemma4-agent/tools/check_notebook_names.py
+
       - name: Start the screen (v7c clock screen, or a screen-v8 config if one is present)
         continue-on-error: true
         env:
