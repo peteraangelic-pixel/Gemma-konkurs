@@ -526,41 +526,83 @@ except Exception as _exc:
     print(f'Diagnostics: gold map unavailable ({type(_exc).__name__}: {_exc})')
 
 
-for task_index, task in enumerate(selected_tasks, start=1):
-    print(f'Benchmark task {task_index}/{len(selected_tasks)}: {task.instance_id} ({task.repo})')
-    try:
-        result = run_sync(evaluator.evaluate_task, task=task, task_index=task_index, total_tasks=len(selected_tasks))
-        patch = result.agent_patch or ''
-        exit_code = result.test_exit_code
-        row = {
-            'task_id': task.instance_id,
-            'repo': task.repo,
-            'resolved': bool(result.resolved),
-            'test_exit_code': None if exit_code is None else int(exit_code),
-            'patch_chars': len(patch),
-            'tool_calls': int(result.tool_calls or 0),
-            'duration_seconds': float(result.duration_seconds),
-        }
-        touched = _patch_paths(patch)
-        gold = GOLD_BY_TASK.get(task.instance_id, {})
-        gold_fixable = gold.get('fixable') or gold.get('all') or []
-        row['touched_files'] = touched[:12]
-        row['touched_tests'] = any(_is_test_path(item) for item in touched)
-        row['gold_fixable_files'] = gold_fixable[:12]
-        row['localized'] = bool(set(touched) & set(gold_fixable))
-        if patch:
-            patches.append(f"===== {task.instance_id} | resolved={row['resolved']} | {len(patch)} chars =====\n{patch}")
-    except Exception as exc:
-        row = {
-            'task_id': task.instance_id,
-            'repo': task.repo,
-            'resolved': False,
-            'error': f'{type(exc).__name__}: {str(exc)[:500]}',
-            'duration_seconds': None,
-        }
+_CONCURRENCY = max(1, int(TASK_SELECTION.get('concurrency') or 1))
+
+
+def _record_result(task, result):
+    patch = result.agent_patch or ''
+    exit_code = result.test_exit_code
+    row = {
+        'task_id': task.instance_id,
+        'repo': task.repo,
+        'resolved': bool(result.resolved),
+        'test_exit_code': None if exit_code is None else int(exit_code),
+        'patch_chars': len(patch),
+        'tool_calls': int(result.tool_calls or 0),
+        'duration_seconds': float(result.duration_seconds),
+    }
+    touched = _patch_paths(patch)
+    gold = GOLD_BY_TASK.get(task.instance_id, {})
+    gold_fixable = gold.get('fixable') or gold.get('all') or []
+    row['touched_files'] = touched[:12]
+    row['touched_tests'] = any(_is_test_path(item) for item in touched)
+    row['gold_fixable_files'] = gold_fixable[:12]
+    row['localized'] = bool(set(touched) & set(gold_fixable))
+    if patch:
+        patches.append(f"===== {task.instance_id} | resolved={row['resolved']} | {len(patch)} chars =====\n{patch}")
     per_task_results.append(row)
     summary = persist_results()
     print(json.dumps({key: summary[key] for key in ('tasks_completed_or_failed', 'resolved_count', 'score_estimate', 'score_ci95_wilson')}))
+    return row
+
+
+def _record_failure(task, exc):
+    row = {
+        'task_id': task.instance_id,
+        'repo': task.repo,
+        'resolved': False,
+        'error': f'{type(exc).__name__}: {str(exc)[:500]}',
+        'duration_seconds': None,
+    }
+    per_task_results.append(row)
+    persist_results()
+    print(f'  {task.instance_id} failed: {row["error"]}')
+    return row
+
+
+async def _run_one_async(task_index, task, semaphore):
+    # The evaluator's own batch path (Evaluator.run) is what implements concurrency upstream; our
+    # serial loop never gave it more than one task to overlap, which is why a "concurrency 3" run
+    # took exactly as long as a serial one. This gathers the same per-task coroutines the harness
+    # gathers, and keeps our per-task persistence so a later crash cannot lose completed tasks.
+    async with semaphore:
+        print(f'Benchmark task {task_index}/{len(selected_tasks)}: {task.instance_id} ({task.repo})')
+        try:
+            result = await evaluator.evaluate_task(
+                task=task, task_index=task_index, total_tasks=len(selected_tasks)
+            )
+        except Exception as exc:
+            return _record_failure(task, exc)
+        return _record_result(task, result)
+
+
+async def _run_all_async(tasks):
+    semaphore = asyncio.Semaphore(_CONCURRENCY)
+    await asyncio.gather(
+        *[_run_one_async(index, task, semaphore) for index, task in enumerate(tasks, start=1)]
+    )
+
+
+if _CONCURRENCY == 1:
+    for task_index, task in enumerate(selected_tasks, start=1):
+        print(f'Benchmark task {task_index}/{len(selected_tasks)}: {task.instance_id} ({task.repo})')
+        try:
+            _record_result(task, run_sync(evaluator.evaluate_task, task=task, task_index=task_index, total_tasks=len(selected_tasks)))
+        except Exception as exc:
+            _record_failure(task, exc)
+else:
+    print(f'Running {len(selected_tasks)} tasks with {_CONCURRENCY} concurrent sessions')
+    run_sync(_run_all_async, selected_tasks)
 
 final_summary = persist_results()
 print(json.dumps(final_summary, indent=2, ensure_ascii=False))

@@ -1,24 +1,18 @@
 {
-  "label": "concurrency 3, launcher verified end to end",
-  "why": "Third attempt, and this time the knob is checked before the launch: tools/check_notebook_names.py fails on a name that is read and never bound, on a TASK_SELECTION key that is never forwarded, and on a build_notebook() keyword the CLI never passes. The two earlier kernels both ran at concurrency 1 (the second one proved it: 12/12 tasks reproduced the serial baseline's outcome exactly, 5/12, so the screen is deterministic per task and any flip under batching is a real effect). Same 12 paired tasks, same seed, concurrency 3.",
+  "label": "concurrency smoke: does the gather path actually overlap sessions?",
+  "why": "Two launches proved the config flag alone does nothing: our loop awaited one task at a time, so the evaluator never had a second task to overlap and wall clock equalled the sum of task durations. The cell now gathers the same per-task coroutines the harness gathers. Six tasks, three at a time, V5 archive: expect 3/6 (6644 T, 3934 F, 14851 T, 3718 T, 14266 F, 14487 F) and a wall clock near one third of the sum. Any flip on these six is a warning that batching changes outcomes.",
   "submission": "gemma4-agent/submission-v7c.zip",
-  "outdir": "gemma4-agent/kaggle_results/screen-v8-2-concurrency",
+  "outdir": "gemma4-agent/kaggle_results/screen-v8-smoke-concurrency",
   "task_ids": [
     "requests_6644",
     "rich_3934",
     "fastapi_14851",
     "rich_3718",
     "fastapi_14266",
-    "fastapi_14487",
-    "fastapi_14953",
-    "rich_3518",
-    "fastapi_14297",
-    "rich_3894",
-    "fastapi_14303",
-    "rich_3052"
+    "fastapi_14487"
   ],
   "concurrency": 3,
   "seed": 20261009,
-  "max_wait_minutes": 120,
+  "max_wait_minutes": 60,
   "start_now": true
 }
