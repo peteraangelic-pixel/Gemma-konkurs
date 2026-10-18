@@ -1,6 +1,6 @@
 {
-  "created_utc": "2026-10-18T10:31:23+00:00",
-  "status": "complete",
+  "created_utc": "2026-10-18T11:24:47+00:00",
+  "status": "running",
   "submission_sha256": "907b8648c6dcbb53b7f2fb3c5fa9a54d73af55278b66c04aeef70714ce19883e",
   "fixed_task_id": "fastapi_15588",
   "task_count_requested": 12,
@@ -19,31 +19,14 @@
   "gpu_quota_used": null,
   "gpu_quota_usage_status": "unconfirmed",
   "kaggle_running_status_observed": true,
-  "updated_utc": "2026-10-18T10:45:52+00:00",
-  "kernel_ref": "petersharps/gemma-agent-benchmark-907b8648-20261018-103123",
-  "kernel_url": "https://www.kaggle.com/code/petersharps/gemma-agent-benchmark-907b8648-20261018-103123",
+  "updated_utc": "2026-10-18T11:39:20+00:00",
+  "kernel_ref": "petersharps/gemma-agent-benchmark-907b8648-20261018-112447",
+  "kernel_url": "https://www.kaggle.com/code/petersharps/gemma-agent-benchmark-907b8648-20261018-112447",
   "push_exit_code": 0,
-  "push_stdout_tail": "Kernel version 1 successfully pushed.  Please check progress at https://www.kaggle.com/code/petersharps/gemma-agent-benchmark-907b8648-20261018-103123\n",
+  "push_stdout_tail": "Kernel version 1 successfully pushed.  Please check progress at https://www.kaggle.com/code/petersharps/gemma-agent-benchmark-907b8648-20261018-112447\n",
   "push_stderr_tail": "",
   "gpu_requested": true,
   "push_verified": true,
-  "push_probe_raw": "petersharps/gemma-agent-benchmark-907b8648-20261018-103123 has status \"KernelWorkerStatus.QUEUED\"",
-  "kaggle_status": "COMPLETE",
-  "poll_checked_utc": "2026-10-18T11:24:23+00:00",
-  "result": {
-    "tasks_completed_or_failed": 12,
-    "task_count_selected": 12,
-    "resolved_count": 5,
-    "score_estimate": 0.4166666666666667,
-    "score_ci95_wilson": [
-      0.19325746190524654,
-      0.6804926643446272
-    ],
-    "mean_task_duration_seconds": 214.333580105,
-    "total_task_duration_seconds": 2572.00296126,
-    "benchmark_wall_seconds": 2572.7461518970003,
-    "per_task_max_time_minutes": 8.0,
-    "submission_sha256": "907b8648c6dcbb53b7f2fb3c5fa9a54d73af55278b66c04aeef70714ce19883e"
-  },
-  "fetched_utc": "2026-10-18T11:24:32+00:00"
+  "push_probe_raw": "petersharps/gemma-agent-benchmark-907b8648-20261018-112447 has status \"KernelWorkerStatus.QUEUED\"",
+  "kaggle_status": "KernelWorkerStatus.RUNNING"
 }
