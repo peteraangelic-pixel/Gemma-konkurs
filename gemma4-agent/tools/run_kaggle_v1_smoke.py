@@ -657,6 +657,7 @@ def main() -> int:
     parser.add_argument("--poll-interval-seconds", type=int, default=45)
     args = parser.parse_args()
     explicit_task_ids = [item.strip() for item in (args.task_ids or "").split(",") if item.strip()]
+    excluded_repos = [item.strip() for item in (args.exclude_repos or "").split(",") if item.strip()]
     if explicit_task_ids:
         args.task_count = len(explicit_task_ids)
     if args.task_count < 1:
@@ -680,6 +681,10 @@ def main() -> int:
         "fixed_task_id": args.task_id,
         "task_count_requested": args.task_count,
         "sample_seed": args.seed,
+        # Requested here so the committed launch record itself shows what the kernel was asked for;
+        # the notebook's own summary is what proves what it actually did.
+        "concurrency_requested": args.concurrency,
+        "excluded_repos_requested": excluded_repos,
         "kernel_timeout_seconds": kernel_timeout_seconds,
         "model": MODEL_ID,
         "machine_shape": MACHINE_SHAPE,
@@ -719,6 +724,11 @@ def main() -> int:
                 seed=args.seed,
                 task_id=args.task_id,
                 task_ids=explicit_task_ids or None,
+                # Both of these were silently defaulted for three launches in a row: the CLI parsed
+                # them, run.json recorded them, and build_notebook was called without them, so the
+                # kernel ran serially at concurrency 1. The checker now fails on a missing keyword.
+                concurrency=args.concurrency,
+                excluded_repos=excluded_repos,
             )
             notebook_path = kernel_dir / "agent-benchmark.ipynb"
             notebook_path.write_text(json.dumps(notebook, ensure_ascii=False), encoding="utf-8")

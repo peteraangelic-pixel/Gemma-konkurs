@@ -1,8 +1,8 @@
 {
-  "label": "concurrency-3, fixed launcher",
-  "why": "The first launch was a dud: `concurrency` never reached the notebook (TASK_SELECTION had no such key) and `_excluded` was a NameError. tools/check_notebook_names.py now fails the workflow before a launch. Same 12 paired tasks, same seed, concurrency 3: does batching four sessions against one vLLM server cost accuracy, and how much wall clock does it save against the serial baseline (5/12, 2919 s, 2 empties)?",
+  "label": "concurrency 3, launcher verified end to end",
+  "why": "Third attempt, and this time the knob is checked before the launch: tools/check_notebook_names.py fails on a name that is read and never bound, on a TASK_SELECTION key that is never forwarded, and on a build_notebook() keyword the CLI never passes. The two earlier kernels both ran at concurrency 1 (the second one proved it: 12/12 tasks reproduced the serial baseline's outcome exactly, 5/12, so the screen is deterministic per task and any flip under batching is a real effect). Same 12 paired tasks, same seed, concurrency 3.",
   "submission": "gemma4-agent/submission-v7c.zip",
-  "outdir": "gemma4-agent/kaggle_results/screen-v8b-concurrency",
+  "outdir": "gemma4-agent/kaggle_results/screen-v8-2-concurrency",
   "task_ids": [
     "requests_6644",
     "rich_3934",

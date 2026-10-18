@@ -1,19 +1,21 @@
-"""Fail before a GPU run if the generated Kaggle notebook can only crash.
+"""Fail before a GPU run if the generated Kaggle notebook can only crash or silently ignore a knob.
 
-Twice in a row a "knob" added to the launcher was written into `run.json` but never reached the
-notebook: `concurrency` was missing from the encoded TASK_SELECTION (the cell silently read 1), and
-`_excluded` was referenced by persist_results() while never being defined (NameError after the
-first task, i.e. after the quota was already spent). Both are invisible to `ast.parse` on the
-launcher, because the notebook is a string.
+Three launches in a row carried a knob that was parsed, recorded in run.json and reported in every
+summary while never reaching the kernel: `concurrency` was missing from the encoded TASK_SELECTION,
+`_excluded` was referenced and never defined (NameError after the first task), and finally the CLI
+simply did not pass `concurrency=`/`excluded_repos=` to build_notebook() at all, so three kernels
+ran serially. Every one of those is invisible to `ast.parse` on the launcher, because the notebook
+is a string.
 
-This check imports the launcher's build_notebook, extracts the generated cell bodies, and reports:
+This check reports:
 
-  * syntax errors in the generated code;
-  * names read at module level and never bound anywhere and not builtins (the `_excluded` class);
-  * TASK_SELECTION keys that the launcher accepts but does not forward.
+  * syntax errors in the generated notebook;
+  * names read and never bound anywhere, and not builtins (the `_excluded` class);
+  * TASK_SELECTION keys the launcher accepts but does not forward;
+  * keywords the CLI parses but never passes to build_notebook() (the third class).
 
 Run: python3 gemma4-agent/tools/check_notebook_names.py
-Exit code 0 = the notebook is at least name-clean; 1 = do not launch.
+Exit code 0 = the notebook is at least name-clean and the knobs are wired; 1 = do not launch.
 """
 from __future__ import annotations
 
@@ -21,14 +23,16 @@ import ast
 import builtins
 import importlib.util
 import json
-import sys
 import symtable
+import sys
 from pathlib import Path
 
 LAUNCHER = Path(__file__).with_name("run_kaggle_v1_smoke.py")
 
 # Plumbed through build_notebook(...) and expected inside TASK_SELECTION.
 REQUIRED_SELECTION_KEYS = ("task_count", "seed", "task_id", "concurrency")
+# Must appear as keyword arguments at the build_notebook call site.
+REQUIRED_CALL_KEYWORDS = ("concurrency", "excluded_repos")
 
 
 def load_launcher():
@@ -90,6 +94,18 @@ def undefined_names(source: str) -> list[str]:
     return sorted(missing)
 
 
+def missing_call_keywords(source: str, function: str = "build_notebook") -> list[str]:
+    """Keywords that build_notebook() never receives, so its signature defaults silently win."""
+    tree = ast.parse(source)
+    found: set[str] = set()
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Call):
+            name = getattr(node.func, "id", None) or getattr(node.func, "attr", None)
+            if name == function:
+                found.update(keyword.arg for keyword in node.keywords if keyword.arg)
+    return sorted(set(REQUIRED_CALL_KEYWORDS) - found)
+
+
 def forwarded_keys(notebook: dict) -> set[str]:
     source = notebook_source(notebook)
     marker = "TASK_SELECTION = json.loads("
@@ -135,8 +151,14 @@ def main() -> int:
     if "excluded_repos" not in keys:
         problems.append("TASK_SELECTION never receives 'excluded_repos'")
 
+    for keyword in missing_call_keywords(LAUNCHER.read_text(encoding="utf-8")):
+        problems.append(
+            f"the CLI never passes {keyword}= to build_notebook(), so "
+            f"--{keyword.replace('_', '-')} is recorded but never applied"
+        )
+
     if problems:
-        print("NOT NOTEBOOK-SAFE — do not launch:")
+        print("NOT NOTEBOOK-SAFE - do not launch:")
         for problem in problems:
             print(f"  - {problem}")
         return 1
