@@ -62,3 +62,24 @@ przeczytaj błąd → popraw**. I musi być mierzona na tych samych zadaniach (p
   przedział.
 - **Porażki klasyfikujemy zawsze**, zanim zmienimy cokolwiek w prompcie — inaczej „poprawiamy" to,
   co nie jest zepsute (jak zegar w V7-c).
+
+## Drugi pomiar tej samej metody: co odróżnia sesję rozwiązaną od przegranej (V6.4, 30 zadań)
+
+Te same 30 zadań, dla których mamy pełne trajektorie (`kaggle_results/v6-4-benchmark/traces/`).
+Pytanie: czy po edycji agent sprawdził, co zrobił?
+
+| stan po ostatniej edycji | rozwiązane | przegrane |
+| --- | ---: | ---: |
+| **po edycji uruchomił cokolwiek** | **10** | 10 |
+| edycja i ani jednej komendy po niej | **0** | 6 |
+| żadnej edycji w pliku źródłowym | **0** | 4 |
+
+To nie jest dowód przyczynowy (sesja, która ma dobry pomysł, częściej go też sprawdza), ale jest to
+jedyne miejsce w naszych danych, gdzie jedna obserwowalna czynność dzieli zbiór na 50 % i 0 %.
+Dlatego V8 nie dokłada wiedzy o repozytoriach — dokłada **obowiązek uruchomienia własnej zmiany**
+i poprawienia tego, co pokaże. Bramki: `GATES_V8.md`.
+
+Trzecia liczba z tej samej tabeli: **3/30 pierwszych zapisów trafiło w plik, który grader wyrzuca**
+(`pyproject.toml`, `docs/en/...md`, `tox.ini`) — dwa z nich skończyły się pustym drzewem mimo
+potwierdzonej edycji. To nie jest problem rozumowania, to problem celu; w V8 jest osobne zdanie,
+że diff confined to tests/config/docs nie jest fixem.
