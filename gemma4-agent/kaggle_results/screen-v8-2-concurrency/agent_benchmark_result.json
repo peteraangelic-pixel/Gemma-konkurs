@@ -1,0 +1,253 @@
+{
+  "task_count_requested": 12,
+  "task_count_selected": 12,
+  "tasks_completed_or_failed": 12,
+  "resolved_count": 5,
+  "score_estimate": 0.4166666666666667,
+  "score_ci95_wilson": [
+    0.19325746190524654,
+    0.6804926643446272
+  ],
+  "per_task_max_time_minutes": 8.0,
+  "mean_task_duration_seconds": 214.333580105,
+  "total_task_duration_seconds": 2572.00296126,
+  "benchmark_wall_seconds": 2572.7461518970003,
+  "model": "gemma-4-31b-it-qat-w4a16-ct",
+  "visible_gpu_count": 4,
+  "submission_sha256": "907b8648c6dcbb53b7f2fb3c5fa9a54d73af55278b66c04aeef70714ce19883e",
+  "sample_seed": 20261009,
+  "concurrency": 3,
+  "excluded_repos": [],
+  "repo_counts": {
+    "psf/requests": 1,
+    "Textualize/rich": 5,
+    "fastapi/fastapi": 6
+  },
+  "task_ids": [
+    "requests_6644",
+    "rich_3934",
+    "fastapi_14851",
+    "rich_3718",
+    "fastapi_14266",
+    "fastapi_14487",
+    "fastapi_14953",
+    "rich_3518",
+    "fastapi_14297",
+    "rich_3894",
+    "fastapi_14303",
+    "rich_3052"
+  ],
+  "tasks": [
+    {
+      "task_id": "requests_6644",
+      "repo": "psf/requests",
+      "resolved": true,
+      "test_exit_code": 0,
+      "patch_chars": 458,
+      "tool_calls": 43,
+      "duration_seconds": 335.1569041550001,
+      "touched_files": [
+        "src/requests/models.py"
+      ],
+      "touched_tests": false,
+      "gold_fixable_files": [
+        "src/requests/adapters.py"
+      ],
+      "localized": false
+    },
+    {
+      "task_id": "rich_3934",
+      "repo": "Textualize/rich",
+      "resolved": false,
+      "test_exit_code": -1,
+      "patch_chars": 0,
+      "tool_calls": 8,
+      "duration_seconds": 160.76061037199997,
+      "touched_files": [],
+      "touched_tests": false,
+      "gold_fixable_files": [
+        "rich/live.py",
+        "rich/live_render.py"
+      ],
+      "localized": false
+    },
+    {
+      "task_id": "fastapi_14851",
+      "repo": "fastapi/fastapi",
+      "resolved": true,
+      "test_exit_code": 0,
+      "patch_chars": 0,
+      "tool_calls": 45,
+      "duration_seconds": 284.1457591809999,
+      "touched_files": [],
+      "touched_tests": false,
+      "gold_fixable_files": [
+        "fastapi/routing.py"
+      ],
+      "localized": false
+    },
+    {
+      "task_id": "rich_3718",
+      "repo": "Textualize/rich",
+      "resolved": true,
+      "test_exit_code": 0,
+      "patch_chars": 767,
+      "tool_calls": 14,
+      "duration_seconds": 164.51856623599997,
+      "touched_files": [
+        "rich/panel.py"
+      ],
+      "touched_tests": false,
+      "gold_fixable_files": [
+        "rich/panel.py"
+      ],
+      "localized": true
+    },
+    {
+      "task_id": "fastapi_14266",
+      "repo": "fastapi/fastapi",
+      "resolved": false,
+      "test_exit_code": 2,
+      "patch_chars": 0,
+      "tool_calls": 45,
+      "duration_seconds": 375.5942628370003,
+      "touched_files": [],
+      "touched_tests": false,
+      "gold_fixable_files": [
+        "fastapi/dependencies/utils.py"
+      ],
+      "localized": false
+    },
+    {
+      "task_id": "fastapi_14487",
+      "repo": "fastapi/fastapi",
+      "resolved": false,
+      "test_exit_code": 1,
+      "patch_chars": 5576,
+      "tool_calls": 31,
+      "duration_seconds": 283.3644658009998,
+      "touched_files": [
+        "docs_src/custom_request_and_route/tutorial002.py",
+        "docs_src/custom_request_and_route/tutorial002_an.py",
+        "docs_src/custom_request_and_route/tutorial002_an_py310.py",
+        "docs_src/custom_request_and_route/tutorial002_an_py39.py",
+        "docs_src/custom_request_and_route/tutorial002_py310.py",
+        "docs_src/custom_request_and_route/tutorial002_py39.py",
+        "docs_src/handling_errors/tutorial005.py"
+      ],
+      "touched_tests": false,
+      "gold_fixable_files": [
+        "docs_src/handling_errors/tutorial004.py"
+      ],
+      "localized": false
+    },
+    {
+      "task_id": "fastapi_14953",
+      "repo": "fastapi/fastapi",
+      "resolved": false,
+      "test_exit_code": 2,
+      "patch_chars": 560,
+      "tool_calls": 18,
+      "duration_seconds": 101.24415595699975,
+      "touched_files": [
+        "fastapi/datastructures.py"
+      ],
+      "touched_tests": false,
+      "gold_fixable_files": [
+        "fastapi/_compat/v2.py",
+        "fastapi/datastructures.py"
+      ],
+      "localized": true
+    },
+    {
+      "task_id": "rich_3518",
+      "repo": "Textualize/rich",
+      "resolved": true,
+      "test_exit_code": 0,
+      "patch_chars": 529,
+      "tool_calls": 15,
+      "duration_seconds": 124.63442844999963,
+      "touched_files": [
+        "rich/table.py"
+      ],
+      "touched_tests": false,
+      "gold_fixable_files": [
+        "rich/table.py"
+      ],
+      "localized": true
+    },
+    {
+      "task_id": "fastapi_14297",
+      "repo": "fastapi/fastapi",
+      "resolved": false,
+      "test_exit_code": 2,
+      "patch_chars": 950,
+      "tool_calls": 11,
+      "duration_seconds": 176.0336233080002,
+      "touched_files": [
+        "fastapi/_compat/v2.py"
+      ],
+      "touched_tests": false,
+      "gold_fixable_files": [
+        "fastapi/_compat/v2.py"
+      ],
+      "localized": true
+    },
+    {
+      "task_id": "rich_3894",
+      "repo": "Textualize/rich",
+      "resolved": true,
+      "test_exit_code": 0,
+      "patch_chars": 595,
+      "tool_calls": 9,
+      "duration_seconds": 106.50521022300018,
+      "touched_files": [
+        "rich/_inspect.py"
+      ],
+      "touched_tests": false,
+      "gold_fixable_files": [
+        "rich/_inspect.py"
+      ],
+      "localized": true
+    },
+    {
+      "task_id": "fastapi_14303",
+      "repo": "fastapi/fastapi",
+      "resolved": false,
+      "test_exit_code": 2,
+      "patch_chars": 1502,
+      "tool_calls": 29,
+      "duration_seconds": 228.45892066600027,
+      "touched_files": [
+        "fastapi/dependencies/utils.py"
+      ],
+      "touched_tests": false,
+      "gold_fixable_files": [
+        "fastapi/dependencies/utils.py"
+      ],
+      "localized": true
+    },
+    {
+      "task_id": "rich_3052",
+      "repo": "Textualize/rich",
+      "resolved": false,
+      "test_exit_code": 1,
+      "patch_chars": 2843,
+      "tool_calls": 19,
+      "duration_seconds": 231.586054074,
+      "touched_files": [
+        "rich/prompt.py"
+      ],
+      "touched_tests": false,
+      "gold_fixable_files": [
+        "rich/prompt.py"
+      ],
+      "localized": true
+    }
+  ],
+  "localization_hits": 7,
+  "tasks_with_empty_patch": 3,
+  "tasks_touching_tests": 0,
+  "official_submission": false,
+  "score_scope": "seeded stratified public development sample; not a leaderboard score"
+}
