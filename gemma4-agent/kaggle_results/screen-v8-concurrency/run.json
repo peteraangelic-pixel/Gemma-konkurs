@@ -1,6 +1,6 @@
 {
   "created_utc": "2026-10-18T09:14:16+00:00",
-  "status": "running",
+  "status": "error",
   "submission_sha256": "907b8648c6dcbb53b7f2fb3c5fa9a54d73af55278b66c04aeef70714ce19883e",
   "fixed_task_id": "fastapi_15588",
   "task_count_requested": 12,
@@ -26,5 +26,7 @@
   "gpu_requested": true,
   "push_verified": true,
   "push_probe_raw": "petersharps/gemma-agent-benchmark-907b8648-20261018-091416 has status \"KernelWorkerStatus.QUEUED\"",
-  "kaggle_status": "KernelWorkerStatus.RUNNING"
+  "kaggle_status": "ERROR",
+  "poll_checked_utc": "2026-10-18T09:35:36+00:00",
+  "error": "the kernel ended without a result"
 }
