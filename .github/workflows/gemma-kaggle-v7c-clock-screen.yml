@@ -61,14 +61,22 @@ jobs:
           set -euo pipefail
           python3 - <<'PY'
           import datetime as dt
+          import json
           import os
           import sys
           import time
+          from pathlib import Path
 
           event = os.environ.get("EVENT_NAME", "")
           mode = (os.environ.get("REQUESTED_MODE") or "").strip()
           if mode != "wait_boundary" and event == "workflow_dispatch":
               print("Mode: start now (manual dispatch).")
+              sys.exit(0)
+          # A screen-v8 config can ask to start immediately; only the v7c clock screen needs to wait
+          # for the daily boundary, because it competes for the submission slot.
+          _cfg = Path("gemma4-agent/kaggle_smoke/screen-v8.json")
+          if _cfg.is_file() and json.loads(_cfg.read_text()).get("start_now"):
+              print("Mode: start now (screen-v8 config).")
               sys.exit(0)
 
           max_wait = float(os.environ.get("MAX_WAIT_HOURS", "8")) * 3600

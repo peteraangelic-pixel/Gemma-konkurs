@@ -4,11 +4,21 @@
   "submission": "gemma4-agent/submission-v7c.zip",
   "outdir": "gemma4-agent/kaggle_results/screen-v8-concurrency",
   "task_ids": [
-    "requests_6644", "rich_3934", "fastapi_14851", "rich_3718",
-    "fastapi_14266", "fastapi_14487", "fastapi_14953", "rich_3518",
-    "fastapi_14297", "rich_3894", "fastapi_14303", "rich_3052"
+    "requests_6644",
+    "rich_3934",
+    "fastapi_14851",
+    "rich_3718",
+    "fastapi_14266",
+    "fastapi_14487",
+    "fastapi_14953",
+    "rich_3518",
+    "fastapi_14297",
+    "rich_3894",
+    "fastapi_14303",
+    "rich_3052"
   ],
   "concurrency": 3,
   "seed": 20261009,
-  "max_wait_minutes": 120
+  "max_wait_minutes": 120,
+  "start_now": true
 }
