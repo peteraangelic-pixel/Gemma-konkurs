@@ -128,7 +128,9 @@ jobs:
         # Twice the launcher recorded a knob in run.json and never passed it to the notebook:
         # concurrency stayed 1 and _excluded was a NameError waiting for the first task. The
         # notebook is a string, so ast.parse on the launcher cannot see either. This fails fast.
-        run: python3 gemma4-agent/tools/check_notebook_names.py
+        run: |
+          python3 gemma4-agent/tools/check_notebook_names.py
+          python3 gemma4-agent/tools/test_notebook_concurrency.py
 
       - name: Start the screen (v7c clock screen, or a screen-v8 config if one is present)
         continue-on-error: true
