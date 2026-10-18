@@ -62,6 +62,15 @@ nie rozstrzyga**. Czytamy tak:
 | **0,11–0,15** | nieodróżnialne od V5 | zdanie zostaje (nie szkodzi), przechodzimy do lokalizatora; pustych drzew pilnujemy na ekranie |
 | **≤ 0,09** | samo zdanie szkodzi (bardzo mało prawdopodobne) | cofamy zdanie i wracamy do czystego V5 |
 
+### WYNIK (odczytany 2026-10-17 ~12:45 UTC): 0,10
+
+0,10 leży w szczelinie między pasmami (0,09 < 0,10 < 0,11), ale przy n = 58 i CI ±0,08 jest
+**nieodróżnialne od 0,13 i od 0,08 jednocześnie**. Odczyt: dźwignia nie skonwertowała, ale też nic
+nie zepsuła — a przede wszystkim **ten przyrząd nie ma rozdzielczości, by to rozstrzygnąć**.
+Pełna analiza: `ANALYSIS_2026-10-17_V7B_RESULT.md`. Drabinka powyżej jest od tego momentu
+historyczna: kolejne submisje oceniamy tylko wtedy, gdy zmiana jest większa niż ±9 punktów albo
+mierzymy ją własnym ekranem o większym n.
+
 **Uczciwa granica:** V7-b **nie** jest poprawką na skalę 0,13 → 0,20. To tania informacja o jednej
 dźwigni, na darmowym slocie, bez zużycia kwoty GPU. Skok do okolic 0,20+ wiążemy z adapterami LoRA
 (jedyna droga, którą czołówka faktycznie idzie), a nie z kolejnymi zdaniami w prompcie.
