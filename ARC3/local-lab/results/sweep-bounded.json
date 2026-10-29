@@ -1,0 +1,825 @@
+{
+  "config": {
+    "games": "all",
+    "levels": 3,
+    "nodes": 3000,
+    "time_s": 40.0,
+    "workers": 2,
+    "seed": 0,
+    "games_dir": null,
+    "engine_paths": null,
+    "out": "results/sweep-bounded.json"
+  },
+  "wall_secs": 309.1,
+  "mean_score": 0.762,
+  "levels_total": 3,
+  "rows": [
+    {
+      "game": "cd82",
+      "levels": 2,
+      "levels_total": 6,
+      "actions": 12,
+      "actions_per_level": [
+        5,
+        6
+      ],
+      "score": 14.29,
+      "clone_policy": "share_levels_and_camera",
+      "search_stats": [
+        {
+          "nodes": 358,
+          "secs": 4.46,
+          "found": true,
+          "depth": 5,
+          "frontier_dropped": 0
+        },
+        {
+          "nodes": 2251,
+          "secs": 25.98,
+          "found": true,
+          "depth": 6,
+          "frontier_dropped": 0
+        },
+        {
+          "nodes": 3000,
+          "secs": 31.06,
+          "found": false,
+          "frontier_dropped": 0,
+          "frontier_left": 424
+        }
+      ],
+      "secs": 61.6,
+      "baseline": [
+        55,
+        8,
+        41,
+        21,
+        23,
+        23
+      ],
+      "tags": [
+        "keyboard_click"
+      ]
+    },
+    {
+      "game": "sp80",
+      "levels": 1,
+      "levels_total": 6,
+      "actions": 5,
+      "actions_per_level": [
+        4
+      ],
+      "score": 4.76,
+      "clone_policy": "share_levels_and_camera",
+      "search_stats": [
+        {
+          "nodes": 227,
+          "secs": 5.51,
+          "found": true,
+          "depth": 4,
+          "frontier_dropped": 0
+        },
+        {
+          "nodes": 1697,
+          "secs": 40.03,
+          "found": false,
+          "frontier_dropped": 0,
+          "frontier_left": 361
+        }
+      ],
+      "secs": 45.7,
+      "baseline": [
+        39,
+        58,
+        25,
+        148,
+        96,
+        152
+      ],
+      "tags": [
+        "keyboard_click"
+      ]
+    },
+    {
+      "game": "ar25",
+      "levels": 0,
+      "levels_total": 8,
+      "actions": 1,
+      "actions_per_level": [],
+      "score": 0.0,
+      "clone_policy": "full_deepcopy",
+      "search_stats": [
+        {
+          "nodes": 360,
+          "secs": 40.58,
+          "found": false,
+          "frontier_dropped": 0,
+          "frontier_left": 57
+        }
+      ],
+      "secs": 40.7,
+      "baseline": [
+        32,
+        50,
+        75,
+        37,
+        89,
+        159,
+        233,
+        73
+      ],
+      "tags": [
+        "keyboard_click"
+      ]
+    },
+    {
+      "game": "bp35",
+      "levels": 0,
+      "levels_total": 9,
+      "actions": 1,
+      "actions_per_level": [],
+      "score": 0.0,
+      "clone_policy": "full_deepcopy",
+      "search_stats": [
+        {
+          "nodes": 338,
+          "secs": 40.9,
+          "found": false,
+          "frontier_dropped": 0,
+          "frontier_left": 102
+        }
+      ],
+      "secs": 41.4,
+      "baseline": [
+        21,
+        48,
+        44,
+        38,
+        33,
+        87,
+        86,
+        131,
+        163
+      ],
+      "tags": [
+        "keyboard_click"
+      ]
+    },
+    {
+      "game": "cn04",
+      "levels": 0,
+      "levels_total": 6,
+      "actions": 1,
+      "actions_per_level": [],
+      "score": 0.0,
+      "clone_policy": "share_levels_and_camera",
+      "search_stats": [
+        {
+          "nodes": 3000,
+          "secs": 24.77,
+          "found": false,
+          "frontier_dropped": 0,
+          "frontier_left": 232
+        }
+      ],
+      "secs": 24.8,
+      "baseline": [
+        29,
+        54,
+        85,
+        300,
+        208,
+        113
+      ],
+      "tags": [
+        "keyboard_click"
+      ]
+    },
+    {
+      "game": "dc22",
+      "levels": 0,
+      "levels_total": 6,
+      "actions": 1,
+      "actions_per_level": [],
+      "score": 0.0,
+      "clone_policy": "share_levels_and_camera",
+      "search_stats": [
+        {
+          "nodes": 307,
+          "secs": 9.8,
+          "found": false,
+          "frontier_dropped": 0,
+          "frontier_left": 0
+        }
+      ],
+      "secs": 9.9,
+      "baseline": [
+        59,
+        102,
+        67,
+        98,
+        324,
+        578
+      ],
+      "tags": [
+        "keyboard_click"
+      ]
+    },
+    {
+      "game": "ft09",
+      "levels": 0,
+      "levels_total": 6,
+      "actions": 1,
+      "actions_per_level": [],
+      "score": 0.0,
+      "clone_policy": "share_levels_and_camera",
+      "search_stats": [
+        {
+          "nodes": 296,
+          "secs": 7.07,
+          "found": false,
+          "frontier_dropped": 0,
+          "frontier_left": 0
+        }
+      ],
+      "secs": 7.2,
+      "baseline": [
+        43,
+        12,
+        23,
+        28,
+        65,
+        37
+      ],
+      "tags": []
+    },
+    {
+      "game": "g50t",
+      "levels": 0,
+      "levels_total": 7,
+      "actions": 1,
+      "actions_per_level": [],
+      "score": 0.0,
+      "clone_policy": "share_levels_and_camera",
+      "search_stats": [
+        {
+          "nodes": 3000,
+          "secs": 11.95,
+          "found": false,
+          "frontier_dropped": 0,
+          "frontier_left": 15
+        }
+      ],
+      "secs": 12.1,
+      "baseline": [
+        78,
+        175,
+        179,
+        230,
+        96,
+        54,
+        67
+      ],
+      "tags": [
+        "keyboard"
+      ]
+    },
+    {
+      "game": "ka59",
+      "levels": 0,
+      "levels_total": 7,
+      "actions": 1,
+      "actions_per_level": [],
+      "score": 0.0,
+      "clone_policy": "share_levels_and_camera",
+      "search_stats": [
+        {
+          "nodes": 230,
+          "secs": 2.64,
+          "found": false,
+          "frontier_dropped": 0,
+          "frontier_left": 0
+        }
+      ],
+      "secs": 2.7,
+      "baseline": [
+        28,
+        109,
+        51,
+        51,
+        33,
+        132,
+        326
+      ],
+      "tags": [
+        "keyboard_click"
+      ]
+    },
+    {
+      "game": "lf52",
+      "levels": 0,
+      "levels_total": 10,
+      "actions": 1,
+      "actions_per_level": [],
+      "score": 0.0,
+      "clone_policy": "full_deepcopy",
+      "search_stats": [
+        {
+          "nodes": 426,
+          "secs": 40.68,
+          "found": false,
+          "frontier_dropped": 0,
+          "frontier_left": 24
+        }
+      ],
+      "secs": 41.0,
+      "baseline": [
+        32,
+        81,
+        60,
+        71,
+        205,
+        148,
+        244,
+        109,
+        164,
+        225
+      ],
+      "tags": [
+        "click"
+      ]
+    },
+    {
+      "game": "lp85",
+      "levels": 0,
+      "levels_total": 8,
+      "actions": 1,
+      "actions_per_level": [],
+      "score": 0.0,
+      "clone_policy": "share_levels_and_camera",
+      "search_stats": [
+        {
+          "nodes": 58,
+          "secs": 10.4,
+          "found": false,
+          "frontier_dropped": 0,
+          "frontier_left": 0
+        }
+      ],
+      "secs": 10.5,
+      "baseline": [
+        17,
+        38,
+        31,
+        16,
+        41,
+        60,
+        26,
+        159
+      ],
+      "tags": [
+        "click"
+      ]
+    },
+    {
+      "game": "ls20",
+      "levels": 0,
+      "levels_total": 7,
+      "actions": 1,
+      "actions_per_level": [],
+      "score": 0.0,
+      "clone_policy": "share_levels_and_camera",
+      "search_stats": [
+        {
+          "nodes": 3000,
+          "secs": 39.75,
+          "found": false,
+          "frontier_dropped": 0,
+          "frontier_left": 271
+        }
+      ],
+      "secs": 40.1,
+      "baseline": [
+        22,
+        123,
+        73,
+        84,
+        96,
+        192,
+        186
+      ],
+      "tags": [
+        "keyboard"
+      ]
+    },
+    {
+      "game": "m0r0",
+      "levels": 0,
+      "levels_total": 6,
+      "actions": 1,
+      "actions_per_level": [],
+      "score": 0.0,
+      "clone_policy": "share_levels_and_camera",
+      "search_stats": [
+        {
+          "nodes": 1391,
+          "secs": 40.02,
+          "found": false,
+          "frontier_dropped": 0,
+          "frontier_left": 124
+        }
+      ],
+      "secs": 40.1,
+      "baseline": [
+        30,
+        111,
+        203,
+        26,
+        500,
+        237
+      ],
+      "tags": [
+        "keyboard_click"
+      ]
+    },
+    {
+      "game": "r11l",
+      "levels": 0,
+      "levels_total": 6,
+      "actions": 1,
+      "actions_per_level": [],
+      "score": 0.0,
+      "clone_policy": "full_deepcopy",
+      "search_stats": [
+        {
+          "nodes": 3000,
+          "secs": 38.53,
+          "found": false,
+          "frontier_dropped": 0,
+          "frontier_left": 19
+        }
+      ],
+      "secs": 38.7,
+      "baseline": [
+        22,
+        33,
+        51,
+        26,
+        52,
+        49
+      ],
+      "tags": [
+        "click"
+      ]
+    },
+    {
+      "game": "re86",
+      "levels": 0,
+      "levels_total": 8,
+      "actions": 1,
+      "actions_per_level": [],
+      "score": 0.0,
+      "clone_policy": "share_levels_and_camera",
+      "search_stats": [
+        {
+          "nodes": 500,
+          "secs": 0.6,
+          "found": false,
+          "frontier_dropped": 0,
+          "frontier_left": 0
+        }
+      ],
+      "secs": 0.7,
+      "baseline": [
+        26,
+        42,
+        86,
+        108,
+        189,
+        139,
+        424,
+        241
+      ],
+      "tags": [
+        "keyboard_click"
+      ]
+    },
+    {
+      "game": "s5i5",
+      "levels": 0,
+      "levels_total": 8,
+      "actions": 1,
+      "actions_per_level": [],
+      "score": 0.0,
+      "clone_policy": "share_levels_and_camera",
+      "search_stats": [
+        {
+          "nodes": 84,
+          "secs": 2.58,
+          "found": false,
+          "frontier_dropped": 0,
+          "frontier_left": 0
+        }
+      ],
+      "secs": 2.7,
+      "baseline": [
+        20,
+        89,
+        106,
+        54,
+        162,
+        38,
+        86,
+        83
+      ],
+      "tags": [
+        "click"
+      ]
+    },
+    {
+      "game": "sb26",
+      "levels": 0,
+      "levels_total": 8,
+      "actions": 1,
+      "actions_per_level": [],
+      "score": 0.0,
+      "clone_policy": "full_deepcopy",
+      "search_stats": [
+        {
+          "nodes": 321,
+          "secs": 40.04,
+          "found": false,
+          "frontier_dropped": 0,
+          "frontier_left": 122
+        }
+      ],
+      "secs": 40.3,
+      "baseline": [
+        18,
+        28,
+        18,
+        19,
+        31,
+        23,
+        58,
+        18
+      ],
+      "tags": [
+        "keyboard_click"
+      ]
+    },
+    {
+      "game": "sc25",
+      "levels": 0,
+      "levels_total": 6,
+      "actions": 1,
+      "actions_per_level": [],
+      "score": 0.0,
+      "clone_policy": "share_levels_and_camera",
+      "search_stats": [
+        {
+          "nodes": 4,
+          "secs": 0.4,
+          "found": false,
+          "frontier_dropped": 0,
+          "frontier_left": 0
+        }
+      ],
+      "secs": 0.6,
+      "baseline": [
+        36,
+        6,
+        32,
+        83,
+        143,
+        50
+      ],
+      "tags": [
+        "keyboard_click"
+      ]
+    },
+    {
+      "game": "sk48",
+      "levels": 0,
+      "levels_total": 8,
+      "actions": 1,
+      "actions_per_level": [],
+      "score": 0.0,
+      "clone_policy": "full_deepcopy",
+      "search_stats": [
+        {
+          "nodes": 245,
+          "secs": 40.13,
+          "found": false,
+          "frontier_dropped": 0,
+          "frontier_left": 27
+        }
+      ],
+      "secs": 40.3,
+      "baseline": [
+        61,
+        177,
+        101,
+        103,
+        230,
+        181,
+        125,
+        92
+      ],
+      "tags": [
+        "keyboard_click"
+      ]
+    },
+    {
+      "game": "su15",
+      "levels": 0,
+      "levels_total": 9,
+      "actions": 1,
+      "actions_per_level": [],
+      "score": 0.0,
+      "clone_policy": "share_levels_and_camera",
+      "search_stats": [
+        {
+          "nodes": 91,
+          "secs": 6.19,
+          "found": false,
+          "frontier_dropped": 0,
+          "frontier_left": 0
+        }
+      ],
+      "secs": 6.4,
+      "baseline": [
+        22,
+        42,
+        26,
+        115,
+        36,
+        31,
+        8,
+        40,
+        41
+      ],
+      "tags": [
+        "click"
+      ]
+    },
+    {
+      "game": "tn36",
+      "levels": 0,
+      "levels_total": 7,
+      "actions": 1,
+      "actions_per_level": [],
+      "score": 0.0,
+      "clone_policy": "share_levels_and_camera",
+      "search_stats": [
+        {
+          "nodes": 219,
+          "secs": 40.04,
+          "found": false,
+          "frontier_dropped": 0,
+          "frontier_left": 34
+        }
+      ],
+      "secs": 40.4,
+      "baseline": [
+        32,
+        72,
+        26,
+        40,
+        30,
+        55,
+        62
+      ],
+      "tags": [
+        "click"
+      ]
+    },
+    {
+      "game": "tr87",
+      "levels": 0,
+      "levels_total": 6,
+      "actions": 1,
+      "actions_per_level": [],
+      "score": 0.0,
+      "clone_policy": "full_deepcopy",
+      "search_stats": [
+        {
+          "nodes": 2160,
+          "secs": 40.01,
+          "found": false,
+          "frontier_dropped": 0,
+          "frontier_left": 798
+        }
+      ],
+      "secs": 40.3,
+      "baseline": [
+        54,
+        58,
+        40,
+        45,
+        71,
+        146
+      ],
+      "tags": [
+        "keyboard"
+      ]
+    },
+    {
+      "game": "tu93",
+      "levels": 0,
+      "levels_total": 9,
+      "actions": 1,
+      "actions_per_level": [],
+      "score": 0.0,
+      "clone_policy": "share_levels_and_camera",
+      "search_stats": [
+        {
+          "nodes": 200,
+          "secs": 0.28,
+          "found": false,
+          "frontier_dropped": 0,
+          "frontier_left": 0
+        }
+      ],
+      "secs": 0.3,
+      "baseline": [
+        19,
+        16,
+        34,
+        42,
+        123,
+        80,
+        14,
+        23,
+        111
+      ],
+      "tags": [
+        "keyboard_click"
+      ]
+    },
+    {
+      "game": "vc33",
+      "levels": 0,
+      "levels_total": 7,
+      "actions": 1,
+      "actions_per_level": [],
+      "score": 0.0,
+      "clone_policy": "share_levels_and_camera",
+      "search_stats": [
+        {
+          "nodes": 66,
+          "secs": 3.92,
+          "found": false,
+          "frontier_dropped": 0,
+          "frontier_left": 0
+        }
+      ],
+      "secs": 4.0,
+      "baseline": [
+        7,
+        18,
+        44,
+        61,
+        131,
+        34,
+        152
+      ],
+      "tags": [
+        "click"
+      ]
+    },
+    {
+      "game": "wa30",
+      "levels": 0,
+      "levels_total": 9,
+      "actions": 1,
+      "actions_per_level": [],
+      "score": 0.0,
+      "clone_policy": "share_levels_and_camera",
+      "search_stats": [
+        {
+          "nodes": 990,
+          "secs": 6.59,
+          "found": false,
+          "frontier_dropped": 0,
+          "frontier_left": 0
+        }
+      ],
+      "secs": 6.7,
+      "baseline": [
+        71,
+        119,
+        183,
+        98,
+        368,
+        68,
+        79,
+        442,
+        415
+      ],
+      "tags": [
+        "keyboard"
+      ]
+    }
+  ]
+}

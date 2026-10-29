@@ -201,14 +201,26 @@ Przy 1,0× baseline: +3,0. Przy 1,5×: −13,5. Przy 2×: −19,3. Czyli nie war
 „oszczędności", ale trzeba mieć watchdog: jeśli poziom zużył 2×baseline akcji bez postępu,
 restart poziomu jest tańszy niż brnięcie (reset poziomu kosztuje tylko akcje, nie tokeny).
 
-### 3.4 Wyszukiwanie deterministyczne (search assist) — dane w `local-lab/results/`
-Silnik lokalny działa na 25/25 grach. Zmierzone koszty: krok 0,07–2,9 ms, snapshot
-0,5–8,6 ms → **95–1400 węzłów/s/rdzeń** (14 rdzeni: 1,5–15 tys./s). To wystarcza na
-poziomy o małym rozgałęzieniu (klawiaturowe, 4–5 akcji) i na „kalibrację klików"
-(na ft09: 4096 pikseli → ~8 klików o różnym efekcie). Nie wystarcza na głębokie zagadki:
-BFS o głębokości 20 przy rozgałęzieniu 5 to 10¹⁴ węzłów. Rola: tanie, pewne poziomy 1–2 i
-oszczędzanie akcji/tokenów na nich, plus opener detection. Tabela per gra:
-`local-lab/results/sweep-bounded.json`.
+### 3.4 Wyszukiwanie deterministyczne — zmierzone, nie obiecane
+
+Silnik lokalny działa na **25/25 grach**. Zmierzone koszty (ten sandbox, 2 rdzenie):
+krok **0,07–2,9 ms**, snapshot **0,5–8,6 ms** (po kalibracji polityki klonowania; naiwny
+`deepcopy` to 19 ms), czyli **48–1400 węzłów/s/rdzeń** zależnie od gry. Na 14 rdzeniach
+5950X to 0,7–20 tys. węzłów/s.
+
+Sweep 25 gier × 3 poziomy, budżet 40 s/poziom, 2 workery (`results/sweep-bounded.json`):
+
+| gra | poziomy | akcje | punkty | polityka klonowania |
+|---|---|---|---|---|
+| cd82 | 2/6 | 12 | 14.29 | share_levels_and_camera |
+| sp80 | 1/6 | 5 | 4.76 | share_levels_and_camera |
+
+Razem: **2/25 gier, 3 poziomy, średnia 0,76** w 5,2 min. To *nie* jest solver i nie udaje
+solvera: BFS o rozgałęzieniu 4–8 potrzebuje głębokości równej długości rozwiązania
+(poziomy mają 20–300 bazowych akcji), więc łapie tylko poziomy krótkie (tu: 6 i 5 akcji).
+Wartość jest inna i konkretna: **te 3 poziomy kosztowały 17 akcji i zero tokenów**, a
+poziom 1 zwykle kosztuje agenta 20–40 akcji i ~20–30k tokenów. Search jako *opener* oddaje
+tę pulę na poziomy 3+, gdzie waga jest 3–7×.
 
 ### 3.5 Best-of-k / n_passes — **niedozwolone w rerunie**
 Scorecard liczy najlepszy przebieg per środowisko, ale brama konkursowa nie da drugiego

@@ -194,6 +194,27 @@ def frame_hash(fd) -> str:
     return frame_hash_of(fd.frame, getattr(fd, "levels_completed", 0))
 
 
+_ACTION_BY_ID: dict = {}
+
+
+def action_for(action_id: int, GameAction=None):
+    """int from `available_actions` -> GameAction member.
+
+    `GameAction(1)` raises ValueError even though `GameAction.ACTION1.value` prints as 1
+    (the enum carries a custom value object), so the mapping is built by name.
+    """
+    global _ACTION_BY_ID
+    if not _ACTION_BY_ID:
+        if GameAction is None:
+            from arcengine import GameAction as GA  # noqa: PLC0415
+
+            GameAction = GA
+        _ACTION_BY_ID = {0: GameAction.RESET}
+        for i in range(1, 8):
+            _ACTION_BY_ID[i] = getattr(GameAction, f"ACTION{i}")
+    return _ACTION_BY_ID[int(action_id)]
+
+
 class Session:
     """One game, driven directly through `game.perform_action`.
 
