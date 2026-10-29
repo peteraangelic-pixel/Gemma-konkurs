@@ -1,0 +1,85 @@
+{
+  "config": {
+    "games": "ls20,ar25",
+    "levels": 2,
+    "nodes": 3000,
+    "time_s": 90.0,
+    "workers": 2,
+    "seed": 0,
+    "games_dir": "/tmp/smak/arc-agi-3/games/environment_files",
+    "engine_paths": null,
+    "out": null
+  },
+  "wall_secs": 92.1,
+  "mean_score": 2.055,
+  "levels_total": 1,
+  "rows": [
+    {
+      "game": "ls20",
+      "levels": 1,
+      "levels_total": 7,
+      "deaths": 0,
+      "actions": 14,
+      "actions_per_level": [
+        13
+      ],
+      "score": 4.11,
+      "search_stats": [
+        {
+          "nodes": 1777,
+          "secs": 21.82,
+          "found": true,
+          "depth": 13
+        },
+        {
+          "nodes": 3000,
+          "secs": 70.18,
+          "found": false
+        }
+      ],
+      "secs": 92.1,
+      "baseline": [
+        22,
+        123,
+        73,
+        84,
+        96,
+        192,
+        186
+      ],
+      "tags": [
+        "keyboard"
+      ]
+    },
+    {
+      "game": "ar25",
+      "levels": 0,
+      "levels_total": 8,
+      "deaths": 0,
+      "actions": 1,
+      "actions_per_level": [],
+      "score": 0.0,
+      "search_stats": [
+        {
+          "nodes": 984,
+          "secs": 90.04,
+          "found": false
+        }
+      ],
+      "secs": 90.1,
+      "baseline": [
+        32,
+        50,
+        75,
+        37,
+        89,
+        159,
+        233,
+        73
+      ],
+      "tags": [
+        "keyboard_click"
+      ]
+    }
+  ]
+}
