@@ -3,7 +3,8 @@
 | katalog | co to jest |
 |---|---|
 | `local-lab/` | nasze lokalne narzędzia: silnik, playbook (14/14), audyty runów (`analyze_run.py`), symulator pamięci win-path, audyt eskalacji. Nic z tego nie idzie na Kaggle. |
-| `duck-v14/` | **gotowy pakiet do submitu**: notebook + patche + playbook, zbudowany z `duck-v13-2` z trzema mierzalnymi poprawkami. `README.md` w środku. |
+| `duck-v14/` | pakiet z `duck-v13-2`: eskalacja 20 + dwie sondy + guard (bez opener-hinta). Wariant zapasowy, gdyby batch okazał się ślepy. |
+| `duck-v15/` | **gotowy pakiet do submitu**: `duck-v13-3-arena` (opener-hint + log replayu, 7/7 patchy) + eskalacja 20 + obie sondy. `README.md` w środku. |
 
 Stan wiedzy (liczby, nie opinie):
 

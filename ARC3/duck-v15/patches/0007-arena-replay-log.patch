@@ -1,0 +1,129 @@
+diff --git a/ARC3-Inference/inference/framework/arc3_winpath.py b/ARC3-Inference/inference/framework/arc3_winpath.py
+index 4113516..c788255 100644
+--- a/ARC3-Inference/inference/framework/arc3_winpath.py
++++ b/ARC3-Inference/inference/framework/arc3_winpath.py
+@@ -50,6 +50,7 @@ Env switches (all optional):
+   ARC3_WINPATH_REPLAY=1   replay stored paths (default 1; 0 = record only)
+   ARC3_WINPATH_DIR        store dir (default /kaggle/working/arc3_winpath,
+                           falls back to the system temp dir)
++  ARC3_WINPATH_LOG=1      one-line stdout event log (default 1; 0 = quiet)
+   ARC3_DEAD_SKIP=1        enable the dead-game entry skip (default 0)
+   ARC3_DEAD_MIN_PASSES=3  completed zero-level entries required to skip
+ """
+@@ -68,6 +69,19 @@ MAX_LEVEL_FAILS = 3
+ _SESSIONS: dict[int, "_SessionState"] = {}
+ 
+ 
++def _log(msg: str) -> None:
++    """Single-line stdout events. The rerun log is the only diagnostic
++    channel a submitted run leaves behind: both the 7911f950 and c87 audits
++    flagged a silent replay failure as a diagnosis risk. Never called on
++    hot no-op paths (per-iteration early returns stay quiet)."""
++    if os.environ.get("ARC3_WINPATH_LOG", "1") == "0":
++        return
++    try:
++        print(f"[arc3-winpath] {msg}", flush=True)
++    except Exception:
++        pass
++
++
+ def _env_int(name: str, default: int) -> int:
+     raw = (os.environ.get(name) or "").strip()
+     if not raw:
+@@ -186,6 +200,8 @@ class _Store:
+             if match:
+                 for lvl, entry in (match.get("levels") or {}).items():
+                     self.data["levels"].setdefault(str(lvl), dict(entry))
++                _log(f"playbook match game={self.game_id} "
++                     f"levels={len(match.get('levels') or {})}")
+         except Exception:
+             pass
+ 
+@@ -230,6 +246,7 @@ class _Store:
+             "n": len(actions), "src": "run", "fails": 0,
+         }
+         self.data["best_levels"] = max(int(self.data["best_levels"]), level + 1)
++        _log(f"record game={self.game_id} level={level} n={len(actions)}")
+         self.save()
+ 
+     def note_fail(self, level: int) -> None:
+@@ -260,7 +277,11 @@ def _game_id_of(session) -> str:
+ def begin_session(session) -> None:
+     if not enabled():
+         return
+-    _SESSIONS[id(session)] = _SessionState(_game_id_of(session))
++    state = _SessionState(_game_id_of(session))
++    _SESSIONS[id(session)] = state
++    _log(f"session begin game={state.store.game_id} "
++         f"stored_levels={len(state.store.data['levels'])} "
++         f"passes_done={int(state.store.data.get('passes_completed', 0))}")
+ 
+ 
+ def end_session(session) -> None:
+@@ -277,6 +298,9 @@ def end_session(session) -> None:
+         data["best_levels"] = max(int(data.get("best_levels", 0)),
+                                   state.max_levels, current)
+         state.store.save()
++        _log(f"session end game={state.store.game_id} "
++             f"best_levels={data.get('best_levels')} "
++             f"passes_completed={data.get('passes_completed')}")
+     except Exception:
+         pass
+ 
+@@ -357,10 +381,13 @@ def _replay_once(session, state: _SessionState) -> bool:
+     if not actions or len(actions) > MAX_REPLAY_ACTIONS:
+         return False
+     if entry.get("init") and entry["init"] != grid_key_of_state(game_state):
++        _log(f"replay init-mismatch game={state.store.game_id} "
++             f"level={level} -> broken")
+         state.broken.add(level)  # different start: never waste an action
+         return False
+     hashes = entry.get("hashes") or []
+     executed = False
++    _log(f"replay start game={state.store.game_id} level={level} n={len(actions)}")
+     for index, stored in enumerate(actions):
+         if session.should_stop():
+             break
+@@ -374,6 +401,8 @@ def _replay_once(session, state: _SessionState) -> bool:
+         current = session.game.current_state
+         try:
+             if action_id.value not in current.available_actions:
++                _log(f"replay abort game={state.store.game_id} level={level} "
++                     f"step={index} reason=action-unavailable")
+                 _fail(state, level, executed)
+                 return executed
+         except Exception:
+@@ -384,14 +413,21 @@ def _replay_once(session, state: _SessionState) -> bool:
+             batch_index=index + 1, batch_size=len(actions), generated_tokens=0)
+         executed = True
+         if payload.get("game_over"):
++            _log(f"replay abort game={state.store.game_id} level={level} "
++                 f"step={index} reason=game-over")
+             _fail(state, level, True)
+             return True
+         if hashes and grid_key_of_state(session.game.current_state) != hashes[index]:
++            _log(f"replay abort game={state.store.game_id} level={level} "
++                 f"step={index} reason=hash-mismatch")
+             _fail(state, level, True)
+             return True
+         if int(session.game.current_state.levels_completed) > level:
++            _log(f"replay ok game={state.store.game_id} level={level} n={len(actions)}")
+             return True  # level completed; recorder already saved the path
+     if executed and int(session.game.current_state.levels_completed) <= level:
++        _log(f"replay abort game={state.store.game_id} level={level} "
++             f"n={len(actions)} reason=exhausted")
+         _fail(state, level, True)
+     return executed
+ 
+@@ -409,6 +445,10 @@ def dead_skip(session) -> bool:
+     if state is None:
+         return False
+     data = state.store.data
+-    return (int(data.get("best_levels", 0)) <= 0
++    dead = (int(data.get("best_levels", 0)) <= 0
+             and int(data.get("passes_completed", 0))
+             >= _env_int("ARC3_DEAD_MIN_PASSES", 3))
++    if dead:
++        _log(f"dead-skip game={state.store.game_id} "
++             f"passes_completed={data.get('passes_completed')}")
++    return dead
