@@ -49,6 +49,33 @@ Reguła punktacji: `score = min(Σ s·w / Σ w, 100 × pokrycie)` — **wynik ni
   2,90, nie więcej.
 - **`plan_commit` / `commit(plan)`** — mechanizm jest opisany i uzbrojony, ale nie zmierzony.
 
+## Audyt `duck-v17-action-efficiency` (gałąź `5ed750ef`, commit `283a36b`) — 2026-10-30
+
+Paczka jest w repo (nie tylko w czacie). Odtworzone: `test_layer.py` **7/7**, `run_eval.py 12`
+→ **RHAE 40,06 ± 0,00**. **Ale:** `agent.py` i `run_eval.py` nie importują
+`action_efficiency_layer.py` ani razu — 40,06 mierzy `PlannerAgent` (model przejść + BFS),
+a trzy mechanizmy mają **zero pomiarów** poza testami jednostkowymi. „12 seedów" = 12 powtórzeń
+jednej deterministycznej populacji (`_make_level()` nie używa seeda → σ = 0,00).
+
+Na naszym prawdziwym r085 (`local-lab/leverage.py`, scorowisko zgodne z harnessem 34/34):
+
+| wariant | Δ score |
+|---|---|
+| cięcie akcji −30% (bez nowych poziomów) | **+2,05** |
+| cięcie akcji −70% | +3,00 |
+| **+1 poziom na grę** | **+16,42** |
+| +2 poziomy na grę | +32,89 |
+
+5 z 10 gier jest ograniczonych pokryciem → w nich cięcie akcji daje **dokładnie 0**.
+Do 50 pkt samą efektywnością trzeba by uciąć **99%** akcji.
+
+**Werdykt: nie nakładać na v16, nie robić v18.** Sensowne użycie: te 166 akcji/greę (78% puli),
+które palimy na poziomach już ukończonych, **przekierować** na nieukończone — cięcie 30% oddaje
+~11 min = ~1,2 poziomu/greę ≈ **+19 pkt**. Z mechanizmów v17 wart zachowania jest tylko
+`ConvergedGuard` (pętle dłuższe niż okno; u nas `ARC3_REPEAT_STATE_GUARD` istnieje, ale jest
+domyślnie wyłączony) — jako backlog **po** 2 XI. `AVX512/` jest poza konkursem i nie wchodzi
+do żadnej paczki. Szczegóły: `REVIEWS/2026-10-30-v17-action-efficiency-audyt.md`.
+
 ## Zasady, których ta sesja się trzyma (i wam proponuje)
 
 1. Nic na Kaggle bez GO użytkownika; żadnych GPU-runów bez pytania.

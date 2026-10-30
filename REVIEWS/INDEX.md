@@ -2,6 +2,7 @@
 
 | data | plik | czego dotyczy | werdykt w jednym zdaniu |
 |---|---|---|---|
+| 2026-10-30 | `2026-10-30-v17-action-efficiency-audyt.md` | duck-v17-action-efficiency (gałąź 5ed750ef, commit `283a36b`) | liczby się odtwarzają (7/7, 40,06), ale 40,06 to planista, nie warstwa — `agent.py`/`run_eval.py` nie importują `action_efficiency_layer`; na r085 cięcie akcji −30% = **+2,05 pkt**, a +1 poziom = +16,4 → **nie nakładać, nie robić v18** |
 | 2026-10-30 | `2026-10-30-v13-4-v15-porownanie-i-v16.md` | v13.4-unified (Smak) + duck-v15 (Pokemon) + moje v16 | oba pakiety w porządku, ale ich eskalacja relatywna jest w rerunie martwa (baseline `None`); 0009 self-pace to jedyny próg, który tam działa |
 | 2026-10-30 | `2026-10-30-v13-3-arena-weryfikacja.md` | v13.3-arena (`5548d35`) | mechanizm opener-hinta istnieje i jest właściwą dźwignią `tok/akcję`; patch 0007 (log) wchodzi czysto i odtwarza plik 1:1; zostawia 10 na eskalacji |
 | 2026-10-29 | `2026-10-29-v13-2-z-galezi-a450-weryfikacja.md` | v13.2 (`6b10853`) | guard GAME_OVER działa; `ESCALATE_ACTIONS=10` mierzone na r085: 154 nudge'ów = 15,3% puli i 31/32 „przestań próbować" na poziomach wygrywanych |
