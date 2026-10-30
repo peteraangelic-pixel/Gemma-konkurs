@@ -32,7 +32,7 @@ zero rozbieżności).
 3. **Dwie dźwignie, ale jedna włączona.** W tym buildzie żyje tylko D′; budżet poziomu jest
    zapakowany i wyłączony, więc eksperyment pozostaje jednozmiennościowy.
 
-## Jeśli kiedyś uzbrajać 0010 — NISKO, nie 60000
+## Jeśli kiedyś uzbrajać 0010 — NIE 60000, i nie 20000 bez pomiaru
 
 Reguła to `cap = clamp(max(static_cap, mediana(koszty ukończonych) × 4), cap_min, 150k)`.
 Wartość uzbrojenia jest **jednocześnie podłogą**, więc przy 60000 reguła **tylko poluzowuje**.
@@ -41,18 +41,39 @@ Na moim korpusie 40 gier (r085/r093/r110/r118), przy uzbrojeniu 60000:
 * reguła włącza się w **16/40** gier (tylko tam, gdzie ≥2 ukończone poziomy), w nich
   **15/16 luźniej, 0/16 ciaśniej**, mediana capa 128 612;
 * gry, które palą 100% tokenów na poziomie, którego nie kończą (24/40), **w ogóle nie są
-  dotknięte** — nie mają historii;
-* przy uzbrojeniu **20000** produktywne gry i tak dostają `mediana×4` = 46k–150k, a gry bez
-  historii tną się na ~20k (+1 darmowy RESET ≈ 40k).
+  dotknięte** — nie mają historii.
 
-Dlatego wariant zostaje `"ARC3_LEVEL_TOKEN_CAP": "0"`, a rekomendacja armingu to **20000**.
-Komórka „v17 levers" liczy to po biegu z jego własnych danych (`levers.jsonl`) — decyzja
-o uzbrojeniu ma być pomiarem z tego biegu, nie z cudzego.
+Symulator (`tools/arming_sim.py`, prawdziwy moduł 0010, odtworzenie nagrania akcja po akcji):
+
+| cap | RESET-e | ABANDON-y | gry ucięte | utracone ukończone poziomy (z 65) |
+|---|---|---|---|---|
+| 10 000 | 58 | 34 | 34 | **35** |
+| 15 000 | 50 | 23 | 23 | **23** |
+| 20 000 | 48 | 20 | 20 | **15** |
+| 30 000 | 43 | 0 | 0 | 0 |
+| 45 000 | 32 | 0 | 0 | 0 |
+| 60 000 | 28 | 0 | 0 | 0 |
+| 90 000 | 2 | 0 | 0 | 0 |
+
+**To koryguje moją wcześniejszą rekomendację.** Pisałem „uzbrój 20 000". Symulacja pokazuje,
+że przy 20 000 reguła wydałaby ABANDON w 20 grach i (w kontrafaktuale „bez korzyści z resetu")
+zabiła **15 z 65** ukończonych poziomów — czyli 23% ukończeń za korzyść, której nikt nie zmierzył.
+Zero straty w tym korpusie pojawia się dopiero przy **30 000**. Przy 20 000 cała nadzieja leży
+w tym, że darmowy RESET sprawi, iż model ukończy poziom szybciej — a tego nie ma w żadnym
+nagraniu, więc to założenie, nie pomiar.
+
+Dlatego: domyślnie `"ARC3_LEVEL_TOKEN_CAP": "0"` (dormant). Jeśli uzbrajać — **30 000 jako
+pierwsza wartość**, z metryką ochronną `completed/game` przed/po, i dopiero potem schodzić
+niżej, jeśli ukończenia nie spadają.
+
+Uwaga o cudzej tabeli: druga sesja opisuje „niezależny symulator" i kolano 20k–30k, ale tego
+symulatora **nie ma w repo**, więc nikt nie może tego sprawdzić. Mój jest w `tools/arming_sim.py`
++ `fixtures/benchmarks/` i daje się powtórzyć jedną komendą.
 
 ## Kill-switche (każdy niezależny)
 
-`"ARC3_PRIORITY_DPRIME": "0"` = dokładnie v13-7-final · `"ARC3_LEVEL_TOKEN_CAP": "20000"` =
-uzbrojenie 0010 · `"ARC3_DYN_CAP": "0"` = wierny statyczny 0004 (kontrola A/B) ·
+`"ARC3_PRIORITY_DPRIME": "0"` = dokładnie v13-7-final · `"ARC3_LEVEL_TOKEN_CAP": "30000"` =
+uzbrojenie 0010 (pierwsza bezpieczna wartość wg symulacji) · `"ARC3_DYN_CAP": "0"` = wierny statyczny 0004 (kontrola A/B) ·
 `"ARC3_ESCALATE_SELF_PACE": "0"` = v13.5 · `"ARC3_ESCALATE_RELATIVE": "0"` ·
 `"ARC3_ESCALATE_MAX_PER_LEVEL": "0"` · `"ARC3_OPENER_COMMIT_HINT": "0"` · `"ARC3_WINPATH": "0"` ·
 `"ARC3_DEAD_SKIP": "0"` · `PLAN_COMMIT = "0"` · `"ARC3_LEVEL_TOKEN_CAP": "45000"`.
