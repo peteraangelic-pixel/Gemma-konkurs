@@ -122,6 +122,30 @@ Rozstrzyga dwie rzeczy naraz:
 
 Bez tego pomiaru każda prognoza „50+" opiera się na założeniu, nie na danych.
 
+## 4b. Eskalacja (`commit(plan)`) — jedyna dźwignia z sufitem >50, i jak ją uzbroić
+
+`commit(plan, max_actions=40)` wykonuje plan **wewnątrz jednej tury modelu** (`pc_play`),
+więc akcje z planu kosztują ~0,3 s (czas silnika) zamiast ~12,9 s. Jeśli połowa akcji idzie
+przez `commit`, sekundy na akcję spadają do ~6,6, a okno 2 945 s mieści **~450 akcji zamiast
+226** → to jest mechanizm, który w modelu budżetu przenosi 26,8 na ~70.
+
+Ale prompt tylko *zachęca* do `commit()`; jedynym przypomnieniem jest dyrektywa eskalacyjna
+co `ARC3_ESCALATE_ACTIONS` akcji na poziomie. Ile razy odpala (dane z r085, 32 ukończone
+poziomy, `escalation_audit.py`):
+
+| próg | wstrzyknięć | % puli gry | odpala przed ludzkim baseline'em |
+|---|---|---|---|
+| 10 (v13.2) | 154 | **15,3%** | **31/32** |
+| 60 (v13.1) | 12 | 1,2% | 7/32 |
+| `max(20, 1,2 × baseline[poziom])` | **8** | 0,8% | **0/32** |
+
+Kosztowna jest posłuszność, nie dyrektywa: każda zachęta prosi o turę modelarską
+(`model_state` → `check_model()` → `plan()`), a to tysiące tokenów.
+
+**Zalecenie:** próg względny wobec baseline'u (patch w
+`REVIEWS/2026-10-29-v13-2-z-galezi-a450-weryfikacja.md` §4), cap 2 eskalacje/poziom. Jeśli
+musi zostać absolutny — **20**, nie 10.
+
 ## 5. Bramki GO/NO-GO (lokalne, bez GPU)
 
 Przed wysłaniem slotu, na 10 grach dev:
@@ -144,6 +168,7 @@ otwieracze z kodu gier, głębokość przed szerokością).
 | 27B / większy model | −26,5 (0,27 vs 26,78): 47 s/akcję zamiast 12,9 |
 | rekonstrukcja patchy v11 | −2,9 (23,89 vs 26,25) |
 | cap 45k tokenów na grę | −26,0 (0,73 vs 26,78) |
+| eskalacja co 10 akcji bez pomiaru | 154 wstrzyknięcia = 15,3% puli i „przestań próbować" na 31/32 poziomów, na których agent był na tempie |
 | gonić efektywność akcji | max +3,0; przy 1,5× baseline już −13,5 |
 | search assist jako solver głębokich poziomów | nie skaluje się (patrz `PLAN-50.md` §3.4) |
 | `n_passes > 1` / best-of-k | niemożliwe w rerunie (brama daje jedno środowisko na grę) |

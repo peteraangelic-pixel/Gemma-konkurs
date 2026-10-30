@@ -16,6 +16,11 @@ najpierw), liczby i tabele: `analyze_run.py`, `verify_scoring.py`, `results/`.
 | `verify_scoring.py` | regresja punktacji na zapisanych runach | 32/32 |
 | `test_lab.py` | 10 testów (punktacja + silnik), bez pytest | OK |
 | `worker.py` | jedna gra → JSON (jednostka pracy dla Rusta) | działa |
+| `playbook_verify.py` | odtwarza playbook (v13/v13.1/v13.2) na prawdziwych grach, hash po hashу | 14/14, 184/184 |
+| `extend_playbook.py` | odtwarza zapisany prefiks, potem szuka głębszych poziomów | działa, BFS nie schodzi głębiej bez heurystyk |
+| `winpath_sim.py` | dwa wpisy rosteru na ich module `arc3_winpath` + prawdziwy silnik | replay między wpisami: 0 tokenów |
+| `winpath_guard_test.py` | guard GAME_OVER: v13.1 pali poziom, v13.2 nie | potwierdzone |
+| `escalation_audit.py` | ile razy odpali eskalacja @10 / @60 / względem baseline'u | 154 / 12 / 8 na r085 |
 | `rust/arc3lab/` | `score` / `alloc` / `sweep` na Rayon | **źródło, niekompilowane tutaj** (brak toolchaina w sandboxie) |
 
 ## Uruchomienie
@@ -27,6 +32,7 @@ export ARC3_GAMES=~/smak/arc-agi-3/games/environment_files
 python3 verify_scoring.py                          # 32/32
 python3 test_lab.py                                # 10 testów
 python3 analyze_run.py ~/r116/benchmark.json --target 50
+python3 escalation_audit.py ~/r116/benchmark.json      # czy eskalacja @10 płonie na darmo
 python3 run_lab.py --games all --levels 3 --nodes 4000 --time-s 120 --workers 14
 python3 worker.py --game cn04 --levels 2            # jedna gra, jedna linia JSON
 ```

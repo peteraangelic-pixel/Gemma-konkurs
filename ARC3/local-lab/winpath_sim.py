@@ -47,19 +47,25 @@ def _last_frame_2d(frame_sequence):
 
 
 class FakeState:
-    """The slice of `taaf.GameState` that arc3_winpath touches: .frame.data, levels, actions."""
+    """The slice of `taaf.GameState` that arc3_winpath touches.
 
-    def __init__(self, frame, levels_completed, available):
+    v13.2 added a guard that reads `game_state.raw.state`, so `raw` has to be modelled too -
+    otherwise the guard silently never fires and the test would certify a path it never took.
+    """
+
+    def __init__(self, frame, levels_completed, available, state=None):
         self.frame = type("Frame", (), {"data": _last_frame_2d(frame)})()
         self.levels_completed = levels_completed
         self.available_actions = available
+        self.raw = type("Raw", (), {"state": state})()
 
 
 class FakeGame:
     def __init__(self, web, game_id):
         self.web = web
         self.game_run = type("GR", (), {"game_id": game_id})()
-        self.current_state = FakeState(web.last.frame, web.levels_completed, web.available)
+        self.current_state = FakeState(web.last.frame, web.levels_completed, web.available,
+                                       getattr(web.last, "state", None))
 
 
 class FakeSession:
@@ -89,7 +95,8 @@ class FakeSession:
             self.actions_llm += 1
         else:
             self.actions_replay += 1
-        self.game.current_state = FakeState(fd.frame, self.web.levels_completed, self.web.available)
+        self.game.current_state = FakeState(fd.frame, self.web.levels_completed,
+                                           self.web.available, fd.state)
         payload = {"game_over": self.web.is_over}
         self.wp.record_action(
             self,
