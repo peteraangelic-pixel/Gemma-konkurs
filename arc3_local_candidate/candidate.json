@@ -1,0 +1,33 @@
+{
+  "candidate_id": "arc3-dprime-safe-local-2026-10-29",
+  "status": "LOCAL_RESEARCH_ONLY_NOT_INTEGRATED_NOT_KAGGLE_VALIDATED",
+  "score_claim": null,
+  "target_50_plus": "not supported by measured evidence; not promised",
+  "stages": [
+    {
+      "id": "cap_off_control",
+      "delta": ["disable the 45k level token cap and its terminal ABANDON path"],
+      "hold_constant": ["model", "serving settings", "prompt", "runner", "PLAN_COMMIT=0", "one pass per game"],
+      "validation": "local patch/config checks first; requires explicit permission for any Kaggle run or submission"
+    },
+    {
+      "id": "dprime_scheduler",
+      "delta": ["replace uniform slot allocation with the tested D-prime priority formula"],
+      "prerequisite": "cap_off_control is validated and the runner API is confirmed",
+      "hold_constant": ["all model and serving parameters", "prompts", "replay/memory/playbook flags"],
+      "validation": "unit tests in this folder cover the formula only; exact notebook integration remains unverified"
+    }
+  ],
+  "explicitly_excluded": [
+    "offline source search or static playbook as a hidden-game score lever",
+    "win-path replay or multiple passes for the same competition game",
+    "solved-level memory, no-op guard, strategy-audit, or plan-commit stack without isolated evidence",
+    "changes to model, temperature, context, MAXREQ, or GPU serving configuration",
+    "Kaggle benchmark, Kaggle API submission, or remote-branch changes"
+  ],
+  "references": {
+    "v11_submission": "57737623",
+    "later_27b_submission": "57752672",
+    "previous_best_complete": "57247568"
+  }
+}

@@ -1,0 +1,54 @@
+OK   notebook parses (42 cells)
+OK   code cells compile (27)
+OK   concurrency fix present
+OK   cap off in variant env
+OK   winpath on in variant env
+OK   opener commit hint on in variant env
+OK   relative escalation on in variant env
+OK   escalation floor measured (20, not 10)
+OK   roster-probe hook guarded (v14/v13.4 fix)
+OK   budget probe present (v13.4)
+OK   roster probe present (v13.4, own file)
+OK   all eight inherited patches registered
+OK   D' switch on in variant env
+OK   legacy cost factor kept off
+OK   patch 0009 registered
+OK   D' probe present
+OK   D' metering present
+OK   v16 version print
+OK   switch assignment is PLAN_COMMIT = "1"
+OK   switch PLAN_COMMIT=1
+OK   switch PLAN_COMMIT=0
+OK   playbook embedded == certified playbook.json (9 gier/14 poziomów)
+OK   D' probe/metering stub tests pass
+OK   all nine patches extracted
+OK   applies: harness-changes.patch
+OK   applies: duck-extra-00.patch
+OK   applies: duck-extra-01.patch
+OK   applies: duck-extra-02.patch
+OK   applies: duck-extra-03.patch
+OK   applies: duck-extra-04.patch
+OK   applies: duck-extra-05.patch
+OK   applies: duck-extra-06.patch
+OK   applies: duck-extra-07.patch
+OK   patched tree compiles
+OK   winpath module present in tree
+OK   D' formula in patched tree
+OK   both call sites route through select_priority
+OK   raw pace recorded when D' is on
+OK   legacy priority_value kept verbatim
+OK   src/priority_scheduler_v16.py == patched tree (replay input)
+OK   12 plan-commit + 6 escalate-relative + 21 D' tests pass
+OK   11 winpath tests pass on patched tree
+OK   switch-off == shipped priority_value on the patched tree
+
+ALL CHECKS PASSED
+dprime probe: switch ON, OFF==legacy, order checks OK
+dprime probe: switch OFF -> explicit warning OK
+dprime probe: OFF path diverges -> labelled non-single-variable OK
+dprime probe: missing scheduler -> 'skipped', cell does not die OK
+dprime metering: pace per cleared level written OK
+dprime metering: no cleared level -> explicit note OK
+dprime metering: broken run -> 'skipped' OK
+
+wszystkie testy sond v16 przeszły

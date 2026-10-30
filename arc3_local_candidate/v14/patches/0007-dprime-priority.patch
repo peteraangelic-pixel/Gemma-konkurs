@@ -1,0 +1,293 @@
+diff --git a/ARC3-Inference/inference/agent/priority_scheduler.py b/ARC3-Inference/inference/agent/priority_scheduler.py
+index 14bb787..acab464 100644
+--- a/ARC3-Inference/inference/agent/priority_scheduler.py
++++ b/ARC3-Inference/inference/agent/priority_scheduler.py
+@@ -48,17 +48,47 @@ def parse_total_levels(value: object) -> int | None:
+     return min(10, max(6, int(number)))
+ 
+ 
++def _finite_nonnegative(value: object, default: float = 0.0) -> float:
++    try:
++        number = float(value)
++    except (TypeError, ValueError, OverflowError):
++        return default
++    if not math.isfinite(number):
++        return default
++    return max(0.0, number)
++
++
++def _clip(value: float, low: float, high: float) -> float:
++    return min(high, max(low, value))
++
++
++def _actual_total_levels(value: object) -> int:
++    if value is None or isinstance(value, bool):
++        return 10
++    try:
++        number = float(value)
++    except (TypeError, ValueError, OverflowError):
++        return 10
++    if not math.isfinite(number) or number <= 0 or not number.is_integer():
++        return 10
++    return int(number)
++
++
+ @dataclass
+ class ProgressPace:
+     completed: int = 0
+     log_cost_ratio: float = 0.0
++    total_tokens: float = 0.0
+ 
+     def record_completion(self, tokens_used: float, reference_tokens: float) -> None:
+-        observation = math.log(max(1.0, tokens_used) / max(1.0, reference_tokens))
++        used = _finite_nonnegative(tokens_used)
++        reference = max(1.0, _finite_nonnegative(reference_tokens, default=1.0))
++        observation = math.log(max(1.0, used) / reference)
+         self.log_cost_ratio = (
+             observation if self.completed == 0
+             else 0.6 * self.log_cost_ratio + 0.4 * observation
+         )
++        self.total_tokens = _finite_nonnegative(getattr(self, "total_tokens", 0.0)) + used
+         self.completed += 1
+ 
+     def cost_multiplier(self) -> float:
+@@ -66,6 +96,11 @@ class ProgressPace:
+         return math.exp(min(math.log(2.0), max(math.log(0.5),
+                                              confidence * self.log_cost_ratio)))
+ 
++    def mean_tokens_per_cleared_level(self) -> float:
++        completed = max(0, int(getattr(self, "completed", 0)))
++        total_tokens = _finite_nonnegative(getattr(self, "total_tokens", 0.0))
++        return total_tokens / completed if completed else 0.0
++
+ 
+ @dataclass(frozen=True)
+ class PrioritySnapshot:
+@@ -73,62 +108,64 @@ class PrioritySnapshot:
+     actions: int
+     tokens: float
+     cost_multiplier: float = 1.0
+-    # Appended to preserve four-argument callers and older pickled snapshots.
++    # Appended for older five-argument callers and pickled snapshots.
+     total_levels: int | None = None
++    # D′ needs the actual token pace, not the legacy 0.5–2.0 cost multiplier.
++    mean_tokens_per_cleared_level: float = 0.0
+ 
+ 
+ def priority_value(
+-    state: PrioritySnapshot, *, endgame: bool = False,
+-    tail_fraction: float | None = None, human_actions: float = 25.0,
+-    action_scale: float = 115.0, token_scale: float = 62000.0,
+-    action_weight: float = 0.25, tail_base: float = 6.0, tail_cap: float = 6.0,
+-    normalize_score: bool = False, tail_lookup: bool | str = False,
+-    tail_efficiency: float = 0.8,
++    state: PrioritySnapshot,
++    *,
++    endgame: bool = False,
++    tail_fraction: float | None = None,
++    **_ignored: object,
+ ) -> int:
+-    """No phase offset: all candidates must be evaluated at the same time.
+-
+-    tail_fraction=None retains the endgame rule. Supplying a fraction
+-    keeps the likelihood proxy active and fades the tail instead of switching.
+-    The likelihood proxy is heuristic, not a calibrated completion probability.
+-
+-    tail_lookup=True uses the empirical 80k table; "remaining" uses the
+-    fixed 8/7/5/0 table without an efficiency discount. False keeps the capped
+-    tail. normalize_score scales only A, never B or the endgame's 0.25 floor.
++    """Published D′ priority, scaled by 1000 for the harness heap.
++
++    The extra legacy keyword arguments are accepted so this replacement can be
++    applied after v13.2 without changing its scheduler call sites. D′ itself
++    uses the measured mean generated-token cost per cleared level; it must not
++    interpret ``cost_multiplier`` (a dimensionless 0.5–2.0 factor) as tokens.
++    ``endgame`` is retained for API compatibility; the global tail fade is
++    supplied through ``tail_fraction`` by the priority gate.
+     """
+-    level = max(1, state.level)
+-    total_levels = parse_total_levels(getattr(state, "total_levels", None)) or 10
+-    actions, tokens = max(0, state.actions), max(0.0, state.tokens)
+-    pace = min(2.0, max(0.5, state.cost_multiplier))
+-    efficiency = (human_actions / (human_actions + actions)) ** 2
+-    current_value = level * efficiency
+-    if normalize_score:
+-        # Normalize immediate reward A to a ten-level reference (sum 1..10).
+-        # B is a separately chosen continuation value, not normalized reward.
+-        current_value *= 55.0 / (total_levels * (total_levels + 1) / 2)
+-    if endgame and tail_fraction is None:
+-        # Preserve the original arithmetic when normalization is disabled.
+-        value = (
+-            level * 0.25 + current_value if normalize_score
+-            else level * (0.25 + efficiency)
+-        ) / pace * 100
+-    else:
+-        if tail_lookup == "remaining":
+-            index = min(total_levels, level) - 1
+-            tail = TAIL_LOOKUP_REMAINING[total_levels][index]
+-        elif tail_lookup:
+-            future_efficiency = (
+-                min(1.0, max(0.0, tail_efficiency))
+-                if math.isfinite(tail_efficiency) else 0.8
+-            )
+-            index = min(total_levels, level) - 1
+-            tail = TAIL_LOOKUP_80K[total_levels][index] * future_efficiency
+-        else:
+-            tail = min(tail_cap, tail_base + level - 1)
+-        if tail_fraction is not None:
+-            tail *= min(1.0, max(0.0, tail_fraction))
+-        chance = (
+-            action_weight * 0.5 ** ((actions / action_scale) ** 2)
+-            + (1.0 - action_weight) * 0.5 ** ((tokens / (token_scale * pace)) ** 2)
+-        )
+-        value = (current_value + tail) * chance / pace * 100
+-    return max(1, int(value))
++    del endgame
++    try:
++        level = max(1, int(state.level))
++    except (TypeError, ValueError, OverflowError):
++        level = 1
++
++    actual_levels = _actual_total_levels(getattr(state, "total_levels", None))
++    norm_levels = min(10, max(6, actual_levels))
++    norm = 55.0 / (norm_levels * (norm_levels + 1) / 2.0)
++    actions = _finite_nonnegative(getattr(state, "actions", 0.0))
++    tokens = _finite_nonnegative(getattr(state, "tokens", 0.0))
++    pace = _finite_nonnegative(
++        getattr(state, "mean_tokens_per_cleared_level", 0.0)
++    )
++
++    depth_efficiency = (1.0 + 0.5 * (level - 1)) * norm
++    depth_efficiency *= (300.0 / (300.0 + actions)) ** 2.5
++    if pace > 0.0:
++        pace_multiplier = _clip((30_000.0 / max(1.0, pace)) ** 0.4, 0.25, 4.0)
++        depth_efficiency *= pace_multiplier
++
++    reference_pace = pace if pace > 0.0 else 30_000.0
++    token_scale = 225_000.0 * _clip(reference_pace / 30_000.0, 0.5, 2.0) ** 0.5
++    patience = (
++        0.1 * max(0.1, 1.0 - actions / 115.0)
++        + 0.9 * max(0.1, 1.0 - tokens / token_scale)
++    )
++
++    remaining_levels = max(0, actual_levels - level)
++    growth_bonus = (
++        16.0 if remaining_levels >= 3 else
++        14.0 if remaining_levels == 2 else
++        10.0 if remaining_levels == 1 else 0.0
++    )
++    phi = 1.0 if tail_fraction is None else _clip(
++        _finite_nonnegative(tail_fraction, default=1.0), 0.0, 1.0
++    )
++    value = depth_efficiency * patience + growth_bonus * phi
++    return max(1, int(value * 1000.0))
+diff --git a/ARC3-Inference/inference/agent/tool_agent.py b/ARC3-Inference/inference/agent/tool_agent.py
+index 39bec69..9d7e3ed 100644
+--- a/ARC3-Inference/inference/agent/tool_agent.py
++++ b/ARC3-Inference/inference/agent/tool_agent.py
+@@ -2356,59 +2356,19 @@ def _game_priority(
+     tokens_on_level: int = 0,
+     endgame: bool = False,
+     total_levels: int | None = None,
++    mean_tokens_per_cleared_level: float = 0.0,
+ ) -> int:
+-    """Expected remaining score for a game on `level` after this much spend.
+-
+-    Two phases. In the main one, (a + b) * c:
+-
+-      a  what finishing THIS level banks - the score becomes `level` levels
+-         completed, discounted by the benchmark's efficiency term
+-      b  every level after it, min(cap, base + level - 1)
+-      c  whether this level still yields anything, as a blend of two measured
+-         decay curves
+-
+-    In the endgame there is no time to reach a further level, so the tail and
+-    the hazard stop meaning anything and what remains is simply what completing
+-    this level would bank. The 0.25 floor lets efficiency separate games at the
+-    same depth without letting a shallower one overtake a deeper one.
+-
+-    Replaying four runs against their own level-up costs, the endgame switch was
+-    worth 8 to 12% of total score at constrained budgets and nothing at all once
+-    the budget covered what the games actually spent - which is where real runs
+-    sit, so this matters only if the competition budget is tighter.
+-    """
+-    level = max(1, int(level))
+-    actions = max(0, int(actions_on_level))
+-    tokens = max(0, int(tokens_on_level))
+-    options = _priority_level_options()
+-    if options["normalize_score"] or options["tail_lookup"]:
+-        # Same scoring as the refreshed queue, retaining this legacy path's
+-        # phase offset. With both flags off, execute the original path below.
+-        value = priority_value(
+-            PrioritySnapshot(level, actions, tokens, total_levels=total_levels),
+-            endgame=endgame, human_actions=_priority_human_actions(),
+-            action_scale=_priority_action_scale(), token_scale=_priority_token_scale(),
+-            action_weight=_priority_action_weight(), tail_base=_priority_tail_base(),
+-            tail_cap=_priority_tail_cap(), **options,
+-        )
+-        return value + (_PRIORITY_ENDGAME_OFFSET if endgame else 0)
+-    human = _priority_human_actions()
+-    efficiency = min(1.0, (human / (human + actions)) ** 2)
+-
+-    if endgame:
+-        value = level * (0.25 + efficiency)
+-        return _PRIORITY_ENDGAME_OFFSET + max(1, int(value * 100))
+-
+-    a = level * efficiency
+-    b = min(_priority_tail_cap(), _priority_tail_base() + level - 1.0)
+-    weight = _priority_action_weight()
+-    by_actions = actions / _priority_action_scale()
+-    by_tokens = tokens / _priority_token_scale()
+-    c = (
+-        weight * 0.5 ** (by_actions * by_actions)
+-        + (1.0 - weight) * 0.5 ** (by_tokens * by_tokens)
++    """D′ priority used when the shared priority gate is unavailable."""
++    state = PrioritySnapshot(
++        level=max(1, int(level)),
++        actions=max(0, int(actions_on_level)),
++        tokens=max(0, int(tokens_on_level)),
++        total_levels=total_levels,
++        mean_tokens_per_cleared_level=mean_tokens_per_cleared_level,
++    )
++    return priority_value(
++        state, endgame=endgame, **_priority_level_options()
+     )
+-    return max(1, int((a + b) * c * 100))
+ 
+ 
+ def _persistent_functions_scope() -> str:
+@@ -6630,19 +6590,28 @@ class ToolAgent:
+         )
+         gate = _priority_gate()
+         snapshot = None
+-        options = _priority_level_options()
+-        total_levels = (
+-            self._priority_total_levels()
+-            if options["normalize_score"] or options["tail_lookup"] else None
++        total_levels = self._priority_total_levels()
++        pace_enabled = _get_env_bool("ARC3_PRIORITY_PACE", False)
++        pace_multiplier = self._progress_pace.cost_multiplier() if pace_enabled else 1.0
++        mean_tokens = (
++            self._progress_pace.mean_tokens_per_cleared_level()
++            if pace_enabled else 0.0
+         )
+         if gate is not None and _priority_refresh_enabled():
+-            pace = self._progress_pace.cost_multiplier() if _get_env_bool("ARC3_PRIORITY_PACE", False) else 1.0
+-            snapshot = PrioritySnapshot(level, actions, tokens, pace, total_levels)
++            snapshot = PrioritySnapshot(
++                level=level,
++                actions=actions,
++                tokens=tokens,
++                cost_multiplier=pace_multiplier,
++                total_levels=total_levels,
++                mean_tokens_per_cleared_level=mean_tokens,
++            )
+             estimate = gate._snapshot_priority(snapshot, time.monotonic())
+         else:
+             estimate = _game_priority(
+                 level, actions, tokens, endgame=self._in_endgame(),
+                 total_levels=total_levels,
++                mean_tokens_per_cleared_level=mean_tokens,
+             )
+         # this request pays the prefill, so it drops to the bottom band; the one
+         # after it, with the prefix rebuilt, returns to the warm band

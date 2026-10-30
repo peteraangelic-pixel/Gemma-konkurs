@@ -1,0 +1,83 @@
+{
+ "tool": "tools/dprime_ordering_replay.py",
+ "step_s": 300,
+ "top": 3,
+ "source_recordings": {
+  "r085": "Smak-Domu-Konkurs ops/results/r085 (48 min, 10 gier)",
+  "r093": "Smak-Domu-Konkurs ops/results/r093 (48 min, 10 gier)",
+  "r110": "Smak-Domu-Konkurs ops/results/r110 (48 min, 10 gier)",
+  "r118": "Smak-Domu-Konkurs ops/results/r118 (90 min, 10 gier)"
+ },
+ "caveat": "Ranking disagreement says the switch is live. It is NOT a score, and the realised outcomes were produced under the old allocation.",
+ "runs": [
+  {
+   "recording": "r085",
+   "samples": 8,
+   "identical_top_set": 1,
+   "identical_full_order": 0,
+   "rank_corr_with_realised_score": {
+    "legacy": 0.216,
+    "dprime": 0.185
+   },
+   "games_dprime_pulls_into_top": {
+    "ka59-38d34dbb": 2,
+    "m0r0-492f87ba": 1,
+    "sc25-635fd71a": 2,
+    "dc22-fdcac232": 2
+   }
+  },
+  {
+   "recording": "r093",
+   "samples": 9,
+   "identical_top_set": 0,
+   "identical_full_order": 0,
+   "rank_corr_with_realised_score": {
+    "legacy": -0.089,
+    "dprime": -0.072
+   },
+   "games_dprime_pulls_into_top": {
+    "cn04-2fe56bfb": 2,
+    "tn36-ef4dde99": 1,
+    "dc22-fdcac232": 1,
+    "su15-1944f8ab": 2
+   }
+  },
+  {
+   "recording": "r110",
+   "samples": 9,
+   "identical_top_set": 1,
+   "identical_full_order": 0,
+   "rank_corr_with_realised_score": {
+    "legacy": 0.373,
+    "dprime": 0.323
+   },
+   "games_dprime_pulls_into_top": {
+    "sc25-635fd71a": 4,
+    "cn04-2fe56bfb": 1,
+    "ls20-9607627b": 1
+   }
+  },
+  {
+   "recording": "r118",
+   "samples": 17,
+   "identical_top_set": 0,
+   "identical_full_order": 0,
+   "rank_corr_with_realised_score": {
+    "legacy": 0.27,
+    "dprime": 0.358
+   },
+   "games_dprime_pulls_into_top": {
+    "cn04-2fe56bfb": 14,
+    "m0r0-492f87ba": 1,
+    "dc22-fdcac232": 10,
+    "su15-1944f8ab": 5
+   }
+  }
+ ],
+ "pooled": {
+  "samples": 43,
+  "identical_top_set": 2,
+  "mean_rank_corr_legacy": 0.193,
+  "mean_rank_corr_dprime": 0.199
+ }
+}

@@ -1,0 +1,10 @@
+# verify_v17_dyn.py --bundle /tmp/r033 --tests  →  ALL CHECKS PASSED (54 OK, 0 FAIL)
+# 2026-10-30, offline (Py 3.11, stubs requests/PIL, R085_BENCH=/tmp/bench/r085.json)
+#   build: 45 komorek / 783 407 B, powtarzalny bajt w bajt
+#   11/11 patchy z notebooka aplikuje sie na czysty r033, drzewo kompiluje
+#   12 plan-commit + 5 escalate-relative + 21 priority-D' + 16 dyn-budget
+#   + self-pace 22/14 (r085, z drzewa po patchach) + 11 win-path: OK
+#   cmp: src/priority_scheduler_v17.py == drzewo po patchach
+#   cmp: src/arc3_level_budget_v13_2.py == drzewo po patchach
+#   switch-off: select_priority() == priority_value() (24 kombinacje)
+#   0010 DORMANT: ARC3_LEVEL_TOKEN_CAP = "0" w wariancie

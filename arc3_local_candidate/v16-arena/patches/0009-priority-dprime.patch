@@ -1,0 +1,286 @@
+diff --git a/ARC3-Inference/inference/agent/priority_scheduler.py b/ARC3-Inference/inference/agent/priority_scheduler.py
+index 14bb787..4b3f857 100644
+--- a/ARC3-Inference/inference/agent/priority_scheduler.py
++++ b/ARC3-Inference/inference/agent/priority_scheduler.py
+@@ -1,9 +1,35 @@
+ """Pure scheduler inputs and scoring; never reads hidden game metadata."""
+ from __future__ import annotations
+ 
++import logging
+ import math
++import os
+ from dataclasses import dataclass
+ 
++log = logging.getLogger(__name__)
++
++
++def _env_bool(name: str, default: bool = False) -> bool:
++    """Same truthiness contract as tool_agent._get_env_bool, without a cycle."""
++    raw = os.environ.get(name)
++    if raw is None or not str(raw).strip():
++        return default
++    return str(raw).strip().lower() in {"1", "true", "yes", "on"}
++
++
++def _finite_nonnegative(value: object, default: float = 0.0) -> float:
++    try:
++        number = float(value)  # type: ignore[arg-type]
++    except (TypeError, ValueError, OverflowError):
++        return default
++    if not math.isfinite(number):
++        return default
++    return max(0.0, number)
++
++
++def _clip(value: float, low: float, high: float) -> float:
++    return min(high, max(low, value))
++
+ 
+ # Expected future level-weight sum, conditional on completing the current level.
+ # 80k tokens are shared by ALL future levels; efficiency is NOT baked in.
+@@ -52,13 +78,22 @@ def parse_total_levels(value: object) -> int | None:
+ class ProgressPace:
+     completed: int = 0
+     log_cost_ratio: float = 0.0
++    # Raw generated tokens spent on cleared levels (D', ARC3_PRIORITY_DPRIME).
++    # cost_multiplier() is a dimensionless 0.5-2.0 factor and cannot stand in
++    # for this. getattr() keeps agents unpickled from older builds working.
++    total_tokens: float = 0.0
+ 
+     def record_completion(self, tokens_used: float, reference_tokens: float) -> None:
+-        observation = math.log(max(1.0, tokens_used) / max(1.0, reference_tokens))
++        used = _finite_nonnegative(tokens_used)
++        reference = max(1.0, _finite_nonnegative(reference_tokens, default=1.0))
++        observation = math.log(max(1.0, used) / reference)
+         self.log_cost_ratio = (
+             observation if self.completed == 0
+             else 0.6 * self.log_cost_ratio + 0.4 * observation
+         )
++        self.total_tokens = (
++            _finite_nonnegative(getattr(self, "total_tokens", 0.0)) + used
++        )
+         self.completed += 1
+ 
+     def cost_multiplier(self) -> float:
+@@ -66,6 +101,12 @@ class ProgressPace:
+         return math.exp(min(math.log(2.0), max(math.log(0.5),
+                                              confidence * self.log_cost_ratio)))
+ 
++    def mean_tokens_per_cleared_level(self) -> float:
++        """D' pace: generated tokens per completed level, 0 before the first."""
++        completed = max(0, int(getattr(self, "completed", 0)))
++        total = _finite_nonnegative(getattr(self, "total_tokens", 0.0))
++        return total / completed if completed else 0.0
++
+ 
+ @dataclass(frozen=True)
+ class PrioritySnapshot:
+@@ -75,6 +116,8 @@ class PrioritySnapshot:
+     cost_multiplier: float = 1.0
+     # Appended to preserve four-argument callers and older pickled snapshots.
+     total_levels: int | None = None
++    # Appended for D'; read only when ARC3_PRIORITY_DPRIME is on.
++    mean_tokens_per_cleared_level: float = 0.0
+ 
+ 
+ def priority_value(
+@@ -132,3 +175,114 @@ def priority_value(
+         )
+         value = (current_value + tail) * chance / pace * 100
+     return max(1, int(value))
++
++
++# --- D' slot priority (opt-in: ARC3_PRIORITY_DPRIME=1) ----------------------
++# Restated from the published D' slot priority (scale 1000, no unconditional
++# fresh-first band). Measured public draws on a comparable line: 31.54, 30.74,
++# 29.05, 24.77 (mean ~29.0, n=4) against a comparable-baseline mean of ~25.77
++# (SD ~3.93). That is a modest, noisy signal, not a proven gain, which is why
++# the whole formula is one env switch and every legacy path stays byte-intact.
++#
++# The only new input it needs is the measured generated-token pace per cleared
++# level. The host supplies it; nothing here reads hidden game metadata.
++_DPRIME_LOGGED = False
++
++
++def dprime_enabled() -> bool:
++    return _env_bool("ARC3_PRIORITY_DPRIME", False)
++
++
++def _dprime_total_levels(value: object) -> int:
++    """True level count for the growth term; 10 when unknown or invalid."""
++    if value is None or isinstance(value, bool):
++        return 10
++    try:
++        number = float(value)  # type: ignore[arg-type]
++    except (TypeError, ValueError, OverflowError):
++        return 10
++    if not math.isfinite(number) or number <= 0 or not number.is_integer():
++        return 10
++    return int(number)
++
++
++def dprime_value(
++    state: PrioritySnapshot, *, tail_fraction: float | None = 1.0,
++) -> float:
++    """Unscaled D' priority: A * M * C + B * phi.
++
++      A = (1 + 0.5 (level - 1)) * norm(N) * (300 / (300 + actions)) ** 2.5
++      M = clip((30000 / pace) ** 0.4, 0.25, 4), or 1 before the first clear
++      C = 0.1 * max(0.1, 1 - actions / 115) + 0.9 * max(0.1, 1 - tokens / T)
++      T = 225000 * clip(pace / 30000, 0.5, 2) ** 0.5
++      B = 16 / 14 / 10 / 0 for >=3 / 2 / 1 / 0 levels remaining
++      phi in [0, 1] fades B near the end of the run
++    """
++    try:
++        level = max(1, int(state.level))
++    except (TypeError, ValueError, OverflowError):
++        level = 1
++
++    actual_levels = _dprime_total_levels(getattr(state, "total_levels", None))
++    norm_levels = min(10, max(6, actual_levels))
++    norm = 55.0 / (norm_levels * (norm_levels + 1) / 2.0)
++
++    actions = _finite_nonnegative(getattr(state, "actions", 0.0))
++    tokens = _finite_nonnegative(getattr(state, "tokens", 0.0))
++    pace = _finite_nonnegative(getattr(state, "mean_tokens_per_cleared_level", 0.0))
++
++    depth = (1.0 + 0.5 * (level - 1)) * norm
++    depth *= (300.0 / (300.0 + actions)) ** 2.5
++    if pace > 0.0:
++        depth *= _clip((30_000.0 / max(1.0, pace)) ** 0.4, 0.25, 4.0)
++
++    reference_pace = pace if pace > 0.0 else 30_000.0
++    token_scale = 225_000.0 * _clip(reference_pace / 30_000.0, 0.5, 2.0) ** 0.5
++    patience = (
++        0.1 * max(0.1, 1.0 - actions / 115.0)
++        + 0.9 * max(0.1, 1.0 - tokens / token_scale)
++    )
++
++    remaining = max(0, actual_levels - level)
++    growth = (0.0, 10.0, 14.0, 16.0)[min(remaining, 3)]
++    phi = 1.0 if tail_fraction is None else _clip(
++        _finite_nonnegative(tail_fraction, default=1.0), 0.0, 1.0
++    )
++    return depth * patience + growth * phi
++
++
++def dprime_priority(
++    state: PrioritySnapshot, *, tail_fraction: float | None = 1.0,
++) -> int:
++    """Integer priority on the reference 1000 scale, never below 1."""
++    return max(1, int(dprime_value(state, tail_fraction=tail_fraction) * 1000.0))
++
++
++def select_priority(
++    state: PrioritySnapshot, *,
++    tail_fraction: float | None = None,
++    endgame: bool = False,
++    **legacy: object,
++) -> int:
++    """Single switch between the shipped priority and D'.
++
++    With ARC3_PRIORITY_DPRIME unset this calls priority_value() with exactly
++    the arguments it would have received, so v13.4 behaviour is unchanged.
++    """
++    if not dprime_enabled():
++        return priority_value(
++            state, tail_fraction=tail_fraction, endgame=endgame, **legacy
++        )
++    global _DPRIME_LOGGED
++    if not _DPRIME_LOGGED:
++        _DPRIME_LOGGED = True
++        log.warning(
++            "priority: D' slot priority active (ARC3_PRIORITY_DPRIME=1); "
++            "legacy priority_value bypassed"
++        )
++    phi = tail_fraction
++    if phi is None:
++        # No shared clock: the legacy path would fall back to its endgame
++        # switch here, so D' drops the growth bonus in that phase instead.
++        phi = 0.0 if endgame else 1.0
++    return dprime_priority(state, tail_fraction=phi)
+diff --git a/ARC3-Inference/inference/agent/tool_agent.py b/ARC3-Inference/inference/agent/tool_agent.py
+index c5f6cb7..8f95cbe 100644
+--- a/ARC3-Inference/inference/agent/tool_agent.py
++++ b/ARC3-Inference/inference/agent/tool_agent.py
+@@ -20,7 +20,8 @@ import requests
+ 
+ from inference.agent.noop_repeat_guard import NoopRepeatGuard, action_signature
+ from inference.agent.priority_scheduler import (
+-    ProgressPace, PrioritySnapshot, parse_total_levels, priority_value,
++    ProgressPace, PrioritySnapshot, dprime_enabled, parse_total_levels,
++    priority_value, select_priority,
+ )
+ from inference.utils.animation import (
+     _transient_cells as _animation_transient_cells,
+@@ -2196,7 +2197,7 @@ class _PriorityGate:
+                             "%.1f minutes, retaining hazard C",
+                             elapsed / 60.0, remaining / 60.0, window / 60.0,
+                         )
+-        return priority_value(
++        return select_priority(
+             snapshot, endgame=endgame, tail_fraction=tail_fraction,
+             human_actions=_priority_human_actions(), action_scale=_priority_action_scale(),
+             token_scale=_priority_token_scale(), action_weight=_priority_action_weight(),
+@@ -2388,6 +2389,7 @@ def _game_priority(
+     tokens_on_level: int = 0,
+     endgame: bool = False,
+     total_levels: int | None = None,
++    mean_tokens_per_cleared_level: float = 0.0,
+ ) -> int:
+     """Expected remaining score for a game on `level` after this much spend.
+ 
+@@ -2413,6 +2415,19 @@ def _game_priority(
+     actions = max(0, int(actions_on_level))
+     tokens = max(0, int(tokens_on_level))
+     options = _priority_level_options()
++    if dprime_enabled():
++        # D' replaces the legacy formula only when the switch is on; the two
++        # paths below stay untouched and are what runs when it is off.
++        return select_priority(
++            PrioritySnapshot(
++                level, actions, tokens, total_levels=total_levels,
++                mean_tokens_per_cleared_level=mean_tokens_per_cleared_level,
++            ),
++            endgame=endgame, human_actions=_priority_human_actions(),
++            action_scale=_priority_action_scale(), token_scale=_priority_token_scale(),
++            action_weight=_priority_action_weight(), tail_base=_priority_tail_base(),
++            tail_cap=_priority_tail_cap(), **options,
++        ) + (_PRIORITY_ENDGAME_OFFSET if endgame else 0)
+     if options["normalize_score"] or options["tail_lookup"]:
+         # Same scoring as the refreshed queue, retaining this legacy path's
+         # phase offset. With both flags off, execute the original path below.
+@@ -4045,7 +4060,8 @@ class ToolAgent:
+             self._arc3_wm_level_totals = [0, 0, 0]
+         if summary.get("level_transition"):
+             # the priority estimate is per level, so both counts restart here
+-            if _get_env_bool("ARC3_PRIORITY_PACE", False):
++            if _get_env_bool("ARC3_PRIORITY_PACE", False) or dprime_enabled():
++                # D' needs the raw token pace too, not only the legacy factor.
+                 completed_level = max(1, int(summary.get("level") or 2) - 1)
+                 if completed_level > self._pace_last_completed_level:
+                     self._progress_pace.record_completion(
+@@ -6677,14 +6693,22 @@ class ToolAgent:
+             self._priority_total_levels()
+             if options["normalize_score"] or options["tail_lookup"] else None
+         )
++        mean_tokens = (
++            self._progress_pace.mean_tokens_per_cleared_level()
++            if dprime_enabled() else 0.0
++        )
+         if gate is not None and _priority_refresh_enabled():
+             pace = self._progress_pace.cost_multiplier() if _get_env_bool("ARC3_PRIORITY_PACE", False) else 1.0
+-            snapshot = PrioritySnapshot(level, actions, tokens, pace, total_levels)
++            snapshot = PrioritySnapshot(
++                level, actions, tokens, pace, total_levels,
++                mean_tokens_per_cleared_level=mean_tokens,
++            )
+             estimate = gate._snapshot_priority(snapshot, time.monotonic())
+         else:
+             estimate = _game_priority(
+                 level, actions, tokens, endgame=self._in_endgame(),
+                 total_levels=total_levels,
++                mean_tokens_per_cleared_level=mean_tokens,
+             )
+         # this request pays the prefill, so it drops to the bottom band; the one
+         # after it, with the prefix rebuilt, returns to the warm band
