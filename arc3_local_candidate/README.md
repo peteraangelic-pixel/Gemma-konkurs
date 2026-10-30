@@ -72,6 +72,45 @@ python -m arc3_local_candidate.tools.action_efficiency compare before.json after
 python -m arc3_local_candidate.tools.score_decomposition benchmark.json
 ```
 
+## Audyt reguł eskalacji i budżetu poziomu (30.10)
+
+- `tools/escalation_audit.py` — ile razy reguła eskalacji wtrąca się do kontekstu i ile z tych
+  wtrąceń jest przedwczesnych (próg poniżej ludzkiego baseline'u). Cztery reguły: absolutna 20,
+  20+cap2, względna (0008) i self-pace (0009).
+- `tools/audit_dyn_budget.py` — dwuczęściowy audyt patcha dyn-level-budget: `benchmarks` liczy
+  na realnych nagraniach, ile ukończonych poziomów przekracza statyczny cap i jak koncentruje się
+  marnotrawstwo; `logic <pre> <post>` porównuje decyzje modułu adaptacyjnego z wersją statyczną
+  (8 000 decyzji na konfigurację, ścieżka uśpiona i kontrola `ARC3_DYN_CAP=0`).
+- `fixtures/benchmarks/{r085,r093,r110,r118}.json` — cztery prawdziwe `benchmark.json`
+  (kernel_output_pick z gałęzi operacyjnej, ~1,6 MB razem), żeby oba audyty dało się powtórzyć
+  bez dostępu do cudzych artefaktów.
+
+```bash
+python -m arc3_local_candidate.tools.escalation_audit \
+    arc3_local_candidate/fixtures/benchmarks/{r085,r093,r110,r118}.json
+python -m arc3_local_candidate.tools.audit_dyn_budget benchmarks \
+    arc3_local_candidate/fixtures/benchmarks/*.json
+```
+
+Ustalone liczby (odtwarzalne z fixtures):
+
+| reguła | r085 (32 poziomy) | r093 (27) | r110 (4) | r118 (2) |
+|---|---|---|---|---|
+| absolutna 20 | 67 wtrąceń / 26 przedwcz. | 72 / 23 | 8 / 4 | 3 / 1 |
+| 20 + cap 2 (to leci w submisji) | 42 / 26 | 39 / 23 | 5 / 4 | 2 / 1 |
+| względna 1,2× (0008) — tylko replay | **8 / 0** | **10 / 0** | 3 / 0 | 2 / 0 |
+| self-pace (0009) | **22 / 14** | 22 / 13 | 5 / 4 | 2 / 1 |
+
+Wniosek: względna jest najlepsza **tam, gdzie widzi baseline**; w submisji baseline jest ukryty
+(`base_actions_per_level = None` w `taaf/game.py`), więc degeneruje się do 42/26. Self-pace jest
+jedyną regułą, która w biegu, który się liczy, faktycznie różni się od „20" — ale to oszczędność
+interwencji, nie wzrost punktów.
+
+Budżet poziomu: w korpusie 40 gier **14 ukończonych poziomów kosztowało >45k** tokenów (max
+88 114), a mediana **64,5%** tokenów gry idzie na poziomy, których gra nie ukończyła. Reguła
+adaptacyjna `cap = clamp(max(static, mediana×4), …)` przy uzbrojeniu 60 000 włącza się w 16/40
+gier i **tylko poluzowuje** (0/16 ciaśniej), więc arming ma sens przy **20 000**, nie 60 000.
+
 ## Testy lokalne
 
 Wymagany jest tylko Python 3.10+; bez CUDA, Kaggle API, GPU i dodatkowych pakietów:
