@@ -1,4 +1,9 @@
-# ARC-AGI-3 (Smak-Domu): dwa katalogi
+# ARC-AGI-3 (Smak-Domu)
+
+> **Punkt wejścia dla innych gałęzi: [`STATUS.md`](STATUS.md)** — stan na commit `0ef2465`,
+> łącznie z listą rzeczy, których ta sesja **nie** zweryfikowała.
+
+
 
 | katalog | co to jest |
 |---|---|
