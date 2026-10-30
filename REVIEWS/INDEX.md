@@ -2,6 +2,7 @@
 
 | data | plik | czego dotyczy | werdykt w jednym zdaniu |
 |---|---|---|---|
+| 2026-10-30 | `2026-10-30-v13-7-final-audyt.md` | duck-v13-7-final (gałąź 5ed750ef, commit `de57e4d`) | to **v16 + patch 0010** (0006–0009/playbook/winpath md5 identyczne); 0010 jest poprawny i podłączony, ale na traktach r085 daje **6 RESET / 0 ABANDON na 10 gier**, a premisa „35–91% tokenów" to dziś **25%** — nośnik, nie dźwignia; ich bramka **a/call ≥ 6,0 = 50 pkt** odtworzona niezależnie (4,441 → 5,9) |
 | 2026-10-30 | `2026-10-30-v17-action-efficiency-audyt.md` | duck-v17-action-efficiency (gałąź 5ed750ef, commit `283a36b`) | liczby się odtwarzają (7/7, 40,06), ale 40,06 to planista, nie warstwa — `agent.py`/`run_eval.py` nie importują `action_efficiency_layer`; na r085 cięcie akcji −30% = **+2,05 pkt**, a +1 poziom = +16,4 → **nie nakładać, nie robić v18** |
 | 2026-10-30 | `2026-10-30-v13-4-v15-porownanie-i-v16.md` | v13.4-unified (Smak) + duck-v15 (Pokemon) + moje v16 | oba pakiety w porządku, ale ich eskalacja relatywna jest w rerunie martwa (baseline `None`); 0009 self-pace to jedyny próg, który tam działa |
 | 2026-10-30 | `2026-10-30-v13-3-arena-weryfikacja.md` | v13.3-arena (`5548d35`) | mechanizm opener-hinta istnieje i jest właściwą dźwignią `tok/akcję`; patch 0007 (log) wchodzi czysto i odtwarza plik 1:1; zostawia 10 na eskalacji |

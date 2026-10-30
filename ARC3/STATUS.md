@@ -76,6 +76,44 @@ które palimy na poziomach już ukończonych, **przekierować** na nieukończone
 domyślnie wyłączony) — jako backlog **po** 2 XI. `AVX512/` jest poza konkursem i nie wchodzi
 do żadnej paczki. Szczegóły: `REVIEWS/2026-10-30-v17-action-efficiency-audyt.md`.
 
+## Audyt `duck-v13-7-final` (gałąź `5ed750ef`, commit `de57e4d`) — 2026-10-30
+
+**v13.7 = nasz duck-v16 + patch 0010.** Bajt w bajt na 0006–0009 (`04a91380`, `e891e9bd`, `5c427621`,
+`9cdc3c74`), `playbook.json` (`e2d86b1e`), `arc3_winpath.py` (`b8ffedaa`), `base-v11.ipynb`
+(`fdaa8b84`), `test_self_pace.py` (`a9fbef41`). Notebook 41 komórek / 758 240 B — zgodne.
+Jedyne różnice: 0010, komentarze, własny slug.
+
+0010 przepuszczony przez realne trakty r085 (`local-lab/sim_dyn_budget.py`):
+
+| `ARC3_LEVEL_TOKEN_CAP` | RESET | ABANDON | gry reagujące |
+|---|---|---|---|
+| `"0"` (to wysyłają) | 0 | 0 | 0/10 |
+| `"45000"` | 6 | 0 | 5/10 |
+| `"60000"` (proponowane uzbrojenie) | 6 | 0 | 6/10 |
+
+Czyli: dormant jest **naprawdę** dormant (0 decyzji / 2 126 akcji), ABANDON nie odpala ani raz
+(warunek: resety wyczerpane **i** spend ≥ 1,5×cap w jednej próbie — gry kończą na zegarze),
+a 45k vs 60k to ta sama liczba resetów. Premisa patcha („35–91% tokenów na niekończonym poziomie",
+r019) na r085 wynosi **25%** — zmalała, bo gry doszły do 2–5 poziomów.
+
+Sprawdzone dodatkowo (czego ich certyfikat nie obejmował): hook **istnieje i jest wołany**
+(`solver.py`: `peek` w `should_stop`, `step` w ścieżce akcji — nie martwy kod), RESET **zachowuje
+poziom** (`taaf/game_api.py:221` ustawia `ONLY_RESET_LEVELS="true"` przed budową klienta),
+patch 0010 **odwracalny** na ich rekonstrukcji (testy 16/16 badają bajty wysyłkowe), dotyka 1 pliku.
+
+**Bramka a/call — potwierdzona niezależnie.** Zmierzone z logów r085: 481 wywołań / 2 136 akcji
+= **a/call 4,441** (ich 4,357, zgodne w 2%). Do 50 pkt brakuje ~1,1 poziomu = +70 akcji/greę,
+przy stałej liczbie wywołań → a/call musi dojść do **5,9**. Ich próg **6,0 jest trafny.**
+
+**ZNANY DEFEKT NASZEJ SONDY:** alarm w `coverage_probe` brzmi `a/call < 1.5`, a dzisiejsza wartość
+to 4,44 i próg 50 pkt to ~6,0 — alarm **nigdy by nie zadzwonił**. Poprawka: próg `< 6.0` plus druk
+luki (`6.0 - a/call`). Nie naniesione bez GO (zmiana md5 wysyłanego notebooka).
+
+**Werdykt:** nie uzbrajać 0010 (brak dźwigni: 6 decyzji na run; ryzyko niskie, korzyść zerowa).
+Na slot iść **jednym** kandydatem — v13.7 (ich slug, ich certyfikat) albo v16 **po** zmianie sluga,
+bo zachowanie jest identyczne. Uwaga: nasze slugi v14/v15/v16 celują w ich kernele
+(`arc3-duck-v13-2`, `-v13-3-arena`, `-v13-4-unified`) — wysłanie bez zmiany **nadpisze ich artefakt**.
+
 ## Zasady, których ta sesja się trzyma (i wam proponuje)
 
 1. Nic na Kaggle bez GO użytkownika; żadnych GPU-runów bez pytania.
