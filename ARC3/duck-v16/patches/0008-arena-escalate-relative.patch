@@ -1,0 +1,92 @@
+diff --git a/ARC3-Inference/inference/agent/tool_agent.py b/ARC3-Inference/inference/agent/tool_agent.py
+index 39bec69..c5f6cb7 100644
+--- a/ARC3-Inference/inference/agent/tool_agent.py
++++ b/ARC3-Inference/inference/agent/tool_agent.py
+@@ -132,9 +132,41 @@ def _escalate_actions() -> int:
+     return max(0, _get_env_int("ARC3_ESCALATE_ACTIONS", 0))
+ 
+ 
++def _escalate_threshold(agent, floor: int) -> int:
++    """ARC3_ESCALATE_RELATIVE=1: escalate relative to the human baseline.
++
++    Threshold = max(floor, ARC3_ESCALATE_RATE * base_actions_per_level[
++    current_level]); falls back to the absolute floor whenever the baseline
++    is hidden (GameRun.base_actions_per_level is None) or the game reference
++    is missing (analyzer_factory path). Measured on r085's 32 completed
++    levels (ARC3/local-lab/escalation_audit.py, Gemma b38b82e; recomputed
++    independently by Arena): absolute 10 -> 154 injections, 15.3% of the
++    game's token pool, premature on 31/32 levels; relative(1.2, floor 20)
++    -> 8 injections, 0.8%, premature on 0/32.
++    """
++    if not _get_env_bool("ARC3_ESCALATE_RELATIVE", False):
++        return floor
++    try:
++        game = getattr(agent, "game", None)
++        base = list(getattr(getattr(game, "game_run", None),
++                            "base_actions_per_level", None) or [])
++        level = int(getattr(game, "current_state").levels_completed)
++        b = int(base[level]) if 0 <= level < len(base) else 0
++    except Exception:
++        b = 0
++    if b <= 0:
++        return floor
++    try:
++        rate = float((os.environ.get("ARC3_ESCALATE_RATE") or "1.2").strip())
++    except ValueError:
++        rate = 1.2
++    return max(floor, int(b * rate))
++
++
+ _WM_CHECK_RE = re.compile(r"\[world model check\] (\d+)/(\d+)(?:[^\n]*?; (\d+) model errors)?")
+ 
+ 
++
+ def _level_transfer_guidance_enabled() -> bool:
+     """Opt-in level-transfer prompts; set before constructing the agent.
+ 
+@@ -5403,8 +5435,18 @@ class ToolAgent:
+         escalate_every = _escalate_actions()
+         if escalate_every and _plan_commit_enabled():
+             on_level = max(0, int(action_num or 0) - int(self._actions_at_level_start or 0))
+-            if on_level >= escalate_every * (self._arc3_escalations_on_level + 1):
+-                self._arc3_escalations_on_level = on_level // escalate_every
++            # patch 0008 (v13.4-unified): trigger stays absolute (v14 semantics)
++            # unless ARC3_ESCALATE_RELATIVE=1, then fire only when the level
++            # costs more than max(floor, rate * human baseline). Optional cap
++            # (ARC3_ESCALATE_MAX_PER_LEVEL, default 0 = off) silences a level
++            # after N nudges. With the env unset everything below is a no-op
++            # against v14.
++            escalate_at = _escalate_threshold(self, escalate_every)
++            _esc_cap = _get_env_int("ARC3_ESCALATE_MAX_PER_LEVEL", 0)
++            if _esc_cap and self._arc3_escalations_on_level >= _esc_cap:
++                escalate_at = 0  # stubborn level: cap nudges, then silence
++            if escalate_at and on_level >= escalate_at * (self._arc3_escalations_on_level + 1):
++                self._arc3_escalations_on_level = on_level // escalate_at
+                 lines.append(plan_escalation_prompt(int(current_level or 1), on_level))
+         return "\n".join(lines)
+ 
+diff --git a/ARC3-Inference/inference/framework/solver.py b/ARC3-Inference/inference/framework/solver.py
+index 669433a..c6b52a2 100644
+--- a/ARC3-Inference/inference/framework/solver.py
++++ b/ARC3-Inference/inference/framework/solver.py
+@@ -1915,7 +1915,7 @@ class HarnessSolver(Solver):
+     ) -> Any:
+         if self.analyzer_factory is not None:
+             return self.analyzer_factory(game, index)
+-        return ToolAgent(
++        agent = ToolAgent(
+             model=self.model,
+             timeout=self.analyzer_timeout,
+             save_request_logs=self.save_request_logs,
+@@ -1936,6 +1936,11 @@ class HarnessSolver(Solver):
+             or None,
+             provider="vllm" if local_server is not None else None,
+         )
++        try:  # patch 0008 (v13.4-unified): baseline access for ARC3_ESCALATE_RELATIVE
++            agent.game = game
++        except Exception:
++            pass
++        return agent
+ 
+     def _play_one(
+         self,
