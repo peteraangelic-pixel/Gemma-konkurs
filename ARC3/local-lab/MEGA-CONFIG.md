@@ -104,6 +104,24 @@ jeśli poziom zużył > 2 × baseline_actions i nie ma postępu → RESET poziom
 (inaczej RESET cofa do poziomu 1). W r085 dwa takie poziomy (ls20 poz. 3: 222 vs 73;
 tn36 poz. 2: 171 vs 72) kosztowały ~25 pkt na tych dwóch grach.
 
+## 4a. Sonda rosteru — jeden darmowy pomiar, który decyduje o dwóch dźwigniach
+
+Wpis do logu w następnym submicie (`/kaggle/working/roster_probe.jsonl`, koszt 0 GPU):
+`game_id`, `index`, `pass_index`, hash pierwszej ramki, `win_levels`, `available_actions`;
+na końcu `levels`, `actions`, hash ostatniej ramki. Potem:
+
+```bash
+python3 tools/analyze_roster.py /sciezka/roster_probe.jsonl
+```
+
+Rozstrzyga dwie rzeczy naraz:
+1. **czy roster powtarza gry** (110 = 25 × 4,4 czy 110 unikalnych) → czy pamięć między
+   wpisami (v13/v13.1 patch 0006) jest warta 0 czy +5…15 pkt;
+2. **ile wpisów na mechanikę** → czy `ARC3_DEAD_SKIP` ma sens (przy braku powtórzeń
+   dead-skip nie ma czego zwalniać).
+
+Bez tego pomiaru każda prognoza „50+" opiera się na założeniu, nie na danych.
+
 ## 5. Bramki GO/NO-GO (lokalne, bez GPU)
 
 Przed wysłaniem slotu, na 10 grach dev:
