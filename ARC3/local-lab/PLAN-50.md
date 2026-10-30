@@ -234,17 +234,24 @@ Baza: **v12 = bajty c45 + 2 linie (concurrency 10)**. Baza pomiarowa: smoke 26,7
 Zasada: **jedna zmiana mechanizmu na slot**, bo przy takim szumie dwie zmiany naraz dają
 liczbę, której nie da się przypisać.
 
-### M1. Okno czasu na grę (największa dźwignia, +EV 15–45 pkt)
+### M1. Tokeny na akcję i silnik — ~~okno czasu~~ (korekta 29.10; +EV 15–45 pkt)
 
-Dziś dev-runy kończą na 48 min (`max_runtime_s_per_game = 48*60`), a r116/v14 na 90 min.
-Notatnik ma budżet 32 400 s. Przy 12,9 s/akcję:
+**Korekta własnego błędu:** pierwsza wersja tego punktu mówiła „podnieś
+`max_runtime_s_per_game` z 48 min". Sprawdzone w notatniku v13: w submisie ten cap to
+`532*60` (8,9 h) i **nigdy nie wiąże**. Wiąże liczba fal: 110 gier / concurrency 10 =
+11 fal × ~49 min = 32 400 s. Efektywne okno to **2 945 s na grę**, nie 48 min (to była
+wartość dev-smoke'a) i nie 532 min.
+
+Co wyznacza akcje: `s/akcja`, a to jest liniowe w `tok/akcja` z nachyleniem zależnym od
+silnika (r = 0,99–1,00): **17,2 ms/token** w r085 (8B), **62,6** w r110 (ten sam 8B!),
+**63,1** w r118 (27B). Stąd akcje/gę = 2945 / s_akcję: 228 / 82 / 63.
 
 ```python
-# v13-cell: budżet per gra = pełne okno, nie 48 min
-bm.solver.max_runtime_s_per_game = 7920     # 2,2 h; 4 h = 14400 gdy notatnik pozwala
+# rejestr do sprawdzenia w logu rerunu, nic do "podkręcenia":
+#   ms/token  (17 = dobrze, 60 = silnik wolny)
+#   akcje/gę  (228 = r085-owo, <100 = głodzenie)
 ```
-Sprawdzić w logu rerunu jedną liczbę: **akcje/gę**. Jeśli < 300 przy 12,9 s/akcję, to
-znaczy, że okno nie było wykorzystane i to jest cała różnica.
+Lever: mniej tokenów na akcję + szybszy silnik. Nie okno.
 
 ### M2. Zakaz poddawania się przed capem (+8,8 pkt zmierzone przy tym samym budżecie)
 

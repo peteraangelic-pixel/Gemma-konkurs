@@ -8,25 +8,51 @@ Model: **8B, linia szybka** — nie 27B (zmierzone: −26,5).
 
 ---
 
-## 1. Okno czasu na grę — największa dźwignia
+## 1. ~~Okno czasu na grę~~ — **KOREKTA (29.10, po sprawdzeniu v13)**
 
-W v12 jest:
-
-```python
-bm.solver.max_runtime_s_per_game = 48*60       # 2880 s = 48 min
-```
-
-W notatniku jest budżet **32 400 s (9 h)** i gry idą równolegle. Przy zmierzonych
-**12,9 s/akcję** (8B) 48 min daje ~200 akcji; pełne okno daje 4–6× więcej akcji.
+Pierwotna wersja tego punktu twierdziła, że dźwignią jest podniesienie
+`max_runtime_s_per_game` z 48 min. **To było błędne** i wynikało z czytania dev-smoke'a
+jako submitu. Sprawdzone w notatniku v13 (cell 21):
 
 ```python
-bm.solver.max_runtime_s_per_game = 7920        # 2,2 h; jeśli notatnik pozwoli: 14400 (4 h)
+bm.n_passes = 4
+if TRUE_SUBMISSION:
+    bm.n_passes = 1
+    bm.solver.concurrency = 10
+    bm.solver.max_runtime_s_per_game = 532*60      # 8,9 h — cap jest, ale nie wiąże
 ```
 
-Ryzyko: przekroczenie 9 h zabija submit (twardy błąd). Dlatego wchodzimy na 2,2 h, nie na 4 h
-— reszta budżetu idzie na start silnika i okresowe zapisy.
-**Weryfikacja po runie: `akcje/gę` w `benchmark.json` musi być ≥ 400.** Jeśli nie jest, to
-znaczy, że okno nie było used i cały zysk z tego punktu przepadł.
+Arytmetyka prawdziwego submitu:
+
+| element | wartość |
+|---|---|
+| budżet notatnika | 32 400 s (9 h), asercja w kodzie |
+| roster | 110 gier |
+| concurrency (backend MAXREQ) | 10 |
+| fal | 110 / 10 = **11** |
+| efektywny czas na grę | 32 400 / 11 = **2 945 s ≈ 49 min** |
+
+Czyli cap 532 min **nigdy nie wiąże** — wiąże liczba fal. Podnoszenie go nic nie daje.
+Tym, co realnie wyznacza akcje na grę, jest **sekundy na akcję**:
+
+```
+akcje/gę = 2945 s / (s na akcję)
+```
+
+a `s/akcja` jest w każdym runie **liniowe w tokenach na akcję** (r = 0,99–1,00 na 10 grach):
+
+| run | silnik | ms na token | mediana tok/akcję | s/akcję | akcje/gę (49 min) |
+|---|---|---|---|---|---|
+| r085 | 8B, bez capa | **17,2** | 647 | 12,9 | **228** |
+| r110 | 8B, v13 cap 45k | 62,6 | 572 | 36,0 | 82 |
+| r118 | 27B | 63,1 | 686 | 47,0 | 63 |
+
+Dwie dźwignie, obie widoczne w tej tabeli:
+1. **mniej tokenów na akcję** (mózg treściwszy: cap outputu, krótsze analizy),
+2. **lepszy silnik** — ten sam model 8B ma 17,2 vs 62,6 ms/token w dwóch runach, czyli
+   3,6× różnicy nie pochodzi z modelu ani z promptu.
+
+Cel: 400+ akcji/gę wymaga ~370 tok/akcję przy r085-owym silniku; 600 akcji wymaga ~230.
 
 ## 2. Capy poddawania się — skalowane wagą poziomu
 
@@ -107,7 +133,9 @@ otwieracze z kodu gier, głębokość przed szerokością).
 ## 7. Kolejność slotów (4 pozostałe: 30.10, 31.10, 1.11, 2.11)
 
 1. **slot 30.10** — v12 bez zmian (baza 26,78). Sens: potwierdzić, że linia żyje po 1,18
-   i 0,27; bez tego reszta jest zgadywaniem.
+   i 0,27; bez tego reszta jest zgadywaniem. W logu sprawdzić **ms/token** i `akcje/gę`:
+   jeśli wyjdzie ~60 ms/token zamiast ~17, to silnik jest wolny i żadna zmiana polityki
+   tego nie naprawi.
 2. **slot 31.10** — M1+M2 (okno + capy). Jedna hipoteza: „akcje są wąskim gardłem".
 3. **slot 1.11** — M3+M4 na zwycięzcy z (2).
 4. **slot 2.11** — najlepsza złożona konfiguracja, wysłana rano, nie wieczorem.
