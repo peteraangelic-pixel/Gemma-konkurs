@@ -2,6 +2,7 @@
 
 | data | plik | czego dotyczy | werdykt w jednym zdaniu |
 |---|---|---|---|
+| 2026-10-30 | `2026-10-30-v13-7-rev2-vs-v16.md` | v13.7 **rev2** (commit `3945d72`) vs duck-v16 | na submisji rev2 ≡ v16 (cap `"0"`); jako pakiet rev2 lepszy (naprawia mój martwy próg a/call `<1.5`, własny slug), jako plan gorszy: arming **20k = −4,43 (r085) / −4,82 (r093)**, a strata > zysk nawet przy **100%** konwersji; semafor `solver.py:898` od razu wpuszcza następną grę → uwolniony slot nie wydłuża cudzego budżetu |
 | 2026-10-30 | `2026-10-30-v13-7-final-audyt.md` | duck-v13-7-final (gałąź 5ed750ef, commit `de57e4d`) | to **v16 + patch 0010** (0006–0009/playbook/winpath md5 identyczne); 0010 jest poprawny i podłączony, ale na traktach r085 daje **6 RESET / 0 ABANDON na 10 gier**, a premisa „35–91% tokenów" to dziś **25%** — nośnik, nie dźwignia; ich bramka **a/call ≥ 6,0 = 50 pkt** odtworzona niezależnie (4,441 → 5,9) |
 | 2026-10-30 | `2026-10-30-v17-action-efficiency-audyt.md` | duck-v17-action-efficiency (gałąź 5ed750ef, commit `283a36b`) | liczby się odtwarzają (7/7, 40,06), ale 40,06 to planista, nie warstwa — `agent.py`/`run_eval.py` nie importują `action_efficiency_layer`; na r085 cięcie akcji −30% = **+2,05 pkt**, a +1 poziom = +16,4 → **nie nakładać, nie robić v18** |
 | 2026-10-30 | `2026-10-30-v13-4-v15-porownanie-i-v16.md` | v13.4-unified (Smak) + duck-v15 (Pokemon) + moje v16 | oba pakiety w porządku, ale ich eskalacja relatywna jest w rerunie martwa (baseline `None`); 0009 self-pace to jedyny próg, który tam działa |

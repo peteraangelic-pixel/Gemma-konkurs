@@ -114,6 +114,42 @@ Na slot iść **jednym** kandydatem — v13.7 (ich slug, ich certyfikat) albo v1
 bo zachowanie jest identyczne. Uwaga: nasze slugi v14/v15/v16 celują w ich kernele
 (`arc3-duck-v13-2`, `-v13-3-arena`, `-v13-4-unified`) — wysłanie bez zmiany **nadpisze ich artefakt**.
 
+## `v13.7 rev2` (commit `3945d72`) vs nasz v16 — 2026-10-30
+
+rev2 = rev1 (759 109 B vs 758 240 B; różnica to nota i scalone sondy) z **`ARC3_LEVEL_TOKEN_CAP`
+nadal `"0"`**, więc **na submisji rev2 ≡ rev1 ≡ nasz v16**. Różnice w artefakcie: kom. 1/2/12/14/33
+(nazwy, nota, writer 0010) i scalenie sond 39+40 w jedną kom. 40 z **bezwarunkowym drukiem
+`a/call` + bramką 6,0**.
+
+**Dwa defekty po naszej stronie, przyznane:**
+1. `if _summary["mean_a_per_call"] < 1.5` w kom. 39 naszego v16 to **martwy próg** (dziś 4,441;
+   50 pkt wymaga ~6,0). v13.7 drukuje bezwarunkowo. Do przejęcia.
+2. `duck-v16/kernel-metadata.json` → `id = petersharps/arc3-duck-v13-4-unified` = **ich kernel**.
+   Wysyłka bez zmiany sluga nadpisałaby cudzy artefakt.
+
+**Arming 20 000 (propozycja rev2 na 1.11) — policzone, `local-lab/arm_cost.py`:**
+
+| cap | Δ r085 | Δ r093 | Δ r110 | Δ r118 | utracone poz. | uwolnione tok |
+|---|---|---|---|---|---|---|
+| 10 000 | −18,67 | −9,54 | 0,00 | −0,05 | 20/14/0/1 | 2 091k |
+| 15 000 | −6,07 | −9,43 | 0,00 | −0,05 | 9/13/0/1 | 1 210k |
+| **20 000** | **−4,43** | **−4,82** | 0,00 | −0,05 | **5/9/0/1** | 668k |
+| 30 000 / 45 000 | 0,00 | 0,00 | 0,00 | 0,00 | 0/0/0/0 | 0 |
+
+Ich tabela §25 **odtwarza się 1:1** (indeksowanie o jedną akcję dalej: 20k → AB=20 gier,
+15 utraconych poziomów, **667 937** uwolnionych tokenów; per-run AB 3/7/0/10). Ale wniosek jest
+odwrócony: uwolniony budżet wart jest 3,5 poziomu na r085 i 6,6 na r093 przy **5 i 9 utraconych**
+— trzeba by **>100% konwersji** (143% / 136%), żeby wyjść na zero.
+
+Dlaczego konwersja ≈ 0: `solver.py:898` trzyma `asyncio.Semaphore(concurrency=10 = MAXREQ)`
+i tworzy zadania dla **wszystkich** gier naraz; zwolniony slot natychmiast dostaje następna gra
+z kolejki, więc obciążenie serwera jest stałe, a każda gra ma **własny** cap `532/11 ≈ 48,4 min`.
+Uwolniony czas skraca bieg, nie wydłuża cudzego budżetu. (Rozumowanie z kodu, nie z przebiegu
+110 gier — niezweryfikowane pomiarem, dlatego przy ewentualnym flipie mierzyć `completed/game`.)
+
+**Werdykt:** nie uzbrajać 20k na 1.11 (arytmetyka, nie ryzyko). Przejąć od rev2 tylko druk `a/call`
+z bramką 6,0. Na slot — jeden kandydat, pod własnym slugiem.
+
 ## Zasady, których ta sesja się trzyma (i wam proponuje)
 
 1. Nic na Kaggle bez GO użytkownika; żadnych GPU-runów bez pytania.
