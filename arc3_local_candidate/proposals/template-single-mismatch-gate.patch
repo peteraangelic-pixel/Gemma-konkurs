@@ -1,0 +1,26 @@
+--- a/arc-agi-3/analysis/template_transfer.py	2026-10-31 14:05:02.000000000 +0000
++++ b/arc-agi-3/analysis/template_transfer.py	2026-10-31 14:15:13.288585071 +0000
+@@ -81,13 +81,16 @@
+         refs=[p for p in panels if p is not target and p['stamp']==target['stamp']]
+         if len(refs)!=1 or target['border']<=refs[0]['border']:continue
+         ref=refs[0]
+-        for i,j in target['coords']:
+-            expected=cells[(ref['y']+i*pitch,ref['x']+j*pitch)]
+-            actual=cells[(target['y']+i*pitch,target['x']+j*pitch)]
+-            if actual!=expected:
+-                choices.append((target['border']-ref['border'],target['y']+i*pitch+size//2,
+-                                target['x']+j*pitch+size//2,expected,None))
+-                break
++        # BRAMKA: niezgodna komorka musi byc DOKLADNIE JEDNA i wszystkie panele
++        # referencyjne musza sie zgadzac co do jej wartosci. Inaczej abstynencja.
++        wrong=[(i,j) for i,j in target['coords']
++               if cells[(target['y']+i*pitch,target['x']+j*pitch)]
++               !=cells[(ref['y']+i*pitch,ref['x']+j*pitch)]]
++        if len(wrong)!=1:continue
++        i,j=wrong[0]
++        expected=cells[(ref['y']+i*pitch,ref['x']+j*pitch)]
++        choices.append((target['border']-ref['border'],target['y']+i*pitch+size//2,
++                        target['x']+j*pitch+size//2,expected,None))
+     # If stamps differ, infer their symbolic color-to-tile rule from all the
+     # completed reference panels. Require perfect agreement, not a palette
+     # assumption (e.g. white/red). The outlined panel supplies a new query.
