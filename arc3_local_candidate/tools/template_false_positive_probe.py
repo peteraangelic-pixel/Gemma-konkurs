@@ -30,6 +30,7 @@ from __future__ import annotations
 
 import argparse
 import importlib.util
+import pathlib
 import sys
 from collections import Counter
 
@@ -82,6 +83,44 @@ def make_board(rng, rule):
     return grid, truth, (4 + SIZE + GAP, 4), pal
 
 
+OLD_BLOCK = (
+    "        for i,j in target['coords']:\n"
+    "            expected=cells[(ref['y']+i*pitch,ref['x']+j*pitch)]\n"
+    "            actual=cells[(target['y']+i*pitch,target['x']+j*pitch)]\n"
+    "            if actual!=expected:\n"
+    "                choices.append((target['border']-ref['border'],target['y']+i*pitch+size//2,\n"
+    "                                target['x']+j*pitch+size//2,expected,None))\n"
+    "                break\n"
+)
+NEW_BLOCK = (
+    "        wrong=[(i,j) for i,j in target['coords']\n"
+    "               if cells[(target['y']+i*pitch,target['x']+j*pitch)]\n"
+    "               !=cells[(ref['y']+i*pitch,ref['x']+j*pitch)]]\n"
+    "        if len(wrong)!=1:continue\n"
+    "        i,j=wrong[0]\n"
+    "        expected=cells[(ref['y']+i*pitch,ref['x']+j*pitch)]\n"
+    "        choices.append((target['border']-ref['border'],target['y']+i*pitch+size//2,\n"
+    "                        target['x']+j*pitch+size//2,expected,None))\n"
+)
+
+
+def apply_gate(path, out_suffix="_gate"):
+    """Naklada bramke 'dokladnie jedna niezgodna komorka' na plik polityki.
+
+    Robi to tekstowo, wiec jednoczesnie sprawdza, czy opublikowany patch
+    proposals/template-single-mismatch-gate.patch w ogole sie naklada na dany
+    plik. Jesli wzorca nie ma dokladnie raz, konczy sie bledem.
+    """
+    src = pathlib.Path(path).read_text()
+    if src.count(OLD_BLOCK) != 1:
+        raise SystemExit(f"BLAD: patch nie naklada sie na {path} "
+                         f"(wzorzec wystepuje {src.count(OLD_BLOCK)}x)")
+    src_path = pathlib.Path(path)
+    dst = src_path.with_name(src_path.stem + out_suffix + src_path.suffix)
+    dst.write_text(src.replace(OLD_BLOCK, NEW_BLOCK))
+    return str(dst)
+
+
 def load_policy(path):
     spec = importlib.util.spec_from_file_location("policy_under_test", path)
     mod = importlib.util.module_from_spec(spec)
@@ -112,9 +151,13 @@ def main(argv=None):
     ap.add_argument("--policy", required=True, help="sciezka do template_transfer.py")
     ap.add_argument("--trials", type=int, default=300)
     ap.add_argument("--families", default="copy,rotate,invert,random")
+    ap.add_argument("--gate", action="store_true",
+                    help="naloz bramke 'dokladnie jedna niezgodna komorka'")
     args = ap.parse_args(argv)
-    policy = load_policy(args.policy)
-    print(f"polityka: {args.policy}  (proby na rodzine: {args.trials})")
+    path = apply_gate(args.policy) if args.gate else args.policy
+    policy = load_policy(path)
+    tag = "  + BRAMKA" if args.gate else ""
+    print(f"polityka: {args.policy}{tag}  (proby na rodzine: {args.trials})")
     print(f"{'rodzina':9s} {'rozpoznane':>11s} {'trafne':>8s} {'precyzja':>9s}")
     for rule in args.families.split(","):
         fired, correct = measure(policy, rule, args.trials)

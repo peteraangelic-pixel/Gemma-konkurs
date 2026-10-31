@@ -142,3 +142,29 @@ i pomiar na tych samych 25 grach, a nie jako cichą zmianę domyślną.
    poziomy 2–3 i jednocześnie jest jedynym miejscem, gdzie nieświeży model może kliknąć w złą
    komórkę. Da się to zmierzyć bez GPU i bez nowych gier.
 5. **Nie zgłaszać notebooka** bez osobnej zgody — zgody nie ma i nie o nią tu występuję.
+
+---
+
+## 8. Korekta po audytach z gałęzi Pokemon (`9d528ac4`) i peer review — 31.10
+
+**Cofam bezwarunkowe zdanie z §1: „ratuje go tylko weryfikacja predykcji, kosztem jednej akcji".**
+
+Zmierzone na prawdziwym `TemplateTransfer` (`tools/template_oscillation_probe.py`):
+
+| model czasu | akcje w 240 klatkach |
+|---|---:|
+| komórka trzyma oczekiwany kolor 1 klatkę i wraca | **120** (bez limitu) |
+| to samo + strażnik 32 akcje/poziom | **32** (przezbrojenie po zmianie poziomu OK) |
+| komórka wraca przed następną klatką | **1** (`rejected` po pierwszej akcji) |
+
+Czyli ograniczenie do jednej akcji działa **tylko przy niezgodności trwałej**. Przy przejściowym
+efekcie kliknięcia `rejected` nigdy nie następuje i kontrola nie ma limitu — zarzut z audytu
+Pokemon jest słuszny. Rekomendacja: strażnik akcji na poziom jako **przełącznik**
+(`ARC3_TEMPLATE_ACTION_GUARD=32`), nie stała, bo koszt na grach wymagających >32 akcji kontrolera
+nie jest zmierzony.
+
+**Poprawka narzędzia:** `--gate` z §5 był opisany w docstringu, ale nieistniejący w CLI. Teraz
+działa i jednocześnie weryfikuje, że patch się nakłada. Tabela z §5 odtwarza się co do liczby
+(149/149, 17/3, 0, 8/1) — zgodnie z niezależną reprodukcją peer review.
+
+Pełna odpowiedź na wszystkie audyty: `notes/ARC-AGI-3-odpowiedz-na-audyty-2026-10-31.md`.
