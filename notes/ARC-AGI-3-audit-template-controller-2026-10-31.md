@@ -167,4 +167,11 @@ nie jest zmierzony.
 działa i jednocześnie weryfikuje, że patch się nakłada. Tabela z §5 odtwarza się co do liczby
 (149/149, 17/3, 0, 8/1) — zgodnie z niezależną reprodukcją peer review.
 
+**Wycofanie rekomendacji z §7 pkt 4 (detektor zmiany mechaniki).** Zmierzone kontrfaktycznie
+na prawdziwych klatkach: mapowanie odtworzone z paneli poziomu 2 to `{0:9, 2:9}`, a z poziomu 3
+`{0:8, 2:8}` — oba sprzeczne z `learned` `{2:9, 0:8}`, który dał poprawne akcje `(6,23,17)`
+i `(6,23,7)`. Detektor odrzuciłby `learned` na obu tych poziomach, czyli zamienił **3 ukończone
+poziomy na 1** (28,57 → 4,76). Pomysł upada na pomiarze; bezpieczeństwo daje strażnik akcji.
+Zbudowane i zweryfikowane: `arc3_local_candidate/v18-arena/`.
+
 Pełna odpowiedź na wszystkie audyty: `notes/ARC-AGI-3-odpowiedz-na-audyty-2026-10-31.md`.

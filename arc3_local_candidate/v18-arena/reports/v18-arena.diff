@@ -1,0 +1,102 @@
+--- a/analysis/template_transfer.py
++++ b/analysis/template_transfer.py
+@@ -5,7 +5,13 @@
+ predicted target color before the policy continues. Otherwise it yields.
+ """
+ from collections import Counter
++import os
+ import numpy as np
++
++
++def _single_mismatch():
++    """Przelacznik bramki single-mismatch (domyslnie wylaczona)."""
++    return os.environ.get('ARC3_TEMPLATE_REQUIRE_SINGLE_MISMATCH')=='1'
+ 
+ 
+ def rectangles(grid):
+@@ -81,6 +87,19 @@
+         refs=[p for p in panels if p is not target and p['stamp']==target['stamp']]
+         if len(refs)!=1 or target['border']<=refs[0]['border']:continue
+         ref=refs[0]
++        # ARM: bramka single-mismatch (ARC3_TEMPLATE_REQUIRE_SINGLE_MISMATCH=1).
++        # Wymagaj DOKLADNIE jednej niezgodnej komorki - inaczej abstynencja.
++        # Bez przelacznika zachowanie jest bajt w bajt jak w oryginale.
++        if _single_mismatch():
++            wrong=[(i,j) for i,j in target['coords']
++                   if cells[(target['y']+i*pitch,target['x']+j*pitch)]
++                   !=cells[(ref['y']+i*pitch,ref['x']+j*pitch)]]
++            if len(wrong)!=1:continue
++            i,j=wrong[0]
++            expected=cells[(ref['y']+i*pitch,ref['x']+j*pitch)]
++            choices.append((target['border']-ref['border'],target['y']+i*pitch+size//2,
++                            target['x']+j*pitch+size//2,expected,None))
++            continue
+         for i,j in target['coords']:
+             expected=cells[(ref['y']+i*pitch,ref['x']+j*pitch)]
+             actual=cells[(target['y']+i*pitch,target['x']+j*pitch)]
+@@ -134,11 +153,25 @@
+         self.hits=0
+         self.mismatches=0
+         self.learned=None
++        # ARM: straznik akcji na poziom (ARC3_TEMPLATE_ACTION_GUARD=K, 0 = wylaczony).
++        # Bez niego kontroler przy przejsciowym efekcie klikniecia (komorka wraca)
++        # klika bez konca: rejected nigdy nie nastepuje, bo predykcja sie zgadza
++        # co klatke. Zmierzone: 120 akcji w 240 klatkach.
++        # Nazwy prywatne (_arm_*), zeby nie kolidowac z licznikami podklasy
++        # template_guarded.GuardedTemplateTransfer. Kolizja = podwojne liczenie
++        # i cap 32 zjezdzajacy do 16 (zmierzone).
++        self._arm_guard=int(os.environ.get('ARC3_TEMPLATE_ACTION_GUARD','0') or 0)
++        self._arm_level_actions=0
++        self._arm_cap_hits=0
+ 
+     def act(self,grid,available,level):
+         a=np.asarray(grid,dtype=np.uint8)
+         if level!=self.level:
+             self.prediction=None;self.rejected=False;self.level=level
++            self._arm_level_actions=0
++        if self._arm_guard and self._arm_level_actions>=self._arm_guard:
++            self._arm_cap_hits+=1
++            return None
+         if self.prediction is not None:
+             p=self.prediction
+             if int(a[p['row'],p['col']])!=p['expected_color']:
+@@ -149,5 +182,6 @@
+             if result:
+                 action,self.prediction=result;self.hits+=1
+                 if self.prediction.get('model'):self.learned=self.prediction['model']
++                self._arm_level_actions+=1
+                 return action
+         return None
+--- a/analysis/template_hook.py
++++ b/analysis/template_hook.py
+@@ -12,7 +12,11 @@
+ 
+ 
+ def install(ta,controller_class):
+-    original=ta.ToolAgent.analyze
++    # ARM: instalacja idempotentna - drugie wywolanie nie owija analyze drugi raz.
++    current=ta.ToolAgent.analyze
++    if getattr(current,'_arc3_template_hooked',False):
++        return current
++    original=current
+     signature=inspect.signature(original)
+     def analyze(self,*args,**kwargs):
+         bound=signature.bind(self,*args,**kwargs)
+@@ -20,7 +24,9 @@
+         values=bound.arguments
+         state_path=values['state_path']
+         stop=values.get('should_stop')
+-        if stop and stop():return ta.AnalyzerTurnResult(step_executed=False)
++        # ARM: przy should_stop oddaj sterowanie ORYGINALOWI, zamiast zwracac wlasny
++        # wynik. Hook nie zmienia wiec semantyki zatrzymania - tylko ja poprzedza.
++        if stop and stop():return original(self,*args,**kwargs)
+         self._ensure_session(state_path)
+         runtime=str(state_path.resolve())
+         if getattr(self,'_template_runtime',None)!=runtime:
+@@ -47,4 +53,6 @@
+         if result.step_executed:self._template_actions+=1
+         return ta.AnalyzerTurnResult(step_executed=result.step_executed,
+                                     reasoning='Observation-derived symbolic template action')
++    analyze._arc3_template_hooked=True
+     ta.ToolAgent.analyze=analyze
++    return analyze

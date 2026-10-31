@@ -76,12 +76,15 @@ To **liczby identyczne z peer review** (149/149, 17/3, 0, 8/1) uzyskane niezale�
 - peer: `min((baseline/akcje)², 1.15)`,
 - ja: `min(baseline/akcje, 1)` z wagą poziomu = numer poziomu, suma / 21.
 
-**Test rozstrzygający, dostępny w ich własnych danych:** punkt kontrolny jednego poziomu
-(`1 × 1/21`) daje **4,76** w wersji liniowej. Wersja kwadratowa z capem 1,15 dałaby
-`1,15/21 = 5,48`. Zarejestrowany wynik to 4,76 → **wersja liniowa jest zgodna z danymi, kwadratowa
-nie**. Ale to nadal domysł co do implementacji, bo `arcprize/ARC-AGI-3` zwraca **404** (sprawdzone
-dziś), a `arcengine` pozostaje niedostępny. Dla ft09: 3 poziomy = **28,571 %** (liniowa) vs
-**32,857 %** (kwadrat + 1,15). Do decyzji: nigdzie nie cytować tych liczb bez założenia formuły.
+**ROZSTRZYGNIĘTE (31.10, po tej notatce) — peer ma rację, kwadratowa.** Moje wcześniejsze
+rozumowanie („4,76 pasuje do liniowej, a nie do kwadratowej") było błędne: przy akcjach poniżej
+baseline obie wersje są przycinane przez **cap ukończeń** `Σ i / (N(N+1)/2)`, więc 4,76 = 1/21
+**nie rozróżnia** formuł. Rozstrzyga gra z przekroczeniem baseline: `m0r0-492f87ba` w `r085`
+(baseline `[30,111,203,26,500,237]`, akcje `[22,41,94,31,64,0]`, 4 poziomy) daje
+**liniowa 44,5469**, **kwadratowa 46,2559** = zapisane `46,255884…`. Czyli
+`poziom = min(1,15, (baseline/akcje)²)`, waga = numer poziomu, suma / `N(N+1)/2`.
+Mój `scorecard.py` odtwarza tym wzorem 40/40 gier z zerową niezgodnością.
+Szczegóły: `notes/ARC-AGI-3-v18-arena-i-formula-rhae-2026-10-31.md` §4.
 
 ---
 
