@@ -150,6 +150,50 @@ Uwolniony czas skraca bieg, nie wydłuża cudzego budżetu. (Rozumowanie z kodu,
 **Werdykt:** nie uzbrajać 20k na 1.11 (arytmetyka, nie ryzyko). Przejąć od rev2 tylko druk `a/call`
 z bramką 6,0. Na slot — jeden kandydat, pod własnym slugiem.
 
+## ZMIANA KURSU: prawdziwy rerun v13.7-final = **13,28** (odczyt 31.10)
+
+`own-submissions.csv` (Kaggle API): ref 57811453 = v13.7-final, COMPLETE, **publicScore 13,28**.
+Dla porównania v11 = **23,89**, mistrz v3 = **26,25**. Strata 10,61 pkt względem v11.
+
+**To unieważnia moją wcześniejszą rekomendację.** v13.7 = v13.4-unified + 0009 + 0010(dormant);
+**duck-v16 jest z tej samej linii**, więc jego oczekiwany wynik to ≈13, nie ≈26. Zdanie
+„v16 jest najlepszą z czterech gałęzi" było oparte na testach offline, a obala je jedyny
+prawdziwy pomiar. **Nie wysyłać v16 ani niczego z linii v13.x bez wyjaśnienia spadku.**
+
+Mapa różnic wobec mistrza (bez wskazywania winnego — ich zasada „nie przypisujemy bez dowodów"
+jest słuszna): v3 miał `ARC3_WORLD_MODEL=1` i tylko patche 0001+0002; v13.7 ma WM=0, cap
+wyłączony (0), PLAN_COMMIT=1, win-path/dead-skip/opener-hint/relative+self-pace, 10 patchy.
+
+**Smoke nie prognozuje rerunu w żadną stronę:** v11 smoke 18,54 → 23,89 (+5,4);
+v13.7 smoke 22,59 → 13,28 (−9,3). Reguła „GO przy smoke ≥ 26" jest zawodna przy n=1 na wersję.
+
+## Audyt kontrolera `template` (gałąź `codex/arc-local-lab-v18`, `3926007e`) — 31.10
+
+Odtworzone **niezależnie na prawdziwym silniku** (arcengine 0.9.3 + arc-agi 0.9.9, 25 gier z repo):
+SHA256 notebooka zgodny, moduł i hook w notebooku bajt w bajt z plikami, 52/52 testy,
+**3 poziomy ft09 w 25 akcjach, per-level [4,7,14], wszystkie 25 kliknięć identyczne z zapisem**,
+abstynencja na 24 pozostałych grach. Zero identyfikatorów gier / współrzędnych / dostępu do silnika.
+
+- **Pułapka odtwarzania:** po level-upie `fd.frame` ma 2 klatki; `frame[0]` to animacja
+  (`[0 2 4 5 8 9 11 12]`), `frame[-1]` to plansza (`[0 2 4 9 12]`). Kto bierze `frame[0]`,
+  dostaje 1 poziom / 4 akcje i „obala" prawdziwy wynik. Obserwacja = **ostatnia** klatka.
+- **Wartość:** jedna gra ⇒ sufit **+0,26 pkt** (28,57 / 110 gier). „28,5714 RHAE" = sufit
+  pokrycia `100×6/21`, nie efektywność.
+- **Bramka zastosowania:** motyw (≥3 panele odniesienia + 1 z obwódką) musi być na **pierwszej**
+  planszy. Zmierzone: 5/25 gier ma strukturę paneli, ale tylko ft09 ma motyw; lf52/tu93 mają
+  1 panel, sc25/tn36 — 0.
+- **Izolacja pamięci:** kontroler per `state_path` na instancji ToolAgent — działa; ale przy
+  `n_passes>1` ta sama ścieżka wraca i stan (`learned`) **nie jest resetowany**. W submicie
+  `n_passes=1`, więc dziś nie boli.
+- **`a/call`:** wycofuję swoje „6,0 = 50 pkt". Akcje płacą tylko, gdy kupują poziom
+  (`score = min(raw, 100×pokrycie)`); `a/call` to przepustowość, nie prognoza.
+- **Niezweryfikowane:** Rust/Rayon 33,4× (brak `cargo`; to kernel prostokątów, nie wynik),
+  hybryda z Qwenem (brak modelu lokalnie; ślad sprawdzony).
+
+Narzędzia: `local-lab/template_replay.py`, `local-lab/template_stage_probe.py`,
+kopie kodu autora w `local-lab/template-audit/`. Pełna recenzja:
+`REVIEWS/2026-10-31-template-hybrid-audyt.md`.
+
 ## Zasady, których ta sesja się trzyma (i wam proponuje)
 
 1. Nic na Kaggle bez GO użytkownika; żadnych GPU-runów bez pytania.
