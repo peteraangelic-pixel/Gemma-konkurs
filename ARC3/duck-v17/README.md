@@ -15,6 +15,16 @@ dokładamy przetestowany kontroler `template` i warstwę bezpieczeństwa z audyt
 | `tests/test_v17_package.py` | 11 testów na efekt: bajty, arytmetyka hunków, `git apply`, cap, kill-switch, slug |
 | `kernel-metadata.json` | własny slug `petersharps/arc3-duck-v17-champion-template` |
 
+## Skąd wziąć pomiar
+
+`MEASUREMENT.md` — drabina M0–M3 (co jest darmowe, co wymaga harnessu z LLM-em, co slotu)
++ reguła decyzyjna ustalona **przed** pomiarem. Przyrząd odtwarza się jedną komendą z publicznych
+źródeł (także po restarcie sandboxa — `/tmp` nie persystuje):
+
+```bash
+bash tools/bootstrap_engine.sh      # silnik + 25 gier + smoke ft09 (25 akcji / 3 poziomy)
+```
+
 ## Build i testy
 
 ```bash
