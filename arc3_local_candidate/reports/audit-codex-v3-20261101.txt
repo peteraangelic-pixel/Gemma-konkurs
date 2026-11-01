@@ -1,0 +1,55 @@
+
+=== 1. KONTROLNY BENCHMARK ============================================
+wynik sredni        27.496670817884922  (deklarowane 27.496670817884922)  OK
+poziomy             33/69  (deklarowane 33)
+akcje               1877  | non-reset 1872 (deklarowane 1872)  | RESET 5
+tokeny              1703530  (deklarowane 1703530)
+stany               {'gave_up': 10}
+maks. wall-clock    2890.7s
+niezgodnosci score  0 na 10 gier
+rozkld akcji        {'ACTION6': 686, 'RESET': 5, 'ACTION3': 247, 'ACTION4': 270, 'ACTION1': 302, 'ACTION2': 304, 'ACTION5': 37, 'ACTION7': 26}
+
+=== 2. A/B = JEDNA ZMIENNA ============================================
+komorki             control 29 | slim 29
+rozne komorki       [1]  OK - jedna zmienna
+domyslne env        ARC3_MEMORY_SECTIONS=off w setup_env: True
+srodowisko          identyczne: True (maszyna, docker, datasety, modele, konkurs)
+
+=== 3. WYNIK SLIM - ODTWORZENIE =======================================
+control  srednia z wierszy 27.496670817884922  deklarowane 27.496670817884922  niezgodnosci 0
+slim     srednia z wierszy 17.350468479169024  deklarowane 17.350468479169024  niezgodnosci 0
+surowy benchmark slim w pakiecie: False (-> per-poziomowe akcje slim sa NIEaudytowalne, tylko wiersze pochodne)
+
+=== 4. ROZKLAD SPADKU =================================================
+control  wynik  27.50 | cap ukonczen  29.19 | strata na efektywnosci  1.69 (6% capu)
+slim     wynik  17.35 | cap ukonczen  18.89 | strata na efektywnosci  1.54 (8% capu)
+utracona waga poziomow 31 | zyskana 4 | netto 27 z 210 mozliwych
+-> caly spadek wyniku tlumaczy sie liczba poziomow, nie pogorszeniem efektywnosci
+
+=== 5. BOOTSTRAP PO GRACH (n=10) ======================================
+delta wyniku        srednia -10.146  95% CI [-19.29, -1.80]  P(<0)=99.3%
+delta poziomow      srednia -0.90  95% CI [-1.60, -0.20]  P(<0)=99.4%
+zastrzezenie        jedna proba na ramie -> wariancja rerunu NIE jest w tym CI
+
+=== 6. PODGRUPA 'BEZ KIERUNKOWYCH' (deklarowane -4 / -5) ==============
+  tn36-e akcje kierunkowe    0  delta poziomow -2
+  m0r0-4 akcje kierunkowe  108  delta poziomow -1
+  cn04-2 akcje kierunkowe   90  delta poziomow -2
+  dc22-f akcje kierunkowe  149  delta poziomow +0
+  ka59-3 akcje kierunkowe  181  delta poziomow -1
+  sc25-6 akcje kierunkowe  125  delta poziomow +0
+  s5i5-1 akcje kierunkowe    0  delta poziomow -3
+  ls20-9 akcje kierunkowe  306  delta poziomow +0
+  su15-1 akcje kierunkowe    0  delta poziomow +1
+  g50t-5 akcje kierunkowe  164  delta poziomow -1
+suma bez kierunkowych -4 | z kierunkowymi -5 (deklarowane -4 / -5)  ODTWORZONE
+ale: to post-hoc podzial stalej sumy -9 na grupy n=3 i n=7 -> nie dowodzi mechanizmu
+
+=== 7. DIAGNOSTYKA NIEZARAPORTOWANA PRZEZ AUTOROW =====================
+control  pierwsza akcja mediana    39s | suma   413s | akcje/min 3.91 | akcje na ukonczenie 56.9
+slim     pierwsza akcja mediana    93s | suma   958s | akcje/min 3.96 | akcje na ukonczenie 79.2
+slim wolniejszy do pierwszej akcji w 9/10 gier, roznica sumy +545s (1.9% budzetu 10x48min)
+-> przepustowosc bez zmian; roznica jest w decyzjach, nie w szybkosci
+
+WERDYKT: liczby pakietu odtwarzalne co do cyfry; kierunek spadku solidny przy n=10;
+         aktywacja sekcji i surowe dane slim pozostaja nieaudytowalne z tego pakietu.
