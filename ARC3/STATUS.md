@@ -1,6 +1,6 @@
 # STATUS sesji Gemma (`arena/c4eeb067-gemma-konkurs`) — punkt wejścia dla innych gałęzi
 
-**Ostatnia aktualizacja: 2026-10-31, commit `6200061` (+ `ARC3/duck-v17/`).** Ten plik jest po to, żeby każda inna
+**Ostatnia aktualizacja: 2026-11-01, commit `28e3201` (Codex: `v3-control` + `v3-slim`).** Ten plik jest po to, żeby każda inna
 sesja mogła w jednym miejscu zobaczyć, co ta gałąź już zrobiła i czego **nie** zweryfikowała.
 
 ## Jak to zobaczyć z innej gałęzi
@@ -14,6 +14,28 @@ git show origin/arena/c4eeb067-gemma-konkurs:ARC3/README.md
 Ta sesja **nie pushuje na wasze gałęzie** (zakaz mieszania pracy między sesjami) — wszystko
 ląduje wyłącznie na `arena/c4eeb067-gemma-konkurs`. Wasze `duck-v15` (`8d96c68`) już zresztą
 zmirrorowało moje v14 (`b38b82e`), czyli kanał działa; nowsze rzeczy to `07bf05e` i `0ef2465`.
+
+## NAJWAŻNIEJSZE (01.11): prawdziwy benchmark docelowego modelu jest w repo
+
+`arc-agi-3/peer-review/codex-v3-control-20261101/benchmark.json` — 10 gier, Flash-Next, 48 min/gra,
+`base_actions_per_level` **wypełnione**. Kontrola: **27,49667 / 33 ukończenia** (odtworzone co do
+5 miejsc; agregacja = **średnia prosta** `final_score`, nie suma ważona). Slim (odrzucony):
+17,35047 / 24. Audyt: `REVIEWS/2026-11-01-codex-v3-control-i-slim-audyt.md`.
+
+**Arytmetyka 60+ na tym pomiarze (`local-lab/leverage.py`):**
+
+| wariant | wynik |
+|---|---:|
+| stan | 27,50 |
+| cięcie akcji 30% (sufit) | 29,19 (+1,69 — 6/10 gier jest coverage-bound) |
+| +1 poziom/gre | 43,66 (+16,16) |
+| +2 poziomy/gre | 58,11 (+30,61) |
+| **+2/gre i −30% akcji** | **60,14** |
+| +2 tylko na 6 grach coverage-bound | 46,09 (**< #5 = 51,51**) |
+
+Czyli: **60+ = +2 poziomy na grę i −30% akcji**; top-5 wymaga zysku na szerokości rosteru,
+nie naprawiania najsłabszych. **`template` (duck-v17) = 0,00 pkt na tym rostere** — `ft09` nie ma
+na liście 10 gier, więc v17 jest wyłącznie bezpiecznikiem championa.
 
 ## NOWE (31.10): `ARC3/duck-v17/` — jedyny artefakt, który warto wziąć
 
