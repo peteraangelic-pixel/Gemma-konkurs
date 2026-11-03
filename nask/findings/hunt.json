@@ -1,0 +1,2023 @@
+{
+  "generated_at": "2026-11-03T23:00:46+00:00",
+  "requests_used": 706,
+  "hosts_scanned": 15,
+  "probe_findings": [
+    {
+      "code": "S6",
+      "host": "dns.pl",
+      "url": "https://dns.pl/panel",
+      "severity": "wysoki",
+      "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+      "detail": "/panel → 404; żądanie na / z x-original-url: /panel → 200, 51141 B (inna treść)",
+      "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+      "raw": {
+        "header": "x-original-url",
+        "plain": 404
+      }
+    },
+    {
+      "code": "S6",
+      "host": "dns.pl",
+      "url": "https://dns.pl/admin",
+      "severity": "wysoki",
+      "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+      "detail": "/admin → 404; żądanie na / z x-original-url: /admin → 200, 51122 B (inna treść)",
+      "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+      "raw": {
+        "header": "x-original-url",
+        "plain": 404
+      }
+    },
+    {
+      "code": "S6",
+      "host": "dns.pl",
+      "url": "https://dns.pl/dashboard",
+      "severity": "wysoki",
+      "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+      "detail": "/dashboard → 404; żądanie na / z x-original-url: /dashboard → 200, 51121 B (inna treść)",
+      "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+      "raw": {
+        "header": "x-original-url",
+        "plain": 404
+      }
+    },
+    {
+      "code": "S6",
+      "host": "dns.pl",
+      "url": "https://dns.pl/profil",
+      "severity": "wysoki",
+      "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+      "detail": "/profil → 404; żądanie na / z x-original-url: /profil → 200, 51149 B (inna treść)",
+      "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+      "raw": {
+        "header": "x-original-url",
+        "plain": 404
+      }
+    },
+    {
+      "code": "S6",
+      "host": "dns.pl",
+      "url": "https://dns.pl/konto",
+      "severity": "wysoki",
+      "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+      "detail": "/konto → 404; żądanie na / z x-original-url: /konto → 200, 51152 B (inna treść)",
+      "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+      "raw": {
+        "header": "x-original-url",
+        "plain": 404
+      }
+    },
+    {
+      "code": "S6",
+      "host": "dns.pl",
+      "url": "https://dns.pl/moje",
+      "severity": "wysoki",
+      "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+      "detail": "/moje → 404; żądanie na / z x-original-url: /moje → 200, 51147 B (inna treść)",
+      "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+      "raw": {
+        "header": "x-original-url",
+        "plain": 404
+      }
+    },
+    {
+      "code": "S6",
+      "host": "oad.nask.pl",
+      "url": "https://oad.nask.pl/panel",
+      "severity": "wysoki",
+      "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+      "detail": "/panel → 404; żądanie na / z x-original-url: /panel → 200, 75666 B (inna treść)",
+      "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+      "raw": {
+        "header": "x-original-url",
+        "plain": 404
+      }
+    },
+    {
+      "code": "S6",
+      "host": "oad.nask.pl",
+      "url": "https://oad.nask.pl/admin",
+      "severity": "wysoki",
+      "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+      "detail": "/admin → 404; żądanie na / z x-original-url: /admin → 200, 75666 B (inna treść)",
+      "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+      "raw": {
+        "header": "x-original-url",
+        "plain": 404
+      }
+    },
+    {
+      "code": "S6",
+      "host": "oad.nask.pl",
+      "url": "https://oad.nask.pl/dashboard",
+      "severity": "wysoki",
+      "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+      "detail": "/dashboard → 404; żądanie na / z x-original-url: /dashboard → 200, 75666 B (inna treść)",
+      "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+      "raw": {
+        "header": "x-original-url",
+        "plain": 404
+      }
+    },
+    {
+      "code": "S6",
+      "host": "oad.nask.pl",
+      "url": "https://oad.nask.pl/profil",
+      "severity": "wysoki",
+      "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+      "detail": "/profil → 404; żądanie na / z x-original-url: /profil → 200, 75666 B (inna treść)",
+      "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+      "raw": {
+        "header": "x-original-url",
+        "plain": 404
+      }
+    },
+    {
+      "code": "S6",
+      "host": "oad.nask.pl",
+      "url": "https://oad.nask.pl/konto",
+      "severity": "wysoki",
+      "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+      "detail": "/konto → 404; żądanie na / z x-original-url: /konto → 200, 75666 B (inna treść)",
+      "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+      "raw": {
+        "header": "x-original-url",
+        "plain": 404
+      }
+    },
+    {
+      "code": "S6",
+      "host": "oad.nask.pl",
+      "url": "https://oad.nask.pl/moje",
+      "severity": "wysoki",
+      "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+      "detail": "/moje → 404; żądanie na / z x-original-url: /moje → 200, 75666 B (inna treść)",
+      "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+      "raw": {
+        "header": "x-original-url",
+        "plain": 404
+      }
+    },
+    {
+      "code": "S6",
+      "host": "moje.cert.pl",
+      "url": "https://moje.cert.pl/panel",
+      "severity": "wysoki",
+      "title": "Nagłówek x-forwarded-prefix zmienia treść odpowiedzi",
+      "detail": "/panel → 404; żądanie na / z x-forwarded-prefix: /panel → 200, 31158 B (inna treść)",
+      "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+      "raw": {
+        "header": "x-forwarded-prefix",
+        "plain": 404
+      }
+    },
+    {
+      "code": "S6",
+      "host": "moje.cert.pl",
+      "url": "https://moje.cert.pl/admin",
+      "severity": "wysoki",
+      "title": "Nagłówek x-forwarded-prefix zmienia treść odpowiedzi",
+      "detail": "/admin → 403; żądanie na / z x-forwarded-prefix: /admin → 200, 31158 B (inna treść)",
+      "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+      "raw": {
+        "header": "x-forwarded-prefix",
+        "plain": 403
+      }
+    },
+    {
+      "code": "S6",
+      "host": "moje.cert.pl",
+      "url": "https://moje.cert.pl/dashboard",
+      "severity": "wysoki",
+      "title": "Nagłówek x-forwarded-prefix zmienia treść odpowiedzi",
+      "detail": "/dashboard → 404; żądanie na / z x-forwarded-prefix: /dashboard → 200, 31158 B (inna treść)",
+      "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+      "raw": {
+        "header": "x-forwarded-prefix",
+        "plain": 404
+      }
+    },
+    {
+      "code": "S6",
+      "host": "moje.cert.pl",
+      "url": "https://moje.cert.pl/profil",
+      "severity": "wysoki",
+      "title": "Nagłówek x-forwarded-prefix zmienia treść odpowiedzi",
+      "detail": "/profil → 404; żądanie na / z x-forwarded-prefix: /profil → 200, 31158 B (inna treść)",
+      "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+      "raw": {
+        "header": "x-forwarded-prefix",
+        "plain": 404
+      }
+    },
+    {
+      "code": "S6",
+      "host": "moje.cert.pl",
+      "url": "https://moje.cert.pl/konto",
+      "severity": "wysoki",
+      "title": "Nagłówek x-forwarded-prefix zmienia treść odpowiedzi",
+      "detail": "/konto → 404; żądanie na / z x-forwarded-prefix: /konto → 200, 31158 B (inna treść)",
+      "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+      "raw": {
+        "header": "x-forwarded-prefix",
+        "plain": 404
+      }
+    },
+    {
+      "code": "S6",
+      "host": "moje.cert.pl",
+      "url": "https://moje.cert.pl/moje",
+      "severity": "wysoki",
+      "title": "Nagłówek x-forwarded-prefix zmienia treść odpowiedzi",
+      "detail": "/moje → 404; żądanie na / z x-forwarded-prefix: /moje → 200, 31158 B (inna treść)",
+      "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+      "raw": {
+        "header": "x-forwarded-prefix",
+        "plain": 404
+      }
+    },
+    {
+      "code": "S6",
+      "host": "incydent.cert.pl",
+      "url": "https://incydent.cert.pl/panel",
+      "severity": "wysoki",
+      "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+      "detail": "/panel → 404; żądanie na / z x-original-url: /panel → 200, 2743 B (inna treść)",
+      "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+      "raw": {
+        "header": "x-original-url",
+        "plain": 404
+      }
+    },
+    {
+      "code": "S6",
+      "host": "incydent.cert.pl",
+      "url": "https://incydent.cert.pl/admin",
+      "severity": "wysoki",
+      "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+      "detail": "/admin → 404; żądanie na / z x-original-url: /admin → 200, 2743 B (inna treść)",
+      "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+      "raw": {
+        "header": "x-original-url",
+        "plain": 404
+      }
+    },
+    {
+      "code": "S6",
+      "host": "incydent.cert.pl",
+      "url": "https://incydent.cert.pl/dashboard",
+      "severity": "wysoki",
+      "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+      "detail": "/dashboard → 404; żądanie na / z x-original-url: /dashboard → 200, 2743 B (inna treść)",
+      "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+      "raw": {
+        "header": "x-original-url",
+        "plain": 404
+      }
+    },
+    {
+      "code": "S6",
+      "host": "incydent.cert.pl",
+      "url": "https://incydent.cert.pl/profil",
+      "severity": "wysoki",
+      "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+      "detail": "/profil → 404; żądanie na / z x-original-url: /profil → 200, 2743 B (inna treść)",
+      "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+      "raw": {
+        "header": "x-original-url",
+        "plain": 404
+      }
+    },
+    {
+      "code": "S6",
+      "host": "incydent.cert.pl",
+      "url": "https://incydent.cert.pl/konto",
+      "severity": "wysoki",
+      "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+      "detail": "/konto → 404; żądanie na / z x-original-url: /konto → 200, 2743 B (inna treść)",
+      "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+      "raw": {
+        "header": "x-original-url",
+        "plain": 404
+      }
+    },
+    {
+      "code": "S6",
+      "host": "incydent.cert.pl",
+      "url": "https://incydent.cert.pl/moje",
+      "severity": "wysoki",
+      "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+      "detail": "/moje → 404; żądanie na / z x-original-url: /moje → 200, 2743 B (inna treść)",
+      "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+      "raw": {
+        "header": "x-original-url",
+        "plain": 404
+      }
+    },
+    {
+      "code": "S6",
+      "host": "116sos.pl",
+      "url": "https://116sos.pl/panel",
+      "severity": "wysoki",
+      "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+      "detail": "/panel → 404; żądanie na / z x-original-url: /panel → 200, 103227 B (inna treść)",
+      "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+      "raw": {
+        "header": "x-original-url",
+        "plain": 404
+      }
+    },
+    {
+      "code": "S6",
+      "host": "116sos.pl",
+      "url": "https://116sos.pl/admin",
+      "severity": "wysoki",
+      "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+      "detail": "/admin → 404; żądanie na / z x-original-url: /admin → 200, 103227 B (inna treść)",
+      "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+      "raw": {
+        "header": "x-original-url",
+        "plain": 404
+      }
+    },
+    {
+      "code": "S6",
+      "host": "116sos.pl",
+      "url": "https://116sos.pl/dashboard",
+      "severity": "wysoki",
+      "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+      "detail": "/dashboard → 404; żądanie na / z x-original-url: /dashboard → 200, 103227 B (inna treść)",
+      "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+      "raw": {
+        "header": "x-original-url",
+        "plain": 404
+      }
+    },
+    {
+      "code": "S6",
+      "host": "116sos.pl",
+      "url": "https://116sos.pl/profil",
+      "severity": "wysoki",
+      "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+      "detail": "/profil → 404; żądanie na / z x-original-url: /profil → 200, 103227 B (inna treść)",
+      "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+      "raw": {
+        "header": "x-original-url",
+        "plain": 404
+      }
+    },
+    {
+      "code": "S6",
+      "host": "116sos.pl",
+      "url": "https://116sos.pl/konto",
+      "severity": "wysoki",
+      "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+      "detail": "/konto → 404; żądanie na / z x-original-url: /konto → 200, 103227 B (inna treść)",
+      "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+      "raw": {
+        "header": "x-original-url",
+        "plain": 404
+      }
+    },
+    {
+      "code": "S6",
+      "host": "science.nask.pl",
+      "url": "https://science.nask.pl/panel",
+      "severity": "wysoki",
+      "title": "Nagłówek x-rewrite-url zmienia treść odpowiedzi",
+      "detail": "/panel → 404; żądanie na / z x-rewrite-url: /panel → 200, 161545 B (inna treść)",
+      "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+      "raw": {
+        "header": "x-rewrite-url",
+        "plain": 404
+      }
+    },
+    {
+      "code": "S6",
+      "host": "science.nask.pl",
+      "url": "https://science.nask.pl/admin",
+      "severity": "wysoki",
+      "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+      "detail": "/admin → 404; żądanie na / z x-original-url: /admin → 200, 161545 B (inna treść)",
+      "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+      "raw": {
+        "header": "x-original-url",
+        "plain": 404
+      }
+    },
+    {
+      "code": "S6",
+      "host": "science.nask.pl",
+      "url": "https://science.nask.pl/dashboard",
+      "severity": "wysoki",
+      "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+      "detail": "/dashboard → 404; żądanie na / z x-original-url: /dashboard → 200, 162221 B (inna treść)",
+      "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+      "raw": {
+        "header": "x-original-url",
+        "plain": 404
+      }
+    },
+    {
+      "code": "S6",
+      "host": "science.nask.pl",
+      "url": "https://science.nask.pl/profil",
+      "severity": "wysoki",
+      "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+      "detail": "/profil → 404; żądanie na / z x-original-url: /profil → 200, 162221 B (inna treść)",
+      "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+      "raw": {
+        "header": "x-original-url",
+        "plain": 404
+      }
+    },
+    {
+      "code": "S6",
+      "host": "science.nask.pl",
+      "url": "https://science.nask.pl/moje",
+      "severity": "wysoki",
+      "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+      "detail": "/moje → 404; żądanie na / z x-original-url: /moje → 200, 161545 B (inna treść)",
+      "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+      "raw": {
+        "header": "x-original-url",
+        "plain": 404
+      }
+    },
+    {
+      "code": "S2",
+      "host": "bezpiecznewybory.pl",
+      "url": "https://bezpiecznewybory.pl/panel",
+      "severity": "wysoki",
+      "title": "Nagłówek x-middleware-subrequest zmienia odpowiedź chronionej trasy",
+      "detail": "Bez nagłówka: 403 (Location: -). Z nagłówkiem: 403, 374 B, treść inna.",
+      "why": "§8 poz. 9.3/12.1 — obejście autoryzacji w warstwie aplikacji. Nagłówek jest publicznie znany (CVE-2025-29927), ale wymagane jest PoC na tej instancji — i to jest to PoC. Trzeba jeszcze ustalić, CO ujawnia odblokowana trasa (samo 200 to za mało).",
+      "raw": {
+        "plain": 403,
+        "bypass": 403
+      }
+    },
+    {
+      "code": "S2",
+      "host": "bezpiecznewybory.pl",
+      "url": "https://bezpiecznewybory.pl/admin",
+      "severity": "wysoki",
+      "title": "Nagłówek x-middleware-subrequest zmienia odpowiedź chronionej trasy",
+      "detail": "Bez nagłówka: 403 (Location: -). Z nagłówkiem: 403, 374 B, treść inna.",
+      "why": "§8 poz. 9.3/12.1 — obejście autoryzacji w warstwie aplikacji. Nagłówek jest publicznie znany (CVE-2025-29927), ale wymagane jest PoC na tej instancji — i to jest to PoC. Trzeba jeszcze ustalić, CO ujawnia odblokowana trasa (samo 200 to za mało).",
+      "raw": {
+        "plain": 403,
+        "bypass": 403
+      }
+    },
+    {
+      "code": "S2",
+      "host": "bezpiecznewybory.pl",
+      "url": "https://bezpiecznewybory.pl/dashboard",
+      "severity": "wysoki",
+      "title": "Nagłówek x-middleware-subrequest zmienia odpowiedź chronionej trasy",
+      "detail": "Bez nagłówka: 403 (Location: -). Z nagłówkiem: 403, 378 B, treść inna.",
+      "why": "§8 poz. 9.3/12.1 — obejście autoryzacji w warstwie aplikacji. Nagłówek jest publicznie znany (CVE-2025-29927), ale wymagane jest PoC na tej instancji — i to jest to PoC. Trzeba jeszcze ustalić, CO ujawnia odblokowana trasa (samo 200 to za mało).",
+      "raw": {
+        "plain": 403,
+        "bypass": 403
+      }
+    },
+    {
+      "code": "S2",
+      "host": "bezpiecznewybory.pl",
+      "url": "https://bezpiecznewybory.pl/profil",
+      "severity": "wysoki",
+      "title": "Nagłówek x-middleware-subrequest zmienia odpowiedź chronionej trasy",
+      "detail": "Bez nagłówka: 403 (Location: -). Z nagłówkiem: 403, 375 B, treść inna.",
+      "why": "§8 poz. 9.3/12.1 — obejście autoryzacji w warstwie aplikacji. Nagłówek jest publicznie znany (CVE-2025-29927), ale wymagane jest PoC na tej instancji — i to jest to PoC. Trzeba jeszcze ustalić, CO ujawnia odblokowana trasa (samo 200 to za mało).",
+      "raw": {
+        "plain": 403,
+        "bypass": 403
+      }
+    },
+    {
+      "code": "S2",
+      "host": "bezpiecznewybory.pl",
+      "url": "https://bezpiecznewybory.pl/konto",
+      "severity": "wysoki",
+      "title": "Nagłówek x-middleware-subrequest zmienia odpowiedź chronionej trasy",
+      "detail": "Bez nagłówka: 403 (Location: -). Z nagłówkiem: 403, 374 B, treść inna.",
+      "why": "§8 poz. 9.3/12.1 — obejście autoryzacji w warstwie aplikacji. Nagłówek jest publicznie znany (CVE-2025-29927), ale wymagane jest PoC na tej instancji — i to jest to PoC. Trzeba jeszcze ustalić, CO ujawnia odblokowana trasa (samo 200 to za mało).",
+      "raw": {
+        "plain": 403,
+        "bypass": 403
+      }
+    },
+    {
+      "code": "S2",
+      "host": "bezpiecznewybory.pl",
+      "url": "https://bezpiecznewybory.pl/moje",
+      "severity": "wysoki",
+      "title": "Nagłówek x-middleware-subrequest zmienia odpowiedź chronionej trasy",
+      "detail": "Bez nagłówka: 403 (Location: -). Z nagłówkiem: 403, 373 B, treść inna.",
+      "why": "§8 poz. 9.3/12.1 — obejście autoryzacji w warstwie aplikacji. Nagłówek jest publicznie znany (CVE-2025-29927), ale wymagane jest PoC na tej instancji — i to jest to PoC. Trzeba jeszcze ustalić, CO ujawnia odblokowana trasa (samo 200 to za mało).",
+      "raw": {
+        "plain": 403,
+        "bypass": 403
+      }
+    },
+    {
+      "code": "S3",
+      "host": "116sos.pl",
+      "url": "https://116sos.pl/_next/data/8CjJwbyxpVqpWnorny23T/aktualnosci.json",
+      "severity": "sredni",
+      "title": "Dane strony Next.js czytane bezpośrednio z /_next/data",
+      "detail": "200 JSON (2543 B), pageProps: appPageUrl, news, ogDescription, ogImageId, ogTitle, seodescription, seotitle, title; podgląd: {\"appPageUrl\": \"/aktualnosci\", \"title\": \"Aktualności\", \"seotitle\": \"Kim jesteśmy | Aktualności\", \"seodescription\": \"Dowiedz się więcej o platformie 116sos.pl oraz naszych działania",
+      "why": "§8 poz. 12.2 — dostęp do danych przez nieudokumentowany endpoint. Znaleziskiem staje się dopiero wtedy, gdy pageProps zawiera dane niepubliczne; gołe `{}` to nie podatność.",
+      "raw": {
+        "route": "/aktualnosci"
+      }
+    },
+    {
+      "code": "S3",
+      "host": "116sos.pl",
+      "url": "https://116sos.pl/_next/data/8CjJwbyxpVqpWnorny23T/artykuly.json",
+      "severity": "sredni",
+      "title": "Dane strony Next.js czytane bezpośrednio z /_next/data",
+      "detail": "200 JSON (33487 B), pageProps: appPageUrl, articles, authorsOptions, content, mainCategories, ogDescription, ogImageId, ogTitle, seodescription, seotitle; podgląd: {\"content\": {\"heading\": \"Baza artykułów\", \"image\": \"https://116sos.multisite.lab.nob.pib.nask.pl/wp-content/uploads/sites/2/2023/06/reka_klucz-1.png\", \"appPageUrl\": \"/baza-artykulo",
+      "why": "§8 poz. 12.2 — dostęp do danych przez nieudokumentowany endpoint. Znaleziskiem staje się dopiero wtedy, gdy pageProps zawiera dane niepubliczne; gołe `{}` to nie podatność.",
+      "raw": {
+        "route": "/artykuly"
+      }
+    },
+    {
+      "code": "S3",
+      "host": "116sos.pl",
+      "url": "https://116sos.pl/_next/data/8CjJwbyxpVqpWnorny23T/artykuly/autor.json",
+      "severity": "sredni",
+      "title": "Dane strony Next.js czytane bezpośrednio z /_next/data",
+      "detail": "200 JSON (2072 B), pageProps: authors; podgląd: {\"authors\": [{\"label\": \"Agata Czaja-Michaud\", \"value\": \"agata-czaja-michaud\"}, {\"label\": \"Agata Sierota\", \"value\": \"agata-sierota\"}, {\"label\": \"Agnieszka Machnowska\", \"value\": \"agn",
+      "why": "§8 poz. 12.2 — dostęp do danych przez nieudokumentowany endpoint. Znaleziskiem staje się dopiero wtedy, gdy pageProps zawiera dane niepubliczne; gołe `{}` to nie podatność.",
+      "raw": {
+        "route": "/artykuly/autor"
+      }
+    },
+    {
+      "code": "S3",
+      "host": "116sos.pl",
+      "url": "https://116sos.pl/_next/data/8CjJwbyxpVqpWnorny23T/artykuly/autor/[author].json",
+      "severity": "sredni",
+      "title": "Dane strony Next.js czytane bezpośrednio z /_next/data",
+      "detail": "200 JSON (26718 B), pageProps: articles, authorsOptions, tagsOptions; podgląd: {\"articles\": {\"posts\": [], \"page\": 1, \"itemsPerPage\": 0, \"totalItems\": 0, \"lastPage\": 0}, \"authorsOptions\": [{\"label\": \"Agata Czaja-Michaud\", \"value\": \"agata-czaja-michaud\"}, {\"lab",
+      "why": "§8 poz. 12.2 — dostęp do danych przez nieudokumentowany endpoint. Znaleziskiem staje się dopiero wtedy, gdy pageProps zawiera dane niepubliczne; gołe `{}` to nie podatność.",
+      "raw": {
+        "route": "/artykuly/autor/[author]"
+      }
+    },
+    {
+      "code": "S3",
+      "host": "116sos.pl",
+      "url": "https://116sos.pl/_next/data/8CjJwbyxpVqpWnorny23T/artykuly/tag.json",
+      "severity": "sredni",
+      "title": "Dane strony Next.js czytane bezpośrednio z /_next/data",
+      "detail": "200 JSON (23720 B), pageProps: tags; podgląd: {\"tags\": [{\"name\": \"abstynencja\", \"slug\": \"abstynencja\"}, {\"name\": \"adhd\", \"slug\": \"adhd\"}, {\"name\": \"agresja\", \"slug\": \"agresja\"}, {\"name\": \"agresja słowna\", \"slug\": \"agresja-slow",
+      "why": "§8 poz. 12.2 — dostęp do danych przez nieudokumentowany endpoint. Znaleziskiem staje się dopiero wtedy, gdy pageProps zawiera dane niepubliczne; gołe `{}` to nie podatność.",
+      "raw": {
+        "route": "/artykuly/tag"
+      }
+    },
+    {
+      "code": "S3",
+      "host": "116sos.pl",
+      "url": "https://116sos.pl/_next/data/8CjJwbyxpVqpWnorny23T/artykuly/tag/[tag].json",
+      "severity": "sredni",
+      "title": "Dane strony Next.js czytane bezpośrednio z /_next/data",
+      "detail": "200 JSON (26718 B), pageProps: articles, authorsOptions, tagsOptions; podgląd: {\"articles\": {\"posts\": [], \"page\": 1, \"itemsPerPage\": 0, \"totalItems\": 0, \"lastPage\": 0}, \"authorsOptions\": [{\"label\": \"Agata Czaja-Michaud\", \"value\": \"agata-czaja-michaud\"}, {\"lab",
+      "why": "§8 poz. 12.2 — dostęp do danych przez nieudokumentowany endpoint. Znaleziskiem staje się dopiero wtedy, gdy pageProps zawiera dane niepubliczne; gołe `{}` to nie podatność.",
+      "raw": {
+        "route": "/artykuly/tag/[tag]"
+      }
+    },
+    {
+      "code": "S3",
+      "host": "116sos.pl",
+      "url": "https://116sos.pl/_next/data/8CjJwbyxpVqpWnorny23T/artykuly/[category].json",
+      "severity": "sredni",
+      "title": "Dane strony Next.js czytane bezpośrednio z /_next/data",
+      "detail": "200 JSON (27240 B), pageProps: articles, authorsOptions, mainCategories, tagsOptions; podgląd: {\"articles\": {\"posts\": [], \"page\": 1, \"itemsPerPage\": 0, \"totalItems\": 0, \"lastPage\": 0}, \"authorsOptions\": [{\"label\": \"Agata Czaja-Michaud\", \"value\": \"agata-czaja-michaud\"}, {\"lab",
+      "why": "§8 poz. 12.2 — dostęp do danych przez nieudokumentowany endpoint. Znaleziskiem staje się dopiero wtedy, gdy pageProps zawiera dane niepubliczne; gołe `{}` to nie podatność.",
+      "raw": {
+        "route": "/artykuly/[category]"
+      }
+    },
+    {
+      "code": "S3",
+      "host": "116sos.pl",
+      "url": "https://116sos.pl/_next/data/8CjJwbyxpVqpWnorny23T/dokumenty.json",
+      "severity": "sredni",
+      "title": "Dane strony Next.js czytane bezpośrednio z /_next/data",
+      "detail": "200 JSON (1017 B), pageProps: appPageUrl, content, docsList, ogDescription, ogImageId, ogTitle, seodescription, seotitle; podgląd: {\"docsList\": [{\"docTitle\": \"Klauzula informacyjna IPZ PTP\", \"docSlug\": \"klauzula-informacyjna-ipz-ptp\"}, {\"docTitle\": \"Polityka prywatności\", \"docSlug\": \"polityka-prywatnosci\"}, {\"",
+      "why": "§8 poz. 12.2 — dostęp do danych przez nieudokumentowany endpoint. Znaleziskiem staje się dopiero wtedy, gdy pageProps zawiera dane niepubliczne; gołe `{}` to nie podatność.",
+      "raw": {
+        "route": "/dokumenty"
+      }
+    },
+    {
+      "code": "S1",
+      "host": "incydent.cert.pl",
+      "url": "https://incydent.cert.pl",
+      "severity": "niski",
+      "title": "CORS: ACAO=* (bez credentials)",
+      "detail": "Origin: https://evil.example → ACAO: *.",
+      "why": "§8 poz. 5.6 — samo `*` bez możliwości kradzieży danych jest wykluczone. Zapisane, żeby nie sprawdzać drugi raz.",
+      "raw": {
+        "origin": "https://evil.example"
+      }
+    },
+    {
+      "code": "S1",
+      "host": "incydent.cert.pl",
+      "url": "https://incydent.cert.pl",
+      "severity": "niski",
+      "title": "CORS: ACAO=* (bez credentials)",
+      "detail": "Origin: https://nask.pl.evil.example → ACAO: *.",
+      "why": "§8 poz. 5.6 — samo `*` bez możliwości kradzieży danych jest wykluczone. Zapisane, żeby nie sprawdzać drugi raz.",
+      "raw": {
+        "origin": "https://nask.pl.evil.example"
+      }
+    },
+    {
+      "code": "S1",
+      "host": "www.gov.pl",
+      "url": "https://www.gov.pl",
+      "severity": "niski",
+      "title": "CORS: ACAO=* (bez credentials)",
+      "detail": "Origin: https://evil.example → ACAO: *.",
+      "why": "§8 poz. 5.6 — samo `*` bez możliwości kradzieży danych jest wykluczone. Zapisane, żeby nie sprawdzać drugi raz.",
+      "raw": {
+        "origin": "https://evil.example"
+      }
+    },
+    {
+      "code": "S1",
+      "host": "www.gov.pl",
+      "url": "https://www.gov.pl",
+      "severity": "niski",
+      "title": "CORS: ACAO=* (bez credentials)",
+      "detail": "Origin: https://nask.pl.evil.example → ACAO: *.",
+      "why": "§8 poz. 5.6 — samo `*` bez możliwości kradzieży danych jest wykluczone. Zapisane, żeby nie sprawdzać drugi raz.",
+      "raw": {
+        "origin": "https://nask.pl.evil.example"
+      }
+    }
+  ],
+  "hosts": [
+    {
+      "host": "https://hack.cert.pl",
+      "hits": 2,
+      "top": [
+        {
+          "url": "https://hack.cert.pl/.git/config",
+          "kind": "auth-wall",
+          "status": 403,
+          "note": "istnieje i wymaga uwierzytelnienia (nie catch-all)",
+          "evidence": "<!DOCTYPE html> <!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]--> <!--[if IE 7]> <html class=\"no-js ie7 oldie\" lang=\"en-US\"> <![endif]--> <!--[if IE 8]> <html class=\"no-js ie8 oldie\" lang=\"en-US\"> <![endif]--> <!--[if gt IE 8]><!--> <html class=\"no-js\" lang=\"en-US\"> <!--<![e",
+          "score": 50
+        },
+        {
+          "url": "https://hack.cert.pl/.env",
+          "kind": "auth-wall",
+          "status": 403,
+          "note": "istnieje i wymaga uwierzytelnienia (nie catch-all)",
+          "evidence": "<!DOCTYPE html> <!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]--> <!--[if IE 7]> <html class=\"no-js ie7 oldie\" lang=\"en-US\"> <![endif]--> <!--[if IE 8]> <html class=\"no-js ie8 oldie\" lang=\"en-US\"> <![endif]--> <!--[if gt IE 8]><!--> <html class=\"no-js\" lang=\"en-US\"> <!--<![e",
+          "score": 50
+        }
+      ],
+      "program": "cert",
+      "tier": "T1",
+      "root_status": 200,
+      "baseline": {
+        "status": 200,
+        "ctype": "text/html",
+        "len": 1177
+      },
+      "tech": [],
+      "build_id": null,
+      "next_routes": [],
+      "js_endpoints": [
+        "/api/v1",
+        "/auth/logout",
+        "/auth/me",
+        "/auth/session",
+        "/auth/session/activity",
+        "/users",
+        "/users/",
+        "/users/$userId/edit",
+        "/users/$userId/view",
+        "/users/${e.userId}/email",
+        "/users/${e.userId}/role",
+        "/users/${e}",
+        "/users/${t}",
+        "/users/me/email-verification/confirm",
+        "/users/me/email-verification/resend",
+        "/users/me/profile-completion",
+        "/users/me/profile/account",
+        "/users/me/profile/account/avatar",
+        "/users/me/profile/account/delete",
+        "/users/me/profile/notification-preferences",
+        "/users/me/profile/payout"
+      ],
+      "probes": []
+    },
+    {
+      "host": "https://dns.pl",
+      "hits": 7,
+      "top": [
+        {
+          "url": "https://dns.pl/.well-known/security.txt",
+          "kind": "non-html",
+          "status": 200,
+          "note": "200, ale nie HTML (text/plain, 152 B)",
+          "evidence": "Contact: mailto:securitytxt@nask.pl Expires: 2027-05-31T23:59:00.000Z Encryption: https://www.nask.pl/pgp_securitytxt.asc Preferred-Languages: pl, en",
+          "score": 60
+        },
+        {
+          "url": "https://dns.pl/wp-json/wp/v2/users",
+          "kind": "status",
+          "status": 200,
+          "note": "200 inny niż catch-all (SPA/route)",
+          "evidence": "",
+          "score": 15
+        },
+        {
+          "url": "https://dns.pl/xmlrpc.php",
+          "kind": "status",
+          "status": 200,
+          "note": "200 inny niż catch-all (SPA/route)",
+          "evidence": "",
+          "score": 15
+        },
+        {
+          "url": "https://dns.pl/server-status",
+          "kind": "status",
+          "status": 200,
+          "note": "200 inny niż catch-all (SPA/route)",
+          "evidence": "",
+          "score": 15
+        },
+        {
+          "url": "https://dns.pl/.git/config",
+          "kind": "status",
+          "status": 200,
+          "note": "200 inny niż catch-all (SPA/route)",
+          "evidence": "",
+          "score": 15
+        },
+        {
+          "url": "https://dns.pl/.env",
+          "kind": "status",
+          "status": 200,
+          "note": "200 inny niż catch-all (SPA/route)",
+          "evidence": "",
+          "score": 15
+        },
+        {
+          "url": "https://dns.pl/config.json",
+          "kind": "status",
+          "status": 200,
+          "note": "200 inny niż catch-all (SPA/route)",
+          "evidence": "",
+          "score": 15
+        }
+      ],
+      "program": "nask",
+      "tier": "T1",
+      "root_status": 200,
+      "baseline": {
+        "status": 404,
+        "ctype": "text/html",
+        "len": 40921
+      },
+      "tech": [],
+      "build_id": null,
+      "next_routes": [],
+      "js_endpoints": [],
+      "probes": [
+        {
+          "code": "S6",
+          "host": "dns.pl",
+          "url": "https://dns.pl/panel",
+          "severity": "wysoki",
+          "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+          "detail": "/panel → 404; żądanie na / z x-original-url: /panel → 200, 51141 B (inna treść)",
+          "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+          "raw": {
+            "header": "x-original-url",
+            "plain": 404
+          }
+        },
+        {
+          "code": "S6",
+          "host": "dns.pl",
+          "url": "https://dns.pl/admin",
+          "severity": "wysoki",
+          "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+          "detail": "/admin → 404; żądanie na / z x-original-url: /admin → 200, 51122 B (inna treść)",
+          "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+          "raw": {
+            "header": "x-original-url",
+            "plain": 404
+          }
+        },
+        {
+          "code": "S6",
+          "host": "dns.pl",
+          "url": "https://dns.pl/dashboard",
+          "severity": "wysoki",
+          "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+          "detail": "/dashboard → 404; żądanie na / z x-original-url: /dashboard → 200, 51121 B (inna treść)",
+          "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+          "raw": {
+            "header": "x-original-url",
+            "plain": 404
+          }
+        },
+        {
+          "code": "S6",
+          "host": "dns.pl",
+          "url": "https://dns.pl/profil",
+          "severity": "wysoki",
+          "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+          "detail": "/profil → 404; żądanie na / z x-original-url: /profil → 200, 51149 B (inna treść)",
+          "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+          "raw": {
+            "header": "x-original-url",
+            "plain": 404
+          }
+        },
+        {
+          "code": "S6",
+          "host": "dns.pl",
+          "url": "https://dns.pl/konto",
+          "severity": "wysoki",
+          "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+          "detail": "/konto → 404; żądanie na / z x-original-url: /konto → 200, 51152 B (inna treść)",
+          "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+          "raw": {
+            "header": "x-original-url",
+            "plain": 404
+          }
+        },
+        {
+          "code": "S6",
+          "host": "dns.pl",
+          "url": "https://dns.pl/moje",
+          "severity": "wysoki",
+          "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+          "detail": "/moje → 404; żądanie na / z x-original-url: /moje → 200, 51147 B (inna treść)",
+          "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+          "raw": {
+            "header": "x-original-url",
+            "plain": 404
+          }
+        }
+      ]
+    },
+    {
+      "host": "https://mwdb.cert.pl",
+      "hits": 3,
+      "top": [
+        {
+          "url": "https://mwdb.cert.pl/api/server",
+          "kind": "json",
+          "status": 200,
+          "note": "JSON bez HTML-owego catch-all (437 B)",
+          "evidence": "{\"file_upload_timeout\":60000,\"instance_name\":\"mwdb\",\"is_3rd_party_sharing_consent_enabled\":true,\"is_authenticated\":false,\"is_karton_enabled\":true,\"is_maintenance_set\":false,\"is_oidc_enabled\":true,\"is_oidc_registration_enabled\":false,\"is_password_auth_enabled\":true,\"is_registration_enabled\":true,\"rec",
+          "score": 100
+        },
+        {
+          "url": "https://mwdb.cert.pl/manifest.json",
+          "kind": "json",
+          "status": 200,
+          "note": "JSON bez HTML-owego catch-all (317 B)",
+          "evidence": "{ \"short_name\": \"React App\", \"name\": \"Create React App Sample\", \"icons\": [ { \"src\": \"favicon.ico\", \"sizes\": \"64x64 32x32 24x24 16x16\", \"type\": \"image/x-icon\" } ], \"start_url\": \"./index.html\", \"display\": \"standalone\", \"theme_color\": \"#000000\", \"background_color\": \"#ffffff\" } ",
+          "score": 90
+        },
+        {
+          "url": "https://mwdb.cert.pl/api/docs",
+          "kind": "json",
+          "status": 401,
+          "note": "JSON bez HTML-owego catch-all (33 B)",
+          "evidence": "{\"message\":\"Not authenticated.\"} ",
+          "score": 80
+        }
+      ],
+      "program": "cert",
+      "tier": "T1",
+      "root_status": 200,
+      "baseline": {
+        "status": 200,
+        "ctype": "text/html",
+        "len": 784
+      },
+      "tech": [
+        "react"
+      ],
+      "build_id": null,
+      "next_routes": [],
+      "js_endpoints": [],
+      "probes": []
+    },
+    {
+      "host": "https://n6portal.cert.pl",
+      "hits": 1,
+      "top": [
+        {
+          "url": "https://n6portal.cert.pl/robots.txt",
+          "kind": "non-html",
+          "status": 200,
+          "note": "200, ale nie HTML (text/plain, 69 B)",
+          "evidence": "# https://www.robotstxt.org/robotstxt.html User-agent: * Disallow: / ",
+          "score": 60
+        }
+      ],
+      "program": "cert",
+      "tier": "T1",
+      "root_status": 200,
+      "baseline": {
+        "status": 200,
+        "ctype": "text/html",
+        "len": 2809
+      },
+      "tech": [
+        "react"
+      ],
+      "build_id": null,
+      "next_routes": [],
+      "js_endpoints": [
+        "/api",
+        "/api_key",
+        "/user-settings",
+        "/user-settings/mfa-configuration"
+      ],
+      "probes": []
+    },
+    {
+      "host": "https://komunikator.narodowy.gov.pl",
+      "hits": 0,
+      "top": [],
+      "program": "mszyfr",
+      "tier": "T1",
+      "root_status": 200,
+      "baseline": {
+        "status": 200,
+        "ctype": "text/html",
+        "len": 4781
+      },
+      "tech": [],
+      "build_id": null,
+      "next_routes": [],
+      "js_endpoints": [],
+      "probes": []
+    },
+    {
+      "host": "https://zglos-dezinformacje.nask.pl",
+      "hits": 4,
+      "top": [
+        {
+          "url": "https://zglos-dezinformacje.nask.pl/robots.txt",
+          "kind": "non-html",
+          "status": 200,
+          "note": "200, ale nie HTML (text/plain, 81 B)",
+          "evidence": "User-Agent: * Allow: / Sitemap: https://zglos-dezinformacje.nask.pl/sitemap.xml ",
+          "score": 60
+        },
+        {
+          "url": "https://zglos-dezinformacje.nask.pl/sitemap.xml",
+          "kind": "non-html",
+          "status": 200,
+          "note": "200, ale nie HTML (application/xml, 436 B)",
+          "evidence": "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\"> <url> <loc>https://zglos-dezinformacje.nask.pl/</loc> <lastmod>2026-10-27T14:16:36.222Z</lastmod> <c",
+          "score": 60
+        },
+        {
+          "url": "https://zglos-dezinformacje.nask.pl/.git/config",
+          "kind": "auth-wall",
+          "status": 403,
+          "note": "istnieje i wymaga uwierzytelnienia (nie catch-all)",
+          "evidence": "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'> <html xmlns='http://www.w3.org/1999/xhtml'> <head> <meta content='text/html; charset=utf-8' http-equiv='content-type' /> <style type='text/css'> body { font-family: Arial; margin",
+          "score": 50
+        },
+        {
+          "url": "https://zglos-dezinformacje.nask.pl/.env",
+          "kind": "auth-wall",
+          "status": 403,
+          "note": "istnieje i wymaga uwierzytelnienia (nie catch-all)",
+          "evidence": "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'> <html xmlns='http://www.w3.org/1999/xhtml'> <head> <meta content='text/html; charset=utf-8' http-equiv='content-type' /> <style type='text/css'> body { font-family: Arial; margin",
+          "score": 50
+        }
+      ],
+      "program": "nask",
+      "tier": "T1",
+      "root_status": 200,
+      "baseline": {
+        "status": 200,
+        "ctype": "text/html",
+        "len": 30270
+      },
+      "tech": [
+        "react"
+      ],
+      "build_id": null,
+      "next_routes": [],
+      "js_endpoints": [],
+      "probes": []
+    },
+    {
+      "host": "https://oad.nask.pl",
+      "hits": 2,
+      "top": [
+        {
+          "url": "https://oad.nask.pl/.git/config",
+          "kind": "auth-wall",
+          "status": 403,
+          "note": "istnieje i wymaga uwierzytelnienia (nie catch-all)",
+          "evidence": "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'> <html xmlns='http://www.w3.org/1999/xhtml'> <head> <meta content='text/html; charset=utf-8' http-equiv='content-type' /> <style type='text/css'> body { font-family: Arial; margin",
+          "score": 50
+        },
+        {
+          "url": "https://oad.nask.pl/.env",
+          "kind": "auth-wall",
+          "status": 403,
+          "note": "istnieje i wymaga uwierzytelnienia (nie catch-all)",
+          "evidence": "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'> <html xmlns='http://www.w3.org/1999/xhtml'> <head> <meta content='text/html; charset=utf-8' http-equiv='content-type' /> <style type='text/css'> body { font-family: Arial; margin",
+          "score": 50
+        }
+      ],
+      "program": "nask",
+      "tier": "T1",
+      "root_status": 200,
+      "baseline": {
+        "status": 404,
+        "ctype": "text/html",
+        "len": 13814
+      },
+      "tech": [
+        "react"
+      ],
+      "build_id": null,
+      "next_routes": [],
+      "js_endpoints": [],
+      "probes": [
+        {
+          "code": "S6",
+          "host": "oad.nask.pl",
+          "url": "https://oad.nask.pl/panel",
+          "severity": "wysoki",
+          "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+          "detail": "/panel → 404; żądanie na / z x-original-url: /panel → 200, 75666 B (inna treść)",
+          "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+          "raw": {
+            "header": "x-original-url",
+            "plain": 404
+          }
+        },
+        {
+          "code": "S6",
+          "host": "oad.nask.pl",
+          "url": "https://oad.nask.pl/admin",
+          "severity": "wysoki",
+          "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+          "detail": "/admin → 404; żądanie na / z x-original-url: /admin → 200, 75666 B (inna treść)",
+          "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+          "raw": {
+            "header": "x-original-url",
+            "plain": 404
+          }
+        },
+        {
+          "code": "S6",
+          "host": "oad.nask.pl",
+          "url": "https://oad.nask.pl/dashboard",
+          "severity": "wysoki",
+          "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+          "detail": "/dashboard → 404; żądanie na / z x-original-url: /dashboard → 200, 75666 B (inna treść)",
+          "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+          "raw": {
+            "header": "x-original-url",
+            "plain": 404
+          }
+        },
+        {
+          "code": "S6",
+          "host": "oad.nask.pl",
+          "url": "https://oad.nask.pl/profil",
+          "severity": "wysoki",
+          "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+          "detail": "/profil → 404; żądanie na / z x-original-url: /profil → 200, 75666 B (inna treść)",
+          "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+          "raw": {
+            "header": "x-original-url",
+            "plain": 404
+          }
+        },
+        {
+          "code": "S6",
+          "host": "oad.nask.pl",
+          "url": "https://oad.nask.pl/konto",
+          "severity": "wysoki",
+          "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+          "detail": "/konto → 404; żądanie na / z x-original-url: /konto → 200, 75666 B (inna treść)",
+          "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+          "raw": {
+            "header": "x-original-url",
+            "plain": 404
+          }
+        },
+        {
+          "code": "S6",
+          "host": "oad.nask.pl",
+          "url": "https://oad.nask.pl/moje",
+          "severity": "wysoki",
+          "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+          "detail": "/moje → 404; żądanie na / z x-original-url: /moje → 200, 75666 B (inna treść)",
+          "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+          "raw": {
+            "header": "x-original-url",
+            "plain": 404
+          }
+        }
+      ]
+    },
+    {
+      "host": "https://moje.cert.pl",
+      "hits": 3,
+      "top": [
+        {
+          "url": "https://moje.cert.pl/robots.txt",
+          "kind": "non-html",
+          "status": 200,
+          "note": "200, ale nie HTML (text/plain, 122 B)",
+          "evidence": "User-agent: * Disallow: / Allow: /$ Allow: /static/img/favicon* Allow: /static/img/og/* Allow: /faq/ Allow: /komunikaty/ ",
+          "score": 60
+        },
+        {
+          "url": "https://moje.cert.pl/.git/config",
+          "kind": "auth-wall",
+          "status": 403,
+          "note": "istnieje i wymaga uwierzytelnienia (nie catch-all)",
+          "evidence": "<!DOCTYPE html> <!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]--> <!--[if IE 7]> <html class=\"no-js ie7 oldie\" lang=\"en-US\"> <![endif]--> <!--[if IE 8]> <html class=\"no-js ie8 oldie\" lang=\"en-US\"> <![endif]--> <!--[if gt IE 8]><!--> <html class=\"no-js\" lang=\"en-US\"> <!--<![e",
+          "score": 50
+        },
+        {
+          "url": "https://moje.cert.pl/.env",
+          "kind": "auth-wall",
+          "status": 403,
+          "note": "istnieje i wymaga uwierzytelnienia (nie catch-all)",
+          "evidence": "<!DOCTYPE html> <!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]--> <!--[if IE 7]> <html class=\"no-js ie7 oldie\" lang=\"en-US\"> <![endif]--> <!--[if IE 8]> <html class=\"no-js ie8 oldie\" lang=\"en-US\"> <![endif]--> <!--[if gt IE 8]><!--> <html class=\"no-js\" lang=\"en-US\"> <!--<![e",
+          "score": 50
+        }
+      ],
+      "program": "cert",
+      "tier": "T1",
+      "root_status": 200,
+      "baseline": {
+        "status": 404,
+        "ctype": "text/html",
+        "len": 14948
+      },
+      "tech": [],
+      "build_id": null,
+      "next_routes": [],
+      "js_endpoints": [],
+      "probes": [
+        {
+          "code": "S6",
+          "host": "moje.cert.pl",
+          "url": "https://moje.cert.pl/panel",
+          "severity": "wysoki",
+          "title": "Nagłówek x-forwarded-prefix zmienia treść odpowiedzi",
+          "detail": "/panel → 404; żądanie na / z x-forwarded-prefix: /panel → 200, 31158 B (inna treść)",
+          "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+          "raw": {
+            "header": "x-forwarded-prefix",
+            "plain": 404
+          }
+        },
+        {
+          "code": "S6",
+          "host": "moje.cert.pl",
+          "url": "https://moje.cert.pl/admin",
+          "severity": "wysoki",
+          "title": "Nagłówek x-forwarded-prefix zmienia treść odpowiedzi",
+          "detail": "/admin → 403; żądanie na / z x-forwarded-prefix: /admin → 200, 31158 B (inna treść)",
+          "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+          "raw": {
+            "header": "x-forwarded-prefix",
+            "plain": 403
+          }
+        },
+        {
+          "code": "S6",
+          "host": "moje.cert.pl",
+          "url": "https://moje.cert.pl/dashboard",
+          "severity": "wysoki",
+          "title": "Nagłówek x-forwarded-prefix zmienia treść odpowiedzi",
+          "detail": "/dashboard → 404; żądanie na / z x-forwarded-prefix: /dashboard → 200, 31158 B (inna treść)",
+          "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+          "raw": {
+            "header": "x-forwarded-prefix",
+            "plain": 404
+          }
+        },
+        {
+          "code": "S6",
+          "host": "moje.cert.pl",
+          "url": "https://moje.cert.pl/profil",
+          "severity": "wysoki",
+          "title": "Nagłówek x-forwarded-prefix zmienia treść odpowiedzi",
+          "detail": "/profil → 404; żądanie na / z x-forwarded-prefix: /profil → 200, 31158 B (inna treść)",
+          "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+          "raw": {
+            "header": "x-forwarded-prefix",
+            "plain": 404
+          }
+        },
+        {
+          "code": "S6",
+          "host": "moje.cert.pl",
+          "url": "https://moje.cert.pl/konto",
+          "severity": "wysoki",
+          "title": "Nagłówek x-forwarded-prefix zmienia treść odpowiedzi",
+          "detail": "/konto → 404; żądanie na / z x-forwarded-prefix: /konto → 200, 31158 B (inna treść)",
+          "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+          "raw": {
+            "header": "x-forwarded-prefix",
+            "plain": 404
+          }
+        },
+        {
+          "code": "S6",
+          "host": "moje.cert.pl",
+          "url": "https://moje.cert.pl/moje",
+          "severity": "wysoki",
+          "title": "Nagłówek x-forwarded-prefix zmienia treść odpowiedzi",
+          "detail": "/moje → 404; żądanie na / z x-forwarded-prefix: /moje → 200, 31158 B (inna treść)",
+          "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+          "raw": {
+            "header": "x-forwarded-prefix",
+            "plain": 404
+          }
+        }
+      ]
+    },
+    {
+      "host": "https://incydent.cert.pl",
+      "hits": 1,
+      "top": [
+        {
+          "url": "https://incydent.cert.pl/manifest.json",
+          "kind": "json",
+          "status": 200,
+          "note": "JSON bez HTML-owego catch-all (333 B)",
+          "evidence": "{ \"short_name\": \"CERT.PL Incident Reports\", \"name\": \"CERT.PL Incident Reports\", \"icons\": [ { \"src\": \"favicon.ico\", \"sizes\": \"64x64 32x32 24x24 16x16\", \"type\": \"image/x-icon\" } ], \"start_url\": \"./index.html\", \"display\": \"standalone\", \"theme_color\": \"#000000\", \"background_color\": \"#ffffff\" } ",
+          "score": 90
+        }
+      ],
+      "program": "cert",
+      "tier": "T1",
+      "root_status": 200,
+      "baseline": {
+        "status": 404,
+        "ctype": "text/html",
+        "len": 232
+      },
+      "tech": [],
+      "build_id": null,
+      "next_routes": [],
+      "js_endpoints": [
+        "https://incydent.cert.pl/"
+      ],
+      "probes": [
+        {
+          "code": "S1",
+          "host": "incydent.cert.pl",
+          "url": "https://incydent.cert.pl",
+          "severity": "niski",
+          "title": "CORS: ACAO=* (bez credentials)",
+          "detail": "Origin: https://evil.example → ACAO: *.",
+          "why": "§8 poz. 5.6 — samo `*` bez możliwości kradzieży danych jest wykluczone. Zapisane, żeby nie sprawdzać drugi raz.",
+          "raw": {
+            "origin": "https://evil.example"
+          }
+        },
+        {
+          "code": "S1",
+          "host": "incydent.cert.pl",
+          "url": "https://incydent.cert.pl",
+          "severity": "niski",
+          "title": "CORS: ACAO=* (bez credentials)",
+          "detail": "Origin: https://nask.pl.evil.example → ACAO: *.",
+          "why": "§8 poz. 5.6 — samo `*` bez możliwości kradzieży danych jest wykluczone. Zapisane, żeby nie sprawdzać drugi raz.",
+          "raw": {
+            "origin": "https://nask.pl.evil.example"
+          }
+        },
+        {
+          "code": "S6",
+          "host": "incydent.cert.pl",
+          "url": "https://incydent.cert.pl/panel",
+          "severity": "wysoki",
+          "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+          "detail": "/panel → 404; żądanie na / z x-original-url: /panel → 200, 2743 B (inna treść)",
+          "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+          "raw": {
+            "header": "x-original-url",
+            "plain": 404
+          }
+        },
+        {
+          "code": "S6",
+          "host": "incydent.cert.pl",
+          "url": "https://incydent.cert.pl/admin",
+          "severity": "wysoki",
+          "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+          "detail": "/admin → 404; żądanie na / z x-original-url: /admin → 200, 2743 B (inna treść)",
+          "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+          "raw": {
+            "header": "x-original-url",
+            "plain": 404
+          }
+        },
+        {
+          "code": "S6",
+          "host": "incydent.cert.pl",
+          "url": "https://incydent.cert.pl/dashboard",
+          "severity": "wysoki",
+          "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+          "detail": "/dashboard → 404; żądanie na / z x-original-url: /dashboard → 200, 2743 B (inna treść)",
+          "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+          "raw": {
+            "header": "x-original-url",
+            "plain": 404
+          }
+        },
+        {
+          "code": "S6",
+          "host": "incydent.cert.pl",
+          "url": "https://incydent.cert.pl/profil",
+          "severity": "wysoki",
+          "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+          "detail": "/profil → 404; żądanie na / z x-original-url: /profil → 200, 2743 B (inna treść)",
+          "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+          "raw": {
+            "header": "x-original-url",
+            "plain": 404
+          }
+        },
+        {
+          "code": "S6",
+          "host": "incydent.cert.pl",
+          "url": "https://incydent.cert.pl/konto",
+          "severity": "wysoki",
+          "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+          "detail": "/konto → 404; żądanie na / z x-original-url: /konto → 200, 2743 B (inna treść)",
+          "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+          "raw": {
+            "header": "x-original-url",
+            "plain": 404
+          }
+        },
+        {
+          "code": "S6",
+          "host": "incydent.cert.pl",
+          "url": "https://incydent.cert.pl/moje",
+          "severity": "wysoki",
+          "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+          "detail": "/moje → 404; żądanie na / z x-original-url: /moje → 200, 2743 B (inna treść)",
+          "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+          "raw": {
+            "header": "x-original-url",
+            "plain": 404
+          }
+        }
+      ]
+    },
+    {
+      "host": "https://dyzurnet.pl",
+      "hits": 5,
+      "top": [
+        {
+          "url": "https://dyzurnet.pl/manifest.json",
+          "kind": "json",
+          "status": 200,
+          "note": "JSON bez HTML-owego catch-all (440 B)",
+          "evidence": "{ \"name\": \"Dyzurnet.pl\", \"short_name\": \"Dyzurnet\", \"icons\": [ { \"src\": \"/web-app-manifest-192x192.png\", \"sizes\": \"192x192\", \"type\": \"image/png\", \"purpose\": \"maskable\" }, { \"src\": \"/web-app-manifest-512x512.png\", \"sizes\": \"512x512\", \"type\": \"image/png\", \"purpose\": \"maskable\" } ], \"theme_color\": \"#fff",
+          "score": 90
+        },
+        {
+          "url": "https://dyzurnet.pl/robots.txt",
+          "kind": "non-html",
+          "status": 200,
+          "note": "200, ale nie HTML (text/plain, 81 B)",
+          "evidence": "User-Agent: * Allow: / Disallow: /api/ Sitemap: https://dyzurnet.pl/sitemap.xml ",
+          "score": 60
+        },
+        {
+          "url": "https://dyzurnet.pl/sitemap.xml",
+          "kind": "non-html",
+          "status": 200,
+          "note": "200, ale nie HTML (application/xml, 75176 B)",
+          "evidence": "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" xmlns:xhtml=\"http://www.w3.org/1999/xhtml\"> <url> <loc>https://dyzurnet.pl/pl</loc> <xhtml:link rel=\"",
+          "score": 60
+        },
+        {
+          "url": "https://dyzurnet.pl/.git/config",
+          "kind": "auth-wall",
+          "status": 403,
+          "note": "istnieje i wymaga uwierzytelnienia (nie catch-all)",
+          "evidence": "<!DOCTYPE html> <!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]--> <!--[if IE 7]> <html class=\"no-js ie7 oldie\" lang=\"en-US\"> <![endif]--> <!--[if IE 8]> <html class=\"no-js ie8 oldie\" lang=\"en-US\"> <![endif]--> <!--[if gt IE 8]><!--> <html class=\"no-js\" lang=\"en-US\"> <!--<![e",
+          "score": 50
+        },
+        {
+          "url": "https://dyzurnet.pl/.env",
+          "kind": "auth-wall",
+          "status": 403,
+          "note": "istnieje i wymaga uwierzytelnienia (nie catch-all)",
+          "evidence": "<!DOCTYPE html> <!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]--> <!--[if IE 7]> <html class=\"no-js ie7 oldie\" lang=\"en-US\"> <![endif]--> <!--[if IE 8]> <html class=\"no-js ie8 oldie\" lang=\"en-US\"> <![endif]--> <!--[if gt IE 8]><!--> <html class=\"no-js\" lang=\"en-US\"> <!--<![e",
+          "score": 50
+        }
+      ],
+      "program": "nask",
+      "tier": "T1",
+      "root_status": 200,
+      "baseline": {
+        "status": 200,
+        "ctype": "text/html",
+        "len": 58289
+      },
+      "tech": [
+        "react"
+      ],
+      "build_id": null,
+      "next_routes": [],
+      "js_endpoints": [],
+      "probes": []
+    },
+    {
+      "host": "https://116sos.pl",
+      "hits": 3,
+      "top": [
+        {
+          "url": "https://116sos.pl/api/fetch-cookie-hash",
+          "kind": "json",
+          "status": 200,
+          "note": "JSON bez HTML-owego catch-all (30 B)",
+          "evidence": "{\"cookieHash\":\"6a9963b75ab63\"}",
+          "score": 115
+        },
+        {
+          "url": "https://116sos.pl/robots.txt",
+          "kind": "non-html",
+          "status": 200,
+          "note": "200, ale nie HTML (text/plain, 108 B)",
+          "evidence": "User-agent: * Disallow: /404 Disallow: /formularz-helpdesk Allow: / Sitemap: https://116sos.pl/sitemap.xml ",
+          "score": 60
+        },
+        {
+          "url": "https://116sos.pl/sitemap.xml",
+          "kind": "non-html",
+          "status": 200,
+          "note": "200, ale nie HTML (text/xml, 132584 B)",
+          "evidence": "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\"> <url> <loc>https://www.116sos.pl</loc> <lastmod>03.11.2026, 22:54:57</lastmod> </url> <url> <loc>htt",
+          "score": 60
+        }
+      ],
+      "program": "nask",
+      "tier": "T2",
+      "root_status": 200,
+      "baseline": {
+        "status": 404,
+        "ctype": "text/html",
+        "len": 10407
+      },
+      "tech": [
+        "next.js",
+        "react"
+      ],
+      "build_id": "8CjJwbyxpVqpWnorny23T",
+      "next_routes": [
+        "/404",
+        "/_error",
+        "/aktualnosci",
+        "/aktualnosci/[slug]",
+        "/artykuly",
+        "/artykuly/autor",
+        "/artykuly/autor/[author]",
+        "/artykuly/tag",
+        "/artykuly/tag/[tag]",
+        "/artykuly/[category]",
+        "/artykuly/[category]/[slug]",
+        "/dokumenty",
+        "/dokumenty/[title]",
+        "/mapa-serwisu",
+        "/o-platformie-sos",
+        "/osrodki-pomocowe",
+        "/osrodki-pomocowe/dodaj",
+        "/osrodki-pomocowe/dziekujemy",
+        "/otrzymaj-pomoc",
+        "/otrzymaj-pomoc/czat",
+        "/otrzymaj-pomoc/formularz",
+        "/otrzymaj-pomoc/formularz/blad",
+        "/otrzymaj-pomoc/formularz/sukces",
+        "/otrzymaj-pomoc/telefon",
+        "/pytania-i-odpowiedzi",
+        "/telefony-pomocowe",
+        "/_app",
+        "/a/i",
+        "/a/b",
+        "/api"
+      ],
+      "js_endpoints": [
+        "/api",
+        "/api/",
+        "/api/fetch-cookie-hash"
+      ],
+      "probes": [
+        {
+          "code": "S6",
+          "host": "116sos.pl",
+          "url": "https://116sos.pl/panel",
+          "severity": "wysoki",
+          "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+          "detail": "/panel → 404; żądanie na / z x-original-url: /panel → 200, 103227 B (inna treść)",
+          "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+          "raw": {
+            "header": "x-original-url",
+            "plain": 404
+          }
+        },
+        {
+          "code": "S6",
+          "host": "116sos.pl",
+          "url": "https://116sos.pl/admin",
+          "severity": "wysoki",
+          "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+          "detail": "/admin → 404; żądanie na / z x-original-url: /admin → 200, 103227 B (inna treść)",
+          "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+          "raw": {
+            "header": "x-original-url",
+            "plain": 404
+          }
+        },
+        {
+          "code": "S6",
+          "host": "116sos.pl",
+          "url": "https://116sos.pl/dashboard",
+          "severity": "wysoki",
+          "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+          "detail": "/dashboard → 404; żądanie na / z x-original-url: /dashboard → 200, 103227 B (inna treść)",
+          "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+          "raw": {
+            "header": "x-original-url",
+            "plain": 404
+          }
+        },
+        {
+          "code": "S6",
+          "host": "116sos.pl",
+          "url": "https://116sos.pl/profil",
+          "severity": "wysoki",
+          "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+          "detail": "/profil → 404; żądanie na / z x-original-url: /profil → 200, 103227 B (inna treść)",
+          "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+          "raw": {
+            "header": "x-original-url",
+            "plain": 404
+          }
+        },
+        {
+          "code": "S6",
+          "host": "116sos.pl",
+          "url": "https://116sos.pl/konto",
+          "severity": "wysoki",
+          "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+          "detail": "/konto → 404; żądanie na / z x-original-url: /konto → 200, 103227 B (inna treść)",
+          "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+          "raw": {
+            "header": "x-original-url",
+            "plain": 404
+          }
+        },
+        {
+          "code": "S3",
+          "host": "116sos.pl",
+          "url": "https://116sos.pl/_next/data/8CjJwbyxpVqpWnorny23T/aktualnosci.json",
+          "severity": "sredni",
+          "title": "Dane strony Next.js czytane bezpośrednio z /_next/data",
+          "detail": "200 JSON (2543 B), pageProps: appPageUrl, news, ogDescription, ogImageId, ogTitle, seodescription, seotitle, title; podgląd: {\"appPageUrl\": \"/aktualnosci\", \"title\": \"Aktualności\", \"seotitle\": \"Kim jesteśmy | Aktualności\", \"seodescription\": \"Dowiedz się więcej o platformie 116sos.pl oraz naszych działania",
+          "why": "§8 poz. 12.2 — dostęp do danych przez nieudokumentowany endpoint. Znaleziskiem staje się dopiero wtedy, gdy pageProps zawiera dane niepubliczne; gołe `{}` to nie podatność.",
+          "raw": {
+            "route": "/aktualnosci"
+          }
+        },
+        {
+          "code": "S3",
+          "host": "116sos.pl",
+          "url": "https://116sos.pl/_next/data/8CjJwbyxpVqpWnorny23T/artykuly.json",
+          "severity": "sredni",
+          "title": "Dane strony Next.js czytane bezpośrednio z /_next/data",
+          "detail": "200 JSON (33487 B), pageProps: appPageUrl, articles, authorsOptions, content, mainCategories, ogDescription, ogImageId, ogTitle, seodescription, seotitle; podgląd: {\"content\": {\"heading\": \"Baza artykułów\", \"image\": \"https://116sos.multisite.lab.nob.pib.nask.pl/wp-content/uploads/sites/2/2023/06/reka_klucz-1.png\", \"appPageUrl\": \"/baza-artykulo",
+          "why": "§8 poz. 12.2 — dostęp do danych przez nieudokumentowany endpoint. Znaleziskiem staje się dopiero wtedy, gdy pageProps zawiera dane niepubliczne; gołe `{}` to nie podatność.",
+          "raw": {
+            "route": "/artykuly"
+          }
+        },
+        {
+          "code": "S3",
+          "host": "116sos.pl",
+          "url": "https://116sos.pl/_next/data/8CjJwbyxpVqpWnorny23T/artykuly/autor.json",
+          "severity": "sredni",
+          "title": "Dane strony Next.js czytane bezpośrednio z /_next/data",
+          "detail": "200 JSON (2072 B), pageProps: authors; podgląd: {\"authors\": [{\"label\": \"Agata Czaja-Michaud\", \"value\": \"agata-czaja-michaud\"}, {\"label\": \"Agata Sierota\", \"value\": \"agata-sierota\"}, {\"label\": \"Agnieszka Machnowska\", \"value\": \"agn",
+          "why": "§8 poz. 12.2 — dostęp do danych przez nieudokumentowany endpoint. Znaleziskiem staje się dopiero wtedy, gdy pageProps zawiera dane niepubliczne; gołe `{}` to nie podatność.",
+          "raw": {
+            "route": "/artykuly/autor"
+          }
+        },
+        {
+          "code": "S3",
+          "host": "116sos.pl",
+          "url": "https://116sos.pl/_next/data/8CjJwbyxpVqpWnorny23T/artykuly/autor/[author].json",
+          "severity": "sredni",
+          "title": "Dane strony Next.js czytane bezpośrednio z /_next/data",
+          "detail": "200 JSON (26718 B), pageProps: articles, authorsOptions, tagsOptions; podgląd: {\"articles\": {\"posts\": [], \"page\": 1, \"itemsPerPage\": 0, \"totalItems\": 0, \"lastPage\": 0}, \"authorsOptions\": [{\"label\": \"Agata Czaja-Michaud\", \"value\": \"agata-czaja-michaud\"}, {\"lab",
+          "why": "§8 poz. 12.2 — dostęp do danych przez nieudokumentowany endpoint. Znaleziskiem staje się dopiero wtedy, gdy pageProps zawiera dane niepubliczne; gołe `{}` to nie podatność.",
+          "raw": {
+            "route": "/artykuly/autor/[author]"
+          }
+        },
+        {
+          "code": "S3",
+          "host": "116sos.pl",
+          "url": "https://116sos.pl/_next/data/8CjJwbyxpVqpWnorny23T/artykuly/tag.json",
+          "severity": "sredni",
+          "title": "Dane strony Next.js czytane bezpośrednio z /_next/data",
+          "detail": "200 JSON (23720 B), pageProps: tags; podgląd: {\"tags\": [{\"name\": \"abstynencja\", \"slug\": \"abstynencja\"}, {\"name\": \"adhd\", \"slug\": \"adhd\"}, {\"name\": \"agresja\", \"slug\": \"agresja\"}, {\"name\": \"agresja słowna\", \"slug\": \"agresja-slow",
+          "why": "§8 poz. 12.2 — dostęp do danych przez nieudokumentowany endpoint. Znaleziskiem staje się dopiero wtedy, gdy pageProps zawiera dane niepubliczne; gołe `{}` to nie podatność.",
+          "raw": {
+            "route": "/artykuly/tag"
+          }
+        },
+        {
+          "code": "S3",
+          "host": "116sos.pl",
+          "url": "https://116sos.pl/_next/data/8CjJwbyxpVqpWnorny23T/artykuly/tag/[tag].json",
+          "severity": "sredni",
+          "title": "Dane strony Next.js czytane bezpośrednio z /_next/data",
+          "detail": "200 JSON (26718 B), pageProps: articles, authorsOptions, tagsOptions; podgląd: {\"articles\": {\"posts\": [], \"page\": 1, \"itemsPerPage\": 0, \"totalItems\": 0, \"lastPage\": 0}, \"authorsOptions\": [{\"label\": \"Agata Czaja-Michaud\", \"value\": \"agata-czaja-michaud\"}, {\"lab",
+          "why": "§8 poz. 12.2 — dostęp do danych przez nieudokumentowany endpoint. Znaleziskiem staje się dopiero wtedy, gdy pageProps zawiera dane niepubliczne; gołe `{}` to nie podatność.",
+          "raw": {
+            "route": "/artykuly/tag/[tag]"
+          }
+        },
+        {
+          "code": "S3",
+          "host": "116sos.pl",
+          "url": "https://116sos.pl/_next/data/8CjJwbyxpVqpWnorny23T/artykuly/[category].json",
+          "severity": "sredni",
+          "title": "Dane strony Next.js czytane bezpośrednio z /_next/data",
+          "detail": "200 JSON (27240 B), pageProps: articles, authorsOptions, mainCategories, tagsOptions; podgląd: {\"articles\": {\"posts\": [], \"page\": 1, \"itemsPerPage\": 0, \"totalItems\": 0, \"lastPage\": 0}, \"authorsOptions\": [{\"label\": \"Agata Czaja-Michaud\", \"value\": \"agata-czaja-michaud\"}, {\"lab",
+          "why": "§8 poz. 12.2 — dostęp do danych przez nieudokumentowany endpoint. Znaleziskiem staje się dopiero wtedy, gdy pageProps zawiera dane niepubliczne; gołe `{}` to nie podatność.",
+          "raw": {
+            "route": "/artykuly/[category]"
+          }
+        },
+        {
+          "code": "S3",
+          "host": "116sos.pl",
+          "url": "https://116sos.pl/_next/data/8CjJwbyxpVqpWnorny23T/dokumenty.json",
+          "severity": "sredni",
+          "title": "Dane strony Next.js czytane bezpośrednio z /_next/data",
+          "detail": "200 JSON (1017 B), pageProps: appPageUrl, content, docsList, ogDescription, ogImageId, ogTitle, seodescription, seotitle; podgląd: {\"docsList\": [{\"docTitle\": \"Klauzula informacyjna IPZ PTP\", \"docSlug\": \"klauzula-informacyjna-ipz-ptp\"}, {\"docTitle\": \"Polityka prywatności\", \"docSlug\": \"polityka-prywatnosci\"}, {\"",
+          "why": "§8 poz. 12.2 — dostęp do danych przez nieudokumentowany endpoint. Znaleziskiem staje się dopiero wtedy, gdy pageProps zawiera dane niepubliczne; gołe `{}` to nie podatność.",
+          "raw": {
+            "route": "/dokumenty"
+          }
+        }
+      ]
+    },
+    {
+      "host": "https://science.nask.pl",
+      "hits": 1,
+      "top": [
+        {
+          "url": "https://science.nask.pl/robots.txt",
+          "kind": "non-html",
+          "status": 200,
+          "note": "200, ale nie HTML (text/plain, 73 B)",
+          "evidence": "User-agent: * Disallow: /api/ Disallow: /_next/ Disallow: /node_modules/ ",
+          "score": 60
+        }
+      ],
+      "program": "nask",
+      "tier": "T2",
+      "root_status": 200,
+      "baseline": {
+        "status": 404,
+        "ctype": "text/html",
+        "len": 17524
+      },
+      "tech": [
+        "next.js",
+        "react"
+      ],
+      "build_id": "Grl_YQ5SCHd1ahmhesPv6",
+      "next_routes": [
+        "/_error",
+        "/about",
+        "/about/science-council",
+        "/about/structure",
+        "/about/structure/researchers",
+        "/accessibility-declaration",
+        "/branding",
+        "/career",
+        "/contact",
+        "/cookies",
+        "/doctoral-school",
+        "/doctoral-school/about-tib-pan",
+        "/doctoral-school/courses",
+        "/doctoral-school/our-phd-students/page/[page]",
+        "/doctoral-school/recruitment",
+        "/doctoral-school/what-we-offer",
+        "/equality",
+        "/news/page/[page]",
+        "/research-areas",
+        "/research-areas/projects/page/[page]",
+        "/search",
+        "/_app",
+        "/api/contact",
+        "/api/search",
+        "/news",
+        "/research-areas/projects",
+        "/research-areas/1418",
+        "/research-areas/1415",
+        "/research-areas/1408",
+        "/doctoral-school/our-phd-students"
+      ],
+      "js_endpoints": [
+        "/api",
+        "/api/",
+        "https://science.nask.pl/social_share.png"
+      ],
+      "probes": [
+        {
+          "code": "S6",
+          "host": "science.nask.pl",
+          "url": "https://science.nask.pl/panel",
+          "severity": "wysoki",
+          "title": "Nagłówek x-rewrite-url zmienia treść odpowiedzi",
+          "detail": "/panel → 404; żądanie na / z x-rewrite-url: /panel → 200, 161545 B (inna treść)",
+          "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+          "raw": {
+            "header": "x-rewrite-url",
+            "plain": 404
+          }
+        },
+        {
+          "code": "S6",
+          "host": "science.nask.pl",
+          "url": "https://science.nask.pl/admin",
+          "severity": "wysoki",
+          "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+          "detail": "/admin → 404; żądanie na / z x-original-url: /admin → 200, 161545 B (inna treść)",
+          "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+          "raw": {
+            "header": "x-original-url",
+            "plain": 404
+          }
+        },
+        {
+          "code": "S6",
+          "host": "science.nask.pl",
+          "url": "https://science.nask.pl/dashboard",
+          "severity": "wysoki",
+          "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+          "detail": "/dashboard → 404; żądanie na / z x-original-url: /dashboard → 200, 162221 B (inna treść)",
+          "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+          "raw": {
+            "header": "x-original-url",
+            "plain": 404
+          }
+        },
+        {
+          "code": "S6",
+          "host": "science.nask.pl",
+          "url": "https://science.nask.pl/profil",
+          "severity": "wysoki",
+          "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+          "detail": "/profil → 404; żądanie na / z x-original-url: /profil → 200, 162221 B (inna treść)",
+          "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+          "raw": {
+            "header": "x-original-url",
+            "plain": 404
+          }
+        },
+        {
+          "code": "S6",
+          "host": "science.nask.pl",
+          "url": "https://science.nask.pl/moje",
+          "severity": "wysoki",
+          "title": "Nagłówek x-original-url zmienia treść odpowiedzi",
+          "detail": "/moje → 404; żądanie na / z x-original-url: /moje → 200, 161545 B (inna treść)",
+          "why": "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej zasobowi, a nie losowej stronie.",
+          "raw": {
+            "header": "x-original-url",
+            "plain": 404
+          }
+        }
+      ]
+    },
+    {
+      "host": "https://www.gov.pl",
+      "hits": 1,
+      "top": [
+        {
+          "url": "https://www.gov.pl/robots.txt",
+          "kind": "non-html",
+          "status": 200,
+          "note": "200, ale nie HTML (text/plain, 23 B)",
+          "evidence": "User-Agent: * Allow: / ",
+          "score": 60
+        }
+      ],
+      "program": "gov",
+      "tier": "T1",
+      "root_status": 200,
+      "baseline": {
+        "status": 200,
+        "ctype": "text/html",
+        "len": 39631
+      },
+      "tech": [],
+      "build_id": null,
+      "next_routes": [],
+      "js_endpoints": [],
+      "probes": [
+        {
+          "code": "S1",
+          "host": "www.gov.pl",
+          "url": "https://www.gov.pl",
+          "severity": "niski",
+          "title": "CORS: ACAO=* (bez credentials)",
+          "detail": "Origin: https://evil.example → ACAO: *.",
+          "why": "§8 poz. 5.6 — samo `*` bez możliwości kradzieży danych jest wykluczone. Zapisane, żeby nie sprawdzać drugi raz.",
+          "raw": {
+            "origin": "https://evil.example"
+          }
+        },
+        {
+          "code": "S1",
+          "host": "www.gov.pl",
+          "url": "https://www.gov.pl",
+          "severity": "niski",
+          "title": "CORS: ACAO=* (bez credentials)",
+          "detail": "Origin: https://nask.pl.evil.example → ACAO: *.",
+          "why": "§8 poz. 5.6 — samo `*` bez możliwości kradzieży danych jest wykluczone. Zapisane, żeby nie sprawdzać drugi raz.",
+          "raw": {
+            "origin": "https://nask.pl.evil.example"
+          }
+        }
+      ]
+    },
+    {
+      "host": "https://dataannotation.pllum.org.pl",
+      "hits": 2,
+      "top": [
+        {
+          "url": "https://dataannotation.pllum.org.pl/manifest.json",
+          "kind": "json",
+          "status": 200,
+          "note": "JSON bez HTML-owego catch-all (498 B)",
+          "evidence": "{ \"short_name\": \"TanStack App\", \"name\": \"Create TanStack App Sample\", \"icons\": [ { \"src\": \"favicon.ico\", \"sizes\": \"64x64 32x32 24x24 16x16\", \"type\": \"image/x-icon\" }, { \"src\": \"logo192.png\", \"type\": \"image/png\", \"sizes\": \"192x192\" }, { \"src\": \"logo512.png\", \"type\": \"image/png\", \"sizes\": \"512x512\" } ",
+          "score": 90
+        },
+        {
+          "url": "https://dataannotation.pllum.org.pl/robots.txt",
+          "kind": "non-html",
+          "status": 200,
+          "note": "200, ale nie HTML (text/plain, 67 B)",
+          "evidence": "# https://www.robotstxt.org/robotstxt.html User-agent: * Disallow: ",
+          "score": 60
+        }
+      ],
+      "program": "nask",
+      "tier": "T2",
+      "root_status": 200,
+      "baseline": {
+        "status": 200,
+        "ctype": "text/html",
+        "len": 713
+      },
+      "tech": [],
+      "build_id": null,
+      "next_routes": [],
+      "js_endpoints": [],
+      "probes": []
+    },
+    {
+      "host": "https://bezpiecznewybory.pl",
+      "hits": 0,
+      "top": [],
+      "program": "nask",
+      "tier": "T2",
+      "root_status": 403,
+      "baseline": {
+        "status": 403,
+        "ctype": "text/html",
+        "len": 387
+      },
+      "tech": [],
+      "build_id": null,
+      "next_routes": [],
+      "js_endpoints": [],
+      "probes": [
+        {
+          "code": "S2",
+          "host": "bezpiecznewybory.pl",
+          "url": "https://bezpiecznewybory.pl/panel",
+          "severity": "wysoki",
+          "title": "Nagłówek x-middleware-subrequest zmienia odpowiedź chronionej trasy",
+          "detail": "Bez nagłówka: 403 (Location: -). Z nagłówkiem: 403, 374 B, treść inna.",
+          "why": "§8 poz. 9.3/12.1 — obejście autoryzacji w warstwie aplikacji. Nagłówek jest publicznie znany (CVE-2025-29927), ale wymagane jest PoC na tej instancji — i to jest to PoC. Trzeba jeszcze ustalić, CO ujawnia odblokowana trasa (samo 200 to za mało).",
+          "raw": {
+            "plain": 403,
+            "bypass": 403
+          }
+        },
+        {
+          "code": "S2",
+          "host": "bezpiecznewybory.pl",
+          "url": "https://bezpiecznewybory.pl/admin",
+          "severity": "wysoki",
+          "title": "Nagłówek x-middleware-subrequest zmienia odpowiedź chronionej trasy",
+          "detail": "Bez nagłówka: 403 (Location: -). Z nagłówkiem: 403, 374 B, treść inna.",
+          "why": "§8 poz. 9.3/12.1 — obejście autoryzacji w warstwie aplikacji. Nagłówek jest publicznie znany (CVE-2025-29927), ale wymagane jest PoC na tej instancji — i to jest to PoC. Trzeba jeszcze ustalić, CO ujawnia odblokowana trasa (samo 200 to za mało).",
+          "raw": {
+            "plain": 403,
+            "bypass": 403
+          }
+        },
+        {
+          "code": "S2",
+          "host": "bezpiecznewybory.pl",
+          "url": "https://bezpiecznewybory.pl/dashboard",
+          "severity": "wysoki",
+          "title": "Nagłówek x-middleware-subrequest zmienia odpowiedź chronionej trasy",
+          "detail": "Bez nagłówka: 403 (Location: -). Z nagłówkiem: 403, 378 B, treść inna.",
+          "why": "§8 poz. 9.3/12.1 — obejście autoryzacji w warstwie aplikacji. Nagłówek jest publicznie znany (CVE-2025-29927), ale wymagane jest PoC na tej instancji — i to jest to PoC. Trzeba jeszcze ustalić, CO ujawnia odblokowana trasa (samo 200 to za mało).",
+          "raw": {
+            "plain": 403,
+            "bypass": 403
+          }
+        },
+        {
+          "code": "S2",
+          "host": "bezpiecznewybory.pl",
+          "url": "https://bezpiecznewybory.pl/profil",
+          "severity": "wysoki",
+          "title": "Nagłówek x-middleware-subrequest zmienia odpowiedź chronionej trasy",
+          "detail": "Bez nagłówka: 403 (Location: -). Z nagłówkiem: 403, 375 B, treść inna.",
+          "why": "§8 poz. 9.3/12.1 — obejście autoryzacji w warstwie aplikacji. Nagłówek jest publicznie znany (CVE-2025-29927), ale wymagane jest PoC na tej instancji — i to jest to PoC. Trzeba jeszcze ustalić, CO ujawnia odblokowana trasa (samo 200 to za mało).",
+          "raw": {
+            "plain": 403,
+            "bypass": 403
+          }
+        },
+        {
+          "code": "S2",
+          "host": "bezpiecznewybory.pl",
+          "url": "https://bezpiecznewybory.pl/konto",
+          "severity": "wysoki",
+          "title": "Nagłówek x-middleware-subrequest zmienia odpowiedź chronionej trasy",
+          "detail": "Bez nagłówka: 403 (Location: -). Z nagłówkiem: 403, 374 B, treść inna.",
+          "why": "§8 poz. 9.3/12.1 — obejście autoryzacji w warstwie aplikacji. Nagłówek jest publicznie znany (CVE-2025-29927), ale wymagane jest PoC na tej instancji — i to jest to PoC. Trzeba jeszcze ustalić, CO ujawnia odblokowana trasa (samo 200 to za mało).",
+          "raw": {
+            "plain": 403,
+            "bypass": 403
+          }
+        },
+        {
+          "code": "S2",
+          "host": "bezpiecznewybory.pl",
+          "url": "https://bezpiecznewybory.pl/moje",
+          "severity": "wysoki",
+          "title": "Nagłówek x-middleware-subrequest zmienia odpowiedź chronionej trasy",
+          "detail": "Bez nagłówka: 403 (Location: -). Z nagłówkiem: 403, 373 B, treść inna.",
+          "why": "§8 poz. 9.3/12.1 — obejście autoryzacji w warstwie aplikacji. Nagłówek jest publicznie znany (CVE-2025-29927), ale wymagane jest PoC na tej instancji — i to jest to PoC. Trzeba jeszcze ustalić, CO ujawnia odblokowana trasa (samo 200 to za mało).",
+          "raw": {
+            "plain": 403,
+            "bypass": 403
+          }
+        }
+      ]
+    }
+  ]
+}
