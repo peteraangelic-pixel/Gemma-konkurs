@@ -51,14 +51,13 @@ jobs:
             --json ../../../NASK/hunt/report-$(date -u +%Y%m%dT%H%MZ).json \
             | tee ../../../NASK/hunt/last-run.log
 
-      - name: mapa API z bundle'i JS (tryb --grep, tylko kontekst)
+      - name: mapa API z bundle'i JS (hosty sztandarowe)
         continue-on-error: true
         run: |
           ./target/release/naskmap \
             --scope ../nasktriage/scope.example.json \
-            --hosts "science.nask.pl,116sos.pl,zglos-dezinformacje.nask.pl" \
-            --max-scripts 30 \
-            --grep "downloadFile,fileId,og-image,fetch-cookie-hash,sendForm" \
+            --hosts "nask.pl,bezpiecznymiesiac.pl,bezpiecznewybory.pl,pllum.org.pl,dataannotation.pllum.org.pl,science.nask.pl" \
+            --max-scripts 40 \
             --md ../../../NASK/hunt/MAP-$(date -u +%Y%m%dT%H%MZ).md \
             | tail -20
 
