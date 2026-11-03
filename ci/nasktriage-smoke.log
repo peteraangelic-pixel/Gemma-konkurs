@@ -1,0 +1,2 @@
++ ./target/release/nasktriage --version
+/home/runner/work/_temp/25ff5fa1-055d-4244-887d-515a3196af91.sh: line 4: ./target/release/nasktriage: No such file or directory

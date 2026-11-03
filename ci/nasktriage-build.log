@@ -1,0 +1,26 @@
+[1m[92m   Compiling[0m crossbeam-utils v0.8.23
+[1m[92m   Compiling[0m proc-macro2 v1.0.107
+[1m[92m   Compiling[0m crossbeam-epoch v0.9.21
+[1m[92m   Compiling[0m quote v1.0.47
+[1m[92m   Compiling[0m unicode-ident v1.0.27
+[1m[92m   Compiling[0m serde_core v1.0.229
+[1m[92m   Compiling[0m crossbeam-deque v0.8.8
+[1m[92m   Compiling[0m zmij v1.0.23
+[1m[92m   Compiling[0m rayon-core v1.13.0
+[1m[92m   Compiling[0m serde_json v1.0.154
+[1m[92m   Compiling[0m serde v1.0.229
+[1m[92m   Compiling[0m syn v3.0.9
+[1m[92m   Compiling[0m memchr v2.8.3
+[1m[92m   Compiling[0m either v1.19.0
+[1m[92m   Compiling[0m itoa v1.0.18
+[1m[92m   Compiling[0m rayon v1.12.0
+[1m[92m   Compiling[0m serde_derive v1.0.229
+[1m[92m   Compiling[0m nasktriage v0.1.0 (/home/runner/work/Gemma-konkurs/Gemma-konkurs/NASK/tools/nasktriage)
+[1m[91merror[E0614][0m[1m: type `i64` cannot be dereferenced[0m
+   [1m[94m--> [0msrc/har.rs:151:28
+    [1m[94m|[0m
+[1m[94m151[0m [1m[94m|[0m         (None, Some(s)) => *s as usize,
+    [1m[94m|[0m                            [1m[91m^^[0m [1m[91mcan't be dereferenced[0m
+
+[1mFor more information about this error, try `rustc --explain E0614`.[0m
+[1m[91merror[0m: could not compile `nasktriage` (lib) due to 1 previous error

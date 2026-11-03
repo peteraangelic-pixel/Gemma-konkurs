@@ -1,0 +1,318 @@
+Diff in /home/runner/work/Gemma-konkurs/Gemma-konkurs/NASK/tools/nasktriage/src/analyze.rs:17:
+ 
+ impl Account {
+     pub fn parse(spec: &str) -> Result<Account, String> {
+-        let (label, needle) = spec
+-            .split_once(':')
+-            .ok_or_else(|| format!("konto musi mieć formę etykieta:fragment_cookie — jest: {spec}"))?;
++        let (label, needle) = spec.split_once(':').ok_or_else(|| {
++            format!("konto musi mieć formę etykieta:fragment_cookie — jest: {spec}")
++        })?;
+         if label.is_empty() || needle.is_empty() {
+             return Err(format!("puste pole w specyfikacji konta: {spec}"));
+         }
+Diff in /home/runner/work/Gemma-konkurs/Gemma-konkurs/NASK/tools/nasktriage/src/analyze.rs:158:
+ pub fn looks_like_secret(name: &str) -> bool {
+     let n = name.to_ascii_lowercase();
+     const NEEDLES: [&str; 8] = [
+-        "token", "access_token", "apikey", "api_key", "key", "sig", "session", "auth",
++        "token",
++        "access_token",
++        "apikey",
++        "api_key",
++        "key",
++        "sig",
++        "session",
++        "auth",
+     ];
+-    NEEDLES.iter().any(|needle| n == *needle || n.contains(needle))
++    NEEDLES
++        .iter()
++        .any(|needle| n == *needle || n.contains(needle))
+ }
+ 
+ pub fn analyze(hars: &[(String, Har)], accounts: &[Account]) -> Report {
+Diff in /home/runner/work/Gemma-konkurs/Gemma-konkurs/NASK/tools/nasktriage/src/analyze.rs:191:
+         });
+         match &o.account {
+             Some(label) => {
+-                let slot = row.per_account.entry(label.clone()).or_insert((0, BTreeSet::new()));
++                let slot = row
++                    .per_account
++                    .entry(label.clone())
++                    .or_insert((0, BTreeSet::new()));
+                 slot.0 += 1;
+                 slot.1.insert(o.status);
+             }
+Diff in /home/runner/work/Gemma-konkurs/Gemma-konkurs/NASK/tools/nasktriage/src/analyze.rs:264:
+     for ((method, template), obs) in &by_template {
+         let ok: Vec<&&Observation> = obs.iter().filter(|o| is_ok(o.status)).collect();
+         let distinct_paths: BTreeSet<&String> = ok.iter().map(|o| &o.path).collect();
+-        let shapes: BTreeSet<&Vec<String>> = ok.iter().filter(|o| !o.shape.is_empty()).map(|o| &o.shape).collect();
++        let shapes: BTreeSet<&Vec<String>> = ok
++            .iter()
++            .filter(|o| !o.shape.is_empty())
++            .map(|o| &o.shape)
++            .collect();
+         if distinct_paths.len() >= 2 && shapes.len() == 1 {
+-            let mut sample: Vec<String> = distinct_paths.iter().take(3).map(|p| (*p).clone()).collect();
++            let mut sample: Vec<String> = distinct_paths
++                .iter()
++                .take(3)
++                .map(|p| (*p).clone())
++                .collect();
+             sample.sort();
+             findings.push(Finding {
+                 kind: Kind::IdorCandidate,
+Diff in /home/runner/work/Gemma-konkurs/Gemma-konkurs/NASK/tools/nasktriage/src/analyze.rs:350:
+         }
+         s.push_str("\n### Dowody\n\n");
+         for (i, f) in report.findings.iter().enumerate() {
+-            s.push_str(&format!("**{}.** {} `{} {}`\n", i + 1, f.kind.title(), f.method, f.template));
++            s.push_str(&format!(
++                "**{}.** {} `{} {}`\n",
++                i + 1,
++                f.kind.title(),
++                f.method,
++                f.template
++            ));
+             for e in &f.evidence {
+                 s.push_str(&format!("- `{e}`\n"));
+             }
+Diff in /home/runner/work/Gemma-konkurs/Gemma-konkurs/NASK/tools/nasktriage/src/analyze.rs:358:
+         }
+     }
+ 
+-    s.push_str("## Mapa endpointów\n\n| metoda | endpoint | konta | anonimowo |\n|---|---|---|---|\n");
++    s.push_str(
++        "## Mapa endpointów\n\n| metoda | endpoint | konta | anonimowo |\n|---|---|---|---|\n",
++    );
+     for r in &report.rows {
+         let per: Vec<String> = r
+             .per_account
+Diff in /home/runner/work/Gemma-konkurs/Gemma-konkurs/NASK/tools/nasktriage/src/analyze.rs:374:
+             "| {} | `{}` | {} | {} |\n",
+             r.method,
+             r.template,
+-            if per.is_empty() { "—".to_string() } else { per.join("<br>") },
++            if per.is_empty() {
++                "—".to_string()
++            } else {
++                per.join("<br>")
++            },
+             anon
+         ));
+     }
+Diff in /home/runner/work/Gemma-konkurs/Gemma-konkurs/NASK/tools/nasktriage/src/har.rs:95:
+     if compact.len() == 32 && compact.chars().all(|c| c.is_ascii_hexdigit()) {
+         return true;
+     }
+-    if segment.len() >= 16 && segment.len() <= 64 && segment.chars().all(|c| c.is_ascii_hexdigit()) {
++    if segment.len() >= 16 && segment.len() <= 64 && segment.chars().all(|c| c.is_ascii_hexdigit())
++    {
+         return true;
+     }
+     // długi token mieszany (np. slug+hash, base64url)
+Diff in /home/runner/work/Gemma-konkurs/Gemma-konkurs/NASK/tools/nasktriage/src/har.rs:134:
+     let mut keys: Vec<String> = match &value {
+         serde_json::Value::Object(map) => map.keys().cloned().collect(),
+         serde_json::Value::Array(items) => match items.first() {
+-            Some(serde_json::Value::Object(map)) => {
+-                map.keys().map(|k| format!("[]{k}")).collect()
+-            }
++            Some(serde_json::Value::Object(map)) => map.keys().map(|k| format!("[]{k}")).collect(),
+             _ => Vec::new(),
+         },
+         _ => Vec::new(),
+Diff in /home/runner/work/Gemma-konkurs/Gemma-konkurs/NASK/tools/nasktriage/src/main.rs:34:
+             ExitCode::SUCCESS
+         }
+         "--version" => {
+-            println!("nasktriage {} — {}", env!("CARGO_PKG_VERSION"), nasktriage::ABOUT);
++            println!(
++                "nasktriage {} — {}",
++                env!("CARGO_PKG_VERSION"),
++                nasktriage::ABOUT
++            );
+             ExitCode::SUCCESS
+         }
+         other => {
+Diff in /home/runner/work/Gemma-konkurs/Gemma-konkurs/NASK/tools/nasktriage/tests/pipeline.rs:16:
+ fn scope_parses_and_classifies_tiers() {
+     let scope = Scope::parse(SCOPE).expect("scope");
+     assert_eq!(scope.tier_of("nask.pl"), Some(Tier::Tier1));
+-    assert_eq!(scope.tier_of("NASK.PL"), Some(Tier::Tier1), "wielkość liter nie ma znaczenia");
+-    assert_eq!(scope.tier_of("dataannotation.pllum.org.pl"), Some(Tier::Tier2));
+-    assert_eq!(scope.tier_of("panel.dns.pl"), None, "subdomena nie jest w zakresie");
++    assert_eq!(
++        scope.tier_of("NASK.PL"),
++        Some(Tier::Tier1),
++        "wielkość liter nie ma znaczenia"
++    );
++    assert_eq!(
++        scope.tier_of("dataannotation.pllum.org.pl"),
++        Some(Tier::Tier2)
++    );
++    assert_eq!(
++        scope.tier_of("panel.dns.pl"),
++        None,
++        "subdomena nie jest w zakresie"
++    );
+     assert_eq!(scope.tier_of("gitlab.snkom.nask.pl"), None);
+-    assert_eq!(scope.tier_of("nask.pl.evil.example"), None, "sufiks nie wystarcza");
++    assert_eq!(
++        scope.tier_of("nask.pl.evil.example"),
++        None,
++        "sufiks nie wystarcza"
++    );
+ }
+ 
+ #[test]
+Diff in /home/runner/work/Gemma-konkurs/Gemma-konkurs/NASK/tools/nasktriage/tests/pipeline.rs:27:
+ fn scope_rejects_port_and_accepts_url() {
+     let scope = Scope::parse(SCOPE).expect("scope");
+     assert_eq!(scope.tier_of("nask.pl:443"), Some(Tier::Tier1));
+-    let (host, tier) = scope.check_url("https://oad.nask.pl/api/v1/status?x=1").expect("w zakresie");
++    let (host, tier) = scope
++        .check_url("https://oad.nask.pl/api/v1/status?x=1")
++        .expect("w zakresie");
+     assert_eq!(host, "oad.nask.pl");
+     assert_eq!(tier, Tier::Tier1);
+     assert!(scope.check_url("https://panel.dns.pl/").is_err());
+Diff in /home/runner/work/Gemma-konkurs/Gemma-konkurs/NASK/tools/nasktriage/tests/pipeline.rs:34:
+-    assert!(scope.check_url("ftp://nask.pl/").is_err(), "tylko http/https");
++    assert!(
++        scope.check_url("ftp://nask.pl/").is_err(),
++        "tylko http/https"
++    );
+ }
+ 
+ #[test]
+Diff in /home/runner/work/Gemma-konkurs/Gemma-konkurs/NASK/tools/nasktriage/tests/pipeline.rs:38:
+ fn url_helpers_split_host_path_and_query() {
+-    assert_eq!(scope::host_of_url("https://user:pw@Example.COM:8443/x").unwrap(), "example.com");
+-    assert_eq!(scope::path_of_url("https://a.example/api/tasks/17?z=2#frag"), "/api/tasks/17");
++    assert_eq!(
++        scope::host_of_url("https://user:pw@Example.COM:8443/x").unwrap(),
++        "example.com"
++    );
++    assert_eq!(
++        scope::path_of_url("https://a.example/api/tasks/17?z=2#frag"),
++        "/api/tasks/17"
++    );
+     assert_eq!(scope::path_of_url("https://a.example"), "/");
+     let q = scope::query_pairs("https://a.example/x?access_token=abc&page=2");
+     assert_eq!(q[0].0, "access_token");
+Diff in /home/runner/work/Gemma-konkurs/Gemma-konkurs/NASK/tools/nasktriage/tests/pipeline.rs:46:
+ 
+ #[test]
+ fn rate_limiter_refuses_to_break_the_rules() {
+-    assert!(TokenBucket::new(5.0).is_ok(), "sufit regulaminowy jest dozwolony");
+-    assert!(TokenBucket::new(5.1).is_err(), "powyżej 5/s = odmowa startu");
++    assert!(
++        TokenBucket::new(5.0).is_ok(),
++        "sufit regulaminowy jest dozwolony"
++    );
++    assert!(
++        TokenBucket::new(5.1).is_err(),
++        "powyżej 5/s = odmowa startu"
++    );
+     assert!(TokenBucket::new(0.0).is_err());
+     assert_eq!(MAX_RPS, 5.0);
+ }
+Diff in /home/runner/work/Gemma-konkurs/Gemma-konkurs/NASK/tools/nasktriage/tests/pipeline.rs:57:
+     let mut bucket = TokenBucket::new(2.0).expect("2 rps");
+     assert!(bucket.try_acquire(0.0));
+     assert!(bucket.try_acquire(0.0));
+-    assert!(!bucket.try_acquire(0.0), "trzecie żądanie w tej samej sekundzie nie przechodzi");
++    assert!(
++        !bucket.try_acquire(0.0),
++        "trzecie żądanie w tej samej sekundzie nie przechodzi"
++    );
+     let delay = bucket.delay_s(0.0);
+-    assert!((delay - 0.5).abs() < 1e-9, "przy 2 rps czekamy 0,5 s, jest {delay}");
++    assert!(
++        (delay - 0.5).abs() < 1e-9,
++        "przy 2 rps czekamy 0,5 s, jest {delay}"
++    );
+     assert!(bucket.try_acquire(0.5), "po 0,5 s wraca jeden token");
+ }
+ 
+Diff in /home/runner/work/Gemma-konkurs/Gemma-konkurs/NASK/tools/nasktriage/tests/pipeline.rs:72:
+     assert!(!har::is_identifier("tasks"));
+     assert!(!har::is_identifier("api"));
+     assert!(!har::is_identifier(""));
+-    assert_eq!(har::template_path("/api/tasks/101/comments"), "/api/tasks/{id}/comments");
++    assert_eq!(
++        har::template_path("/api/tasks/101/comments"),
++        "/api/tasks/{id}/comments"
++    );
+     assert_eq!(har::template_path("/api/health"), "/api/health");
+ }
+ 
+Diff in /home/runner/work/Gemma-konkurs/Gemma-konkurs/NASK/tools/nasktriage/tests/pipeline.rs:79:
+ #[test]
+ fn json_shape_reads_object_keys_and_array_of_objects() {
+     assert_eq!(har::json_shape(r#"{"b":1,"a":2}"#), vec!["a", "b"]);
+-    assert_eq!(har::json_shape(r#"[{"id":1,"title":"x"}]"#), vec!["[]id", "[]title"]);
++    assert_eq!(
++        har::json_shape(r#"[{"id":1,"title":"x"}]"#),
++        vec!["[]id", "[]title"]
++    );
+     assert!(har::json_shape("<html>nie json</html>").is_empty());
+ }
+ 
+Diff in /home/runner/work/Gemma-konkurs/Gemma-konkurs/NASK/tools/nasktriage/tests/pipeline.rs:172:
+         entry("GET", "https://nask.pl/o-nas", None, 200, ""),
+     ]);
+     let report = analyze::analyze(&[("clean.har".to_string(), h)], &[]);
+-    assert!(report.findings.is_empty(), "findings: {:?}", report.findings);
++    assert!(
++        report.findings.is_empty(),
++        "findings: {:?}",
++        report.findings
++    );
+     let md = analyze::render_markdown(&report);
+     assert!(md.contains("Brak. To też wynik"), "raport: {md}");
+ }
+Diff in /home/runner/work/Gemma-konkurs/Gemma-konkurs/NASK/tools/nasktriage/tests/pipeline.rs:184:
+     let md = analyze::render_markdown(&report);
+     assert!(md.contains("Raport nasktriage"));
+     assert!(md.contains("/api/tasks/{id}"));
+-    assert!(md.contains("nie wysyła żadnych żądań"), "musi nieść zastrzeżenie");
++    assert!(
++        md.contains("nie wysyła żadnych żądań"),
++        "musi nieść zastrzeżenie"
++    );
+ }
+ 
+ #[test]
+Diff in /home/runner/work/Gemma-konkurs/Gemma-konkurs/NASK/tools/nasktriage/tests/pipeline.rs:196:
+ 
+ #[test]
+ fn secret_parameter_names_are_recognised() {
+-    for name in ["token", "access_token", "api_key", "apikey", "X-Amz-Signature", "session", "auth"] {
+-        assert!(analyze::looks_like_secret(name), "{name} powinno być rozpoznane");
++    for name in [
++        "token",
++        "access_token",
++        "api_key",
++        "apikey",
++        "X-Amz-Signature",
++        "session",
++        "auth",
++    ] {
++        assert!(
++            analyze::looks_like_secret(name),
++            "{name} powinno być rozpoznane"
++        );
+     }
+     for name in ["page", "limit", "q", "sort"] {
+-        assert!(!analyze::looks_like_secret(name), "{name} nie jest sekretem");
++        assert!(
++            !analyze::looks_like_secret(name),
++            "{name} nie jest sekretem"
++        );
+     }
+ }
+ 
