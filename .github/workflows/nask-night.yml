@@ -4,6 +4,12 @@ name: nask-night-hunt
 # Zasady: hosty wyłącznie z NASK/tools/nasktriage/scope.example.json, tempo 2 req/s,
 # brak ciał żądań, brak logowania, brak podążania za przekierowaniami poza zakres.
 on:
+  # workflow_dispatch wymaga pliku na gałęzi domyślnej (main), a ta sesja pushuje tylko na
+  # arena/c4eeb067-gemma-konkurs. Dlatego odpalamy to pushem na zmianę w narzędziu lub w checkach.
+  push:
+    paths:
+      - "NASK/tools/naskhunt/**"
+      - ".github/workflows/nask-night.yml"
   workflow_dispatch:
     inputs:
       rps:
@@ -33,12 +39,14 @@ jobs:
         run: cargo build --release
 
       - name: sondy
+        env:
+          RPS: ${{ github.event.inputs.rps || '2' }}
         run: |
           set -o pipefail
           ./target/release/naskhunt \
             --scope ../nasktriage/scope.example.json \
             --checks checks.json \
-            --rps "${{ github.event.inputs.rps || '2' }}" \
+            --rps "${RPS}" \
             --md ../../../NASK/hunt/report-$(date -u +%Y%m%dT%H%MZ).md \
             --json ../../../NASK/hunt/report-$(date -u +%Y%m%dT%H%MZ).json \
             | tee ../../../NASK/hunt/last-run.log
