@@ -89,6 +89,11 @@ jobs:
                      nask/findings/evidence.jsonl 2>/dev/null || true
           git diff --cached --quiet && { echo "brak zmian"; exit 0; }
           git commit -q -m "nask-hunt: wynik przebiegu ${GITHUB_RUN_ID} (automat)"
+          # Gałąź żyje: przebieg trwa 15 minut, a w tym czasie mogą dojść commity
+          # (poprzedni przebieg padł właśnie tutaj — push odrzucony jako
+          # non-fast-forward, a artefakt jest dla agenta nieosiągalny).
+          git pull --rebase --autostash -q origin "${GITHUB_REF_NAME}" \
+            || { echo "rebase nie wyszedł — próbuję merge"; git merge -q --no-edit "origin/${GITHUB_REF_NAME}" || true; }
           git push -q origin "HEAD:${GITHUB_REF_NAME}"
 
       - name: artefakt

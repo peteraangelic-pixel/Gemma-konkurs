@@ -74,10 +74,11 @@ def plan_targets(explicit: list[str] | None) -> list[tuple[str, str, str]]:
     return chosen
 
 
-def run(out: Path, budget: int, explicit: list[str] | None, rps: float) -> int:
+def run(out: Path, budget: int, explicit: list[str] | None, rps: float,
+        timeout: float = 10.0) -> int:
     out.mkdir(parents=True, exist_ok=True)
     fetcher = GuardedFetcher(rps=rps, max_requests=budget,
-                             evidence_path=out / "evidence.jsonl")
+                             evidence_path=out / "evidence.jsonl", timeout=timeout)
     crawler = Crawler(fetcher)
     targets = plan_targets(explicit)
     if not targets:
@@ -220,8 +221,11 @@ def main(argv=None) -> int:
     ap.add_argument("--budget", type=int, default=900)
     ap.add_argument("--hosts", nargs="*", default=None)
     ap.add_argument("--rps", type=float, default=4.5)
+    ap.add_argument("--timeout", type=float, default=10.0,
+                    help="timeout pojedynczego żądania; martwe hosty nie mogą "
+                         "zjeść całego okna joba")
     args = ap.parse_args(argv)
-    return run(Path(args.out), args.budget, args.hosts, args.rps)
+    return run(Path(args.out), args.budget, args.hosts, args.rps, args.timeout)
 
 
 if __name__ == "__main__":

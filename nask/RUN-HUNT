@@ -1,4 +1,4 @@
 # Flaga uruchomienia nocnego polowania (nask-hunt).
-# Każdy push zmieniający ten plik = jedno polowanie.
-# Przebieg 2: sondy po naprawie fałszywych trafień (patrz tools/probes.py).
-run 2026-11-03T23:02:18Z
+# Przebieg 3: dochodzi sonda S7 (autoryzacja API), krotszy timeout,
+# poprawiony push wyniku (poprzedni odrzucony jako non-fast-forward).
+run 2026-11-03T23:15:03Z
