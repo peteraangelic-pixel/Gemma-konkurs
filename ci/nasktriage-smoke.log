@@ -1,2 +1,27 @@
 + ./target/release/nasktriage --version
-/home/runner/work/_temp/25ff5fa1-055d-4244-887d-515a3196af91.sh: line 4: ./target/release/nasktriage: No such file or directory
+nasktriage 0.1.0 — nasktriage: offline HAR access-control triage for hack.cert.pl programs (no network)
++ ./target/release/nasktriage scope --scope scope.example.json
+116sos.pl                        tier2
+bezpiecznewybory.pl              tier2
+bezpiecznymiesiac.pl             tier2
+dataannotation.pllum.org.pl      tier2
+dns.pl                           tier1
+dyzurnet.pl                      tier1
+nask.pl                          tier1
+oad.nask.pl                      tier1
+pllum.org.pl                     tier2
+science.nask.pl                  tier2
+secure.edu.pl                    tier2
+zglos-dezinformacje.nask.pl      tier1
+
+hostów: 12 (tier1: 5, tier2: 7)
++ ./target/release/nasktriage scope --scope scope.example.json --host panel.dns.pl
+POZA ZAKRESEM: panel.dns.pl — nie testować
++ true
++ ./target/release/nasktriage scope --scope scope.example.json --host oad.nask.pl
+W ZAKRESIE: oad.nask.pl (tier1)
++ ./target/release/nasktriage rate --rps 5
+limiter OK: rps=5 (sufit regulaminowy 5), w pierwszej sekundzie przepuszczono 5
++ ./target/release/nasktriage rate --rps 9
+rps 9 przekracza regulaminowy sufit 5/s — odmowa startu
++ true

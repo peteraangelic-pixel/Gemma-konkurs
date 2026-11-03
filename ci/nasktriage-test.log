@@ -2,8 +2,8 @@
 [1m[92m   Compiling[0m serde_core v1.0.229
 [1m[92m   Compiling[0m zmij v1.0.23
 [1m[92m   Compiling[0m itoa v1.0.18
-[1m[92m   Compiling[0m memchr v2.8.3
 [1m[92m   Compiling[0m either v1.19.0
+[1m[92m   Compiling[0m memchr v2.8.3
 [1m[92m   Compiling[0m crossbeam-epoch v0.9.21
 [1m[92m   Compiling[0m crossbeam-deque v0.8.8
 [1m[92m   Compiling[0m rayon-core v1.13.0
@@ -11,13 +11,34 @@
 [1m[92m   Compiling[0m serde v1.0.229
 [1m[92m   Compiling[0m serde_json v1.0.154
 [1m[92m   Compiling[0m nasktriage v0.1.0 (/home/runner/work/Gemma-konkurs/Gemma-konkurs/NASK/tools/nasktriage)
-[1m[91merror[E0614][0m[1m: type `i64` cannot be dereferenced[0m
-   [1m[94m--> [0msrc/har.rs:151:28
-    [1m[94m|[0m
-[1m[94m151[0m [1m[94m|[0m         (None, Some(s)) => *s as usize,
-    [1m[94m|[0m                            [1m[91m^^[0m [1m[91mcan't be dereferenced[0m
+[1m[92m    Finished[0m `test` profile [unoptimized + debuginfo] target(s) in 3.74s
+[1m[92m     Running[0m unittests src/lib.rs (target/debug/deps/nasktriage-339e30b71800911f)
 
-[1mFor more information about this error, try `rustc --explain E0614`.[0m
-[1m[91merror[0m: could not compile `nasktriage` (lib) due to 1 previous error
-[1m[33mwarning[0m: build failed, waiting for other jobs to finish...
-[1m[91merror[0m: could not compile `nasktriage` (lib test) due to 1 previous error
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+[1m[92m     Running[0m unittests src/main.rs (target/debug/deps/nasktriage-1fe963cbd55ea56c)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+[1m[92m     Running[0m tests/pipeline.rs (target/debug/deps/pipeline-a422b876e427fe1d)
+
+running 12 tests
+test account_spec_requires_colon ... ok
+test identifiers_and_templates ... ok
+test json_shape_reads_object_keys_and_array_of_objects ... ok
+test analysis_says_nothing_when_captures_are_clean ... ok
+test analysis_finds_every_hypothesis_class ... ok
+test rate_limiter_is_deterministic_with_injected_clock ... ok
+test scope_parses_and_classifies_tiers ... ok
+test rate_limiter_refuses_to_break_the_rules ... ok
+test secret_parameter_names_are_recognised ... ok
+test scope_rejects_port_and_accepts_url ... ok
+test url_helpers_split_host_path_and_query ... ok
+test markdown_report_is_usable_and_carries_the_limits ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
