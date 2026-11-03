@@ -1,0 +1,50 @@
+name: nask-triage-ci
+
+# Kompiluje i testuje narzędzie offline (Rust + Rayon). Zero ruchu do systemów programu.
+on:
+  push:
+    paths:
+      - "NASK/tools/nasktriage/**"
+      - ".github/workflows/nask-triage-ci.yml"
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: NASK/tools/nasktriage
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt
+
+      - name: cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: NASK/tools/nasktriage
+
+      - name: format
+        run: cargo fmt --all -- --check
+
+      - name: lints
+        run: cargo clippy --all-targets -- -D warnings
+
+      - name: testy
+        run: cargo test --all-targets -- --nocapture
+
+      - name: build release
+        run: cargo build --release
+
+      - name: dymny test CLI
+        run: |
+          set -euo pipefail
+          ./target/release/nasktriage --version
+          ./target/release/nasktriage scope --scope scope.example.json
+          ./target/release/nasktriage scope --scope scope.example.json --host panel.dns.pl && exit 1 || true
+          ./target/release/nasktriage scope --scope scope.example.json --host oad.nask.pl
+          ./target/release/nasktriage rate --rps 5
+          ./target/release/nasktriage rate --rps 9 && exit 1 || true
