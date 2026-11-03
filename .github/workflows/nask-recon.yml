@@ -113,9 +113,16 @@ jobs:
           fi
           exit "$CODE"
 
-      - name: podsumowanie
+      - name: podsumowanie (Step Summary)
         if: always()
         run: python nask/summary.py >> "$GITHUB_STEP_SUMMARY"
+
+      # Ten krok istnieje, bo agent nie może pobrać artefaktu ani logu.
+      # Adnotacje są w api.github.com, więc to jedyny kanał, którym wynik
+      # rekonesansu dociera do miejsca, gdzie da się go przeczytać.
+      - name: wyniki jako adnotacje (kanał odczytu dla agenta)
+        if: always()
+        run: python nask/annotate.py nask/findings/recon.json
 
       - name: artefakt (dowody + kandydaci)
         uses: actions/upload-artifact@v4
