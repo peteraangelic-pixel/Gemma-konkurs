@@ -211,10 +211,9 @@ fn judge(check: &Check, test: &Observation, base: Option<&Observation>) -> Verdi
     if test.acao.contains("arena-probe.example") && test.acac.eq_ignore_ascii_case("true") {
         return Verdict::Candidate;
     }
-    // endpoint API odpowiadający 200 bez sesji, choć powinien wymagać logowania
-    if (200..300).contains(&test.status) && (test.ctype.contains("json") || test.ctype.contains("javascript")) {
-        return Verdict::Candidate;
-    }
+    // Uwaga: 200 + JSON to NIE podatność — publiczne API tak wyglądają.
+    // Kandydata zgłaszamy tylko przy konkretnym sygnale, np. odbitym obcym Origin
+    // (sprawdzone wyżej) albo różnicy względem baseline.
     if is_denied(test) {
         return Verdict::Clean;
     }
