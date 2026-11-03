@@ -259,3 +259,37 @@ def test_real_bypass_still_detected_after_fix():
 
     got = probes.probe_middleware_bypass(Http(fn), "https://oad.nask.pl", paths=["/panel"])
     assert got and got[0].severity == "krytyczny"
+
+
+# ------------------------ S7: autoryzacja API ------------------------
+def test_api_authz_flags_open_user_endpoint():
+    body = json.dumps({"id": 1, "email": "ktos@example.pl", "payout": {"iban": "PL00"}})
+    http = Http(lambda url, h: R(ctype="application/json", body=body, url=url))
+    got = probes.probe_api_authz(http, "https://hack.cert.pl",
+                                 ["/users/${e.userId}/email", "/users/$userId/view"])
+    assert got and got[0].severity == "krytyczny"
+    assert "email" in got[0].raw["fields"]
+
+
+def test_api_authz_401_is_negative_and_only_two_ids():
+    http = Http(lambda url, h: R(status=401, ctype="application/json", body="{}", url=url))
+    assert probes.probe_api_authz(http, "https://hack.cert.pl",
+                                  ["/users/$userId/view"]) == []
+    values = {u.rsplit("/", 2)[-2] if u.endswith("/view") else u for u, _ in http.calls}
+    assert len(http.calls) == 2, "sonda ma odpytać najwyżej dwa identyfikatory"
+
+
+def test_api_authz_ignores_public_json_without_sensitive_fields():
+    body = json.dumps({"id": 1, "login": "jan", "capabilities": []})
+    http = Http(lambda url, h: R(ctype="application/json", body=body, url=url))
+    assert probes.probe_api_authz(http, "https://hack.cert.pl",
+                                  ["/users/$userId/view"]) == []
+
+
+def test_api_authz_does_not_iterate_range():
+    """Reguła: brak pętli po identyfikatorach. Dwa na szablon, koniec."""
+    body = json.dumps({"email": "x@y.z"})
+    http = Http(lambda url, h: R(ctype="application/json", body=body, url=url))
+    probes.probe_api_authz(http, "https://hack.cert.pl",
+                           ["/users/$userId/email", "/users/$id/view"])
+    assert len(http.calls) <= 2, f"zbyt wiele żądań: {http.calls}"

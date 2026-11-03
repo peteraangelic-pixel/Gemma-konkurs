@@ -31,6 +31,7 @@ Sondy:
   S4  JSON:API Drupala otwarte bez uwierzytelnienia              → §8 poz. 12.2 / 03
   S5  WordPress: wersje robocze / kontekst edit bez logowania    → §8 poz. 03
   S6  Obejście kontroli dostępu nagłówkiem X-Original-URL        → §8 poz. 9.3
+  S7  Endpoint `/users/{id}/…` z własnego JS zwraca dane bez sesji → §8 poz. 9.1/03
 
 Czego świadomie NIE ma (i dlaczego):
   • user enumeration (/wp-json/wp/v2/users, /user/1?_format=json) — §8 poz. 2.2,
@@ -380,6 +381,69 @@ def run_all(http, base: str, ctx: dict) -> list[ProbeFinding]:
         findings += probe_drupal_jsonapi(http, base)
     if "wordpress" in tech:
         findings += probe_wordpress_private(http, base)
+    endpoints = ctx.get("endpoints") or []
+    if any(ID_PARAM_RE.search(e) for e in endpoints):
+        findings += probe_api_authz(http, base, endpoints)
     for f in findings:
         f.host = re.sub(r"^https?://", "", base).split("/")[0]
     return findings
+
+
+# --------------------------------------------------------------------------
+# S7 — autoryzacja na endpointach API znanych z własnego JS aplikacji
+# --------------------------------------------------------------------------
+# Endpointy w stylu `/users/{id}` są w tym repo wyciągane z bundli, czyli
+# z kodu, który aplikacja sama wysyła przeglądarce. To najlepsze możliwe źródło
+# pytań: nie zgadujemy ścieżek, tylko sprawdzamy te, które naprawdę istnieją.
+#
+# BARDZO WAŻNE OGRANICZENIE: podmieniamy identyfikator na 1 i 2 — dwa żądania,
+# bez iteracji po zakresie. Celem jest ustalenie, czy odpowiedź jest 401/403
+# (poprawnie), czy 200 z danymi (podatność). Nie zbieramy danych innych
+# użytkowników; jeśli odpowiedź zawiera dane, kończymy i raportujemy sam fakt,
+# a nie treść. Regulamin §6 pkt 1 mówi o kontach, nie o tym, że nie wolno
+# wysłać żądania, ale etyka jest tu prostsza niż regulamin: minimum konieczne.
+ID_SAFE_VALUES = ["1", "2"]
+ID_PARAM_RE = re.compile(r"\$\{?[\w.]*(?:userId|id|Id|ID)[\w.]*\}?|\$(?:userId|id)")
+SENSITIVE_FIELDS = ("email", "payout", "bank", "iban", "account_number", "phone",
+                    "pesel", "address", "full_name", "token", "password_hash")
+
+
+def probe_api_authz(http, base: str, endpoints: list[str],
+                    max_endpoints: int = 6) -> list[ProbeFinding]:
+    """Czy endpoint z identyfikatorem użytkownika sprawdza uprawnienia?
+
+    Sonda jest celowo wąska: bierze z listy tylko te szablony, które zawierają
+    identyfikator użytkownika, i podmienia go na `1` oraz `2`.
+    """
+    out: list[ProbeFinding] = []
+    templates = [e for e in endpoints if ID_PARAM_RE.search(e)][:max_endpoints]
+    for tpl in templates:
+        for value in ID_SAFE_VALUES:
+            path = ID_PARAM_RE.sub(value, tpl)
+            if not path.startswith("/"):
+                continue
+            url = base.rstrip("/") + path
+            r = http.get(url, headers={"Accept": "application/json"})
+            if r.error:
+                continue
+            ctype = _hdr(r, "content-type")
+            if r.status // 100 != 2:
+                continue                    # 401/403/404 = poprawnie, wynik negatywny
+            body = r.text[:4000]
+            if "json" not in ctype and "{" not in body:
+                continue
+            hits = [f for f in SENSITIVE_FIELDS if f'"{f}"' in body]
+            if not hits:
+                continue
+            out.append(ProbeFinding(
+                "S7", "", url, "krytyczny",
+                "Endpoint użytkownika zwraca dane bez sesji",
+                f"`{path}` → {r.status}, {len(r.body)} B. Pola wrażliwe w treści: "
+                f"{', '.join(hits[:6])}. Zażądano WYŁĄCZNIE identyfikatora {value}; "
+                f"nie pobierano dalszych rekordów.",
+                "§8 poz. 9.1/9.2 i 03 — IDOR / brak kontroli dostępu prowadzący do "
+                "odczytu cudzych danych. Wymaga potwierdzenia w przeglądarce dwoma "
+                "własnymi kontami przed zgłoszeniem.",
+                {"path": path, "fields": hits[:6], "value": value}))
+            break                        # jeden dowód wystarczy, nie zbieramy więcej
+    return out

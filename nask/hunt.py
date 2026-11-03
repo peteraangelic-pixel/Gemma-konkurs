@@ -105,12 +105,14 @@ def run(out: Path, budget: int, explicit: list[str] | None, rps: float) -> int:
             routes: list[str] = []
             if bid or tech & {"next.js"}:
                 routes = crawler.next_routes(html, url)
-                endpoints = [f.value for f in js_findings if f.kind == "endpoint"]
-                hits += crawler.verify_endpoints(url, base, endpoints)
+                hits += crawler.verify_endpoints(
+                    url, base, [f.value for f in js_findings if f.kind == "endpoint"])
 
+            endpoints = [f.value for f in js_findings if f.kind == "endpoint"]
             found = probes.run_all(
                 fetcher, url,
-                {"tech": sorted(tech), "build_id": bid, "routes": routes})
+                {"tech": sorted(tech), "build_id": bid, "routes": routes,
+                 "endpoints": endpoints})
 
             row = summarise(url, hits)
             row.update({"program": program, "tier": tier,
