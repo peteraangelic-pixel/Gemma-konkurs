@@ -1,0 +1,34 @@
+# Do wklejenia jako .github/workflows/ci.yml w repo peteraangelic-pixel/NASK.
+# Różnica wobec obecnego pliku: build i testy NIE mają `|| true`.
+# Czerwony build = czerwony build. Bez tego defekt "timeout_connect" (E0599)
+# przeżył w repo dowolnie długo, bo CI nigdy nie próbowało skompilować kodu.
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - name: fmt (blokuje)
+        run: cargo fmt --all -- --check
+
+      - name: build (blokuje)
+        run: cargo build --all-targets --all-features
+
+      - name: clippy (blokuje)
+        run: cargo clippy --all-targets --all-features -- -D warnings
+
+      - name: testy (blokuje)
+        run: cargo test --all
+
+      - name: test regresyjny limitera
+        # Regulamin hack.cert.pl: max 5 req/s. Jest test, który to pilnuje.
+        run: cargo test --test rate_limit -- --nocapture

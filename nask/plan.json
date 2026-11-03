@@ -1,0 +1,49 @@
+{
+  "_komentarz": "Hipotezy do triage'u EV. p_confirm to ZAŁOŻENIE, nie pomiar — można podmienić. Kolejność wylicza triage.py.",
+  "hypotheses": [
+    {"host": "mwdb.cert.pl", "cls": "09-idor-bac", "days": 4, "p_confirm": 0.22,
+     "note": "MWDB ma publiczne źródła — czytamy kod zamiast fuzzować. Najwyższa dźwignia w całym konkursie."},
+    {"host": "mwdb.cert.pl", "cls": "12-api", "days": 3, "p_confirm": 0.18,
+     "note": "Analiza endpointów API obok przeglądu kodu."},
+    {"host": "mwdb.cert.pl", "cls": "07-file-upload", "days": 3, "p_confirm": 0.10,
+     "note": "Upload plików malware + parsery (kzip/yara) — miejsce, gdzie błędy walidacji bolą."},
+    {"host": "n6portal.cert.pl", "cls": "12-api", "days": 3, "p_confirm": 0.15,
+     "note": "Portal N6 też ma otwarte źródła (n6data/n6portal)."},
+
+    {"host": "eobieg.wladyslawowo.pl", "cls": "09-idor-bac", "days": 2, "p_confirm": 0.25,
+     "note": "Mała gmina, obieg dokumentów, niska maks. nagroda — ale najszybsza droga do pierwszego trafienia."},
+    {"host": "cciod.wladyslawowo.pl", "cls": "12-api", "days": 1.5, "p_confirm": 0.15,
+     "note": "Tier 2 tej samej gminy, jeśli eobieg okaże się twardy."},
+
+    {"host": "komunikator.narodowy.gov.pl", "cls": "09-idor-bac", "days": 5, "p_confirm": 0.18,
+     "note": "Komunikator: IDOR na wiadomościach/urządzeniach = klasa 03 + 09, najwyższa stawka."},
+    {"host": "komunikator.narodowy.gov.pl", "cls": "02-account-takeover", "days": 6, "p_confirm": 0.06,
+     "note": "Rejestracja/zmiana urządzenia/reset — trudne, ale 20000 zł."},
+    {"host": "komunikator.narodowy.gov.pl", "cls": "13-mass-assignment", "days": 2, "p_confirm": 0.12,
+     "note": "Pola typu role/is_admin przy rejestracji."},
+
+    {"host": "zglos-dezinformacje.nask.pl", "cls": "05-ssrf", "days": 2, "p_confirm": 0.15,
+     "note": "Formularz przyjmuje źródło/link — sprawdzić, czy serwer go pobiera."},
+    {"host": "zglos-dezinformacje.nask.pl", "cls": "07-file-upload", "days": 3, "p_confirm": 0.12,
+     "note": "Załączniki w zgłoszeniu dezinformacji."},
+
+    {"host": "dns.pl", "cls": "03-sensitive-data", "days": 3, "p_confirm": 0.10,
+     "note": "Wyszukiwarka whois: dane abonenta, możliwy IDOR/enumeracja z realnym wpływem."},
+    {"host": "incydent.cert.pl", "cls": "09-idor-bac", "days": 2, "p_confirm": 0.10,
+     "note": "Zgłaszanie incydentów — dane wrażliwe organizacji."},
+    {"host": "moje.cert.pl", "cls": "09-idor-bac", "days": 2, "p_confirm": 0.10,
+     "note": "Konto użytkownika — typowe miejsce na BAC."},
+
+    {"host": "www.gov.pl", "cls": "08-xss", "days": 3, "p_confirm": 0.20,
+     "note": "Realny XSS (nie self-XSS) = klasa 08, ale stawka średnia, a duplikaty bardzo prawdopodobne."},
+    {"host": "www.gov.pl", "cls": "14-cors", "days": 1, "p_confirm": 0.15,
+     "note": "Tanie sprawdzenie: tylko gdy pozwala CZYTAĆ dane (§8 poz. 14.1)."},
+    {"host": "www.gov.pl", "cls": "18-cache-poisoning", "days": 3, "p_confirm": 0.05,
+     "note": "Duży ruch = duży wpływ, ale i duża szansa, że już naprawione."},
+
+    {"host": "oad.nask.pl", "cls": "12-api", "days": 2, "p_confirm": 0.10,
+     "note": "Next.js + Envoy: middleware i API routes to najczęstsze miejsce błędów autoryzacji."},
+    {"host": "116sos.pl", "cls": "03-sensitive-data", "days": 2, "p_confirm": 0.10,
+     "note": "Dane o zdrowiu = wysoka wrażliwość, ale serwis może być tylko informacyjny."}
+  ]
+}
