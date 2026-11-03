@@ -1,0 +1,57 @@
+name: nask-night-hunt
+
+# Kuratowane, read-only sondy na programy hack.cert.pl. Tylko ręczne uruchomienie.
+# Zasady: hosty wyłącznie z NASK/tools/nasktriage/scope.example.json, tempo 2 req/s,
+# brak ciał żądań, brak logowania, brak podążania za przekierowaniami poza zakres.
+on:
+  workflow_dispatch:
+    inputs:
+      rps:
+        description: "żądania na sekundę (sufit regulaminu: 5)"
+        required: false
+        default: "2"
+
+permissions:
+  contents: write
+
+jobs:
+  hunt:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: NASK/tools/naskhunt
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: NASK/tools/naskhunt
+
+      - name: build
+        run: cargo build --release
+
+      - name: sondy
+        run: |
+          set -o pipefail
+          ./target/release/naskhunt \
+            --scope ../nasktriage/scope.example.json \
+            --checks checks.json \
+            --rps "${{ github.event.inputs.rps || '2' }}" \
+            --md ../../../NASK/hunt/report-$(date -u +%Y%m%dT%H%MZ).md \
+            --json ../../../NASK/hunt/report-$(date -u +%Y%m%dT%H%MZ).json \
+            | tee ../../../NASK/hunt/last-run.log
+
+      - name: publikuj
+        if: always()
+        run: |
+          cd "$GITHUB_WORKSPACE"
+          mkdir -p NASK/hunt
+          git config user.name "nask-hunt"
+          git config user.email "nask-hunt@users.noreply.github.com"
+          git add -f NASK/hunt/
+          if git diff --cached --quiet; then echo "brak nowych wyników"; else
+            git commit -q -m "hunt: wyniki sond $(date -u +%Y-%m-%dT%H:%MZ) [skip ci]"
+            git push origin HEAD:arena/c4eeb067-gemma-konkurs
+          fi
