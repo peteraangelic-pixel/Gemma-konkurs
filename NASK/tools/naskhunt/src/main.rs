@@ -73,6 +73,7 @@ struct Observation {
     acac: String,
     cdisp: String,
     clen: String,
+    ms: u128,
     snippet: String,
     error: String,
 }
@@ -119,13 +120,14 @@ impl Runner {
         self.last = Some(Instant::now());
         self.sent += 1;
 
+        let t0 = Instant::now();
         let mut req = self.agent.request(&"GET", &url);
         for (k, v) in headers {
             req = req.set(k, v);
         }
         let obs = match req.call() {
-            Ok(resp) => read(resp),
-            Err(ureq::Error::Status(_, resp)) => read(resp),
+            Ok(resp) => read(resp, t0),
+            Err(ureq::Error::Status(_, resp)) => read(resp, t0),
             Err(e) => Observation {
                 status: 0,
                 len: 0,
@@ -136,6 +138,7 @@ impl Runner {
                 acac: String::new(),
                 cdisp: String::new(),
                 clen: String::new(),
+                ms: 0,
                 snippet: String::new(),
                 error: format!("{e}"),
             },
@@ -144,7 +147,7 @@ impl Runner {
     }
 }
 
-fn read(resp: ureq::Response) -> Observation {
+fn read(resp: ureq::Response, t0: Instant) -> Observation {
     let status = resp.status();
     let hdr = |n: &str| resp.header(n).unwrap_or("").to_string();
     let ctype = hdr("content-type");
@@ -155,6 +158,7 @@ fn read(resp: ureq::Response) -> Observation {
     let cdisp = hdr("content-disposition");
     let clen = hdr("content-length");
     let body = resp.into_string().unwrap_or_default();
+    let ms = t0.elapsed().as_millis();
     let len = body.len();
     let mut snippet: String = body
         .chars()
@@ -176,6 +180,7 @@ fn read(resp: ureq::Response) -> Observation {
         acac,
         cdisp,
         clen,
+        ms,
         snippet,
         error: String::new(),
     }
@@ -328,12 +333,12 @@ fn main() {
         md.push_str("Brak. To też wynik — przy tych sondach nie ma czego potwierdzać.\n\n");
     }
 
-    md.push_str("## Wszystkie obserwacje\n\n| id | status | bajty | typ | Content-Disposition | snippet |\n|---|---:|---:|---|---|---|\n");
+    md.push_str("## Wszystkie obserwacje\n\n| id | status | ms | bajty | typ | Content-Disposition | snippet |\n|---|---:|---:|---:|---|---|---|\n");
     for (c, t, _, _) in &results {
         if let Some(t) = t {
             md.push_str(&format!(
-                "| `{}` | {} | {} | {} | `{}` | `{}` |\n",
-                c.id, t.status, t.len, t.ctype, t.cdisp, t.snippet
+                "| `{}` | {} | {} | {} | {} | `{}` | `{}` |\n",
+                c.id, t.status, t.ms, t.len, t.ctype, t.cdisp, t.snippet
             ));
         }
     }
@@ -357,6 +362,7 @@ fn main() {
             "acao": t.as_ref().map(|o| o.acao.clone()),
             "content_disposition": t.as_ref().map(|o| o.cdisp.clone()),
             "content_length_header": t.as_ref().map(|o| o.clen.clone()),
+            "ms": t.as_ref().map(|o| o.ms),
             "snippet": t.as_ref().map(|o| o.snippet.clone()),
             "baseline_status": b.as_ref().map(|o| o.status),
             "error": t.as_ref().map(|o| o.error.clone()),

