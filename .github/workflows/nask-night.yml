@@ -51,6 +51,11 @@ jobs:
             --json ../../../NASK/hunt/report-$(date -u +%Y%m%dT%H%MZ).json \
             | tee ../../../NASK/hunt/last-run.log
 
+      - name: mapa API z bundle'i JS
+        continue-on-error: true
+        run: |
+          ./target/release/naskmap             --scope ../nasktriage/scope.example.json             --hosts "zglos-dezinformacje.nask.pl,dyzurnet.pl,oad.nask.pl,116sos.pl,science.nask.pl,dns.pl,hack.cert.pl"             --max-scripts 30             --md ../../../NASK/hunt/MAP-$(date -u +%Y%m%dT%H%MZ).md             | tail -40
+
       - name: publikuj
         if: always()
         run: |
