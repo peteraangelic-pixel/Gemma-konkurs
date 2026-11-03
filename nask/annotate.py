@@ -6,7 +6,13 @@ nie ma dostępu (`blob.core.windows.net`, `results-receiver.actions...`). Adnota
 (`check-runs/{id}/annotations`) są w `api.github.com` i tam docieram. Bez tego kanału
 wynik rekonesansu zostaje w artefakcie, którego nikt nie otwiera.
 
-Limit adnotacji na krok: 50, stąd twardy `--max-notices`.
+GitHub pokazuje tylko ~10 adnotacji danego typu na krok, więc pakujemy po kilka
+wpisów w jedną adnotację (rozdzielone ` | `). To nie jest kosmetyka: przy 14 celach
+i 12 bundlach pojedyncze wpisy ucinały się w połowie i pierwszy przebieg pokazał
+mi tylko 10 z 14 celów.
+
+Pełne dane i tak trafiają do repo jako `nask/findings/recon.json` (krok w workflow),
+więc adnotacje są tylko podglądem.
 """
 from __future__ import annotations
 
@@ -14,7 +20,9 @@ import json
 import sys
 from pathlib import Path
 
-MAX_NOTICES = 45
+MAX_NOTICES = 8          # ~10 to limit GitHuba, zostawiamy zapas na ostrzeżenia
+PACK_CHARS = 3000        # jeden wpis adnotacji może być długi — pakujemy
+PACK_ENTRIES = 12
 
 
 def _esc(text: str, limit: int = 850) -> str:
@@ -60,10 +68,20 @@ def main(argv: list[str]) -> int:
     for note in r.get("notes", []):
         out.append(("warning", _esc(note)))
 
-    for level, msg in out[:max_notices]:
+    # Pakowanie: łączymy wpisy tego samego poziomu, dopóki mieszczą się w limicie.
+    packed: list[tuple[str, str]] = []
+    for level, msg in out:
+        if packed and packed[-1][0] == level and len(packed[-1][1]) + len(msg) < PACK_CHARS \
+                and packed[-1][1].count(" | ") < PACK_ENTRIES:
+            packed[-1] = (level, packed[-1][1] + " | " + msg)
+        else:
+            packed.append((level, msg))
+
+    shown = packed[:max_notices]
+    for level, msg in shown:
         print(f"::{level}::{msg}")
-    if len(out) > max_notices:
-        print(f"::notice::obcięto {len(out) - max_notices} adnotacji (limit GitHuba)")
+    if len(packed) > len(shown):
+        print(f"::notice::obcięto {len(packed) - len(shown)} adnotacji (limit GitHuba)")
     return 0
 
 

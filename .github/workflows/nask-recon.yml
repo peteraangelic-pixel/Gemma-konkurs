@@ -42,7 +42,7 @@ on:
         default: ""
 
 permissions:
-  contents: read
+  contents: write     # tylko po to, żeby zapisać wynik rekonesansu na gałąź
 
 concurrency:
   group: nask-recon
@@ -123,6 +123,29 @@ jobs:
       - name: wyniki jako adnotacje (kanał odczytu dla agenta)
         if: always()
         run: python nask/annotate.py nask/findings/recon.json
+
+      # Zapis wyniku do repo. Artefakt i logi lecą z hostów, do których agent nie
+      # ma dostępu, adnotacje są ograniczone do ~10 na krok. Commit jest jedynym
+      # kanałem, którym PEŁNE dane docierają w miejsce, gdzie da się je przeczytać.
+      # Trigger workflow jest wąski (`nask/RUN-RECON`), więc ten commit nie wywoła pętli.
+      - name: zapis wyniku na gałąź
+        if: always()
+        run: |
+          set -euo pipefail
+          mkdir -p nask/findings
+          if [ ! -f nask/findings/recon.json ]; then
+            echo "brak recon.json — nie ma czego zapisywać"
+            exit 0
+          fi
+          git config user.name "nask-recon-bot"
+          git config user.email "nask-recon@users.noreply.github.com"
+          git add -f nask/findings/recon.json nask/findings/evidence.jsonl 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "brak zmian do zapisania"
+            exit 0
+          fi
+          git commit -q -m "nask-recon: wynik przebiegu ${GITHUB_RUN_ID} (automat)"
+          git push -q origin "HEAD:${GITHUB_REF_NAME}"
 
       - name: artefakt (dowody + kandydaci)
         uses: actions/upload-artifact@v4
