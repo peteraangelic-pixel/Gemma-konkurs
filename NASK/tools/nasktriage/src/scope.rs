@@ -62,9 +62,7 @@ pub fn host_of_url(url: &str) -> Result<String, String> {
     } else {
         return Err(format!("nieobsługiwany schemat (tylko http/https): {url}"));
     };
-    let end = rest
-        .find(|c| c == '/' || c == '?' || c == '#')
-        .unwrap_or(rest.len());
+    let end = rest.find(['/', '?', '#']).unwrap_or(rest.len());
     let authority = &rest[..end];
     if authority.is_empty() {
         return Err(format!("brak hosta w URL: {url}"));

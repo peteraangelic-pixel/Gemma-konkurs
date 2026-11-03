@@ -17,7 +17,7 @@ pub struct TokenBucket {
 
 impl TokenBucket {
     pub fn new(rps: f64) -> Result<TokenBucket, String> {
-        if !(rps > 0.0) {
+        if rps <= 0.0 || rps.is_nan() {
             return Err("rps musi być > 0".to_string());
         }
         if rps > MAX_RPS {
