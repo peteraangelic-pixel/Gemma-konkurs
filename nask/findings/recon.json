@@ -1,0 +1,1176 @@
+{
+  "generated_at": "2026-11-03T20:04:45+00:00",
+  "dry_run": false,
+  "targets": [
+    {
+      "url": "https://mwdb.cert.pl/",
+      "status": 200,
+      "bytes": 784,
+      "sha256": "e2509a7def1d54176ad41c75c87cb4eab356c32a71a8eb8d86d78e442128d3e5",
+      "server": "nginx",
+      "tech": [
+        "react"
+      ],
+      "bundles": [
+        "https://mwdb.cert.pl/assets/index-6JR1iRQ_.js",
+        "https://mwdb.cert.pl/assets/react-dom-DnHUW51E.js",
+        "https://mwdb.cert.pl/assets/remotes-CT_Vn_ao.js"
+      ]
+    },
+    {
+      "url": "https://n6portal.cert.pl/",
+      "status": 200,
+      "bytes": 2809,
+      "sha256": "2e408c58a332522726ef31c5489dabdf3d9670fd5d90074f91a6641617e5d63f",
+      "server": "nginx",
+      "tech": [],
+      "bundles": [
+        "https://n6portal.cert.pl/static/js/main.9b01b47c.js",
+        "https://n6portal.cert.pl/manifest.json"
+      ]
+    },
+    {
+      "url": "https://moje.cert.pl/",
+      "status": 200,
+      "bytes": 31158,
+      "sha256": "4dabf01870dbc79d0603152663c184c17626cf2bb4e05d4c08db768ad4656ba3",
+      "server": "cloudflare",
+      "tech": [],
+      "bundles": [
+        "https://moje.cert.pl/jsi18n/",
+        "https://moje.cert.pl/static/CACHE/js/output.2cfe8a6ba69e.js",
+        "https://moje.cert.pl/static/js/external/fa_all.min.js",
+        "https://moje.cert.pl/static/CACHE/js/output.d0378309a41c.js",
+        "https://moje.cert.pl/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js",
+        "https://moje.cert.pl/static/CACHE/js/output.7dbb2b20372b.js"
+      ]
+    },
+    {
+      "url": "https://incydent.cert.pl/",
+      "status": 200,
+      "bytes": 2743,
+      "sha256": "2835b9ad88b310cd6e926fa09a789b057a74313f037a5b20b412aaadb4de5473",
+      "server": "cloudflare",
+      "tech": [],
+      "bundles": [
+        "https://incydent.cert.pl/static/js/2.33d34004.chunk.js",
+        "https://incydent.cert.pl/static/js/main.5de3dc39.chunk.js",
+        "https://incydent.cert.pl/manifest.json"
+      ]
+    },
+    {
+      "url": "https://dyzurnet.pl/",
+      "status": 200,
+      "bytes": 106937,
+      "sha256": "9a3887d4d26b8199453879a69d15bb439af536313d48b48f244d9327a755a0ed",
+      "server": "cloudflare",
+      "tech": [
+        "next.js"
+      ],
+      "bundles": [
+        "https://dyzurnet.pl/_next/static/chunks/2-5er9m2_t7b6.js",
+        "https://dyzurnet.pl/_next/static/chunks/0vyi56aya56rg.js",
+        "https://dyzurnet.pl/_next/static/chunks/2ydgn1tgb69eq.js",
+        "https://dyzurnet.pl/_next/static/chunks/2p9ljallbhsik.js",
+        "https://dyzurnet.pl/_next/static/chunks/turbopack-3-ry682tkyiqk.js",
+        "https://dyzurnet.pl/_next/static/chunks/0s6h-yted0uw2.js",
+        "https://dyzurnet.pl/_next/static/chunks/3vub9fxmxbjlz.js",
+        "https://dyzurnet.pl/_next/static/chunks/1zkc3mymypfwm.js",
+        "https://dyzurnet.pl/_next/static/chunks/07lirgnhzsm11.js",
+        "https://dyzurnet.pl/_next/static/chunks/0v1n5lp8ubxj2.js",
+        "https://dyzurnet.pl/_next/static/chunks/26hbu1e9eaa5-.js",
+        "https://dyzurnet.pl/_next/static/chunks/2vy43xy80_lh-.js"
+      ]
+    },
+    {
+      "url": "https://dns.pl/",
+      "status": 200,
+      "bytes": 51152,
+      "sha256": "e4f0479c185cd8a31a86faa0a44121e67eb71309080ddee5fcac13a4a9b91a24",
+      "server": "",
+      "tech": [
+        "drupal"
+      ],
+      "bundles": [
+        "https://dns.pl/bundles/bazingajstranslation/js/translator.min.js",
+        "https://dns.pl/translations/delegation?locales=pl",
+        "https://dns.pl/translations/deletedDomainCount?locales=pl",
+        "https://dns.pl/translations/domainBrowser?locales=pl",
+        "https://dns.pl/translations/domainCount?locales=pl",
+        "https://dns.pl/translations/enum?locales=pl",
+        "https://dns.pl/translations/funnyName?locales=pl",
+        "https://dns.pl/translations/govErrors?locales=pl",
+        "https://dns.pl/translations/idnTranslator?locales=pl",
+        "https://dns.pl/translations?locales=pl",
+        "https://dns.pl/translations/registrarsList?locales=pl",
+        "https://dns.pl/translations/statCharts?locales=pl"
+      ]
+    },
+    {
+      "url": "https://oad.nask.pl/",
+      "status": 200,
+      "bytes": 75666,
+      "sha256": "cf8b70d0e7dc08999a60f1127f0545511bd3fe54b91367eff836e1566063fcab",
+      "server": "",
+      "tech": [
+        "next.js"
+      ],
+      "bundles": [
+        "https://oad.nask.pl/_next/static/chunks/0sng4_8r3chh8.js",
+        "https://oad.nask.pl/_next/static/chunks/0sw1eb_yznt8l.js",
+        "https://oad.nask.pl/_next/static/chunks/02nb7hg5s7v8z.js",
+        "https://oad.nask.pl/_next/static/chunks/turbopack-3-ry682tkyiqk.js",
+        "https://oad.nask.pl/_next/static/chunks/3ad-negp3lyp2.js",
+        "https://oad.nask.pl/_next/static/chunks/25wnn-gw_syze.js",
+        "https://oad.nask.pl/_next/static/chunks/08n2mthgm95xu.js",
+        "https://oad.nask.pl/_next/static/chunks/41lk95l8op7nz.js",
+        "https://oad.nask.pl/_next/static/chunks/0gnc331ufzpqs.js",
+        "https://oad.nask.pl/_next/static/chunks/0gr21xybkhnle.js",
+        "https://oad.nask.pl/_next/static/chunks/3wo7t9hh7pyto.js",
+        "https://oad.nask.pl/_next/static/chunks/01oz8t4rw-8jj.js"
+      ]
+    },
+    {
+      "url": "https://zglos-dezinformacje.nask.pl/",
+      "status": 200,
+      "bytes": 43912,
+      "sha256": "654bed94c3e568dd49624feda8f7a35e797b1980aed1a4d400ee936172abcd46",
+      "server": "",
+      "tech": [
+        "next.js"
+      ],
+      "bundles": [
+        "https://zglos-dezinformacje.nask.pl/_next/static/chunks/6da37222-b092541e14d1b5a6.js",
+        "https://zglos-dezinformacje.nask.pl/_next/static/chunks/94-f73edc448420d7d8.js",
+        "https://zglos-dezinformacje.nask.pl/_next/static/chunks/main-app-8be590c639fce775.js",
+        "https://zglos-dezinformacje.nask.pl/_next/static/chunks/7e0b69db-8f9206bcea1ce65f.js",
+        "https://zglos-dezinformacje.nask.pl/_next/static/chunks/51fbb617-cbc03c785fe2a174.js",
+        "https://zglos-dezinformacje.nask.pl/_next/static/chunks/413-5e0b6b7e5866129f.js",
+        "https://zglos-dezinformacje.nask.pl/_next/static/chunks/app/%5Blocale%5D/page-b09fb0150c4ca4ed.js",
+        "https://zglos-dezinformacje.nask.pl/_next/static/chunks/app/%5Blocale%5D/error-10980afc28860fc9.js",
+        "https://zglos-dezinformacje.nask.pl/_next/static/chunks/app/%5Blocale%5D/layout-63e01e706d03fdef.js",
+        "https://zglos-dezinformacje.nask.pl/_next/static/chunks/polyfills-42372ed130431b0a.js",
+        "https://zglos-dezinformacje.nask.pl/_next/static/chunks/webpack-3937ac471c6a060c.js"
+      ]
+    },
+    {
+      "url": "https://dataannotation.pllum.org.pl/",
+      "status": 200,
+      "bytes": 713,
+      "sha256": "908ce0b4e45c176777e4e8ba171c06e8f71c912d01ea687ac16874c5f0ff40cf",
+      "server": "",
+      "tech": [],
+      "bundles": [
+        "https://dataannotation.pllum.org.pl/assets/index-ClBZuP56.js",
+        "https://dataannotation.pllum.org.pl/manifest.json"
+      ]
+    },
+    {
+      "url": "https://komunikator.narodowy.gov.pl/",
+      "status": 200,
+      "bytes": 4781,
+      "sha256": "af6ee284b06b0b22383dad7d8d0b712c0766e0b4bcb148efea536633fe39dd98",
+      "server": "",
+      "tech": [],
+      "bundles": [
+        "https://komunikator.narodowy.gov.pl/bundles/622bdb601d5a4764b1d4/bundle.js",
+        "https://komunikator.narodowy.gov.pl/custom_welcome/custom.js",
+        "https://komunikator.narodowy.gov.pl/manifest.json"
+      ]
+    },
+    {
+      "url": "https://www.gov.pl/",
+      "status": 200,
+      "bytes": 39631,
+      "sha256": "502a1a94ca5c7bbe946232d30dd01c94ac3b4254f919a4d57664f486253c3d6c",
+      "server": "",
+      "tech": [],
+      "bundles": [
+        "https://www.gov.pl/scripts/polyfills/html5shiv-3.7.3.min.js",
+        "https://www.gov.pl/scripts/polyfills/modernizr-custom.js",
+        "https://www.gov.pl/scripts/polyfills/polyfills.js",
+        "https://www.gov.pl/scripts/vendors/jquery-3.7.1.min.js",
+        "https://www.gov.pl/scripts/vendors/jquery-ui-1.13.2.min.js",
+        "https://www.gov.pl/scripts/vendors/modaal.min.js",
+        "https://www.gov.pl/scripts/vendors/b_util.js",
+        "https://www.gov.pl/scripts/vendors/b_tab_orginal.js",
+        "https://www.gov.pl/scripts/vendors/validate.min.js",
+        "https://www.gov.pl/scripts/gov_context.js?locale=pl_PL",
+        "https://www.gov.pl/scripts/accordion.js",
+        "https://www.gov.pl/scripts/govpl.js"
+      ]
+    },
+    {
+      "url": "https://116sos.pl/",
+      "status": 200,
+      "bytes": 103227,
+      "sha256": "13632548f6c18ed7de4949f311a71ec1ad2ff89b187bacc7697d3e178503270c",
+      "server": "",
+      "tech": [
+        "next.js",
+        "wordpress"
+      ],
+      "bundles": [
+        "https://116sos.pl/_next/static/chunks/polyfills-42372ed130431b0a.js",
+        "https://116sos.pl/_next/static/chunks/webpack-1222a6ab286d6dc9.js",
+        "https://116sos.pl/_next/static/chunks/framework-e6c7080b6dfa798b.js",
+        "https://116sos.pl/_next/static/chunks/main-94bc6707d4ece65a.js",
+        "https://116sos.pl/_next/static/chunks/pages/_app-1106ac9f13f1718c.js",
+        "https://116sos.pl/_next/static/chunks/4225-4efa18ad1daccf45.js",
+        "https://116sos.pl/_next/static/chunks/7100-2129ccaa94d967cf.js",
+        "https://116sos.pl/_next/static/chunks/97-fc10c7ada9fc72f8.js",
+        "https://116sos.pl/_next/static/chunks/4125-eec950d4bc4fe7f0.js",
+        "https://116sos.pl/_next/static/chunks/4661-03fece942227a40f.js",
+        "https://116sos.pl/_next/static/chunks/4165-3fdd1dafcfa06ed4.js",
+        "https://116sos.pl/_next/static/chunks/pages/index-4cac6f9e73cb76e5.js"
+      ]
+    },
+    {
+      "url": "https://science.nask.pl/",
+      "status": 200,
+      "bytes": 161205,
+      "sha256": "7e5149cc5fa46bd8f97aea376c5c26ca86a6641e31c20aa0524d34917fdab97a",
+      "server": "",
+      "tech": [
+        "next.js",
+        "wordpress"
+      ],
+      "bundles": [
+        "https://science.nask.pl/_next/static/chunks/1twrq8867wq7g.js",
+        "https://science.nask.pl/_next/static/chunks/0dck9t_bz8687.js",
+        "https://science.nask.pl/_next/static/chunks/3bjjbczm6xmxy.js",
+        "https://science.nask.pl/_next/static/chunks/38c-rhg1it8eg.js",
+        "https://science.nask.pl/_next/static/chunks/3wigeoy01-4us.js",
+        "https://science.nask.pl/_next/static/chunks/turbopack-2c3mg3r-05n1w.js",
+        "https://science.nask.pl/_next/static/chunks/022bbpomwzg6i.js",
+        "https://science.nask.pl/_next/static/chunks/3bpomgww3gqxa.js",
+        "https://science.nask.pl/_next/static/Grl_YQ5SCHd1ahmhesPv6/_buildManifest.js",
+        "https://science.nask.pl/_next/static/Grl_YQ5SCHd1ahmhesPv6/_ssgManifest.js",
+        "https://science.nask.pl/_next/static/Grl_YQ5SCHd1ahmhesPv6/_clientMiddlewareManifest.js"
+      ]
+    },
+    {
+      "url": "https://hack.cert.pl/",
+      "status": 200,
+      "bytes": 1177,
+      "sha256": "389f71280e6643a808c1798f6480f76004deb650f5a82ea766e99eb1d7b4a79e",
+      "server": "cloudflare",
+      "tech": [],
+      "bundles": [
+        "https://hack.cert.pl/assets/index-B5IFYBO_.js",
+        "https://hack.cert.pl/assets/framework-DQ6P6spe.js",
+        "https://hack.cert.pl/assets/tns-DvlG-FB6.js",
+        "https://hack.cert.pl/assets/ui-foundation-BLsHyVue.js",
+        "https://hack.cert.pl/assets/domain-utils-DNkkjv7c.js",
+        "https://hack.cert.pl/assets/icons-B99Sj_pn.js",
+        "https://hack.cert.pl/assets/animations-DAOsNCb4.js"
+      ]
+    }
+  ],
+  "skipped": [],
+  "bundles": [
+    {
+      "url": "https://mwdb.cert.pl/assets/index-6JR1iRQ_.js",
+      "status": 200,
+      "bytes": 1734690,
+      "sha256": "40d2014bf9c5b253453ee451ab42630e745546c8b3bbb21d0d2042594b6024b9",
+      "top": [
+        {
+          "kind": "hot_field",
+          "value": "email",
+          "hint": "klasa 13/9: sprawdź, czy serwer przyjmuje to pole od klienta"
+        },
+        {
+          "kind": "hot_field",
+          "value": "id",
+          "hint": "klasa 13/9: sprawdź, czy serwer przyjmuje to pole od klienta"
+        },
+        {
+          "kind": "hot_field",
+          "value": "permission",
+          "hint": "klasa 13/9: sprawdź, czy serwer przyjmuje to pole od klienta"
+        },
+        {
+          "kind": "hot_field",
+          "value": "permissions",
+          "hint": "klasa 13/9: sprawdź, czy serwer przyjmuje to pole od klienta"
+        },
+        {
+          "kind": "hot_field",
+          "value": "role",
+          "hint": "klasa 13/9: sprawdź, czy serwer przyjmuje to pole od klienta"
+        },
+        {
+          "kind": "hot_field",
+          "value": "status",
+          "hint": "klasa 13/9: sprawdź, czy serwer przyjmuje to pole od klienta"
+        },
+        {
+          "kind": "hot_field",
+          "value": "token",
+          "hint": "klasa 13/9: sprawdź, czy serwer przyjmuje to pole od klienta"
+        },
+        {
+          "kind": "hot_field",
+          "value": "uid",
+          "hint": "klasa 13/9: sprawdź, czy serwer przyjmuje to pole od klienta"
+        },
+        {
+          "kind": "endpoint",
+          "value": "/api",
+          "hint": "klasa 12: sprawdź autoryzację i IDOR na tym endpoincie"
+        },
+        {
+          "kind": "endpoint",
+          "value": "/api_key/${e}",
+          "hint": "klasa 12: sprawdź autoryzację i IDOR na tym endpoincie"
+        },
+        {
+          "kind": "endpoint",
+          "value": "/auth/change_password",
+          "hint": "klasa 12: sprawdź autoryzację i IDOR na tym endpoincie"
+        },
+        {
+          "kind": "endpoint",
+          "value": "/auth/groups",
+          "hint": "klasa 12: sprawdź autoryzację i IDOR na tym endpoincie"
+        },
+        {
+          "kind": "endpoint",
+          "value": "/auth/login",
+          "hint": "klasa 12: sprawdź autoryzację i IDOR na tym endpoincie"
+        },
+        {
+          "kind": "endpoint",
+          "value": "/auth/recover_password",
+          "hint": "klasa 12: sprawdź autoryzację i IDOR na tym endpoincie"
+        },
+        {
+          "kind": "endpoint",
+          "value": "/auth/refresh",
+          "hint": "klasa 12: sprawdź autoryzację i IDOR na tym endpoincie"
+        },
+        {
+          "kind": "endpoint",
+          "value": "/auth/register",
+          "hint": "klasa 12: sprawdź autoryzację i IDOR na tym endpoincie"
+        },
+        {
+          "kind": "endpoint",
+          "value": "/auth/request_password_change",
+          "hint": "klasa 12: sprawdź autoryzację i IDOR na tym endpoincie"
+        },
+        {
+          "kind": "endpoint",
+          "value": "/user",
+          "hint": "klasa 12: sprawdź autoryzację i IDOR na tym endpoincie"
+        },
+        {
+          "kind": "endpoint",
+          "value": "/user/${e.login}",
+          "hint": "klasa 12: sprawdź autoryzację i IDOR na tym endpoincie"
+        },
+        {
+          "kind": "endpoint",
+          "value": "/user/${e}",
+          "hint": "klasa 12: sprawdź autoryzację i IDOR na tym endpoincie"
+        },
+        {
+          "kind": "endpoint",
+          "value": "/user/${e}/api_key",
+          "hint": "klasa 12: sprawdź autoryzację i IDOR na tym endpoincie"
+        },
+        {
+          "kind": "endpoint",
+          "value": "/user/${e}/change_password",
+          "hint": "klasa 12: sprawdź autoryzację i IDOR na tym endpoincie"
+        },
+        {
+          "kind": "endpoint",
+          "value": "/user/${e}/pending",
+          "hint": "klasa 12: sprawdź autoryzację i IDOR na tym endpoincie"
+        },
+        {
+          "kind": "endpoint",
+          "value": "/user/${e}/request_password_change",
+          "hint": "klasa 12: sprawdź autoryzację i IDOR na tym endpoincie"
+        },
+        {
+          "kind": "endpoint",
+          "value": "/user/${n}",
+          "hint": "klasa 12: sprawdź autoryzację i IDOR na tym endpoincie"
+        },
+        {
+          "kind": "param",
+          "value": "diff",
+          "hint": "kandydat na IDOR/SSRF/open redirect"
+        },
+        {
+          "kind": "param",
+          "value": "invariant",
+          "hint": "kandydat na IDOR/SSRF/open redirect"
+        },
+        {
+          "kind": "param",
+          "value": "node",
+          "hint": "kandydat na IDOR/SSRF/open redirect"
+        },
+        {
+          "kind": "param",
+          "value": "obfuscate",
+          "hint": "kandydat na IDOR/SSRF/open redirect"
+        },
+        {
+          "kind": "param",
+          "value": "onload",
+          "hint": "kandydat na IDOR/SSRF/open redirect"
+        },
+        {
+          "kind": "param",
+          "value": "parent",
+          "hint": "kandydat na IDOR/SSRF/open redirect"
+        },
+        {
+          "kind": "param",
+          "value": "render",
+          "hint": "kandydat na IDOR/SSRF/open redirect"
+        },
+        {
+          "kind": "param",
+          "value": "token",
+          "hint": "kandydat na IDOR/SSRF/open redirect"
+        },
+        {
+          "kind": "tech",
+          "value": "react",
+          "hint": "technologia — dobierz testy do stacku"
+        },
+        {
+          "kind": "url",
+          "value": "http://www.w3.org/1999/xhtml",
+          "hint": "inna domena — najpierw sprawdź scope, potem traktuj jako zależność"
+        },
+        {
+          "kind": "url",
+          "value": "http://www.w3.org/2000/svg",
+          "hint": "inna domena — najpierw sprawdź scope, potem traktuj jako zależność"
+        },
+        {
+          "kind": "url",
+          "value": "https://github.com/CERT-Polska/mwdb-core/issues",
+          "hint": "inna domena — najpierw sprawdź scope, potem traktuj jako zależność"
+        },
+        {
+          "kind": "url",
+          "value": "https://github.com/CERT-Polska/mwdb-core/releases/tag/v",
+          "hint": "inna domena — najpierw sprawdź scope, potem traktuj jako zależność"
+        },
+        {
+          "kind": "url",
+          "value": "https://mustache.github.io/mustache.5.html",
+          "hint": "inna domena — najpierw sprawdź scope, potem traktuj jako zależność"
+        },
+        {
+          "kind": "url",
+          "value": "https://mwdb.readthedocs.io/",
+          "hint": "inna domena — najpierw sprawdź scope, potem traktuj jako zależność"
+        }
+      ]
+    },
+    {
+      "url": "https://mwdb.cert.pl/assets/react-dom-DnHUW51E.js",
+      "status": 200,
+      "bytes": 140381,
+      "sha256": "05869d6933875fd6501ab1735f774d7ecbc72804c77c4c9f4e0e5200611dbd65",
+      "top": [
+        {
+          "kind": "hot_field",
+          "value": "email",
+          "hint": "klasa 13/9: sprawdź, czy serwer przyjmuje to pole od klienta"
+        },
+        {
+          "kind": "hot_field",
+          "value": "id",
+          "hint": "klasa 13/9: sprawdź, czy serwer przyjmuje to pole od klienta"
+        },
+        {
+          "kind": "hot_field",
+          "value": "status",
+          "hint": "klasa 13/9: sprawdź, czy serwer przyjmuje to pole od klienta"
+        },
+        {
+          "kind": "param",
+          "value": "Ia",
+          "hint": "kandydat na IDOR/SSRF/open redirect"
+        },
+        {
+          "kind": "param",
+          "value": "cl",
+          "hint": "kandydat na IDOR/SSRF/open redirect"
+        },
+        {
+          "kind": "param",
+          "value": "ga",
+          "hint": "kandydat na IDOR/SSRF/open redirect"
+        },
+        {
+          "kind": "param",
+          "value": "invariant",
+          "hint": "kandydat na IDOR/SSRF/open redirect"
+        },
+        {
+          "kind": "param",
+          "value": "ml",
+          "hint": "kandydat na IDOR/SSRF/open redirect"
+        },
+        {
+          "kind": "param",
+          "value": "nl",
+          "hint": "kandydat na IDOR/SSRF/open redirect"
+        },
+        {
+          "kind": "param",
+          "value": "ro",
+          "hint": "kandydat na IDOR/SSRF/open redirect"
+        },
+        {
+          "kind": "tech",
+          "value": "react",
+          "hint": "technologia — dobierz testy do stacku"
+        },
+        {
+          "kind": "url",
+          "value": "http://www.w3.org/1998/Math/MathML",
+          "hint": "inna domena — najpierw sprawdź scope, potem traktuj jako zależność"
+        },
+        {
+          "kind": "url",
+          "value": "http://www.w3.org/1999/xhtml",
+          "hint": "inna domena — najpierw sprawdź scope, potem traktuj jako zależność"
+        },
+        {
+          "kind": "url",
+          "value": "http://www.w3.org/1999/xlink",
+          "hint": "inna domena — najpierw sprawdź scope, potem traktuj jako zależność"
+        },
+        {
+          "kind": "url",
+          "value": "http://www.w3.org/2000/svg",
+          "hint": "inna domena — najpierw sprawdź scope, potem traktuj jako zależność"
+        },
+        {
+          "kind": "url",
+          "value": "http://www.w3.org/XML/1998/namespace",
+          "hint": "inna domena — najpierw sprawdź scope, potem traktuj jako zależność"
+        }
+      ]
+    },
+    {
+      "url": "https://mwdb.cert.pl/assets/remotes-CT_Vn_ao.js",
+      "status": 200,
+      "bytes": 24863,
+      "sha256": "7cd83aa983cdd1c8221bf8fe8f3cf80380e5ca9b5a2d186910fe964e791a35b3",
+      "top": [
+        {
+          "kind": "hot_field",
+          "value": "id",
+          "hint": "klasa 13/9: sprawdź, czy serwer przyjmuje to pole od klienta"
+        },
+        {
+          "kind": "tech",
+          "value": "react",
+          "hint": "technologia — dobierz testy do stacku"
+        }
+      ]
+    },
+    {
+      "url": "https://n6portal.cert.pl/static/js/main.9b01b47c.js",
+      "status": 200,
+      "bytes": 511393,
+      "sha256": "b918c92f1f0a588f0e72f68d4167c6c44f6dcae70a9f03b288048028a22655cb",
+      "top": [
+        {
+          "kind": "hot_field",
+          "value": "device_id",
+          "hint": "klasa 13/9: sprawdź, czy serwer przyjmuje to pole od klienta"
+        },
+        {
+          "kind": "hot_field",
+          "value": "email",
+          "hint": "klasa 13/9: sprawdź, czy serwer przyjmuje to pole od klienta"
+        },
+        {
+          "kind": "hot_field",
+          "value": "id",
+          "hint": "klasa 13/9: sprawdź, czy serwer przyjmuje to pole od klienta"
+        },
+        {
+          "kind": "hot_field",
+          "value": "org_id",
+          "hint": "klasa 13/9: sprawdź, czy serwer przyjmuje to pole od klienta"
+        },
+        {
+          "kind": "hot_field",
+          "value": "phone",
+          "hint": "klasa 13/9: sprawdź, czy serwer przyjmuje to pole od klienta"
+        },
+        {
+          "kind": "hot_field",
+          "value": "role",
+          "hint": "klasa 13/9: sprawdź, czy serwer przyjmuje to pole od klienta"
+        },
+        {
+          "kind": "hot_field",
+          "value": "status",
+          "hint": "klasa 13/9: sprawdź, czy serwer przyjmuje to pole od klienta"
+        },
+        {
+          "kind": "hot_field",
+          "value": "token",
+          "hint": "klasa 13/9: sprawdź, czy serwer przyjmuje to pole od klienta"
+        },
+        {
+          "kind": "hot_field",
+          "value": "uid",
+          "hint": "klasa 13/9: sprawdź, czy serwer przyjmuje to pole od klienta"
+        },
+        {
+          "kind": "hot_field",
+          "value": "user_id",
+          "hint": "klasa 13/9: sprawdź, czy serwer przyjmuje to pole od klienta"
+        },
+        {
+          "kind": "endpoint",
+          "value": "/api",
+          "hint": "klasa 12: sprawdź autoryzację i IDOR na tym endpoincie"
+        },
+        {
+          "kind": "endpoint",
+          "value": "/api_key",
+          "hint": "klasa 12: sprawdź autoryzację i IDOR na tym endpoincie"
+        },
+        {
+          "kind": "endpoint",
+          "value": "/user-settings",
+          "hint": "klasa 12: sprawdź autoryzację i IDOR na tym endpoincie"
+        },
+        {
+          "kind": "endpoint",
+          "value": "/user-settings/mfa-configuration",
+          "hint": "klasa 12: sprawdź autoryzację i IDOR na tym endpoincie"
+        },
+        {
+          "kind": "param",
+          "value": "Bl",
+          "hint": "kandydat na IDOR/SSRF/open redirect"
+        },
+        {
+          "kind": "param",
+          "value": "Fo",
+          "hint": "kandydat na IDOR/SSRF/open redirect"
+        },
+        {
+          "kind": "param",
+          "value": "Gl",
+          "hint": "kandydat na IDOR/SSRF/open redirect"
+        },
+        {
+          "kind": "param",
+          "value": "Pa",
+          "hint": "kandydat na IDOR/SSRF/open redirect"
+        },
+        {
+          "kind": "param",
+          "value": "Rl",
+          "hint": "kandydat na IDOR/SSRF/open redirect"
+        },
+        {
+          "kind": "param",
+          "value": "Ul",
+          "hint": "kandydat na IDOR/SSRF/open redirect"
+        },
+        {
+          "kind": "param",
+          "value": "ia",
+          "hint": "kandydat na IDOR/SSRF/open redirect"
+        },
+        {
+          "kind": "param",
+          "value": "invariant",
+          "hint": "kandydat na IDOR/SSRF/open redirect"
+        },
+        {
+          "kind": "param",
+          "value": "null",
+          "hint": "kandydat na IDOR/SSRF/open redirect"
+        },
+        {
+          "kind": "tech",
+          "value": "react",
+          "hint": "technologia — dobierz testy do stacku"
+        },
+        {
+          "kind": "url",
+          "value": "http://www.w3.org/1998/Math/MathML",
+          "hint": "inna domena — najpierw sprawdź scope, potem traktuj jako zależność"
+        },
+        {
+          "kind": "url",
+          "value": "http://www.w3.org/1999/xhtml",
+          "hint": "inna domena — najpierw sprawdź scope, potem traktuj jako zależność"
+        },
+        {
+          "kind": "url",
+          "value": "http://www.w3.org/1999/xlink",
+          "hint": "inna domena — najpierw sprawdź scope, potem traktuj jako zależność"
+        },
+        {
+          "kind": "url",
+          "value": "http://www.w3.org/2000/svg",
+          "hint": "inna domena — najpierw sprawdź scope, potem traktuj jako zależność"
+        },
+        {
+          "kind": "url",
+          "value": "http://www.w3.org/XML/1998/namespace",
+          "hint": "inna domena — najpierw sprawdź scope, potem traktuj jako zależność"
+        },
+        {
+          "kind": "secret",
+          "value": "apiKey:\"/api_key\"",
+          "hint": "klucz — ale uwaga: §8 poz. 12.1/12.2 wyklucza klucze bez możliwości nadużycia"
+        }
+      ]
+    },
+    {
+      "url": "https://n6portal.cert.pl/manifest.json",
+      "status": 200,
+      "bytes": 2809,
+      "sha256": "2e408c58a332522726ef31c5489dabdf3d9670fd5d90074f91a6641617e5d63f",
+      "top": []
+    },
+    {
+      "url": "https://moje.cert.pl/jsi18n/",
+      "status": 200,
+      "bytes": 15792,
+      "sha256": "c58907abd747cbe237ca4330b7f35bab5485ee1a3aecd20f5967b205bc571dcc",
+      "top": [
+        {
+          "kind": "hot_field",
+          "value": "status",
+          "hint": "klasa 13/9: sprawdź, czy serwer przyjmuje to pole od klienta"
+        }
+      ]
+    },
+    {
+      "url": "https://moje.cert.pl/static/CACHE/js/output.2cfe8a6ba69e.js",
+      "status": 200,
+      "bytes": 640092,
+      "sha256": "2cfe8a6ba69e646eb5a1b53ffa728fc38d1e3b64004eab31ee3c270bad5252f7",
+      "top": [
+        {
+          "kind": "hot_field",
+          "value": "id",
+          "hint": "klasa 13/9: sprawdź, czy serwer przyjmuje to pole od klienta"
+        },
+        {
+          "kind": "hot_field",
+          "value": "role",
+          "hint": "klasa 13/9: sprawdź, czy serwer przyjmuje to pole od klienta"
+        },
+        {
+          "kind": "hot_field",
+          "value": "status",
+          "hint": "klasa 13/9: sprawdź, czy serwer przyjmuje to pole od klienta"
+        },
+        {
+          "kind": "hot_field",
+          "value": "uid",
+          "hint": "klasa 13/9: sprawdź, czy serwer przyjmuje to pole od klienta"
+        },
+        {
+          "kind": "param",
+          "value": "Et",
+          "hint": "kandydat na IDOR/SSRF/open redirect"
+        },
+        {
+          "kind": "param",
+          "value": "null",
+          "hint": "kandydat na IDOR/SSRF/open redirect"
+        },
+        {
+          "kind": "param",
+          "value": "ot",
+          "hint": "kandydat na IDOR/SSRF/open redirect"
+        },
+        {
+          "kind": "param",
+          "value": "xt",
+          "hint": "kandydat na IDOR/SSRF/open redirect"
+        }
+      ]
+    },
+    {
+      "url": "https://moje.cert.pl/static/js/external/fa_all.min.js",
+      "status": 200,
+      "bytes": 1196707,
+      "sha256": "4fbbc27f97c96d68310c7cc399e16e913654a593fe5b5e6c495b7dd8721c5fe7",
+      "top": [
+        {
+          "kind": "hot_field",
+          "value": "email",
+          "hint": "klasa 13/9: sprawdź, czy serwer przyjmuje to pole od klienta"
+        },
+        {
+          "kind": "hot_field",
+          "value": "id",
+          "hint": "klasa 13/9: sprawdź, czy serwer przyjmuje to pole od klienta"
+        },
+        {
+          "kind": "hot_field",
+          "value": "phone",
+          "hint": "klasa 13/9: sprawdź, czy serwer przyjmuje to pole od klienta"
+        },
+        {
+          "kind": "hot_field",
+          "value": "role",
+          "hint": "klasa 13/9: sprawdź, czy serwer przyjmuje to pole od klienta"
+        },
+        {
+          "kind": "internal_ip",
+          "value": "10.1.5",
+          "hint": "adres wewnętrzny w kodzie — trop pod SSRF (klasa 5)"
+        },
+        {
+          "kind": "internal_ip",
+          "value": "10.1.9",
+          "hint": "adres wewnętrzny w kodzie — trop pod SSRF (klasa 5)"
+        },
+        {
+          "kind": "internal_ip",
+          "value": "10.11.04",
+          "hint": "adres wewnętrzny w kodzie — trop pod SSRF (klasa 5)"
+        },
+        {
+          "kind": "internal_ip",
+          "value": "10.13.73",
+          "hint": "adres wewnętrzny w kodzie — trop pod SSRF (klasa 5)"
+        },
+        {
+          "kind": "internal_ip",
+          "value": "10.14.14",
+          "hint": "adres wewnętrzny w kodzie — trop pod SSRF (klasa 5)"
+        },
+        {
+          "kind": "internal_ip",
+          "value": "10.15.74",
+          "hint": "adres wewnętrzny w kodzie — trop pod SSRF (klasa 5)"
+        },
+        {
+          "kind": "internal_ip",
+          "value": "10.19.07",
+          "hint": "adres wewnętrzny w kodzie — trop pod SSRF (klasa 5)"
+        },
+        {
+          "kind": "internal_ip",
+          "value": "10.2.06",
+          "hint": "adres wewnętrzny w kodzie — trop pod SSRF (klasa 5)"
+        },
+        {
+          "kind": "internal_ip",
+          "value": "10.2.1",
+          "hint": "adres wewnętrzny w kodzie — trop pod SSRF (klasa 5)"
+        },
+        {
+          "kind": "internal_ip",
+          "value": "10.2.4",
+          "hint": "adres wewnętrzny w kodzie — trop pod SSRF (klasa 5)"
+        },
+        {
+          "kind": "internal_ip",
+          "value": "10.2.7",
+          "hint": "adres wewnętrzny w kodzie — trop pod SSRF (klasa 5)"
+        },
+        {
+          "kind": "internal_ip",
+          "value": "10.2.9",
+          "hint": "adres wewnętrzny w kodzie — trop pod SSRF (klasa 5)"
+        },
+        {
+          "kind": "internal_ip",
+          "value": "10.23.18",
+          "hint": "adres wewnętrzny w kodzie — trop pod SSRF (klasa 5)"
+        },
+        {
+          "kind": "internal_ip",
+          "value": "10.25.24",
+          "hint": "adres wewnętrzny w kodzie — trop pod SSRF (klasa 5)"
+        },
+        {
+          "kind": "internal_ip",
+          "value": "10.3.2",
+          "hint": "adres wewnętrzny w kodzie — trop pod SSRF (klasa 5)"
+        },
+        {
+          "kind": "internal_ip",
+          "value": "10.3.3",
+          "hint": "adres wewnętrzny w kodzie — trop pod SSRF (klasa 5)"
+        },
+        {
+          "kind": "internal_ip",
+          "value": "10.31.34",
+          "hint": "adres wewnętrzny w kodzie — trop pod SSRF (klasa 5)"
+        },
+        {
+          "kind": "internal_ip",
+          "value": "10.32.37",
+          "hint": "adres wewnętrzny w kodzie — trop pod SSRF (klasa 5)"
+        },
+        {
+          "kind": "internal_ip",
+          "value": "10.33.12",
+          "hint": "adres wewnętrzny w kodzie — trop pod SSRF (klasa 5)"
+        },
+        {
+          "kind": "internal_ip",
+          "value": "10.37.08",
+          "hint": "adres wewnętrzny w kodzie — trop pod SSRF (klasa 5)"
+        },
+        {
+          "kind": "internal_ip",
+          "value": "10.4.4",
+          "hint": "adres wewnętrzny w kodzie — trop pod SSRF (klasa 5)"
+        },
+        {
+          "kind": "internal_ip",
+          "value": "10.4.7",
+          "hint": "adres wewnętrzny w kodzie — trop pod SSRF (klasa 5)"
+        },
+        {
+          "kind": "internal_ip",
+          "value": "10.4.8",
+          "hint": "adres wewnętrzny w kodzie — trop pod SSRF (klasa 5)"
+        },
+        {
+          "kind": "internal_ip",
+          "value": "10.43.45",
+          "hint": "adres wewnętrzny w kodzie — trop pod SSRF (klasa 5)"
+        },
+        {
+          "kind": "internal_ip",
+          "value": "10.5.1",
+          "hint": "adres wewnętrzny w kodzie — trop pod SSRF (klasa 5)"
+        },
+        {
+          "kind": "internal_ip",
+          "value": "10.5.5",
+          "hint": "adres wewnętrzny w kodzie — trop pod SSRF (klasa 5)"
+        },
+        {
+          "kind": "internal_ip",
+          "value": "10.51.31",
+          "hint": "adres wewnętrzny w kodzie — trop pod SSRF (klasa 5)"
+        },
+        {
+          "kind": "internal_ip",
+          "value": "10.6.2",
+          "hint": "adres wewnętrzny w kodzie — trop pod SSRF (klasa 5)"
+        },
+        {
+          "kind": "internal_ip",
+          "value": "10.6.5",
+          "hint": "adres wewnętrzny w kodzie — trop pod SSRF (klasa 5)"
+        },
+        {
+          "kind": "internal_ip",
+          "value": "10.6.6",
+          "hint": "adres wewnętrzny w kodzie — trop pod SSRF (klasa 5)"
+        },
+        {
+          "kind": "internal_ip",
+          "value": "10.6.7",
+          "hint": "adres wewnętrzny w kodzie — trop pod SSRF (klasa 5)"
+        },
+        {
+          "kind": "internal_ip",
+          "value": "10.606.648",
+          "hint": "adres wewnętrzny w kodzie — trop pod SSRF (klasa 5)"
+        },
+        {
+          "kind": "internal_ip",
+          "value": "10.63.08",
+          "hint": "adres wewnętrzny w kodzie — trop pod SSRF (klasa 5)"
+        },
+        {
+          "kind": "internal_ip",
+          "value": "10.69.65",
+          "hint": "adres wewnętrzny w kodzie — trop pod SSRF (klasa 5)"
+        },
+        {
+          "kind": "internal_ip",
+          "value": "10.7.4",
+          "hint": "adres wewnętrzny w kodzie — trop pod SSRF (klasa 5)"
+        },
+        {
+          "kind": "internal_ip",
+          "value": "10.72.33",
+          "hint": "adres wewnętrzny w kodzie — trop pod SSRF (klasa 5)"
+        }
+      ]
+    },
+    {
+      "url": "https://moje.cert.pl/static/CACHE/js/output.d0378309a41c.js",
+      "status": 200,
+      "bytes": 1066,
+      "sha256": "d0378309a41ccb4f7a4e23464c6cacc764cfb6ce53b3df00c164b4847735ac6b",
+      "top": []
+    },
+    {
+      "url": "https://moje.cert.pl/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js",
+      "status": 200,
+      "bytes": 1239,
+      "sha256": "2595496fe48df6fcf9b1bc57c29a744c121eb4dd11566466bc13d2e52e6bbcc8",
+      "top": []
+    },
+    {
+      "url": "https://moje.cert.pl/static/CACHE/js/output.7dbb2b20372b.js",
+      "status": 200,
+      "bytes": 6385,
+      "sha256": "7dbb2b20372b18e2c87701ba22c21e5170d67fe8a0d664dfd63ce6d2796bee38",
+      "top": [
+        {
+          "kind": "hot_field",
+          "value": "id",
+          "hint": "klasa 13/9: sprawdź, czy serwer przyjmuje to pole od klienta"
+        },
+        {
+          "kind": "url",
+          "value": "https://analytics.cert.pl/",
+          "hint": "inna domena — najpierw sprawdź scope, potem traktuj jako zależność"
+        }
+      ]
+    },
+    {
+      "url": "https://incydent.cert.pl/static/js/2.33d34004.chunk.js",
+      "status": 200,
+      "bytes": 1197032,
+      "sha256": "f22b9bbe255ecbab8541f3a75d002eb38c6b5dce6c67868e1a17f86997d1d223",
+      "top": [
+        {
+          "kind": "hot_field",
+          "value": "email",
+          "hint": "klasa 13/9: sprawdź, czy serwer przyjmuje to pole od klienta"
+        },
+        {
+          "kind": "hot_field",
+          "value": "id",
+          "hint": "klasa 13/9: sprawdź, czy serwer przyjmuje to pole od klienta"
+        },
+        {
+          "kind": "hot_field",
+          "value": "status",
+          "hint": "klasa 13/9: sprawdź, czy serwer przyjmuje to pole od klienta"
+        },
+        {
+          "kind": "hot_field",
+          "value": "token",
+          "hint": "klasa 13/9: sprawdź, czy serwer przyjmuje to pole od klienta"
+        },
+        {
+          "kind": "param",
+          "value": "Ee",
+          "hint": "kandydat na IDOR/SSRF/open redirect"
+        },
+        {
+          "kind": "param",
+          "value": "Ie",
+          "hint": "kandydat na IDOR/SSRF/open redirect"
+        },
+        {
+          "kind": "param",
+          "value": "_e",
+          "hint": "kandydat na IDOR/SSRF/open redirect"
+        },
+        {
+          "kind": "param",
+          "value": "ac",
+          "hint": "kandydat na IDOR/SSRF/open redirect"
+        },
+        {
+          "kind": "param",
+          "value": "hl",
+          "hint": "kandydat na IDOR/SSRF/open redirect"
+        },
+        {
+          "kind": "param",
+          "value": "invariant",
+          "hint": "kandydat na IDOR/SSRF/open redirect"
+        },
+        {
+          "kind": "param",
+          "value": "null",
+          "hint": "kandydat na IDOR/SSRF/open redirect"
+        },
+        {
+          "kind": "param",
+          "value": "onload",
+          "hint": "kandydat na IDOR/SSRF/open redirect"
+        },
+        {
+          "kind": "param",
+          "value": "pb",
+          "hint": "kandydat na IDOR/SSRF/open redirect"
+        },
+        {
+          "kind": "param",
+          "value": "render",
+          "hint": "kandydat na IDOR/SSRF/open redirect"
+        },
+        {
+          "kind": "param",
+          "value": "this",
+          "hint": "kandydat na IDOR/SSRF/open redirect"
+        },
+        {
+          "kind": "sourcemap",
+          "value": "2.33d34004.chunk.js.map",
+          "hint": "mapa źródeł — jeśli publiczna, daje pełny kod frontendu"
+        },
+        {
+          "kind": "tech",
+          "value": "react",
+          "hint": "technologia — dobierz testy do stacku"
+        },
+        {
+          "kind": "url",
+          "value": "http://www.w3.org/1998/Math/MathML",
+          "hint": "inna domena — najpierw sprawdź scope, potem traktuj jako zależność"
+        },
+        {
+          "kind": "url",
+          "value": "http://www.w3.org/1999/xhtml",
+          "hint": "inna domena — najpierw sprawdź scope, potem traktuj jako zależność"
+        },
+        {
+          "kind": "url",
+          "value": "http://www.w3.org/1999/xlink",
+          "hint": "inna domena — najpierw sprawdź scope, potem traktuj jako zależność"
+        },
+        {
+          "kind": "url",
+          "value": "http://www.w3.org/2000/svg",
+          "hint": "inna domena — najpierw sprawdź scope, potem traktuj jako zależność"
+        },
+        {
+          "kind": "url",
+          "value": "http://www.w3.org/XML/1998/namespace",
+          "hint": "inna domena — najpierw sprawdź scope, potem traktuj jako zależność"
+        }
+      ]
+    }
+  ],
+  "candidates": 178,
+  "notes": [
+    "limit bundli (12) wyczerpany — pominięto resztę celów"
+  ],
+  "budget": 28
+}
