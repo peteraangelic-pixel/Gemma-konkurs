@@ -6,7 +6,7 @@
 
 ## Wynik w jednym zdaniu
 
-**105 żądań, 5 rund, 0 potwierdzonych podatności.** Zmapowano powierzchnię API 9 hostów z zakresu, sfalsyfikowano ~10 hipotez i wskazano 4 miejsca, w których warto kopać dalej — żadne nie daje jeszcze materiału na zgłoszenie.
+**165 żądań, 6 rund, 0 potwierdzonych podatności.** Zmapowano powierzchnię API 9 hostów z zakresu, sfalsyfikowano ~10 hipotez i wskazano 4 miejsca, w których warto kopać dalej — żadne nie daje jeszcze materiału na zgłoszenie.
 
 ## Co zostało sprawdzone i z jakim wynikiem
 
@@ -28,8 +28,8 @@ Klasy z §8 przetestowane i **odrzucone**: SSRF (image-proxy, `podglad-pdf`, `og
 
 ### 1. `science.nask.pl /api/downloadFile?fileId=<ID>` — pobieranie po numerze ID (poz. 8.9)
 Kontrakt ustalony jednoznacznie: parametr to **`fileId`**, wartość liczbowa; `fileId=18864` zwraca `200 image/png` 2 210 114 B z `Content-Disposition: attachment; filename="Designer-11.png"`. Walidacja jest twarda (`-1`, `18864abc`, `fileId[]` → `400 Invalid file id`; traversal → reset WAF), a sweep 25 ID w przedziale 100–20 000 dał 404 poza dwoma realnymi.
-**Dlaczego nadal warto:** endpoint serwuje pliki wyłącznie z witryny `sites/4`. Jeśli w mediach tej witryny istnieje załącznik niepubliczny (wersja robocza wpisu, plik z `post_status=private`), jego ID wystarczy do pobrania. Brakuje **jednego** ID niepublicznego pliku — zdobycie go to cała robota.
-**Następny krok:** pozyskać ID z osi czasu (media dodawane w tym samym dniu co wpisy robocze) i sprawdzić, czy dla danego ID `/api/downloadFile` zwraca 200, gdy `/api/media/wp-content/...` zwraca 404/403.
+**Runda 6 (gęsty sweep okolic realnych ID):** 60 żądań w przedziałach 18800–18868, 40330–40358, 12510–12520, 13225–13240. Wszystkie trafienia 200 to **publiczne zdjęcia z aktualności** (`DSC06583-scaled.jpg`, `DSC09655-scaled-e1791382286962.jpg`, `Projekt-bez-nazwy-8.jpg`, `Designer-11.png`) — każdy z tych plików jest normalnie dostępny przez `/api/media/wp-content/...`. Żadnego PDF/DOCX, żadnej nazwy sugerującej dokument wewnętrzny, żadnego 200 dla ID, którego nie ma w publicznym mediach.
+**Werdykt po rundzie 6:** endpoint jest nadmiarowy wobec publicznego `/api/media/`, ale **nie udało się znaleźć dowodu obejścia kontroli dostępu**. Bez jednego ID pliku niepublicznego nie ma zgłoszenia — a takiego ID nie da się odgadnąć (przestrzeń gęsta, wszystkie widoczne pozycje są opublikowane).
 
 ### 2. `zglos-dezinformacje.nask.pl /api/sendForm` — jedyny realny wektor z potencjałem na wyższą półkę
 POST-only (405 na GET), FormData + `g-recaptcha-response`, pole „link” i załącznik. Niesprawdzone: typy plików (upload → RCE/filter bypass, poz. 8.6), walidacja URL (SSRF), propagacja treści do panelu analityka (stored XSS).
