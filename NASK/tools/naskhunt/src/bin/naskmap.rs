@@ -96,6 +96,12 @@ fn main() {
         .and_then(|i| args.get(i + 1))
         .cloned()
         .unwrap_or_else(|| "MAP.md".to_string());
+    let needles: Vec<String> = args
+        .iter()
+        .position(|a| a == "--grep")
+        .and_then(|i| args.get(i + 1))
+        .map(|v| v.split(',').map(|s| s.trim().to_string()).filter(|s| !s.is_empty()).collect())
+        .unwrap_or_default();
     let max_scripts: usize = args
         .iter()
         .position(|a| a == "--max-scripts")
@@ -188,6 +194,44 @@ fn main() {
         }
 
         md.push_str(&format!("- skryptów pobranych: **{fetched}**\n\n"));
+
+        // Kontekst wokół wskazanych stringów: tak ustala się NAZWY parametrów i kształt odpowiedzi.
+        if !needles.is_empty() {
+            let mut ctx_md = String::new();
+            let mut seen: BTreeSet<String> = BTreeSet::new();
+            for url in scripts.iter().take(max_scripts) {
+                let Some((st, _, js)) = f.get(url) else { continue };
+                if st == 0 || js.len() < 64 {
+                    continue;
+                }
+                for needle in &needles {
+                    let mut hits = 0;
+                    for (idx, _) in js.match_indices(needle.as_str()) {
+                        if hits >= 4 {
+                            break;
+                        }
+                        let start = idx.saturating_sub(160);
+                        let end = (idx + 200).min(js.len());
+                        let mut snip: String = js[start..end]
+                            .chars()
+                            .map(|c| if c == '\n' || c == '\r' || c == '`' || c == '|' { ' ' } else { c })
+                            .collect();
+                        while snip.contains("  ") {
+                            snip = snip.replace("  ", " ");
+                        }
+                        if seen.insert(snip.clone()) {
+                            ctx_md.push_str(&format!("- **`{needle}`** → `{}`\n", snip));
+                            hits += 1;
+                        }
+                    }
+                }
+            }
+            if !ctx_md.is_empty() {
+                md.push_str("### Kontekst stringów (nazwy parametrów)\n\n");
+                md.push_str(&ctx_md);
+                md.push('\n');
+            }
+        }
 
         if apis.is_empty() {
             md.push_str("### Endpointy API\n\nBrak `/api/...` w bundle'ach (albo chunki ładowane leniwie).\n\n");
