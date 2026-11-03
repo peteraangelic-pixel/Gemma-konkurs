@@ -93,17 +93,25 @@ jobs:
           NASK_COOKIE_DATAANNOTATIONPLLUMORGPL: ${{ secrets.NASK_COOKIE_DATAANNOTATIONPLLUMORGPL }}
           NASK_COOKIE_KOMUNIKATORNARODOWYGOVPL: ${{ secrets.NASK_COOKIE_KOMUNIKATORNARODOWYGOVPL }}
         run: |
-          set -euo pipefail
-          ARGS=()
-          # Przy triggerze `push` wartości inputs.* są puste — dlatego każdy
-          # warunek porównuje do "true", a nie polega na prawdziwości.
+          # `set +e` + przechwycenie logu: potrzebujemy treści błędu, nie tylko
+          # kodu wyjścia. Bez tego debugowanie zdalne to zgadywanie.
+          set +e
           INPUT_DRY="${{ inputs.dry_run }}"
           INPUT_AUTH="${{ inputs.auth }}"
           INPUT_HOSTS="${{ inputs.hosts }}"
+          ARGS=()
+          # Przy triggerze `push` wartości inputs.* są puste — dlatego każdy
+          # warunek porównuje do "true", a nie polega na prawdziwości.
           if [ "$INPUT_DRY" = "true" ]; then ARGS+=(--dry-run); fi
           if [ "$INPUT_AUTH" = "true" ]; then ARGS+=(--auth); fi
           if [ -n "$INPUT_HOSTS" ]; then ARGS+=(--hosts "$INPUT_HOSTS"); fi
-          python nask/recon.py "${ARGS[@]+"${ARGS[@]}"}"
+          python nask/recon.py "${ARGS[@]+"${ARGS[@]}"}" 2>&1 | tee /tmp/recon.log
+          CODE=${PIPESTATUS[0]}
+          echo "kod wyjścia recon.py: $CODE"
+          if [ "$CODE" -ne 0 ]; then
+            python nask/fail_annotation.py /tmp/recon.log
+          fi
+          exit "$CODE"
 
       - name: podsumowanie
         if: always()
