@@ -1,0 +1,101 @@
+# Nocne polowanie: rekonesans + sześć sond celowanych po hostach w zakresie.
+#
+# Dlaczego na Actions: sandbox agenta nie ma wyjścia do tych hostów, runner ma.
+# Regulamin obowiązuje tu tak samo: wyłącznie GET, 4,5 req/s, tylko hosty
+# z nask/tools/scope.py, zero testów obciążeniowych.
+#
+# URUCHOMIENIE (bez wklejania haseł): push pliku-flagi `nask/RUN-HUNT`.
+#   echo "run $(date -u +%FT%TZ)" >> nask/RUN-HUNT && git push
+# `workflow_dispatch` zadziała dopiero, gdy plik trafi na gałąź domyślną.
+name: nask-hunt
+
+on:
+  push:
+    paths:
+      - "nask/RUN-HUNT"
+  workflow_dispatch:
+    inputs:
+      budget:
+        description: "Maksymalna liczba żądań w przebiegu"
+        default: "900"
+      hosts:
+        description: "Konkretne hosty po spacji (puste = wszystkie w scope)"
+        default: ""
+
+permissions:
+  contents: write
+
+concurrency:
+  group: nask-hunt
+  cancel-in-progress: false
+
+jobs:
+  testy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install --quiet pytest
+      - name: testy offline (blokują przebieg)
+        run: python -m pytest nask/tools/tests -q
+      - name: kontrola zakresu (blokuje przebieg)
+        run: |
+          set -e
+          python nask/nask.py scope hack.cert.pl
+          python nask/nask.py scope ctf.hack.cert.pl
+          if python nask/nask.py scope gov.pl; then echo "BLAD: gov.pl nie jest w scope"; exit 1; fi
+          if python nask/nask.py scope evil.com; then echo "BLAD: evil.com w scope"; exit 1; fi
+          echo "scope OK"
+      - name: brak poświadczeń w plikach
+        run: python nask/security_scan.py
+
+  hunt:
+    needs: testy
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: polowanie
+        run: |
+          set +e
+          BUDGET="${{ inputs.budget }}"; BUDGET="${BUDGET:-900}"
+          HOSTS="${{ inputs.hosts }}"
+          if [ -n "$HOSTS" ]; then
+            python nask/hunt.py --out nask/findings --budget "$BUDGET" --hosts $HOSTS 2>&1 | tee /tmp/hunt.log
+          else
+            python nask/hunt.py --out nask/findings --budget "$BUDGET" 2>&1 | tee /tmp/hunt.log
+          fi
+          CODE=${PIPESTATUS[0]}
+          echo "kod wyjścia: $CODE"
+          exit "$CODE"
+
+      - name: podsumowanie w logu
+        if: always()
+        run: cat nask/findings/hunt-summary.md >> "$GITHUB_STEP_SUMMARY" || true
+
+      - name: wynik z powrotem do repo (kanał odczytu)
+        if: always()
+        run: |
+          set -euo pipefail
+          git config user.name "nask-hunt-bot"
+          git config user.email "nask-hunt@users.noreply.github.com"
+          git add -f nask/findings/hunt.json nask/findings/hunt-summary.md \
+                     nask/findings/evidence.jsonl 2>/dev/null || true
+          git diff --cached --quiet && { echo "brak zmian"; exit 0; }
+          git commit -q -m "nask-hunt: wynik przebiegu ${GITHUB_RUN_ID} (automat)"
+          git push -q origin "HEAD:${GITHUB_REF_NAME}"
+
+      - name: artefakt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nask-hunt-${{ github.run_id }}
+          path: nask/findings/hunt*.json
+          if-no-files-found: warn
+          retention-days: 30
