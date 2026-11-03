@@ -71,6 +71,8 @@ struct Observation {
     server: String,
     acao: String,
     acac: String,
+    cdisp: String,
+    clen: String,
     snippet: String,
     error: String,
 }
@@ -132,6 +134,8 @@ impl Runner {
                 server: String::new(),
                 acao: String::new(),
                 acac: String::new(),
+                cdisp: String::new(),
+                clen: String::new(),
                 snippet: String::new(),
                 error: format!("{e}"),
             },
@@ -148,6 +152,8 @@ fn read(resp: ureq::Response) -> Observation {
     let server = hdr("server");
     let acao = hdr("access-control-allow-origin");
     let acac = hdr("access-control-allow-credentials");
+    let cdisp = hdr("content-disposition");
+    let clen = hdr("content-length");
     let body = resp.into_string().unwrap_or_default();
     let len = body.len();
     let mut snippet: String = body
@@ -168,6 +174,8 @@ fn read(resp: ureq::Response) -> Observation {
         server,
         acao,
         acac,
+        cdisp,
+        clen,
         snippet,
         error: String::new(),
     }
@@ -298,6 +306,12 @@ fn main() {
             if !t.acao.is_empty() {
                 md.push_str(&format!("- CORS: `{}` (credentials: `{}`)\n", t.acao, t.acac));
             }
+            if !t.clen.is_empty() {
+                md.push_str(&format!("- Content-Length: `{}`\n", t.clen));
+            }
+            if !t.cdisp.is_empty() {
+                md.push_str(&format!("- Content-Disposition: `{}`\n", t.cdisp));
+            }
             if !t.snippet.is_empty() {
                 md.push_str(&format!("- początek treści: `{}`\n", t.snippet));
             }
@@ -314,12 +328,12 @@ fn main() {
         md.push_str("Brak. To też wynik — przy tych sondach nie ma czego potwierdzać.\n\n");
     }
 
-    md.push_str("## Wszystkie obserwacje\n\n| id | status | bajty | typ | server | snippet |\n|---|---:|---:|---|---|---|\n");
+    md.push_str("## Wszystkie obserwacje\n\n| id | status | bajty | typ | Content-Disposition | snippet |\n|---|---:|---:|---|---|---|\n");
     for (c, t, _, _) in &results {
         if let Some(t) = t {
             md.push_str(&format!(
-                "| `{}` | {} | {} | {} | {} | `{}` |\n",
-                c.id, t.status, t.len, t.ctype, t.server, t.snippet
+                "| `{}` | {} | {} | {} | `{}` | `{}` |\n",
+                c.id, t.status, t.len, t.ctype, t.cdisp, t.snippet
             ));
         }
     }
@@ -341,6 +355,8 @@ fn main() {
             "ctype": t.as_ref().map(|o| o.ctype.clone()),
             "location": t.as_ref().map(|o| o.location.clone()),
             "acao": t.as_ref().map(|o| o.acao.clone()),
+            "content_disposition": t.as_ref().map(|o| o.cdisp.clone()),
+            "content_length_header": t.as_ref().map(|o| o.clen.clone()),
             "snippet": t.as_ref().map(|o| o.snippet.clone()),
             "baseline_status": b.as_ref().map(|o| o.status),
             "error": t.as_ref().map(|o| o.error.clone()),
