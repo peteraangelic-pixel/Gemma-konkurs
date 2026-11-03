@@ -17,6 +17,19 @@ milion to pula całego, wieloletniego programu bug bounty NASK).
 | **mSzyfr** | `*.komunikator.narodowy.gov.pl` | — | — |
 | **Gmina Władysławowo** | `eobieg.wladyslawowo.pl` | `wladyslawowo.pl`, `cciod.wladyslawowo.pl` | `bip.wladyslawowo.pl` (usunięte z zakresu) |
 
+**Wszystkie pięć programów jest AKTYWNYCH w tym samym oknie 03–30.11.2026.**
+Sprawdzone osobno na stronie każdej edycji (stan na 2026-11-03) — nie zakładam, że
+skoro NASK ma edycję 11/2026, to pozostałe też. Mają, ale to było warto sprawdzić.
+
+Strona CERT Polska mówi to wprost, cytat:
+
+> Oznacza to, że domena `hack.cert.pl` (portal, z którego teraz korzystasz) jest objęta
+> Programem, zaś jej subdomeny — nie, za wyjątkiem portalu `ctf.hack.cert.pl`.
+
+To zdanie jest jedynym miejscem w regulaminach, gdzie ta asymetria została wyjaśniona,
+i dokładnie ono złamało pierwszą wersję mojego `scope.py` (test to wykrył — patrz
+`tools/tests/test_scope_ratelimit.py::test_in_scope[hack.cert.pl-cert-T1]`).
+
 Źródła:
 - <https://hack.cert.pl/programs/nask-pib/nask/editions/1>
 - <https://hack.cert.pl/programs/cert-polska/bug-bounty-cert-polska/editions/1>
