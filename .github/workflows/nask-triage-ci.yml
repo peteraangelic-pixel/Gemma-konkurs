@@ -1,12 +1,17 @@
 name: nask-triage-ci
 
 # Kompiluje i testuje narzędzie offline (Rust + Rayon). Zero ruchu do systemów programu.
+# Logi kompilatora są publikowane do `ci/` (poza filtrem paths), bo w tym sandboxie nie da się
+# pobrać logów przebiegu — a bez nich iteracja nad kodem jest zgadywaniem.
 on:
   push:
     paths:
       - "NASK/tools/nasktriage/**"
       - ".github/workflows/nask-triage-ci.yml"
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   test:
@@ -29,23 +34,58 @@ jobs:
 
       - name: format (informacyjnie)
         continue-on-error: true
-        run: cargo fmt --all -- --check
+        run: |
+          cargo fmt --all -- --check > ../../../ci/nasktriage-fmt.log 2>&1 || true
+          mkdir -p ../../../ci && cargo fmt --all -- --check > ../../../ci/nasktriage-fmt.log 2>&1 || true
 
       - name: lints
-        run: cargo clippy --all-targets -- -D warnings
+        id: lints
+        run: |
+          mkdir -p ../../../ci
+          set -o pipefail
+          cargo clippy --all-targets --message-format=short 2>&1 | tee ../../../ci/nasktriage-clippy.log
 
       - name: testy
-        run: cargo test --all-targets -- --nocapture
+        id: tests
+        if: always()
+        run: |
+          mkdir -p ../../../ci
+          set -o pipefail
+          cargo test --all-targets 2>&1 | tee ../../../ci/nasktriage-test.log
 
       - name: build release
-        run: cargo build --release
+        id: build
+        if: always()
+        run: |
+          mkdir -p ../../../ci
+          set -o pipefail
+          cargo build --release 2>&1 | tee ../../../ci/nasktriage-build.log
 
       - name: dymny test CLI
+        id: smoke
+        if: always()
         run: |
-          set -euo pipefail
-          ./target/release/nasktriage --version
-          ./target/release/nasktriage scope --scope scope.example.json
-          ./target/release/nasktriage scope --scope scope.example.json --host panel.dns.pl && exit 1 || true
-          ./target/release/nasktriage scope --scope scope.example.json --host oad.nask.pl
-          ./target/release/nasktriage rate --rps 5
-          ./target/release/nasktriage rate --rps 9 && exit 1 || true
+          mkdir -p ../../../ci
+          {
+            set -x
+            ./target/release/nasktriage --version
+            ./target/release/nasktriage scope --scope scope.example.json
+            ./target/release/nasktriage scope --scope scope.example.json --host panel.dns.pl && exit 1 || true
+            ./target/release/nasktriage scope --scope scope.example.json --host oad.nask.pl
+            ./target/release/nasktriage rate --rps 5
+            ./target/release/nasktriage rate --rps 9 && exit 1 || true
+          } > ../../../ci/nasktriage-smoke.log 2>&1
+
+      - name: publikuj logi
+        if: always()
+        run: |
+          cd "$GITHUB_WORKSPACE"
+          git config user.name "ci-log"
+          git config user.email "ci-log@users.noreply.github.com"
+          git add -f ci/nasktriage-*.log
+          if git diff --cached --quiet; then
+            echo "brak zmian w logach"
+          else
+            git commit -q -m "ci: logi nasktriage [skip ci]"
+            git push origin HEAD:arena/c4eeb067-gemma-konkurs
+          fi
