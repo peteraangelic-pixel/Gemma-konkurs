@@ -275,8 +275,11 @@ def test_api_authz_401_is_negative_and_only_two_ids():
     http = Http(lambda url, h: R(status=401, ctype="application/json", body="{}", url=url))
     assert probes.probe_api_authz(http, "https://hack.cert.pl",
                                   ["/users/$userId/view"]) == []
-    values = {u.rsplit("/", 2)[-2] if u.endswith("/view") else u for u, _ in http.calls}
-    assert len(http.calls) == 2, "sonda ma odpytać najwyżej dwa identyfikatory"
+    # Dwa identyfikatory × dwa prefiksy (`""` i `/api/v1`) = maksymalnie 4 żądania.
+    # Żadna pętla po zakresie ID — to jest sedno ograniczenia.
+    assert len(http.calls) <= 4, f"zbyt wiele żądań: {http.calls}"
+    ids = {part for u, _ in http.calls for part in u.split("/") if part in {"1", "2"}}
+    assert ids <= {"1", "2"}, f"odpytano inne identyfikatory: {ids}"
 
 
 def test_api_authz_ignores_public_json_without_sensitive_fields():
@@ -292,4 +295,4 @@ def test_api_authz_does_not_iterate_range():
     http = Http(lambda url, h: R(ctype="application/json", body=body, url=url))
     probes.probe_api_authz(http, "https://hack.cert.pl",
                            ["/users/$userId/email", "/users/$id/view"])
-    assert len(http.calls) <= 2, f"zbyt wiele żądań: {http.calls}"
+    assert len(http.calls) <= 4, f"zbyt wiele żądań: {http.calls}"

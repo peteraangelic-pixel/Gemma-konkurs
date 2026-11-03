@@ -392,58 +392,64 @@ def run_all(http, base: str, ctx: dict) -> list[ProbeFinding]:
 # --------------------------------------------------------------------------
 # S7 — autoryzacja na endpointach API znanych z własnego JS aplikacji
 # --------------------------------------------------------------------------
-# Endpointy w stylu `/users/{id}` są w tym repo wyciągane z bundli, czyli
-# z kodu, który aplikacja sama wysyła przeglądarce. To najlepsze możliwe źródło
-# pytań: nie zgadujemy ścieżek, tylko sprawdzamy te, które naprawdę istnieją.
+# Endpointy w stylu `/users/{id}` pochodzą z bundla, który aplikacja sama wysyła
+# przeglądarce — nie zgadujemy ścieżek, tylko sprawdzamy te, które naprawdę istnieją.
 #
-# BARDZO WAŻNE OGRANICZENIE: podmieniamy identyfikator na 1 i 2 — dwa żądania,
-# bez iteracji po zakresie. Celem jest ustalenie, czy odpowiedź jest 401/403
-# (poprawnie), czy 200 z danymi (podatność). Nie zbieramy danych innych
-# użytkowników; jeśli odpowiedź zawiera dane, kończymy i raportujemy sam fakt,
-# a nie treść. Regulamin §6 pkt 1 mówi o kontach, nie o tym, że nie wolno
-# wysłać żądania, ale etyka jest tu prostsza niż regulamin: minimum konieczne.
+# BARDZO WAŻNE OGRANICZENIE: podmieniamy identyfikator na 1 i 2 — bez iteracji po
+# zakresie. Celem jest ustalenie, czy odpowiedź to 401/403 (poprawnie) czy 200
+# z danymi (podatność). Jeśli odpowiedź zawiera dane, kończymy natychmiast
+# i raportujemy sam fakt, nie treść. Regulamin §6 pkt 1 mówi o kontach; etyka jest
+# tu prostsza niż regulamin — minimum konieczne do dowodu.
 ID_SAFE_VALUES = ["1", "2"]
 ID_PARAM_RE = re.compile(r"\$\{?[\w.]*(?:userId|id|Id|ID)[\w.]*\}?|\$(?:userId|id)")
 SENSITIVE_FIELDS = ("email", "payout", "bank", "iban", "account_number", "phone",
                     "pesel", "address", "full_name", "token", "password_hash")
+API_PREFIXES = ("", "/api/v1")
 
 
 def probe_api_authz(http, base: str, endpoints: list[str],
                     max_endpoints: int = 6) -> list[ProbeFinding]:
     """Czy endpoint z identyfikatorem użytkownika sprawdza uprawnienia?
 
-    Sonda jest celowo wąska: bierze z listy tylko te szablony, które zawierają
-    identyfikator użytkownika, i podmienia go na `1` oraz `2`.
+    Sprawdzamy dwa prefiksy, bo ścieżka z bundla bywa trasą frontendu
+    (`/users/1/view`), a nie API. Dla hack.cert.pl realne API to `/api/v1/...`.
+    Drugi prefiks to zgadywanie, ale kosztuje jedno żądanie na szablon.
     """
     out: list[ProbeFinding] = []
     templates = [e for e in endpoints if ID_PARAM_RE.search(e)][:max_endpoints]
     for tpl in templates:
         for value in ID_SAFE_VALUES:
-            path = ID_PARAM_RE.sub(value, tpl)
-            if not path.startswith("/"):
-                continue
-            url = base.rstrip("/") + path
-            r = http.get(url, headers={"Accept": "application/json"})
-            if r.error:
-                continue
-            ctype = _hdr(r, "content-type")
-            if r.status // 100 != 2:
-                continue                    # 401/403/404 = poprawnie, wynik negatywny
-            body = r.text[:4000]
-            if "json" not in ctype and "{" not in body:
-                continue
-            hits = [f for f in SENSITIVE_FIELDS if f'"{f}"' in body]
-            if not hits:
-                continue
-            out.append(ProbeFinding(
-                "S7", "", url, "krytyczny",
-                "Endpoint użytkownika zwraca dane bez sesji",
-                f"`{path}` → {r.status}, {len(r.body)} B. Pola wrażliwe w treści: "
-                f"{', '.join(hits[:6])}. Zażądano WYŁĄCZNIE identyfikatora {value}; "
-                f"nie pobierano dalszych rekordów.",
-                "§8 poz. 9.1/9.2 i 03 — IDOR / brak kontroli dostępu prowadzący do "
-                "odczytu cudzych danych. Wymaga potwierdzenia w przeglądarce dwoma "
-                "własnymi kontami przed zgłoszeniem.",
-                {"path": path, "fields": hits[:6], "value": value}))
-            break                        # jeden dowód wystarczy, nie zbieramy więcej
+            done = False
+            for prefix in API_PREFIXES:
+                path = prefix + ID_PARAM_RE.sub(value, tpl)
+                if not path.startswith("/"):
+                    continue
+                hit = _judge_user_endpoint(http, base.rstrip("/") + path, path, value)
+                if hit:
+                    out.append(hit)
+                    done = True
+                    break
+            if done:
+                break
     return out
+
+
+def _judge_user_endpoint(http, url: str, path: str, value: str) -> ProbeFinding | None:
+    r = http.get(url, headers={"Accept": "application/json"})
+    if r.error or r.status // 100 != 2:
+        return None
+    if "json" not in _hdr(r, "content-type") and "{" not in r.text[:200]:
+        return None
+    hits = [f for f in SENSITIVE_FIELDS if f'"{f}"' in r.text[:4000]]
+    if not hits:
+        return None
+    return ProbeFinding(
+        "S7", "", url, "krytyczny",
+        "Endpoint użytkownika zwraca dane bez sesji",
+        f"`{path}` → {r.status}, {len(r.body)} B. Pola wrażliwe w treści: "
+        f"{', '.join(hits[:6])}. Zażądano WYŁĄCZNIE identyfikatora {value}; "
+        f"nie pobierano dalszych rekordów.",
+        "§8 poz. 9.1/9.2 i 03 — IDOR / brak kontroli dostępu prowadzący do odczytu "
+        "cudzych danych. Wymaga potwierdzenia w przeglądarce dwoma własnymi kontami "
+        "przed zgłoszeniem.",
+        {"path": path, "fields": hits[:6], "value": value})
