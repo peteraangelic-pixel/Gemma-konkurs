@@ -5,7 +5,17 @@
 # więc workflow nie robi nic, czego nie wolno: ~20 żądań, 4,5 req/s, wyłącznie
 # hosty z nask/tools/scope.py, zero testów obciążeniowych.
 #
-# Uruchomienie: Actions → nask-recon → Run workflow.
+# JAK URUCHOMIĆ — dwie drogi, obie bez wklejania haseł:
+#
+# 1. Push pliku-flagi `nask/RUN-RECON` (tak działa dziś, bo `main` nie ma jeszcze
+#    tego workflow, a `workflow_dispatch` wymaga pliku na gałęzi domyślnej):
+#       echo "run $(date -u +%FT%TZ)" >> nask/RUN-RECON && git push
+# 2. Actions → nask-recon → Run workflow (zadziała, gdy workflow trafi na `main`,
+#    np. po scaleniu PR-a).
+#
+# Trigger jest celowo wąski (`nask/RUN-RECON`): zmiana kodu w `nask/*.py` NIE
+# wysyła żadnych żądań do celów. Sieć uruchamia się tylko wtedy, gdy ktoś
+# świadomie podniesie flagę.
 # Sekrety (opcjonalne, do testów uwierzytelnionych z WŁASNYCH kont):
 #   Settings → Secrets and variables → Actions → New repository secret
 #   NASK_COOKIE_MWDBCERTPL = "session=..."
@@ -13,6 +23,9 @@
 name: nask-recon
 
 on:
+  push:
+    paths:
+      - "nask/RUN-RECON"
   workflow_dispatch:
     inputs:
       dry_run:
@@ -82,9 +95,14 @@ jobs:
         run: |
           set -euo pipefail
           ARGS=()
-          if [ "${{ inputs.dry_run }}" = "true" ]; then ARGS+=(--dry-run); fi
-          if [ "${{ inputs.auth }}" = "true" ]; then ARGS+=(--auth); fi
-          if [ -n "${{ inputs.hosts }}" ]; then ARGS+=(--hosts "${{ inputs.hosts }}"); fi
+          # Przy triggerze `push` wartości inputs.* są puste — dlatego każdy
+          # warunek porównuje do "true", a nie polega na prawdziwości.
+          INPUT_DRY="${{ inputs.dry_run }}"
+          INPUT_AUTH="${{ inputs.auth }}"
+          INPUT_HOSTS="${{ inputs.hosts }}"
+          if [ "$INPUT_DRY" = "true" ]; then ARGS+=(--dry-run); fi
+          if [ "$INPUT_AUTH" = "true" ]; then ARGS+=(--auth); fi
+          if [ -n "$INPUT_HOSTS" ]; then ARGS+=(--hosts "$INPUT_HOSTS"); fi
           python nask/recon.py "${ARGS[@]+"${ARGS[@]}"}"
 
       - name: podsumowanie
