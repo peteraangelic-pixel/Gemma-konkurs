@@ -56,6 +56,19 @@ _SCRIPT_SRC = re.compile(r'<script[^>]+src=["\']([^"\']+)["\']', re.I)
 _LINK_HREF = re.compile(r'<link[^>]+href=["\']([^"\']+\.js[^"\']*)["\']', re.I)
 
 
+def budget_for(n_targets: int, max_bundles: int) -> int:
+    """Ile żądań wolno wysłać: cele + bundle + 2 zapasu.
+
+    Ten wzór istniał wcześniej w wersji `n_targets + max_bundles + 2`, ale
+    pętla pobierała `max_bundles` bundli **na każdy cel**, czyli przy 14 celach
+    do 84 żądań. Budżet pękał w połowie przebiegu i cały workflow kończył się
+    `RuntimeError` z `Budget.spend()` — dowiedziałem się o tym dopiero z adnotacji
+    w Actions, bo logi są dla agenta niedostępne. Teraz liczba bundli jest
+    **łączna**, a nie „na cel", i to jedno miejsce wyznacza oba limity.
+    """
+    return n_targets + max_bundles + 2
+
+
 def _absolutize(base_url: str, ref: str) -> str | None:
     if ref.startswith("//"):
         return "https:" + ref
@@ -75,8 +88,8 @@ def main(argv=None) -> int:
     ap.add_argument("--auth", action="store_true", help="dołącz poświadczenia z sekretów")
     ap.add_argument("--hosts", default="", help="lista URL-i po przecinku zamiast domyślnych")
     ap.add_argument("--out", default="nask/findings/recon.json")
-    ap.add_argument("--max-bundles", type=int, default=6,
-                    help="ile plików JS pobrać i zanalizować (każdy to 1 żądanie)")
+    ap.add_argument("--max-bundles", type=int, default=12,
+                    help="ile plików JS pobrać ŁĄCZNIE (każdy to 1 żądanie)")
     args = ap.parse_args(argv)
 
     targets = [t.strip() for t in args.hosts.split(",") if t.strip()] or TARGETS
@@ -102,12 +115,13 @@ def main(argv=None) -> int:
         print("brak celów w scope — kończę", file=sys.stderr)
         return 1
 
-    fetcher = GuardedFetcher(max_requests=len(keep) + args.max_bundles + 2,
+    fetcher = GuardedFetcher(max_requests=budget_for(len(keep), args.max_bundles),
                              dry_run=args.dry_run, use_credentials=args.auth)
 
     report = {"generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
               "dry_run": args.dry_run, "targets": [], "skipped": skipped,
-              "bundles": [], "candidates": 0}
+              "bundles": [], "candidates": 0, "notes": [],
+              "budget": budget_for(len(keep), args.max_bundles)}
 
     for url in keep:
         try:
@@ -126,17 +140,31 @@ def main(argv=None) -> int:
                 for ref in pattern.findall(resp.text[:400_000]):
                     absolute = _absolutize(url, ref)
                     if absolute and check_host(absolute.split("/")[2]).allowed:
-                        if absolute not in row["bundles"]:
+                        if absolute not in row["bundles"] and len(row["bundles"]) < 12:
                             row["bundles"].append(absolute)
         report["targets"].append(row)
 
     # Analiza bundli: to jest właściwa praca tej roboty.
+    # `remaining` jest WSPÓLNE dla wszystkich celów — inaczej budżet pęka.
+    remaining = args.max_bundles
     for target in report["targets"]:
-        for bundle in target.get("bundles", [])[:args.max_bundles]:
+        if remaining <= 0:
+            report["notes"].append(
+                f"limit bundli ({args.max_bundles}) wyczerpany — pominięto resztę celów")
+            break
+        for bundle in target.get("bundles", []):
+            if remaining <= 0:
+                break
+            remaining -= 1
             try:
                 resp = fetcher.get(bundle)
-            except ScopeViolation:
+            except ScopeViolation as exc:
+                report["notes"].append(f"pominięto {bundle}: {exc}")
                 continue
+            except RuntimeError as exc:      # budżet się skończył — kończymy czysto
+                report["notes"].append(f"budżet wyczerpany: {exc}")
+                remaining = 0
+                break
             found = jsmine.rank(jsmine.mine(resp.text, base_host=target["url"].split("/")[2]))
             report["bundles"].append({
                 "url": bundle, "status": resp.status, "bytes": len(resp.body),

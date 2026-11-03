@@ -155,3 +155,28 @@ def test_recon_targets_all_in_scope():
 def test_recon_skips_disabled_program():
     from nask.tools.scope import check_host
     assert not check_host("eobieg.wladyslawowo.pl").allowed
+
+
+# --- Regresja: budżet rekonesansu (błąd wykryty dopiero w Actions) ---------
+
+def test_recon_budget_covers_all_targets_and_bundles():
+    from nask.recon import TARGETS, budget_for
+    n = len(TARGETS)
+    assert budget_for(n, 12) >= n + 12, "budżet musi pokryć cele + ŁĄCZNĄ liczbę bundli"
+
+
+def test_recon_budget_is_not_per_target():
+    """Regresja: pętla brała `max_bundles` na każdy cel, a budżet liczył raz."""
+    from nask.recon import budget_for
+    n_targets, per_request_bundles = 14, 6
+    worst_case_old = n_targets * per_request_bundles      # 84 żądania na bundle
+    assert budget_for(n_targets, per_request_bundles) < worst_case_old, \
+        "stary wzór nie pokrywał pesymistycznego przebiegu — stąd RuntimeError"
+
+
+def test_recon_dry_run_end_to_end():
+    from nask.recon import main
+    import tempfile
+    with tempfile.TemporaryDirectory() as d:
+        rc = main(["--dry-run", "--out", f"{d}/r.json"])
+        assert rc == 0
