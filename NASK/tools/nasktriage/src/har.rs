@@ -148,7 +148,7 @@ pub fn json_shape(text: &str) -> Vec<String> {
 pub fn body_len(entry: &Entry) -> usize {
     match (&entry.response.content.text, entry.response.content.size) {
         (Some(t), _) => t.len(),
-        (None, Some(s)) => *s as usize,
+        (None, Some(s)) => s as usize,
         _ => 0,
     }
 }
