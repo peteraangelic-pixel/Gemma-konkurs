@@ -125,6 +125,7 @@ def run(out: Path, budget: int, explicit: list[str] | None, rps: float) -> int:
             hosts.append(row)
             hits_all.extend(hits)
             probes_all.extend(found)
+            checkpoint(out, hosts, probes_all, budget - fetcher.budget.left)
             print(f"    kandydaci: {len(hits)}, sondy: {len(found)}, "
                   f"budżet: {fetcher.budget.left}", flush=True)
             for p in found:
@@ -140,11 +141,32 @@ def run(out: Path, budget: int, explicit: list[str] | None, rps: float) -> int:
         "probe_findings": [p.as_dict() for p in probes_all],
         "hosts": hosts,
     }
+    checkpoint(out, hosts, probes_all, payload["requests_used"])
     (out / "hunt.json").write_text(json.dumps(payload, indent=2, ensure_ascii=False),
                                    encoding="utf-8")
     (out / "hunt-summary.md").write_text(render(payload, hits_all), encoding="utf-8")
     print(f"\n{payload['requests_used']} żądań, {len(probes_all)} trafień sond")
     return 0
+
+
+def checkpoint(out: Path, hosts: list, found: list, used: int) -> None:
+    """Zapis częściowy po każdym hoście.
+
+    Powód jest praktyczny, nie teoretyczny: pierwszy przebieg trwał dłużej niż
+    zakładałem i gdyby wpadł na limit czasu joba, straciłbym wszystkie wyniki,
+    bo zapis był dopiero na końcu. Teraz każdy ukończony host jest na dysku.
+    """
+    part = {
+        "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "partial": True,
+        "requests_used": used,
+        "hosts_scanned": len(hosts),
+        "probe_findings": [p.as_dict() for p in found],
+        "hosts": hosts,
+    }
+    (out / "hunt.json").write_text(json.dumps(part, indent=2, ensure_ascii=False),
+                                   encoding="utf-8")
+    (out / "hunt-summary.md").write_text(render(part, []), encoding="utf-8")
 
 
 def render(payload: dict, hits: list) -> str:

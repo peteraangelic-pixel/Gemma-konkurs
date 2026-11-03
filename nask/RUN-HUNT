@@ -1,4 +1,4 @@
 # Flaga uruchomienia nocnego polowania (nask-hunt).
 # Każdy push zmieniający ten plik = jedno polowanie.
-# Budżet 900 żądań przy 4,5 req/s to ~3,5 minuty.
-run 2026-11-03T22:50:26Z
+# Przebieg 2: sondy po naprawie fałszywych trafień (patrz tools/probes.py).
+run 2026-11-03T23:02:18Z

@@ -6,9 +6,22 @@ która znaczy „tak". Dzięki temu wynik da się obronić przed weryfikatorem: 
 „narzędzie coś pokazało", a „ta odpowiedź serwera znaczy dokładnie to".
 
 Każda sonda ma pole `why` — dlaczego jej wynik NIE wpada w wykluczenia z §8.
-Jeżeliby wpadł, sondy nie ma w tym pliku. To jest jedyny powód, dla którego
-lista jest krótka: 6 sond, z których każda ma szansę na nagrodę, jest warta
-więcej niż 60, które trzeba potem odsiać.
+
+## Historia, która jest ważniejsza niż sam kod
+
+Pierwsza wersja tych sond przeszła 19 testów i wygenerowała w nocy **52 trafienia,
+z których ~50 było fałszywych**. Przykład: `dns.pl` „odblokowany /admin" zwracał
+51 121 B, a strona główna ma 51 152 B — sondy porównywały `/admin` z `/`, czyli
+dwie różne strony, i „wykrywały różnicę" oczywiście zawsze.
+
+Trzy poprawki wynikły wprost z tych danych i każda ma test regresyjny:
+  • S2 liczy tylko realne odblokowanie (nie-2xx → 2xx), nie „inną treść",
+  • S3 porównuje `/_next/data` **z tym samym adresem jako HTML**,
+  • S6 porównuje **ten sam adres** z nagłówkiem i bez, nie `/` z `/admin`.
+
+Wniosek na przyszłość: sonda bez grupy kontrolnej nie jest sondą, tylko generatorem
+pracy. Testy jednostkowe tego nie wychwyciły, bo testowały logikę, a nie jej
+odniesienie do rzeczywistości.
 
 Sondy:
   S1  CORS odbija Origin obcej domeny i pozwala czytać dane      → §8 poz. 14.1
@@ -71,8 +84,7 @@ def probe_cors(http, base: str) -> list[ProbeFinding]:
 
     Liczy się wyłącznie kombinacja: odbity Origin (albo `*`) **i** `credentials: true`,
     albo odbicie Originu przy odpowiedzi zawierającej dane. Sam `*` bez credentials
-    to nie podatność (§8 poz. 5.6) — dlatego go nie zgłaszamy jako trafienia,
-    tylko jako obserwację.
+    to nie podatność (§8 poz. 5.6) — dlatego nie jest trafieniem, tylko obserwacją.
     """
     out: list[ProbeFinding] = []
     for origin in (EVIL_ORIGIN, SUFFIX_ORIGIN):
@@ -134,10 +146,15 @@ def probe_middleware_bypass(http, base: str,
                             paths: list[str] | None = None) -> list[ProbeFinding]:
     """Porównuje odpowiedź z nagłówkiem i bez niego.
 
-    Sens ma tylko wtedy, gdy BEZ nagłówka ścieżka jest zablokowana
-    (307/308 na login, 401, 403), a Z nagłówkiem serwer zwraca coś innego.
-    Jeżeli obie odpowiedzi są takie same — nic nie ma, i to jest wynik negatywny,
-    który też raportujemy (żeby nie sprawdzać drugi raz).
+    Trafienie musi spełnić JEDEN z warunków:
+      a) bez nagłówka trasa jest zablokowana (nie-2xx), a z nagłówkiem jest 2xx
+         — realne obejście autoryzacji (krytyczny);
+      b) oba są zablokowane, ale treść różni się co najmniej dwukrotnie
+         długością — sygnał do ręcznego sprawdzenia (średni).
+
+    Dlaczego nie „każda różnica treści": pierwsza wersja tak robiła i zgłosiła
+    `bezpiecznewybory.pl` sześć razy, bo 403 z WAF-a ma 374 B, a bez nagłówka
+    377 B — WAF wstawia identyfikator żądania. Bez progu ilościowego to szum.
     """
     out: list[ProbeFinding] = []
     for path in (paths or PROTECTED_CANDIDATES):
@@ -153,20 +170,30 @@ def probe_middleware_bypass(http, base: str,
         bypass = http.get(url, headers={MIDDLEWARE_HEADER: MIDDLEWARE_VALUE})
         if bypass.error:
             continue
-        changed = bypass.status != plain.status
-        same_body = bypass.body == plain.body
-        if changed or not same_body:
-            sev = "krytyczny" if bypass.status == 200 else "wysoki"
+
+        unlocked = bypass.status // 100 == 2 and plain.status // 100 != 2
+        ratio = (len(bypass.body) / len(plain.body)) if plain.body else 0
+        big_change = ratio >= 2 or ratio <= 0.5
+
+        if unlocked:
             out.append(ProbeFinding(
-                "S2", "", url, sev,
-                "Nagłówek x-middleware-subrequest zmienia odpowiedź chronionej trasy",
+                "S2", "", url, "krytyczny",
+                "Nagłówek x-middleware-subrequest odblokowuje chronioną trasę",
                 f"Bez nagłówka: {plain.status} (Location: {_hdr(plain, 'location') or '-'}). "
-                f"Z nagłówkiem: {bypass.status}, {len(bypass.body)} B, "
-                f"treść {'inna' if not same_body else 'ta sama'}.",
+                f"Z nagłówkiem: {bypass.status}, {len(bypass.body)} B.",
                 "§8 poz. 9.3/12.1 — obejście autoryzacji w warstwie aplikacji. "
                 "Nagłówek jest publicznie znany (CVE-2025-29927), ale wymagane jest "
                 "PoC na tej instancji — i to jest to PoC. Trzeba jeszcze ustalić, "
                 "CO ujawnia odblokowana trasa (samo 200 to za mało).",
+                {"plain": plain.status, "bypass": bypass.status}))
+        elif big_change:
+            out.append(ProbeFinding(
+                "S2", "", url, "sredni",
+                "Nagłówek x-middleware-subrequest zmienia treść (bez odblokowania)",
+                f"Bez nagłówka: {plain.status}, {len(plain.body)} B. "
+                f"Z nagłówkiem: {bypass.status}, {len(bypass.body)} B.",
+                "Różnica ilościowa bez zmiany statusu. Najczęściej WAF albo inny "
+                "wariant strony błędu — do ręcznego sprawdzenia, nie do zgłoszenia.",
                 {"plain": plain.status, "bypass": bypass.status}))
     return out
 
@@ -176,21 +203,23 @@ def probe_middleware_bypass(http, base: str,
 # --------------------------------------------------------------------------
 def probe_next_data(http, base: str, build_id: str | None,
                     routes: list[str]) -> list[ProbeFinding]:
-    """`/_next/data/<buildId><trasa>.json` omija HTML-owe sprawdzenia w przeglądarce.
+    """`/_next/data/<buildId><trasa>.json` a **ten sam adres jako HTML**.
 
-    Trafieniem jest dopiero odpowiedź JSON z danymi, która normalnie wymaga
-    zalogowania (sprawdzenie po stronie serwera należy do użytkownika).
+    Trafieniem jest wyłącznie sytuacja, w której strona HTML wymaga logowania,
+    a JSON wydaje dane bez sesji. Publiczna strona z publicznymi danymi to nie
+    podatność — pierwsza wersja tego nie sprawdzała i zgłosiła osiem razy
+    `116sos.pl`, gdzie `/_next/data` serwuje zwykłe artykuły i tagi.
     """
     out: list[ProbeFinding] = []
     if not build_id:
         return out
     for route in routes[:12]:
+        html_probe = http.get(base.rstrip("/") + route)
+        if html_probe.error or html_probe.status // 100 == 2:
+            continue                      # treść i tak publiczna — nie ma czego zgłaszać
         path = f"/_next/data/{build_id}{route.rstrip('/')}.json"
         r = http.get(base.rstrip("/") + path)
-        if r.error or r.status != 200:
-            continue
-        ctype = _hdr(r, "content-type")
-        if "json" not in ctype:
+        if r.error or r.status != 200 or "json" not in _hdr(r, "content-type"):
             continue
         try:
             payload = json.loads(r.text)
@@ -201,14 +230,15 @@ def probe_next_data(http, base: str, build_id: str | None,
         keys = sorted(payload.get("pageProps", {}).keys())[:10]
         preview = json.dumps(payload.get("pageProps", {}), ensure_ascii=False)[:180]
         out.append(ProbeFinding(
-            "S3", "", r.url, "sredni",
-            "Dane strony Next.js czytane bezpośrednio z /_next/data",
-            f"200 JSON ({len(r.body)} B), pageProps: {', '.join(keys) or 'puste'}; "
+            "S3", "", r.url, "wysoki",
+            "Dane chronionej strony Next.js czytane bez sesji przez /_next/data",
+            f"HTML `{route}` → {html_probe.status} (wymaga logowania), "
+            f"a JSON → 200 ({len(r.body)} B); pageProps: {', '.join(keys) or 'puste'}; "
             f"podgląd: {preview}",
-            "§8 poz. 12.2 — dostęp do danych przez nieudokumentowany endpoint. "
-            "Znaleziskiem staje się dopiero wtedy, gdy pageProps zawiera dane "
-            "niepubliczne; gołe `{}` to nie podatność.",
-            {"route": route}))
+            "§8 poz. 12.2 / 9.3 — dane niepubliczne przez nieudokumentowany endpoint, "
+            "z pominięciem sprawdzenia w warstwie HTML. To realne ryzyko tylko wtedy, "
+            "gdy pageProps nie są publiczne — trzeba przeczytać podgląd.",
+            {"route": route, "html_status": html_probe.status}))
     return out
 
 
@@ -269,14 +299,12 @@ def probe_wordpress_private(http, base: str) -> list[ProbeFinding]:
         if not isinstance(doc, list) or not doc:
             continue
         item = doc[0]
-        # `context=edit` bez logowania powinien zwrócić 401. 200 z polami
-        # `content.raw`/`status` = realny wyciek treści roboczej.
-        suspicious = ("content" in item and isinstance(item["content"], dict)
-                      and "raw" in item["content"]) or item.get("status") == "draft"
-        if not suspicious:
+        # `context=edit` bez logowania powinien zwrócić 401. 200 z `content.raw`
+        # albo `status=draft` = realny wyciek treści roboczej.
+        raw_present = isinstance(item.get("content"), dict) and "raw" in item["content"]
+        if not (raw_present or item.get("status") == "draft"):
             continue
-        proof = ("content.raw" if isinstance(item.get("content"), dict)
-                 and "raw" in item.get("content", {}) else "status=draft")
+        proof = "content.raw" if raw_present else "status=draft"
         out.append(ProbeFinding(
             "S5", "", r.url, "wysoki",
             "WordPress REST zwraca treści w kontekście edit bez logowania",
@@ -297,30 +325,43 @@ BYPASS_HEADERS = ["x-original-url", "x-rewrite-url", "x-forwarded-prefix"]
 def probe_header_bypass(http, base: str, paths: list[str] | None = None) -> list[ProbeFinding]:
     """Gdy ścieżka daje 403/404, sprawdza, czy nagłówek proxy ją odblokuje.
 
-    To klasyczna pomyłka w konfiguracji Azure Front Door / Envoy — a takie
-    właśnie warstwy stoją przed celami w tym konkursie.
+    Kluczowe: porównujemy **ten sam adres** z nagłówkiem i bez niego, a nie
+    „ścieżkę" z „stroną główną". Pierwsza wersja robiła to drugie i wygenerowała
+    36 fałszywych trafień: `GET /admin` → 404 vs `GET /` + nagłówek → 200 to
+    przecież zawsze będzie różnica, bo to dwie różne strony.
+
+    Sygnałem jest wyłącznie to, że **ta sama** odpowiedź na `/` zmienia się pod
+    wpływem nagłówka — czyli serwer go respektuje. To jeszcze nie podatność,
+    ale to jedyne miejsce, gdzie warto patrzeć dalej.
     """
     out: list[ProbeFinding] = []
+    control = http.get(base)
+    if control.error:
+        return out
     for path in (paths or PROTECTED_CANDIDATES):
-        url = base.rstrip("/") + path
-        plain = http.get(url)
-        if plain.error or plain.status not in (401, 403, 404):
-            continue
+        path_resp = http.get(base.rstrip("/") + path)
+        if path_resp.error or path_resp.status // 100 == 2:
+            continue                      # ścieżka i tak działa — nie ma czego obchodzić
         for header in BYPASS_HEADERS:
-            r = http.get(base.rstrip("/") + "/", headers={header: path})
+            r = http.get(base, headers={header: path})
             if r.error:
                 continue
-            if r.status == 200 and r.body and r.body != plain.body and len(r.body) > 500:
-                out.append(ProbeFinding(
-                    "S6", "", url, "wysoki",
-                    f"Nagłówek {header} zmienia treść odpowiedzi",
-                    f"{path} → {plain.status}; żądanie na / z {header}: {path} → "
-                    f"{r.status}, {len(r.body)} B (inna treść)",
-                    "§8 poz. 9.3 — obejście autoryzacji w warstwie aplikacji. "
-                    "Wymaga ręcznego potwierdzenia, że treść odpowiada chronionej "
-                    "zasobowi, a nie losowej stronie.",
-                    {"header": header, "plain": plain.status}))
-                break
+            same_status = r.status == control.status
+            delta = abs(len(r.body) - len(control.body))
+            if same_status and delta <= max(64, len(control.body) * 0.02):
+                continue                  # nagłówek zignorowany — wynik negatywny
+            out.append(ProbeFinding(
+                "S6", "", base, "sredni",
+                f"Nagłówek {header} zmienia odpowiedź tego samego adresu",
+                f"`{path}` → {path_resp.status}. `GET /` bez nagłówka: {control.status}, "
+                f"{len(control.body)} B. `GET /` z {header}: {path} → {r.status}, "
+                f"{len(r.body)} B.",
+                "§8 poz. 9.3 — sygnał obejścia autoryzacji w warstwie proxy. "
+                "Sam wpływ nagłówka to jeszcze nie podatność: trzeba pokazać, że "
+                "zwrócona treść odpowiada zasobowi, do którego nie ma dostępu.",
+                {"header": header, "path_status": path_resp.status,
+                 "control": control.status, "test": r.status}))
+            break
     return out
 
 

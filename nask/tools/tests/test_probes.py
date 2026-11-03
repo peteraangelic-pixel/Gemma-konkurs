@@ -194,3 +194,68 @@ def test_run_all_picks_probes_for_stack():
 def test_findings_are_serialisable():
     f = ProbeFinding("S1", "h", "u", "wysoki", "t", "d", "why")
     assert json.loads(json.dumps(f.as_dict()))["code"] == "S1"
+
+
+# ==========================================================================
+# Testy regresyjne z PRAWDZIWEGO przebiegu nocnego (2026-11-03).
+# Każdy z nich odtwarza fałszywe trafienie, które faktycznie wystąpiło.
+# Bez nich poprawka byłaby wiarą, a nie dowodem.
+# ==========================================================================
+def test_regression_dns_pl_header_bypass_artifact():
+    """`GET /admin` → 404, `GET /` z nagłówkiem → 200 (ta sama strona główna).
+
+    Stara sonda porównywała te dwie odpowiedzi i „wykrywała obejście" 6 razy.
+    Poprawiona porównuje `/` z nagłówkiem z `/` bez nagłówka — identyczne,
+    więc wynik jest negatywny.
+    """
+    home = "h" * 51152
+    not_found = "n" * 40921
+
+    def fn(url, h):
+        if url.endswith("/admin"):
+            return R(status=404, body=not_found, url=url)
+        return R(status=200, body=home, url=url)      # z nagłówkiem i bez: to samo
+
+    assert probes.probe_header_bypass(Http(fn), "https://dns.pl", paths=["/admin"]) == []
+
+
+def test_regression_bezpiecznewybory_waf_nonce():
+    """403 (374 B) vs 403 (377 B) — WAF wstawia własny identyfikator żądania.
+
+    Stara sonda traktowała każdą różnicę treści jako trafienie i zgłosiła to
+    sześć razy jako „wysokie". Teraz różnica musi być co najmniej dwukrotna.
+    """
+    def fn(url, h):
+        size = 377 if probes.MIDDLEWARE_HEADER in h else 374
+        return R(status=403, body="b" * size, url=url)
+
+    assert probes.probe_middleware_bypass(Http(fn), "https://bezpiecznewybory.pl",
+                                          paths=["/panel"]) == []
+
+
+def test_regression_116sos_public_next_data():
+    """`/_next/data/.../aktualnosci.json` serwuje publiczne artykuły.
+
+    Stara sonda zgłaszała to osiem razy jako „dane chronionej strony", bo nie
+    sprawdzała, że ta sama trasa zwraca 200 także jako HTML.
+    """
+    payload = json.dumps({"pageProps": {"title": "Aktualności", "news": []}})
+
+    def fn(url, h):
+        if "/_next/data/" in url:
+            return R(ctype="application/json", body=payload, url=url)
+        return R(status=200, body="<html>publiczna</html>", url=url)
+
+    assert probes.probe_next_data(Http(fn), "https://116sos.pl", "abc",
+                                  ["/aktualnosci"]) == []
+
+
+def test_real_bypass_still_detected_after_fix():
+    """Poprawka nie może zabić prawdziwego sygnału: 307 na login → 200 z nagłówkiem."""
+    def fn(url, h):
+        if probes.MIDDLEWARE_HEADER in h:
+            return R(status=200, body="<html>panel</html>" * 50, url=url)
+        return R(status=307, headers={"location": "/login"}, body="", url=url)
+
+    got = probes.probe_middleware_bypass(Http(fn), "https://oad.nask.pl", paths=["/panel"])
+    assert got and got[0].severity == "krytyczny"
