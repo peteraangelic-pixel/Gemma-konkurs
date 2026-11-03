@@ -1,17 +1,5 @@
-[1m[92m   Compiling[0m crossbeam-utils v0.8.23
-[1m[92m   Compiling[0m serde_core v1.0.229
-[1m[92m   Compiling[0m zmij v1.0.23
-[1m[92m   Compiling[0m itoa v1.0.18
-[1m[92m   Compiling[0m either v1.19.0
-[1m[92m   Compiling[0m memchr v2.8.3
-[1m[92m   Compiling[0m crossbeam-epoch v0.9.21
-[1m[92m   Compiling[0m crossbeam-deque v0.8.8
-[1m[92m   Compiling[0m rayon-core v1.13.0
-[1m[92m   Compiling[0m rayon v1.12.0
-[1m[92m   Compiling[0m serde v1.0.229
-[1m[92m   Compiling[0m serde_json v1.0.154
 [1m[92m   Compiling[0m nasktriage v0.1.0 (/home/runner/work/Gemma-konkurs/Gemma-konkurs/NASK/tools/nasktriage)
-[1m[92m    Finished[0m `test` profile [unoptimized + debuginfo] target(s) in 3.74s
+[1m[92m    Finished[0m `test` profile [unoptimized + debuginfo] target(s) in 0.86s
 [1m[92m     Running[0m unittests src/lib.rs (target/debug/deps/nasktriage-339e30b71800911f)
 
 running 0 tests
@@ -30,15 +18,15 @@ running 12 tests
 test account_spec_requires_colon ... ok
 test identifiers_and_templates ... ok
 test json_shape_reads_object_keys_and_array_of_objects ... ok
+test rate_limiter_is_deterministic_with_injected_clock ... ok
 test analysis_says_nothing_when_captures_are_clean ... ok
 test analysis_finds_every_hypothesis_class ... ok
-test rate_limiter_is_deterministic_with_injected_clock ... ok
-test scope_parses_and_classifies_tiers ... ok
-test rate_limiter_refuses_to_break_the_rules ... ok
-test secret_parameter_names_are_recognised ... ok
-test scope_rejects_port_and_accepts_url ... ok
-test url_helpers_split_host_path_and_query ... ok
 test markdown_report_is_usable_and_carries_the_limits ... ok
+test rate_limiter_refuses_to_break_the_rules ... ok
+test url_helpers_split_host_path_and_query ... ok
+test scope_parses_and_classifies_tiers ... ok
+test scope_rejects_port_and_accepts_url ... ok
+test secret_parameter_names_are_recognised ... ok
 
 test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 

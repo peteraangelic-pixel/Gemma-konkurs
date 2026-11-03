@@ -1,43 +1,4 @@
 [1m[92m    Updating[0m crates.io index
 [1m[92m     Locking[0m 17 packages to highest compatible versions
-[1m[92m Downloading[0m crates ...
-[1m[92m  Downloaded[0m either v1.19.0
-[1m[92m  Downloaded[0m crossbeam-deque v0.8.8
-[1m[92m  Downloaded[0m crossbeam-epoch v0.9.21
-[1m[92m  Downloaded[0m itoa v1.0.18
-[1m[92m  Downloaded[0m crossbeam-utils v0.8.23
-[1m[92m  Downloaded[0m proc-macro2 v1.0.107
-[1m[92m  Downloaded[0m quote v1.0.47
-[1m[92m  Downloaded[0m unicode-ident v1.0.27
-[1m[92m  Downloaded[0m zmij v1.0.23
-[1m[92m  Downloaded[0m serde_derive v1.0.229
-[1m[92m  Downloaded[0m serde_core v1.0.229
-[1m[92m  Downloaded[0m rayon-core v1.13.0
-[1m[92m  Downloaded[0m memchr v2.8.3
-[1m[92m  Downloaded[0m serde v1.0.229
-[1m[92m  Downloaded[0m rayon v1.12.0
-[1m[92m  Downloaded[0m serde_json v1.0.154
-[1m[92m  Downloaded[0m syn v3.0.9
-[1m[92m   Compiling[0m crossbeam-utils v0.8.23
-[1m[92m   Compiling[0m proc-macro2 v1.0.107
-[1m[92m   Compiling[0m unicode-ident v1.0.27
-[1m[92m   Compiling[0m crossbeam-epoch v0.9.21
-[1m[92m   Compiling[0m quote v1.0.47
-[1m[92m   Compiling[0m serde_core v1.0.229
-[1m[92m   Compiling[0m crossbeam-deque v0.8.8
-[1m[92m   Compiling[0m zmij v1.0.23
-[1m[92m   Compiling[0m rayon-core v1.13.0
-[1m[92m   Compiling[0m serde_json v1.0.154
-[1m[92m   Compiling[0m serde v1.0.229
-[1m[92m   Compiling[0m syn v3.0.9
-[1m[92m    Checking[0m memchr v2.8.3
-[1m[92m    Checking[0m itoa v1.0.18
-[1m[92m    Checking[0m either v1.19.0
-[1m[92m    Checking[0m rayon v1.12.0
-[1m[92m   Compiling[0m serde_derive v1.0.229
 [1m[92m    Checking[0m nasktriage v0.1.0 (/home/runner/work/Gemma-konkurs/Gemma-konkurs/NASK/tools/nasktriage)
-src/rate.rs:20:12: [1m[33mwarning[0m: the use of negated comparison operators on partially ordered types produces code that is hard to read and refactor, please consider using the `partial_cmp` method instead, to make it clear that the two values could be incomparable
-src/scope.rs:66:15: [1m[33mwarning[0m: this manual char comparison can be written more succinctly: help: consider using an array of `char`: `['/', '?', '#']`
-[1m[33mwarning[0m: `nasktriage` (lib test) generated 2 warnings (2 duplicates)
-[1m[33mwarning[0m: `nasktriage` (lib) generated 2 warnings (run `cargo clippy --fix --lib -p nasktriage -- ` to apply 1 suggestion)
-[1m[92m    Finished[0m `dev` profile [unoptimized + debuginfo] target(s) in 5.83s
+[1m[92m    Finished[0m `dev` profile [unoptimized + debuginfo] target(s) in 1.92s
