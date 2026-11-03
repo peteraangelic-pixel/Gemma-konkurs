@@ -180,3 +180,58 @@ def test_recon_dry_run_end_to_end():
     with tempfile.TemporaryDirectory() as d:
         rc = main(["--dry-run", "--out", f"{d}/r.json"])
         assert rc == 0
+
+
+# --- Skaner autoryzacji (offline) -----------------------------------------
+
+def test_authz_scan_flags_unguarded_by_id(tmp_path):
+    (tmp_path / "views.py").write_text(
+        "class ThingResource(Resource):\n"
+        "    def get(self, identifier):\n"
+        "        return db.session.query(Thing).filter(Thing.id == identifier).first()\n"
+    )
+    from nask.tools.authz_scan import scan
+    got = scan(tmp_path)
+    assert len(got) == 1 and got[0].verdict == "OPEN"
+
+
+def test_authz_scan_respects_object_access(tmp_path):
+    (tmp_path / "views.py").write_text(
+        "class ThingResource(Resource):\n"
+        "    @requires_authorization\n"
+        "    def get(self, identifier):\n"
+        "        obj = access_object('file', identifier)\n"
+        "        return obj\n"
+    )
+    from nask.tools.authz_scan import scan
+    got = scan(tmp_path)
+    assert got[0].verdict == "GUARDED"
+
+
+def test_authz_scan_treats_capability_as_auth(tmp_path):
+    """Regresja: `@requires_capabilities` implikuje zalogowanie.
+
+    Pierwsza wersja skanera oznaczała `UserPendingResource` jako OPEN, bo patrzyła
+    tylko na `requires_authorization`. Capability wymaga `g.auth_user`, więc to
+    fałszywy alarm — a skaner, który flaguje wszystko, jest bezużyteczny.
+    """
+    (tmp_path / "views.py").write_text(
+        "class UserPendingResource(Resource):\n"
+        "    @requires_capabilities(Capabilities.manage_users)\n"
+        "    def post(self, login):\n"
+        "        user = db.session.query(User).filter(User.login == login).first()\n"
+        "        return user\n"
+    )
+    from nask.tools.authz_scan import scan
+    assert scan(tmp_path)[0].verdict == "GUARDED"
+
+
+def test_authz_scan_partial_when_only_authenticated(tmp_path):
+    (tmp_path / "views.py").write_text(
+        "class DocResource(Resource):\n"
+        "    @requires_authorization\n"
+        "    def get(self, identifier):\n"
+        "        return db.session.query(Doc).filter(Doc.id == identifier).first()\n"
+    )
+    from nask.tools.authz_scan import scan
+    assert scan(tmp_path)[0].verdict == "PARTIAL"

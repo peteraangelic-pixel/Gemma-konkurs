@@ -16,8 +16,9 @@ w `../archive/arc-agi-3/` — zamknięty, zostawiony dla historii.
 | [`POMYSLY.md`](POMYSLY.md) | **jak wygrać** — pomysły uszeregowane po EV/dzień, w tym uczciwie o „Rust wszędzie” |
 | [`PLAN.md`](PLAN.md) | plan dzień po dniu na 28 dni konkursu |
 | [`AUDYT-POPRZEDNIEGO-REPO.md`](AUDYT-POPRZEDNIEGO-REPO.md) | co jest zepsute w repo `peteraangelic-pixel/NASK` (sprawdzone w kodzie) |
+| [`PRZEGLAD-KODU-MWDB.md`](PRZEGLAD-KODU-MWDB.md) | przegląd `mwdb-core` offline — i dlaczego obniżyłem szanse na IDOR |
 
-## Narzędzia (Python, zero zależności, 64 testy offline)
+## Narzędzia (Python, zero zależności, 71 testów offline)
 
 ```bash
 python3 nask/nask.py scope --list          # cały zakres
@@ -42,11 +43,12 @@ i zasady dotyczące sekretów: [`JAK-DZIALA-ACTIONS.md`](JAK-DZIALA-ACTIONS.md).
 | `tools/triage.py` | EV = nagroda × P(trafienie) × P(brak duplikatu), na dzień pracy |
 | `tools/report.py` | generator zgłoszenia; **odmawia** wygenerowania bez PoC i wpływu |
 | `tools/credentials.py` | poświadczenia wyłącznie z sekretów Actions; allowlist hostów |
+| `tools/authz_scan.py` | skaner autoryzacji po kodzie źródłowym (offline, bez żądań) |
 
 Testy:
 
 ```bash
-python3 -m pytest nask/tools/tests -q      # 64/64, bez sieci
+python3 -m pytest nask/tools/tests -q      # 71/71, bez sieci
 ```
 
 ## Twarde reguły (z regulaminu, nie z dobrych chęci)
@@ -72,6 +74,6 @@ sieciowego do tych hostów z sandboxa.
 
 ## Realistyczne oczekiwania
 
-Suma EV wszystkich 17 hipotez z `plan.json` to **≈ 9 500 zł** — nie 100 000. Jedna dobrze
+Suma EV wszystkich 18 hipotez z `plan.json` to **≈ 9 500 zł** — nie 100 000. Jedna dobrze
 udokumentowana luka IDOR to 4 000–9 000 zł, więc cel jest wart pracy, ale to nie jest
 dochód, na którym można oprzeć budżet. Więcej w [`POMYSLY.md`](POMYSLY.md) §0.

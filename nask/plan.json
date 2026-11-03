@@ -4,16 +4,16 @@
     {
       "host": "mwdb.cert.pl",
       "cls": "09-idor-bac",
-      "days": 4,
-      "p_confirm": 0.22,
-      "note": "MWDB ma publiczne źródła — czytamy kod zamiast fuzzować. Najwyższa dźwignia w całym konkursie."
+      "days": 3,
+      "p_confirm": 0.1,
+      "note": "SKORYGOWANE PO PRZEGLĄDZIE KODU (2026-11-03): wspólna ścieżka access_object → Object.access jest poprawna, więc klasyczny IDOR jest mało prawdopodobny. p_confirm 0.22 → 0.10. Zamiast podmieniać ID, czytamy oauth.py i share.py — patrz nask/PRZEGLAD-KODU-MWDB.md."
     },
     {
       "host": "mwdb.cert.pl",
       "cls": "12-api",
       "days": 3,
       "p_confirm": 0.18,
-      "note": "Analiza endpointów API obok przeglądu kodu."
+      "note": "Endpointy API obok przeglądu kodu. Uwaga: skan autoryzacji w mwdb-core nie wykazał żadnej metody 'zalogowany + obiekt po ID bez sprawdzenia' — zostają przepływy OAuth i semantyka udostępniania."
     },
     {
       "host": "mwdb.cert.pl",
@@ -119,6 +119,13 @@
       "days": 2,
       "p_confirm": 0.1,
       "note": "Dane o zdrowiu = wysoka wrażliwość, ale serwis może być tylko informacyjny."
+    },
+    {
+      "host": "mwdb.cert.pl",
+      "cls": "02-account-takeover",
+      "days": 4,
+      "p_confirm": 0.05,
+      "note": "Największa powierzchnia w kodzie to oauth.py (865 linii, publiczne endpointy, state + redirect_uri + konfiguracja providera). Skaner wskazał tam 2 metody PARTIAL. To najbardziej obiecujący kierunek po korekcie planu."
     }
   ]
 }
