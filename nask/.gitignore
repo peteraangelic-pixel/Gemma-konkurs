@@ -1,5 +1,4 @@
-nask/findings/evidence.jsonl
-nask/findings/*.local.json
+nask/findings/
 __pycache__/
 *.pyc
 .pytest_cache/

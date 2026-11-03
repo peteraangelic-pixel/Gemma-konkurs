@@ -19,6 +19,7 @@ from dataclasses import dataclass, asdict
 from datetime import datetime, timezone
 from pathlib import Path
 
+from .credentials import headers_for
 from .ratelimit import Budget, TokenBucket
 from .scope import Decision, check_url
 
@@ -55,13 +56,17 @@ class GuardedFetcher:
     def __init__(self, rps: float = 4.5, max_requests: int = 60,
                  evidence_path: str | Path = "nask/findings/evidence.jsonl",
                  user_agent: str = DEFAULT_UA, timeout: float = 15.0,
-                 dry_run: bool = False):
+                 dry_run: bool = False, use_credentials: bool = False):
         self.bucket = TokenBucket(rps)
         self.budget = Budget(max_requests)
         self.evidence_path = Path(evidence_path)
         self.user_agent = user_agent
         self.timeout = timeout
         self.dry_run = dry_run
+        # Domyślnie NIE dokładamy poświadczeń. Włącza się je jawnie, bo
+        # uwierzytelniony ruch to zupełnie inna kategoria testów (§6 pkt 1)
+        # i nie może się włączyć przez przypadek.
+        self.use_credentials = use_credentials
 
     def check(self, url: str) -> Decision:
         return check_url(url)
@@ -82,6 +87,11 @@ class GuardedFetcher:
         req = urllib.request.Request(url, method=method, data=data)
         req.add_header("User-Agent", self.user_agent)
         req.add_header("Accept", "*/*")
+        # Poświadczenia ZAWSZE przed nagłówkami wywołującego, żeby jawne
+        # nagłówki w teście mogły je nadpisać, a nie odwrotnie.
+        if self.use_credentials:
+            for k, v in headers_for(decision.host).items():
+                req.add_header(k, v)
         for k, v in (headers or {}).items():
             req.add_header(k, v)
 

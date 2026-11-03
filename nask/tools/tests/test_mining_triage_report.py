@@ -13,7 +13,7 @@ window.__NEXT_DATA__ = {apiBase:"https://app.example.gov.pl/api/v1"};
 fetch("/api/v1/messages/" + id).then(...)
 const q = "/api/users?userId=42&role=admin";
 xhr.open("GET", "https://files.example.gov.pl/upload/abc");
-const cfg = {token:"abcdef1234567890", internal:"10.42.0.7"};
+const cfg = {token:"abcdef1234567890", internal:"10.42.0.7"}; // allowlist-secret
 payload = {"userId": 5, "role": "admin", "is_verified": true}
 //# sourceMappingURL=main.abc123.js.map
 """
@@ -48,13 +48,15 @@ def test_foreign_domain_flagged_as_url():
 def test_payout_follows_program_table():
     h = build("mwdb.cert.pl", "04-sqli", days=3)
     assert h.tier == "T1" and h.payout == 20000
-    w = build("wladyslawowo.pl", "04-sqli", days=3)
-    assert w.tier == "T2" and w.payout == 2000
+    t2 = build("ctf.hack.cert.pl", "04-sqli", days=3)
+    assert t2.tier == "T2" and t2.payout == 10000
 
 
 def test_out_of_scope_rejected():
     with pytest.raises(ValueError):
         build("bip.wladyslawowo.pl", "09-idor-bac", days=1)
+    with pytest.raises(ValueError):
+        build("eobieg.wladyslawowo.pl", "09-idor-bac", days=1)   # program wyłączony
     with pytest.raises(ValueError):
         build("gov.pl", "09-idor-bac", days=1)
 
@@ -67,7 +69,7 @@ def test_excluded_class_rejected():
 
 def test_ev_per_day_ordering():
     slow = build("www.gov.pl", "09-idor-bac", days=20, p_confirm=0.2)
-    fast = build("wladyslawowo.pl", "09-idor-bac", days=1, p_confirm=0.2)
+    fast = build("ctf.hack.cert.pl", "09-idor-bac", days=1, p_confirm=0.2)
     assert rank_h([slow, fast])[0] is fast
     assert fast.ev < slow.ev
 

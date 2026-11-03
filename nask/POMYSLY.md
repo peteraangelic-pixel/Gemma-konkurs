@@ -8,12 +8,21 @@ założenia i przeliczyć.
 ## 0. Uczciwa arytmetyka, zanim cokolwiek innego
 
 - Pula edycji: **100 000 zł**. Nagroda maksymalna: 20 000 zł. Nagroda typowa, realna: 600–4 000 zł.
-- Suma EV **wszystkich 19 hipotez** z `plan.json`, przy moich założeniach o szansach: **≈ 9 900 zł**.
+- Suma EV **wszystkich 17 hipotez** z `plan.json`, przy moich założeniach o szansach: **≈ 9 500 zł**.
   To nie prognoza zarobku — to pokazuje skalę: nawet solidna praca przez miesiąc to rząd
   kilku tysięcy złotych oczekiwanej wartości, a nie „100k”.
 - Wniosek praktyczny: **nie warto stawiać na tę konkurs jako źródło dochodu.** Warto zrobić
   go porządnie, bo (a) jedna trafiona luka IDOR = 4 000–9 000 zł, (b) reputacja w programie
   zostaje na kolejne edycje, (c) narzędzia i szablon raportu zostają na zawsze.
+
+### Co odpadło i dlaczego to dobrze
+
+**Gmina Władysławowo — wyłączona 2026-11-03.** Nie dlatego, że trudna, ale dlatego,
+że maksymalna nagroda to 4 000 zł, a ta sama praca (IDOR w obiegu dokumentów) w Tier 1
+CERT Polska płaci 9 000–20 000 zł. Było to w moim planie jako „szybki pierwszy skalp" —
+i to był błąd kalibracji: przy 28 dniach jeden dzień na cel o 5× niższej stawce nie
+jest „szybki", jest drogi. Program zostaje opisany w `SCOPE.md` (bo to fakt
+z regulaminu), ale w kodzie ma `enabled=False`, więc narzędzia same odmówią.
 
 ## 1. Przewaga, którą mamy i której nie ma 95 % uczestników: **kod otwartoźródłowy**
 
@@ -61,7 +70,6 @@ prawdopodobieństwa, że da się to zrobić w miesiąc:
 | `komunikator…` | 09-idor-bac | T1 | 9 000 | 18 % | 5 | 891 | **178** |
 | `dns.pl` | 03-dane | T1 | 9 000 | 10 % | 3 | 495 | **165** |
 | `www.gov.pl` | 08-xss | T1 | 4 000 | 20 % | 3 | 440 | **147** |
-| `eobieg.wladyslawowo.pl` | 09-idor-bac | T1 | 2 000 | 25 % | 2 | 275 | **138** |
 | `komunikator…` | 02-przejęcie konta | T1 | 20 000 | 6 % | 6 | 660 | **110** |
 
 Pełna tabela: `python3 nask/nask.py plan nask/plan.json`.

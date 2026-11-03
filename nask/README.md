@@ -11,12 +11,13 @@ w `../archive/arc-agi-3/` — zamknięty, zostawiony dla historii.
 
 | plik | co zawiera |
 |---|---|
-| [`SCOPE.md`](SCOPE.md) | zakres wszystkich 5 programów, zweryfikowany u źródła, z pułapkami |
+| [`SCOPE.md`](SCOPE.md) | zakres 5 programów (4 testujemy, 1 wyłączony), zweryfikowany u źródła |
+| [`JAK-DZIALA-ACTIONS.md`](JAK-DZIALA-ACTIONS.md) | **praca sieciowa na GitHub Actions** i dlaczego nie potrzebuję Twoich haseł |
 | [`POMYSLY.md`](POMYSLY.md) | **jak wygrać** — pomysły uszeregowane po EV/dzień, w tym uczciwie o „Rust wszędzie” |
 | [`PLAN.md`](PLAN.md) | plan dzień po dniu na 28 dni konkursu |
 | [`AUDYT-POPRZEDNIEGO-REPO.md`](AUDYT-POPRZEDNIEGO-REPO.md) | co jest zepsute w repo `peteraangelic-pixel/NASK` (sprawdzone w kodzie) |
 
-## Narzędzia (Python, zero zależności, 46 testów offline)
+## Narzędzia (Python, zero zależności, 64 testy offline)
 
 ```bash
 python3 nask/nask.py scope --list          # cały zakres
@@ -25,7 +26,12 @@ python3 nask/nask.py plan nask/plan.json   # tabela EV hipotez
 python3 nask/nask.py mine bundle.js --host app.komunikator.narodowy.gov.pl
 python3 nask/nask.py get https://www.gov.pl/          # domyślnie DRY-RUN
 python3 nask/nask.py get https://www.gov.pl/ --send   # naprawdę wysyła
+python3 nask/recon.py --dry-run            # walidacja 14 celów bez sieci
 ```
+
+Rekonesans sieciowy uruchamia się na GitHub Actions (**Actions → nask-recon → Run
+workflow**) — sandbox agenta nie ma dostępu do tych hostów, a runner ma. Szczegóły
+i zasady dotyczące sekretów: [`JAK-DZIALA-ACTIONS.md`](JAK-DZIALA-ACTIONS.md).
 
 | moduł | rola |
 |---|---|
@@ -35,11 +41,12 @@ python3 nask/nask.py get https://www.gov.pl/ --send   # naprawdę wysyła
 | `tools/jsmine.py` | endpointy, parametry, pola typu `role`/`userId` z bundli JS |
 | `tools/triage.py` | EV = nagroda × P(trafienie) × P(brak duplikatu), na dzień pracy |
 | `tools/report.py` | generator zgłoszenia; **odmawia** wygenerowania bez PoC i wpływu |
+| `tools/credentials.py` | poświadczenia wyłącznie z sekretów Actions; allowlist hostów |
 
 Testy:
 
 ```bash
-python3 -m pytest nask/tools/tests -q      # 46/46, bez sieci
+python3 -m pytest nask/tools/tests -q      # 64/64, bez sieci
 ```
 
 ## Twarde reguły (z regulaminu, nie z dobrych chęci)
@@ -54,8 +61,10 @@ python3 -m pytest nask/tools/tests -q      # 46/46, bez sieci
 
 **Ja (agent):** kod i narzędzia, analiza offline otwartych źródeł `mwdb-core` / `n6portal`,
 triage EV, generowanie raportów, przegląd dowodów.
-**Ty:** rejestracja własnych kont, wysyłka żądań ze swojej maszyny lub Actions, kliknięcia
+**Ty:** rejestracja własnych kont, uruchomienie workflow `nask-recon`, kliknięcia
 w przeglądarce tam, gdzie potrzebny zalogowany użytkownik, i **wysyłka zgłoszeń**.
+Hasła nie są mi potrzebne — ani do hack.cert.pl, ani do celów. Testy uwierzytelnione
+robimy przez sekret `NASK_COOKIE_*` ustawiony przez Ciebie w repo.
 
 Powód jest formalny: żądania do celów w scope muszą wychodzić spod Twojej
 odpowiedzialności jako uczestnika konkursu (§4 regulaminu). Ja nie mam też dostępu
@@ -63,6 +72,6 @@ sieciowego do tych hostów z sandboxa.
 
 ## Realistyczne oczekiwania
 
-Suma EV wszystkich 19 hipotez z `plan.json` to **≈ 9 900 zł** — nie 100 000. Jedna dobrze
+Suma EV wszystkich 17 hipotez z `plan.json` to **≈ 9 500 zł** — nie 100 000. Jedna dobrze
 udokumentowana luka IDOR to 4 000–9 000 zł, więc cel jest wart pracy, ale to nie jest
 dochód, na którym można oprzeć budżet. Więcej w [`POMYSLY.md`](POMYSLY.md) §0.

@@ -16,8 +16,6 @@ IN = [
     ("anything.cert.pl", "cert", "T2"),
     ("www.gov.pl", "gov", "T1"),
     ("app.komunikator.narodowy.gov.pl", "mszyfr", "T1"),
-    ("eobieg.wladyslawowo.pl", "wladyslawowo", "T1"),
-    ("wladyslawowo.pl", "wladyslawowo", "T2"),
 ]
 
 OUT = [
@@ -26,6 +24,8 @@ OUT = [
     "nask.pl.evil.com",            # klasyczny suffix-trick
     "evilnask.pl",
     "bip.wladyslawowo.pl",         # jawnie wykluczone
+    "eobieg.wladyslawowo.pl",      # program wyłączony decyzją użytkownika
+    "wladyslawowo.pl",
     "lab.cert.pl",                 # jawnie wykluczone
     "moje.hack.cert.pl",           # subdomeny hack.cert.pl wykluczone
     "komunikator.narodowy.gov.pl.evil.pl",
@@ -64,7 +64,8 @@ def test_url_checks():
 def test_payout_by_program():
     assert payout_for("mwdb.cert.pl", "krytyczny") == 20000
     assert payout_for("anything.cert.pl", "krytyczny") == 10000   # Tier 2
-    assert payout_for("eobieg.wladyslawowo.pl", "krytyczny") == 4000
+    # Władysławowo wyłączone z warsztatu → 0, mimo że w scope platformy jest.
+    assert payout_for("eobieg.wladyslawowo.pl", "krytyczny") == 0
     assert payout_for("example.com", "krytyczny") == 0
 
 

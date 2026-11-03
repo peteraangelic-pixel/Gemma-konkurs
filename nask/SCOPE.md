@@ -15,9 +15,16 @@ milion to pula całego, wieloletniego programu bug bounty NASK).
 | **CERT Polska** | `cert.pl`, `m.cert.pl`, `incydent.cert.pl`, `moje.cert.pl`, `n6portal.cert.pl`, `mwdb.cert.pl`, `hack.cert.pl` | `*.cert.pl`, `ctf.hack.cert.pl` | `*.hack.cert.pl`, `*.lab.cert.pl` |
 | **Portal Gov.pl** | `www.gov.pl` | — | wszystko inne (w tym samo `gov.pl`) |
 | **mSzyfr** | `*.komunikator.narodowy.gov.pl` | — | — |
-| **Gmina Władysławowo** | `eobieg.wladyslawowo.pl` | `wladyslawowo.pl`, `cciod.wladyslawowo.pl` | `bip.wladyslawowo.pl` (usunięte z zakresu) |
+| ~~Gmina Władysławowo~~ **WYŁĄCZONY** | `eobieg.wladyslawowo.pl` | `wladyslawowo.pl`, `cciod.wladyslawowo.pl` | `bip.wladyslawowo.pl` (usunięte z zakresu) |
 
-**Wszystkie pięć programów jest AKTYWNYCH w tym samym oknie 03–30.11.2026.**
+**Cztery programy testujemy; piąty (Gmina Władysławowo) jest wyłączony z warsztatu**
+decyzją użytkownika z 2026-11-03: maksymalna nagroda 4 000 zł przy tej samej pracy,
+która w Tier 1 płaci 20 000 zł. Nie usuwam danych ze scope (to fakty z regulaminu),
+tylko oznaczam program jako `enabled=False` w `tools/scope.py`. Efekt: `check_host`
+odmawia, a `triage` odrzuca każdą hipotezę na te hosty. Wyłączenie jest w kodzie,
+nie w dobrej pamięci.
+
+**Wszystkie pięć programów jest AKTYWNYCH na platformie w tym samym oknie 03–30.11.2026.**
 Sprawdzone osobno na stronie każdej edycji (stan na 2026-11-03) — nie zakładam, że
 skoro NASK ma edycję 11/2026, to pozostałe też. Mają, ale to było warto sprawdzić.
 
@@ -83,3 +90,5 @@ potwierdzenia**, literówki i layout.
 2. `hack.cert.pl` jest w scope, ale jego subdomeny **nie** (poza `ctf.hack.cert.pl`).
    Sam `hack.cert.pl` — tak.
 3. `bip.wladyslawowo.pl` **usunięte** z zakresu. Stare poradniki wciąż je podają.
+4. Cały program Władysławowo **nie jest tym, na co warto wydawać dni** — nie dlatego,
+   że trudny, ale dlatego że 4 000 zł za tę samą pracę co 20 000 zł to zła arytmetyka.

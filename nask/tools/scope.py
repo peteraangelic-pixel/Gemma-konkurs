@@ -11,7 +11,9 @@ Ten plik jest JEDYNYM źródłem prawdy o scope w tym repo. Jeśli platforma zmi
 zakres, poprawiamy tutaj — a nie w skryptach, które mają wtedy odmówić startu.
 
 Zasada: nieznany host = ODMOWA. Domyślne zachowanie musi być bezpieczne, bo
-literówka w nazwie domeny to nie "brak nagrody", a problem prawny.
+literówka w nazwie domeny to nie "brak nagrody", a problem prawny. Program
+w scope platformy, ale wyłączony w warsztacie (`enabled=False`) = też ODMOWA:
+narzędzie ma odmówić, a nie "może jednak spróbuje".
 """
 from __future__ import annotations
 
@@ -42,6 +44,11 @@ class Program:
     exclude: tuple[str, ...] = ()
     payouts: dict = field(default_factory=lambda: PAYOUTS_PL)
     notes: str = ""
+    # Program istnieje na platformie, ale my go NIE testujemy. Decyzja użytkownika,
+    # nie moja: nie usuwam danych ze scope (są faktami z regulaminu), tylko zamykam
+    # drogę do wysłania tam żądania. `check_host` odmawia, więc żadne narzędzie
+    # w tym repo nie dotknie wyłączonego programu przez pomyłkę.
+    enabled: bool = True
 
     def tier_of(self, host: str) -> str | None:
         """Kolejność ma znaczenie — dokładnie tak, jak w regulaminie.
@@ -120,8 +127,11 @@ PROGRAMS: tuple[Program, ...] = (
         tier2=("wladyslawowo.pl", "cciod.wladyslawowo.pl"),
         exclude=("bip.wladyslawowo.pl",),
         payouts=PAYOUTS_WLADYSLAWOWO,
-        notes="bip.wladyslawowo.pl usunięty z zakresu. eobieg nie odpowiada na "
-              "standardowych portach — sprawdzić porty alternatywne, ale bez skanowania masowego.",
+        notes="WYŁĄCZONY z warsztatu 2026-11-03 (decyzja użytkownika: szkoda czasu). "
+              "Maksymalna nagroda 4 000 zł przy tej samej pracy co 20 000 zł w Tier 1 — "
+              "to nie zły wybór celu, tylko zła arytmetyka. Dane scope zostają, bo są "
+              "faktem z regulaminu, ale check_host odmawia żądań.",
+        enabled=False,
     ),
 )
 
@@ -195,6 +205,10 @@ def check_host(host: str) -> Decision:
             return Decision(False, h, prog.slug, "EXCLUDED",
                             f"jawnie wykluczone w programie '{prog.slug}'")
         if tier:
+            if not prog.enabled:
+                return Decision(False, h, prog.slug, "DISABLED",
+                                f"program '{prog.slug}' jest w scope platformy, ale "
+                                f"wyłączony z naszego warsztatu (decyzja użytkownika)")
             return Decision(True, h, prog.slug, tier,
                             f"program '{prog.slug}', {tier}")
 
@@ -219,6 +233,8 @@ def all_in_scope_hosts() -> list[tuple[str, str, str]]:
     """Lista (host, program, tier) do dokumentacji i testów."""
     out = []
     for p in PROGRAMS:
+        if not p.enabled:
+            continue
         for rule in p.tier1:
             out.append((rule, p.slug, "T1"))
         for rule in p.tier2:

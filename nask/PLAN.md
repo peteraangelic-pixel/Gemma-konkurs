@@ -11,7 +11,7 @@ Zasada: **jeden cel na raz, każdego dnia coś, co da się pokazać w raporcie.*
 | 3 | **CORS** na `www.gov.pl` (1 dzień, EV/dzień najwyższe) | raport TAK/NIE — jeśli TAK, zgłoszenie tego samego dnia |
 | 4 | **mass assignment** w komunikatorze: rejestracja, próba `role`/`is_admin`/`is_verified` | raport TAK/NIE |
 | 5 | weryfikacja hipotez z dnia 2 na `mwdb.cert.pl` (własne konto, dwa obiekty) | pierwszy kandydat IDOR albo dowód „nie ma” |
-| 6–7 | `eobieg.wladyslawowo.pl` — obieg dokumentów, IDOR na numerach spraw (szybka wygrana, mała kwota, ale pierwszy skalp) | raport |
+| 6–7 | **`incydent.cert.pl` / `moje.cert.pl`** — IDOR na zgłoszeniach i koncie (wolimy to od gminy: 9 000 zł zamiast 4 000 zł za tę samą pracę) | raport |
 
 **Kamień milowy tygodnia 1: co najmniej jedno zgłoszenie wysłane.** Nie „prawie gotowe”.
 
@@ -50,6 +50,7 @@ Zasada: **jeden cel na raz, każdego dnia coś, co da się pokazać w raporcie.*
 ## Definicja sukcesu (realistyczna)
 
 - **minimum:** 1 zgłoszenie, kompletne, z PoC → 600–4 000 zł i wpis w rankingu.
+  (Realistycznie: 600–9 000 zł. Władysławowo dawało maks. 4 000 zł i dlatego wypadło.)
 - **dobry scenariusz:** 1 × IDOR/BAC (9 000 zł) + 1 × mała (600–1 000 zł).
 - **bardzo dobry:** 1 × klasa 03/09 masowy odczyt (9 000–20 000 zł).
 - **porażka, której unikamy:** 20 „potencjalnych” zgłoszeń bez PoC → odrzucone, zero wiarygodności.
