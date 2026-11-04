@@ -53,6 +53,8 @@ Endpoint **poza `/api`**, dlatego nasza mapa (`naskmap`, wzorce `/api|/_next|/re
 
 Zgodne z pomiarem c87 (20 wariantów: `/proc/version`, `%2e%2e%2f`, `..%5c`, `file://`, zakodowany schemat, `//science.nask.pl/…` — wszystkie 400/404; kontrola: PDF 603 523 B → 200). **Wniosek: filtr dekoduje wartość przed walidacją i odrzuca schematy oraz `..` niezależnie od kodowania. Klasa §8.15 zamknięta.**
 
+**Runda 7 dodała trzy warianty, których zespół nie sprawdził** — i wyszło, że prefiks jest „elastyczny”: `/MEDIA/…` (wielkie litery), `media/…` (bez wiodącego ukośnika) i `%2Fmedia%2F…` zwracają **ten sam plik** (540 927 B). Segmenty `.`/`..` nadal odrzucane (400), więc elastyczność prefiksu nie poszerza dostępu. Szczegóły: `NASK/WERYFIKACJA-RUNDA7-2026-11-04.md`.
+
 ### 1.3 `science.nask.pl` — **[Z]**
 - `/api/downloadFile?fileId=<int>` — kontrakt złamany przeze mnie; `fileId=18864` → 200, `image/png`, 2 210 114 B, `Content-Disposition: attachment; filename="Designer-11.png"`.
 - `/api/search?query=<≥3 znaki>&lang=pl` — **`lang=pl` jest wymagany**; bez niego `{"count":0,...}` mimo istniejących treści. To wyjaśnia, dlaczego wczesne sondy „nie działały”.
@@ -129,7 +131,7 @@ testowo.dyzurnet.pl (poza zakresem), files.badanie.nask.pl (S3, poza zakresem)
 | „116sos.pl leży (502 nginx)” — powtarzane w 4 raportach | **Nieaktualne.** Host żyje, `/api/centres-search` i `/api/fetch-cookie-hash` → 200. Awaria minęła; cztery sesje zapisały ją jako stan trwały. |
 | „`fetch-cookie-hash` może zwracać dane sesji” | **Nie.** Stała wartość w dwóch dniach, bez ciasteczka. |
 | „H9: enum `downloadFile` po własnym uploadzie = 2 000–4 500 zł” | **Sfalsyfikowane pomiarem** (nasz gęsty sweep 60 ID: wyłącznie publiczne zdjęcia). Resztkowa wartość: BAC tylko ze znanym niepublicznym ID. |
-| „`/admin/logs` w HIVE ma guardy tylko klienta (H10, 4 500–10 000 zł)” | **Niepotwierdzone.** SPA zwraca 200 na wszystko (catch-all 713 B). Weryfikacja w rundzie 7 (`/admin/logs`, `/api/v1/admin/logs`) — wynik poniżej w `NASK/hunt/`. |
+| „`/admin/logs` w HIVE ma guardy tylko klienta (H10, 4 500–10 000 zł)” | **OBALONE pomiarem (runda 7).** `/admin/logs` → 200 / **713 B**, dokładnie tyle co catch-all hostu; `/api/v1/admin/logs` → 404. To powłoka SPA, nie „guard klienta”. Szczegóły: `NASK/WERYFIKACJA-RUNDA7-2026-11-04.md`. |
 | „`q` w `centres-search` filtruje, więc `q=Warszawa'` dowodzi braku SQLi” | **Błędne założenie** — `q` jest ignorowane. Test mierzył szum. |
 | „`www.nask.pl` jest w zakresie, bo §5 mówi `nask.pl`” | **Ryzyko odrzucenia.** Inna nazwa hosta. Pytanie do organizatora **przed** testem — trzy odrzucenia pod rząd mogą zablokować wysyłkę. |
 | „IDOR na `/users/{id}` i `payout`/IBAN w `hack.cert.pl`” (6d08) | **Inny program** — `hack.cert.pl` należy do programu **CERT Polska**. Nasz program = 12 domen NASK. Nie mieszamy programów. |
