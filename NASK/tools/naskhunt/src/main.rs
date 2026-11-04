@@ -74,6 +74,12 @@ struct Observation {
     cdisp: String,
     clen: String,
     ms: u128,
+    /// Jeden reczny skok na przekierowanie same-origin (308/307 z kanonizacja sciezki).
+    /// Klient nie podaza automatycznie (moglby wyjsc z zakresu), ale bez tego sondy
+    /// sa slepe: frameworki odpowiadaja 308 na kanoniczny wariant sciezki.
+    hop_status: u16,
+    hop_len: usize,
+    hop_ctype: String,
     snippet: String,
     error: String,
 }
@@ -85,6 +91,10 @@ struct Runner {
     last: Option<Instant>,
     scope: Scope,
     sent: usize,
+    /// Baseline catch-all per host: losowa nieistniejaca sciezka. Serwis, ktory
+    /// odpowiada 200 na wszystko (SPA), bez tego daje falszywe trafienia — to blad,
+    /// ktory w cudzych przebiegach dal 200 "trafien" i zero wartosci.
+    catchall: BTreeMap<String, Observation>,
 }
 
 impl Runner {
@@ -102,11 +112,29 @@ impl Runner {
             last: None,
             scope,
             sent: 0,
+            catchall: BTreeMap::new(),
         }
     }
 
-    /// Jedno żądanie GET. Zwraca `None`, gdy host jest poza zakresem (i wtedy **nic nie wysyła**).
+    /// Jedno żądanie GET, bez interpretacji. Zwraca `None`, gdy host jest poza zakresem
+    /// (i wtedy **nic nie wysyła**).
     fn get(&mut self, host: &str, path: &str, headers: &BTreeMap<String, String>) -> Option<Observation> {
+        let mut obs = self.fetch_once(host, path, headers)?;
+        // Jeden skok, wylacznie na ten sam host i wylacznie https. Kazdy hop to
+        // osobne zadanie w limiterze i w liczniku.
+        if matches!(obs.status, 301 | 302 | 303 | 307 | 308) {
+            if let Some(next) = same_origin_path(host, &obs.location) {
+                if let Some(hop) = self.fetch_once(host, &next, &BTreeMap::new()) {
+                    obs.hop_status = hop.status;
+                    obs.hop_len = hop.len;
+                    obs.hop_ctype = hop.ctype;
+                }
+            }
+        }
+        Some(obs)
+    }
+
+    fn fetch_once(&mut self, host: &str, path: &str, headers: &BTreeMap<String, String>) -> Option<Observation> {
         let url = format!("https://{host}{path}");
         if self.scope.check_url(&url).is_err() {
             return None;
@@ -139,12 +167,50 @@ impl Runner {
                 cdisp: String::new(),
                 clen: String::new(),
                 ms: 0,
+                hop_status: 0,
+                hop_len: 0,
+                hop_ctype: String::new(),
                 snippet: String::new(),
                 error: format!("{e}"),
             },
         };
         Some(obs)
     }
+
+    /// Baseline catch-all hostu, pobierany raz na przebieg.
+    fn catchall_for(&mut self, host: &str) -> Option<Observation> {
+        if let Some(o) = self.catchall.get(host) {
+            return Some(o.clone());
+        }
+        let path = "/__naskhunt_catchall__/9f3c2b-there-is-no-such-page";
+        let obs = self.fetch_once(host, path, &BTreeMap::new())?;
+        self.catchall.insert(host.to_string(), obs.clone());
+        Some(obs)
+    }
+}
+
+/// Sciezka przekierowania, jesli zostaje na **tym samym hoscie** i uzywa https.
+/// Porownanie hosta jest twarde: `nask.pl` -> `www.nask.pl` to inna nazwa hosta
+/// i skok bylby wyjsciem z zakresu §5, nawet jesli domena ta sama.
+fn same_origin_path(host: &str, location: &str) -> Option<String> {
+    let loc = location.trim();
+    if loc.is_empty() || loc.starts_with("//") {
+        return None;
+    }
+    if let Some(rest) = loc.strip_prefix("https://") {
+        let path_start = rest.find('/').unwrap_or(rest.len());
+        let (loc_host, _) = rest.split_at(path_start);
+        if !loc_host.eq_ignore_ascii_case(host) {
+            return None;
+        }
+        let path = &rest[path_start..];
+        let p = if path.is_empty() { "/" } else { path };
+        return Some(p.to_string());
+    }
+    if loc.starts_with('/') {
+        return Some(loc.to_string());
+    }
+    None // http:// (downgrade) i obce hosty odrzucone
 }
 
 fn read(resp: ureq::Response, t0: Instant) -> Observation {
@@ -181,6 +247,9 @@ fn read(resp: ureq::Response, t0: Instant) -> Observation {
         cdisp,
         clen,
         ms,
+        hop_status: 0,
+        hop_len: 0,
+        hop_ctype: String::new(),
         snippet,
         error: String::new(),
     }
@@ -190,7 +259,12 @@ fn is_denied(o: &Observation) -> bool {
     matches!(o.status, 401 | 403 | 404 | 405) || (300..400).contains(&o.status)
 }
 
-fn judge(check: &Check, test: &Observation, base: Option<&Observation>) -> Verdict {
+fn judge(
+    _check: &Check,
+    test: &Observation,
+    base: Option<&Observation>,
+    catchall: Option<&Observation>,
+) -> Verdict {
     if test.status == 0 {
         return Verdict::Inconclusive;
     }
@@ -210,6 +284,13 @@ fn judge(check: &Check, test: &Observation, base: Option<&Observation>) -> Verdi
     // CORS: odbicie obcego Origin razem z credentials
     if test.acao.contains("arena-probe.example") && test.acac.eq_ignore_ascii_case("true") {
         return Verdict::Candidate;
+    }
+    // Catch-all: host odpowiada tak samo na losowa nieistniejaca sciezke,
+    // wiec odpowiedz tego zadania nic nie mowi o istnieniu zasobu.
+    if let Some(c) = catchall {
+        if c.status == test.status && c.len.abs_diff(test.len) < 48 {
+            return Verdict::Clean;
+        }
     }
     // Uwaga: 200 + JSON to NIE podatność — publiczne API tak wyglądają.
     // Kandydata zgłaszamy tylko przy konkretnym sygnale, np. odbitym obcym Origin
@@ -247,6 +328,7 @@ fn main() {
     .expect("checks.json poprawny");
 
     let mut runner = Runner::new(scope, rps);
+    let mut catchalls: BTreeMap<String, Observation> = BTreeMap::new();
     let mut results: Vec<(Check, Option<Observation>, Option<Observation>, Verdict)> = Vec::new();
 
     for check in &checks.checks {
@@ -254,14 +336,18 @@ fn main() {
             .baseline_path
             .as_ref()
             .and_then(|p| runner.get(&check.host, p, &BTreeMap::new()));
+        let catchall = runner.catchall_for(&check.host);
         let test = runner.get(&check.host, &check.path, &check.headers);
         let verdict = match &test {
             None => {
                 eprintln!("POMINIĘTE (poza zakresem): {} {}", check.host, check.path);
                 Verdict::Inconclusive
             }
-            Some(t) => judge(check, t, base.as_ref()),
+            Some(t) => judge(check, t, base.as_ref(), catchall.as_ref()),
         };
+        if let Some(c) = &catchall {
+            catchalls.insert(check.host.clone(), c.clone());
+        }
         results.push((check.clone(), test, base, verdict));
     }
 
@@ -274,7 +360,10 @@ fn main() {
     ));
     md.push_str("| werdykt | id | host | ścieżka | status | klasa |\n|---|---|---|---|---:|---|\n");
     for (c, t, _, v) in &results {
-        let st = t.as_ref().map(|o| o.status).unwrap_or(0);
+        let st = t
+            .as_ref()
+            .map(|o| if o.hop_status > 0 { o.hop_status } else { o.status })
+            .unwrap_or(0);
         md.push_str(&format!(
             "| **{}** | `{}` | {} | `{}` | {} | {} |\n",
             v.as_str(),
@@ -362,6 +451,10 @@ fn main() {
             "content_disposition": t.as_ref().map(|o| o.cdisp.clone()),
             "content_length_header": t.as_ref().map(|o| o.clen.clone()),
             "ms": t.as_ref().map(|o| o.ms),
+            "hop_status": t.as_ref().map(|o| o.hop_status),
+            "hop_len": t.as_ref().map(|o| o.hop_len),
+            "hop_ctype": t.as_ref().map(|o| o.hop_ctype.clone()),
+            "catchall_status": catchalls.get(&c.host).map(|o| o.status),
             "snippet": t.as_ref().map(|o| o.snippet.clone()),
             "baseline_status": b.as_ref().map(|o| o.status),
             "error": t.as_ref().map(|o| o.error.clone()),

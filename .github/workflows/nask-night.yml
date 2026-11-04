@@ -51,15 +51,16 @@ jobs:
             --json ../../../NASK/hunt/report-$(date -u +%Y%m%dT%H%MZ).json \
             | tee ../../../NASK/hunt/last-run.log
 
-      - name: mapa API z bundle'i JS (hosty sztandarowe)
+      - name: mapa API z bundle'i JS (raz na dobe, tryb --grep)
         continue-on-error: true
+        if: github.event.inputs.mapa == 'tak'
         run: |
           ./target/release/naskmap \
             --scope ../nasktriage/scope.example.json \
-            --hosts "nask.pl,bezpiecznymiesiac.pl,bezpiecznewybory.pl,pllum.org.pl,dataannotation.pllum.org.pl,science.nask.pl" \
-            --max-scripts 40 \
+            --hosts "science.nask.pl,116sos.pl,zglos-dezinformacje.nask.pl,bezpiecznymiesiac.pl" \
+            --max-scripts 25 \
             --md ../../../NASK/hunt/MAP-$(date -u +%Y%m%dT%H%MZ).md \
-            | tail -20
+            | tail -10
 
       - name: publikuj
         if: always()

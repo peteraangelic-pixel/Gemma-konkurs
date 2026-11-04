@@ -1,486 +1,153 @@
 {
-  "_opis": "Runda 6: gęsty sweep ID w /api/downloadFile — okolice znanych, realnych ID (media wpisów z listopada 2026 oraz sekcji ludzi). Cel: znaleźć załącznik, który nie jest publiczny, albo dokument o nazwie sugerującej dane wewnętrzne.",
-  "_zasady": "GET-only, 2 req/s, odstęp ID = 2 (brak brute-force sekwencyjnego, tylko próbkowanie okolic).",
+  "_opis": "Runda 7: sondy wynikajace z przegladu 6 galezi zespolu (Pokemon c87/7911/a450, Gemma 6d08, Smak 5ed7). Nowe: /download-file na bezpiecznymiesiac (endpoint spoza naszej mapy), weryfikacja twierdzenia o /admin/logs w HIVE, stabilnosc cookieHash na 116sos (host wrocil), drafty Nuxt Content. Kazda sonda jest teraz odejmowana od catch-all hostu, a 308 jest rozstrzygane jednym skokiem same-origin.",
+  "_zasady": "GET-only, 2 req/s, bez cial i bez logowania. Skok przekierowania tylko na ten sam host i tylko https.",
   "checks": [
     {
-      "id": "s6-dl-18800",
-      "host": "science.nask.pl",
+      "id": "s7-bm-dl-control",
+      "host": "bezpiecznymiesiac.pl",
       "method": "GET",
-      "path": "/api/downloadFile?fileId=18800",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
+      "path": "/download-file/?fileUrl=/media/2026/09/Facebook-ecsm-1.png",
+      "why": "Kontrola: istniejacy plik z /media/. Czy endpoint serwuje cokolwiek (200) czy tylko PDF-y (500)?",
+      "class": "info"
     },
     {
-      "id": "s6-dl-18802",
-      "host": "science.nask.pl",
+      "id": "s7-bm-dl-encslashes",
+      "host": "bezpiecznymiesiac.pl",
       "method": "GET",
-      "path": "/api/downloadFile?fileId=18802",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
+      "path": "/download-file/?fileUrl=%2Fmedia%2F2026%2F09%2FFacebook-ecsm-1.png",
+      "why": "Ten sam plik, ale ze zakodowanymi ukosnikami — czy filtr dekoduje przed walidacja (rozna odpowiedz = inna sciezka kodu).",
+      "class": "15"
     },
     {
-      "id": "s6-dl-18804",
-      "host": "science.nask.pl",
+      "id": "s7-bm-dl-dot",
+      "host": "bezpiecznymiesiac.pl",
       "method": "GET",
-      "path": "/api/downloadFile?fileId=18804",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
+      "path": "/download-file/?fileUrl=/media/./2026/09/Facebook-ecsm-1.png",
+      "why": "Segment '.' w srodku: normalizacja po walidacji to klasyczny bypass prefiksu /media/ (poz. 15).",
+      "class": "15"
     },
     {
-      "id": "s6-dl-18806",
-      "host": "science.nask.pl",
+      "id": "s7-bm-dl-case",
+      "host": "bezpiecznymiesiac.pl",
       "method": "GET",
-      "path": "/api/downloadFile?fileId=18806",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
+      "path": "/download-file/?fileUrl=/MEDIA/2026/09/Facebook-ecsm-1.png",
+      "why": "Wielkosc liter w prefiksie: czy walidacja prefiksu jest case-sensitive, a system plikow nie.",
+      "class": "15"
     },
     {
-      "id": "s6-dl-18808",
-      "host": "science.nask.pl",
+      "id": "s7-bm-dl-noslash",
+      "host": "bezpiecznymiesiac.pl",
       "method": "GET",
-      "path": "/api/downloadFile?fileId=18808",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
+      "path": "/download-file/?fileUrl=media/2026/09/Facebook-ecsm-1.png",
+      "why": "Prefiks bez wiodacego ukosnika — ujawnia, czy sciezka jest doklejana do katalogu bazowego.",
+      "class": "info"
     },
     {
-      "id": "s6-dl-18810",
-      "host": "science.nask.pl",
+      "id": "s7-bm-dl-dir",
+      "host": "bezpiecznymiesiac.pl",
       "method": "GET",
-      "path": "/api/downloadFile?fileId=18810",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
+      "path": "/download-file/?fileUrl=/media/2026/09/",
+      "why": "Katalog zamiast pliku: 500 vs 404 rozroznia 'nie ma pliku' od 'blad obslugi' (sygnal o implementacji).",
+      "class": "info"
     },
     {
-      "id": "s6-dl-18812",
-      "host": "science.nask.pl",
+      "id": "s7-116-hash-a",
+      "host": "116sos.pl",
       "method": "GET",
-      "path": "/api/downloadFile?fileId=18812",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
+      "path": "/api/fetch-cookie-hash",
+      "why": "Stabilnosc cookieHash: pierwszy odczyt w przebiegu.",
+      "class": "11.1"
     },
     {
-      "id": "s6-dl-18814",
-      "host": "science.nask.pl",
+      "id": "s7-116-hash-b",
+      "host": "116sos.pl",
       "method": "GET",
-      "path": "/api/downloadFile?fileId=18814",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
+      "path": "/api/fetch-cookie-hash",
+      "why": "Drugi odczyt: identyczna wartosc = stala (cache-buster), inna = pochodna sesji (do analizy).",
+      "class": "11.1"
     },
     {
-      "id": "s6-dl-18816",
-      "host": "science.nask.pl",
+      "id": "s7-116-hash-xfh",
+      "host": "116sos.pl",
       "method": "GET",
-      "path": "/api/downloadFile?fileId=18816",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
+      "path": "/api/fetch-cookie-hash",
+      "why": "X-Forwarded-Host: czy odpowiedz zalezy od naglowka hosta (cache poisoning / host header injection, poz. 18).",
+      "class": "18",
+      "headers": {
+        "X-Forwarded-Host": "arena-probe.example"
+      }
     },
     {
-      "id": "s6-dl-18818",
-      "host": "science.nask.pl",
+      "id": "s7-116-centres-all",
+      "host": "116sos.pl",
       "method": "GET",
-      "path": "/api/downloadFile?fileId=18818",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
+      "path": "/api/centres-search?q=zzzzqqqxxx",
+      "why": "Kontrola: q ignorowane -> API zwraca cala baze osrodkow niezaleznie od frazy. Publiczne, ale mierzy over-read.",
+      "class": "12.2"
     },
     {
-      "id": "s6-dl-18820",
-      "host": "science.nask.pl",
+      "id": "s7-116-centres-id",
+      "host": "116sos.pl",
       "method": "GET",
-      "path": "/api/downloadFile?fileId=18820",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
+      "path": "/api/centres-search?q=a&id=1",
+      "why": "Czy istnieje filtr po id (ujawni endpoint szczegolowy do dalszej analizy).",
+      "class": "info"
     },
     {
-      "id": "s6-dl-18822",
-      "host": "science.nask.pl",
+      "id": "s7-hive-admin-logs",
+      "host": "dataannotation.pllum.org.pl",
       "method": "GET",
-      "path": "/api/downloadFile?fileId=18822",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
+      "path": "/admin/logs",
+      "why": "Cudza galaz twierdzi, ze /admin/logs ma 'guardy tylko klienta'. Mierze: redirect na /login = guard serwerowy, 200 z HTML = guard kliencki.",
+      "class": "9.1"
     },
     {
-      "id": "s6-dl-18824",
-      "host": "science.nask.pl",
+      "id": "s7-hive-api-admin-logs",
+      "host": "dataannotation.pllum.org.pl",
       "method": "GET",
-      "path": "/api/downloadFile?fileId=18824",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
+      "path": "/api/v1/admin/logs",
+      "why": "Ten sam zasob po API: 401 = autoryzacja po stronie serwera.",
+      "class": "9.1"
     },
     {
-      "id": "s6-dl-18826",
-      "host": "science.nask.pl",
+      "id": "s7-hive-api-users-slash",
+      "host": "dataannotation.pllum.org.pl",
       "method": "GET",
-      "path": "/api/downloadFile?fileId=18826",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
+      "path": "/api/v1/users/",
+      "why": "Trailing slash: 307 -> 401 potwierdza zywa trase (kontrakt FastAPI).",
+      "class": "12.1"
     },
     {
-      "id": "s6-dl-18828",
-      "host": "science.nask.pl",
+      "id": "s7-pllum-drafts",
+      "host": "pllum.org.pl",
       "method": "GET",
-      "path": "/api/downloadFile?fileId=18828",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
+      "path": "/api/_content/query?_params=%7B%22where%22%3A%5B%5B%22_draft%22%2C%22%3D%22%2Ctrue%5D%5D%7D",
+      "why": "Nuxt Content z filtrem po _draft=true: pusty wynik = brak wycieku wersji roboczych; niepusty = dane niepubliczne (poz. 3).",
+      "class": "3"
     },
     {
-      "id": "s6-dl-18830",
-      "host": "science.nask.pl",
+      "id": "s7-naskpl-search-literal",
+      "host": "nask.pl",
       "method": "GET",
-      "path": "/api/downloadFile?fileId=18830",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
+      "path": "/api/search?query=raport&lang=pl",
+      "why": "API wyszukiwarki na literalnym hoscie z §5 (bez podazania na www — inny host, poza zakresem).",
+      "class": "info"
     },
     {
-      "id": "s6-dl-18832",
-      "host": "science.nask.pl",
+      "id": "s7-naskpl-root",
+      "host": "nask.pl",
       "method": "GET",
-      "path": "/api/downloadFile?fileId=18832",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
+      "path": "/",
+      "why": "Zapis Location dla nask.pl: dokumentuje, ze kanoniczny host to www (poza zakresem) i ze skoku NIE wykonujemy.",
+      "class": "info"
     },
     {
-      "id": "s6-dl-18834",
-      "host": "science.nask.pl",
+      "id": "s7-dyzurnet-api",
+      "host": "dyzurnet.pl",
       "method": "GET",
-      "path": "/api/downloadFile?fileId=18834",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
-    },
-    {
-      "id": "s6-dl-18836",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=18836",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
-    },
-    {
-      "id": "s6-dl-18838",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=18838",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
-    },
-    {
-      "id": "s6-dl-18840",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=18840",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
-    },
-    {
-      "id": "s6-dl-18842",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=18842",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
-    },
-    {
-      "id": "s6-dl-18844",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=18844",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
-    },
-    {
-      "id": "s6-dl-18846",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=18846",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
-    },
-    {
-      "id": "s6-dl-18848",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=18848",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
-    },
-    {
-      "id": "s6-dl-18850",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=18850",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
-    },
-    {
-      "id": "s6-dl-18852",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=18852",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
-    },
-    {
-      "id": "s6-dl-18854",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=18854",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
-    },
-    {
-      "id": "s6-dl-18856",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=18856",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
-    },
-    {
-      "id": "s6-dl-18858",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=18858",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
-    },
-    {
-      "id": "s6-dl-18860",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=18860",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
-    },
-    {
-      "id": "s6-dl-18862",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=18862",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
-    },
-    {
-      "id": "s6-dl-18864",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=18864",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
-    },
-    {
-      "id": "s6-dl-18866",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=18866",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
-    },
-    {
-      "id": "s6-dl-18868",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=18868",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
-    },
-    {
-      "id": "s6-dl-40330",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=40330",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
-    },
-    {
-      "id": "s6-dl-40332",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=40332",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
-    },
-    {
-      "id": "s6-dl-40334",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=40334",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
-    },
-    {
-      "id": "s6-dl-40336",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=40336",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
-    },
-    {
-      "id": "s6-dl-40338",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=40338",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
-    },
-    {
-      "id": "s6-dl-40340",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=40340",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
-    },
-    {
-      "id": "s6-dl-40342",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=40342",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
-    },
-    {
-      "id": "s6-dl-40344",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=40344",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
-    },
-    {
-      "id": "s6-dl-40346",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=40346",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
-    },
-    {
-      "id": "s6-dl-40348",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=40348",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
-    },
-    {
-      "id": "s6-dl-40350",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=40350",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
-    },
-    {
-      "id": "s6-dl-40352",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=40352",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
-    },
-    {
-      "id": "s6-dl-40354",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=40354",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
-    },
-    {
-      "id": "s6-dl-40356",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=40356",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
-    },
-    {
-      "id": "s6-dl-40358",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=40358",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
-    },
-    {
-      "id": "s6-dl-12510",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=12510",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
-    },
-    {
-      "id": "s6-dl-12512",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=12512",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
-    },
-    {
-      "id": "s6-dl-12514",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=12514",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
-    },
-    {
-      "id": "s6-dl-12516",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=12516",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
-    },
-    {
-      "id": "s6-dl-12518",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=12518",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
-    },
-    {
-      "id": "s6-dl-12520",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=12520",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
-    },
-    {
-      "id": "s6-dl-13225",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=13225",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
-    },
-    {
-      "id": "s6-dl-13230",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=13230",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
-    },
-    {
-      "id": "s6-dl-13235",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=13235",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
-    },
-    {
-      "id": "s6-dl-13240",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/downloadFile?fileId=13240",
-      "why": "Gęsty sweep ID wokół znanych załączników (18864, 12519, 13231, 40342): szukamy pliku niepublicznego lub dokumentu (PDF/DOCX) o wewnętrznej nazwie.",
-      "class": "8.9"
+      "path": "/api",
+      "why": "Cudza galaz: /api zwraca 404 app-routera. Potwierdzam jednym zadaniem z catch-allem.",
+      "class": "info"
     }
   ]
 }
