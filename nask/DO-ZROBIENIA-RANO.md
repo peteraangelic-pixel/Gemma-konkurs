@@ -71,3 +71,55 @@ prawdopodobne wektory **własnymi rękami, a nie cudzym skanerem**. Wtedy nastę
 w kolejce są `dataannotation.pllum.org.pl` (IDOR na anotacjach, wymaga konta)
 i `komunikator.narodowy.gov.pl` (mass assignment przy rejestracji) — oba opisane
 w `POMYSLY.md`, oba wymagają Twojego zalogowania.
+
+
+---
+
+# DOPISEK 2 (04.11, po południu) — po przeglądzie wszystkich gałęzi i Dysku
+
+Punkt 1 (mwdb) jest **zrobiony**: produkcja stoi na **2.20.0**, poprawka XSS w atrybutach Rich
+jest wdrożona → temat zamknięty, punkt 2 skreślony, konta nie zakładamy.
+
+Aktualna lista, w tej kolejności. Każda pozycja ma kryterium „tak/nie”, żadna nie jest skanem.
+
+## 1. Embed PowerBI na `oad.nask.pl` (2 minuty, bez konta, pasywnie) — NOWE
+
+Wejdź na <https://oad.nask.pl/> i otwórz osadzony raport (embed `app.powerbi.com`,
+`autoAuth=true`).
+
+- **widać pojedyncze rekordy** (zgłoszenia, adresy, maile, numery spraw) → klasa **03**,
+  zrób zrzut ekranu i powiedz, co dokładnie widać. **Nie kopiuj rekordów** do czatu.
+- **widać tylko agregaty/liczby** → zamykamy, zero żalu.
+
+## 2. Konto na `hack.cert.pl` + awatar SVG (15 minut) — nadal #1
+
+Bez zmian: rejestracja, potem awatar SVG (`<svg …><script>alert(document.domain)</script></svg>`).
+Kryterium: odrzucony → walidacja OK; przyjęty i wyświetlany na profilu publicznym → stored XSS.
+
+Przy okazji jednej rzeczy, której nie da się zrobić inaczej: **utwórz zgłoszenie w wersji
+roboczej** i zapisz jego ID. Potrzebuję formatu (liczba czy UUID) — od tego zależy, czy
+IDOR z `H1`–`H7` jest w ogóle testowalny, czy enumeracja to szum. Zgłoszenie robocze
+nie musi być wysłane.
+
+## 3. `sendForm` na `zglos-dezinformacje.nask.pl` (20 minut) — tylko po Twoim GO
+
+To żądanie **zapisujące** u operatora rządowego, dlatego stoi tu, a nie wyżej. Jeśli dasz GO:
+najpierw legalne zgłoszenie testowe z linkiem do **własnego** kontrolera, obserwacja, czy
+serwer podgląda linki (SSRF z odczytem), potem walidacja typów plików. reCAPTCHA v3 zadziała
+w Twojej przeglądarce — automatem tego nie zrobię.
+
+## 4. Dwie odpowiedzi od organizatora (formularz na hack.cert.pl, 5 minut)
+
+1. Czy `moje.cert.pl` wolno testować? Karta programu pozwala, **regulamin usługi §IV 4.2
+   zabrania**. Bez odpowiedzi nie zakładam tam konta i nie testuję niczego.
+2. Czy zakres obejmuje `www.nask.pl`, skoro §5 wymienia literał `nask.pl`?
+
+## Czego nadal mi NIE wysyłaj
+
+Haseł, ciasteczek sesji, tokenów, danych osobowych osób trzecich. Wystarczy: co widać,
+zrzut ekranu (bez danych), dokładne kroki, przybliżona godzina.
+
+## Czego ja nie robię w tym czasie
+
+Nie uruchamiam kolejnego przebiegu sieciowego (przebieg 4 = 816 żądań, 13 trafień, wszystkie
+`niski`, zero podatności). Bez nowej hipotezy kolejny skan to tylko większa liczba.

@@ -17,8 +17,14 @@ w `../archive/arc-agi-3/` — zamknięty, zostawiony dla historii.
 | [`PLAN.md`](PLAN.md) | plan dzień po dniu na 28 dni konkursu |
 | [`AUDYT-POPRZEDNIEGO-REPO.md`](AUDYT-POPRZEDNIEGO-REPO.md) | co jest zepsute w repo `peteraangelic-pixel/NASK` (sprawdzone w kodzie) |
 | [`PRZEGLAD-KODU-MWDB.md`](PRZEGLAD-KODU-MWDB.md) | przegląd `mwdb-core` offline — i dlaczego obniżyłem szanse na IDOR |
+| [`HIPOTEZY-ZAMKNIETE.md`](HIPOTEZY-ZAMKNIETE.md) | **19 hipotez z dowodem** — czego nie testować ponownie i dlaczego |
+| [`PRZEJALEM-Z-GALEZI.md`](PRZEJALEM-Z-GALEZI.md) + [`…-2`](PRZEJALEM-Z-GALEZI-2.md) | co przejąłem z 10 gałęzi innych sesji (2 części) |
+| [`PRZEGLAD-DYSCU-2026-11-04.md`](PRZEGLAD-DYSCU-2026-11-04.md) | przegląd folderu zespołu na Dysku: co przyjęte, co duplikat |
+| [`SZABLON-ZGLOSZENIA.md`](SZABLON-ZGLOSZENIA.md) | filtr „czy to płaci” (§8) + szablon zgłoszenia |
+| [`DO-ZROBIENIA-RANO.md`](DO-ZROBIENIA-RANO.md) | Twoja lista na 15 minut, z kryteriami tak/nie |
+| [`WYNIKI-NOCY.md`](WYNIKI-NOCY.md) | podsumowanie nocy + wynik przebiegu 4 |
 
-## Narzędzia (Python, zero zależności, 71 testów offline)
+## Narzędzia (Python, zero zależności, 110 testów offline)
 
 ```bash
 python3 nask/nask.py scope --list          # cały zakres
@@ -48,7 +54,7 @@ i zasady dotyczące sekretów: [`JAK-DZIALA-ACTIONS.md`](JAK-DZIALA-ACTIONS.md).
 Testy:
 
 ```bash
-python3 -m pytest nask/tools/tests -q      # 71/71, bez sieci
+python3 -m pytest nask/tools/tests -q      # 110/110, bez sieci
 ```
 
 ## Twarde reguły (z regulaminu, nie z dobrych chęci)
