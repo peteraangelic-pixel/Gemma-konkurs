@@ -71,3 +71,41 @@ ilościowy. Do repo doszły cztery testy regresyjne odtwarzające dokładnie te 
   jedno zdjęcie profilowe do testu uploadu awatara (`/users/me/profile/account/avatar`)
   i jedna próba: czy awatar przyjmuje SVG z `<script>`. To 15 minut, a rozstrzyga
   największy otwarty wątek.
+
+
+---
+
+# DOPISEK po przeglądzie gałęzi i przebiegu 4 (2026-11-04)
+
+## Rozstrzygnięcie: `mwdb.cert.pl` stoi na **2.20.0**
+
+Sonda S8 w przebiegu 4 odpowiedziała na pytanie, które planowałem zadać dopiero po
+Twojej rejestracji konta:
+
+```
+GET https://mwdb.cert.pl/api/server  ->  "server_version": "2.20.0"
+```
+
+Poprawka XSS w atrybutach Rich (#1272/#1274) weszła **właśnie w 2.20.0**, więc jest
+wdrożona. **Cały wątek zamknięty** — nie trzeba konta, nie trzeba testu w przeglądarce.
+To jedna z trzech dróg wykreślona przez jedno żądanie.
+
+## Przebieg 4 (816 żądań, 16 hostów): 13 trafień, **wszystkie „niskie"**
+
+Po poprawce S6 (rozróżnia spadek i wzrost dostępu) wynik jest czysty: same wyniki
+negatywne zapisane po to, żeby nie sprawdzać ich drugi raz — `x-original-url` dający
+403 na `moje.cert.pl` i 429 na `incydent.cert.pl` to utwardzenie, a `ACAO: *` bez
+credentials jest wprost wykluczone.
+
+Zero trafień z S7 na `hack.cert.pl` **bez sesji** — API wymaga tokenu, co jest
+zachowaniem poprawnym, ale zamyka wariant anonimowy. **Wariant z sesją pozostaje
+najlepszą otwartą drogą.**
+
+## Zostały dwie drogi (były trzy)
+
+| # | droga | blokada | stawka |
+|---|---|---|---|
+| 1 | `hack.cert.pl` — `/users/{id}/view`, `/email`, `/role`, `/me/profile/payout`, awatar SVG | konto + dwie sesje w przeglądarce | 9 000–20 000 zł |
+| 2 | `zglos-dezinformacje` — upload (SVG z JS → stored XSS w panelu moderatora) | reCAPTCHA v3 = tylko przeglądarka | 4 000–9 000 zł |
+
+Obie wymagają Ciebie, nie narzędzia. Szczegóły i kryteria „tak/nie": `DO-ZROBIENIA-RANO.md`.

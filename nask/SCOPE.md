@@ -84,6 +84,24 @@ potwierdzenia**, literówki i layout.
 > Regulamin karze „znalazłem 50 błędów konfiguracji”, a nagradza **jeden działający
 > łańcuch ataku**.
 
+## 4a. Konflikt regulaminów: `moje.cert.pl` — **sprawdzić przed testami z kontem**
+
+To jedyna rzecz w całym przedsięwzięciu, którą trzeba wyjaśnić **przed** pracą, a nie po.
+
+| dokument | mówi |
+|---|---|
+| karta programu CERT (hack.cert.pl) | `moje.cert.pl` jest w Tier 1; testy **z własnych kont** są dozwolone |
+| regulamin samej usługi `moje.cert.pl`, część IV pkt 4.2 | użytkownik ma powstrzymać się od działań mających na celu **testowanie możliwości przełamania lub ominięcia zabezpieczeń** |
+
+Oba dokumenty obowiązują jednocześnie i mówią co innego. Ryzyko jest realne: organizator
+może odrzucić zgłoszenie, powołując się na regulamin usługi, którego naruszenie zarzuca
+uczestnikowi — nawet jeśli karta programu na to pozwalała.
+
+**Działanie:** zapytać organizatora (formularz kontaktowy hack.cert.pl / e-mail programu)
+o pisemne potwierdzenie, że karta programu uchyla §IV 4.2 regulaminu `moje.cert.pl`
+w zakresie testów z własnego konta. Do czasu odpowiedzi: **tylko ruch anonimowy**
+(GET, bez logowania) na tym hoście.
+
 ## 5. Trzy pułapki, które kosztują nagrodę
 
 1. `gov.pl` **nie jest** w scope — tylko `www.gov.pl`.

@@ -48,6 +48,28 @@ Zasada: **jeden cel na raz, każdego dnia coś, co da się pokazać w raporcie.*
 - drugi przebieg po miejscach oznaczonych „prawdopodobne, brak dowodu”;
 - **nic nowego nie zaczynać po 27.11** — raport musi zdążyć przed 30.11.
 
+## KOREKTA 2 (po przeglądzie 6 równoległych gałęzi, 04.11)
+
+Wszystkie gałęzie razem: **~2 900 żądań, 0 potwierdzonych podatności**. Publiczna
+powierzchnia NASK jest utwardzona na wszystko, co da się sprawdzić bez konta.
+Szczegóły i dowody: `PRZEJALEM-Z-GALEZI.md`, `HIPOTEZY-ZAMKNIETE.md`.
+
+**Zostają trzy drogi i wszystkie wymagają zalogowanej przeglądarki, nie narzędzia:**
+
+| # | droga | dlaczego | co blokuje | stawka |
+|---|---|---|---|---|
+| 1 | `hack.cert.pl` — `/users/{id}/view`, `/email`, `/role`, `/me/profile/payout`, awatar | Tier 1, sama platforma, dane wypłat; konkurencja patrzy na programy, nie na platformę | konto + 2 sesje | 9 000–20 000 zł |
+| 2 | `zglos-dezinformacje` — upload (SVG z JS → stored XSS w panelu moderatora) | treść od niezaufanego użytkownika ogląda pracownik | reCAPTCHA v3 = tylko przeglądarka | 4 000–9 000 zł |
+| 3 | `mwdb.cert.pl` — XSS w atrybutach Rich, **jeśli wersja < 2.20.0** | mamy kod i znamy wektor | `curl /api/server` | 4 000–9 000 zł |
+
+**Wypadają** (z dowodami w `HIPOTEZY-ZAMKNIETE.md`): HIVE (rejestracja nie istnieje →
+IDOR bez konta niemożliwy), `moje.cert.pl` do czasu wyjaśnienia konfliktu regulaminów,
+Władysławowo (decyzja użytkownika), cała powierzchnia bezstanowa.
+
+**Reguła na resztę miesiąca:** nie uruchamiamy kolejnego przebiegu sieciowego bez
+nowej hipotezy. Kolejne 700 żądań po tej samej powierzchni nie zmieni wyniku —
+zmieni go jedna funkcja, której jeszcze nie widzieliśmy, albo jedno konto.
+
 ## Reguły, których nie łamiemy nigdy
 
 1. Tylko hosty z `nask/tools/scope.py`. Wątpliwość = `nask.py scope <host>`.
