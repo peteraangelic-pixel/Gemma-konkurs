@@ -1,4 +1,6 @@
 # Flaga uruchomienia nocnego polowania (nask-hunt).
-# Przebieg 3: dochodzi sonda S7 (autoryzacja API), krotszy timeout,
-# poprawiony push wyniku (poprzedni odrzucony jako non-fast-forward).
-run 2026-11-03T23:15:03Z
+# Przebieg 4: po przeglądzie gałęzi. Dochodzi:
+#  - S9 (Wagtail/Django /api/v2/documents) dla hostów z Django,
+#  - nask.pl w celach (w scope jako literał),
+#  - S6 rozróżnia utwardzenie (403/429) od obejścia (2xx).
+run 2026-11-04T10:15:33Z

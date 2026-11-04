@@ -31,6 +31,7 @@ Sondy:
   S4  JSON:API Drupala otwarte bez uwierzytelnienia              → §8 poz. 12.2 / 03
   S5  WordPress: wersje robocze / kontekst edit bez logowania    → §8 poz. 03
   S6  Obejście kontroli dostępu nagłówkiem X-Original-URL        → §8 poz. 9.3
+  S9  Wagtail/Django: dokumenty i strony przez /api/v2            → §8 poz. 03.2 / 12.2
   S7  Endpoint `/users/{id}/…` z własnego JS zwraca dane bez sesji → §8 poz. 9.1/03
 
 Czego świadomie NIE ma (i dlaczego):
@@ -402,6 +403,8 @@ def run_all(http, base: str, ctx: dict) -> list[ProbeFinding]:
         findings += probe_drupal_jsonapi(http, base)
     if "wordpress" in tech:
         findings += probe_wordpress_private(http, base)
+    if ctx.get("cms_api"):          # Wagtail/Django: tanie 3 żądania, realny wyciek
+        findings += probe_wagtail(http, base)
     if ctx.get("mwdb"):
         findings += probe_server_version(http, base)
     endpoints = ctx.get("endpoints") or []
@@ -514,3 +517,56 @@ def probe_server_version(http, base: str) -> list[ProbeFinding]:
         "To nie jest znalezisko i nie idzie do zgłoszenia (§8 poz. 2.1). To informacja "
         "decyzyjna: mówi, czy warto sprawdzać błąd znany z publicznego repo.",
         {"version": version, "older_than_fix": older})]
+
+
+# --------------------------------------------------------------------------
+# S9 — Wagtail / Django: dokumenty i strony przez API v2
+# --------------------------------------------------------------------------
+# Wagtail w domyślnej konfiguracji wystawia `/api/v2/pages/` i `/api/v2/documents/`.
+# Drugi endpoint potrafi zwrócić **niepubliczne dokumenty** (pliki PDF/DOCX wgrane do CMS),
+# jeśli kolekcja nie ma ograniczeń dostępu — a to jest klasa 03.2, nie „wyciek metadanych".
+# Sonda jest tania (2 żądania na host) i odpala się tylko wtedy, gdy `/api/v2/` w ogóle żyje.
+WAGTAIL_PATHS = ["/api/v2/pages/?limit=2", "/api/v2/documents/?limit=5",
+                 "/api/v2/images/?limit=2"]
+# Pola, które w Wagtails oznaczałyby treść niepubliczną albo dane osobowe.
+WAGTAIL_INTERESTING = ("title", "meta", "download_url", "file", "collection")
+
+
+def probe_wagtail(http, base: str) -> list[ProbeFinding]:
+    """Czy CMS wystawia dokumenty/strony bez uwierzytelnienia?
+
+    Trafieniem jest 200 z JSON-em zawierającym `items` — i wtedy liczy się
+    **co** tam jest: tytuły dokumentów wewnętrznych to realny wyciek, puste
+    `items` to poprawna konfiguracja.
+    """
+    out: list[ProbeFinding] = []
+    for path in WAGTAIL_PATHS:
+        r = http.get(base.rstrip("/") + path, headers={"Accept": "application/json"})
+        if r.error or r.status != 200 or "json" not in _hdr(r, "content-type"):
+            continue
+        try:
+            doc = json.loads(r.text)
+        except ValueError:
+            continue
+        if not isinstance(doc, dict) or "items" not in doc:
+            continue
+        items = doc.get("items") or []
+        if not items:
+            continue                     # endpoint żyje, ale nic nie wydaje — negatyw
+        first = items[0] if isinstance(items[0], dict) else {}
+        titles = [str(i.get("title", ""))[:60] for i in items[:5] if isinstance(i, dict)]
+        # `meta` w Wagtails zawiera m.in. `draft`/`live` — obecność `download_url`
+        # przy `documents` znaczy, że plik da się pobrać z tej trasy.
+        looks_private = ("download_url" in first) or (first.get("meta", {}) or {}).get("draft")
+        out.append(ProbeFinding(
+            "S9", "", r.url, "wysoki" if "documents" in path else "sredni",
+            "Wagtail API wydaje treści bez uwierzytelnienia",
+            f"200 JSON, {len(items)} pozycji; pola: {', '.join(sorted(first)[:8])}; "
+            f"tytuły: {'; '.join(titles) or 'brak'}",
+            "§8 poz. 03.2 / 12.2 — dostęp do treści CMS przez publiczne API. "
+            "Krytyczność zależy od tego, czy pozycje są niepubliczne (wersje robocze, "
+            "dokumenty wewnętrzne) — trzeba przeczytać tytuły i sprawdzić, czy "
+            "ten sam plik da się pobrać bez tej trasy.",
+            {"path": path, "count": len(items), "titles": titles,
+             "looks_private": looks_private}))
+    return out

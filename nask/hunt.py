@@ -33,6 +33,7 @@ from nask.tools.scope import check_url  # noqa: E402
 TARGETS = [
     "https://hack.cert.pl",
     "https://dns.pl",
+    "https://nask.pl",
     "https://mwdb.cert.pl",
     "https://n6portal.cert.pl",
     "https://komunikator.narodowy.gov.pl",
@@ -95,7 +96,12 @@ def run(out: Path, budget: int, explicit: list[str] | None, rps: float,
             base = crawler.baseline(url)
             root = fetcher.get(url)
             html = root.text if not root.error else ""
-            tech = {t for t in re.findall(r"next\.js|drupal|wordpress|react", html.lower())}
+            low = html.lower()
+            tech = {t for t in re.findall(r"next\.js|drupal|wordpress|react", low)}
+            # Django/Wagtail: `csrfmiddlewaretoken`, `__admin_media_prefix__`,
+            # `wagtail` w treści. Wtedy warto sprawdzić /api/v2/.
+            cms_api = any(k in low for k in ("csrfmiddlewaretoken", "__admin_media_prefix__",
+                                             "wagtail", "django"))
 
             hits = crawler.probe_paths(url, base)
             hits += crawler.probe_paths(url, base, paths=LEAK_PATHS)
@@ -116,7 +122,8 @@ def run(out: Path, budget: int, explicit: list[str] | None, rps: float,
                  "endpoints": endpoints,
                  # mwdb ma publiczny kod i publiczny /api/server — wersja mówi,
                  # czy poprawka XSS z 2.20.0 jest wdrożona.
-                 "mwdb": "mwdb" in url})
+                 "mwdb": "mwdb" in url,
+                 "cms_api": cms_api})
 
             row = summarise(url, hits)
             row.update({"program": program, "tier": tier,

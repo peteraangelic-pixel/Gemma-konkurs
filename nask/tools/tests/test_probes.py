@@ -364,3 +364,41 @@ def test_header_real_bypass_is_still_high():
 
     got = probes.probe_header_bypass(Http(fn), "https://www.gov.pl", paths=["/admin"])
     assert got and got[0].severity == "wysoki"
+
+
+# ------------------------ S9: Wagtail / Django ------------------------
+WAGTAIL_DOCS = json.dumps({
+    "meta": {"total_count": 3},
+    "items": [
+        {"id": 11, "title": "Umowa ramowa 2025 (wersja robocza)",
+         "download_url": "/documents/11/umowa.pdf", "meta": {"draft": True}},
+        {"id": 12, "title": "Regulamin", "download_url": "/documents/12/reg.pdf",
+         "meta": {"draft": False}},
+    ],
+})
+
+
+def test_wagtail_documents_leak_is_high():
+    http = Http(lambda url, h: R(ctype="application/json", body=WAGTAIL_DOCS, url=url))
+    got = probes.probe_wagtail(http, "https://moje.cert.pl")
+    docs = [f for f in got if "documents" in f.url]
+    assert docs and docs[0].severity == "wysoki"
+    assert docs[0].raw["looks_private"] is True
+    assert "Umowa ramowa" in docs[0].detail
+
+
+def test_wagtail_empty_items_is_negative():
+    body = json.dumps({"meta": {"total_count": 0}, "items": []})
+    http = Http(lambda url, h: R(ctype="application/json", body=body, url=url))
+    assert probes.probe_wagtail(http, "https://nask.pl") == []
+
+
+def test_wagtail_404_is_negative():
+    http = Http(lambda url, h: R(status=404, body="nope", url=url))
+    assert probes.probe_wagtail(http, "https://science.nask.pl") == []
+
+
+def test_wagtail_html_response_is_ignored():
+    """Strona HTML na /api/v2/pages/ to nie API, tylko catch-all — nie zgłaszamy."""
+    http = Http(lambda url, h: R(ctype="text/html", body="<html>index</html>", url=url))
+    assert probes.probe_wagtail(http, "https://nask.pl") == []
