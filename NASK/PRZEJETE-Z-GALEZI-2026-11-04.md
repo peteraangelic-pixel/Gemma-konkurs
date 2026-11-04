@@ -135,6 +135,9 @@ testowo.dyzurnet.pl (poza zakresem), files.badanie.nask.pl (S3, poza zakresem)
 | „`q` w `centres-search` filtruje, więc `q=Warszawa'` dowodzi braku SQLi” | **Błędne założenie** — `q` jest ignorowane. Test mierzył szum. |
 | „`www.nask.pl` jest w zakresie, bo §5 mówi `nask.pl`” | **Ryzyko odrzucenia.** Inna nazwa hosta. Pytanie do organizatora **przed** testem — trzy odrzucenia pod rząd mogą zablokować wysyłkę. |
 | „IDOR na `/users/{id}` i `payout`/IBAN w `hack.cert.pl`” (6d08) | **Inny program** — `hack.cert.pl` należy do programu **CERT Polska**. Nasz program = 12 domen NASK. Nie mieszamy programów. |
+| „`dns.pl` to Symfony, nie Drupal (SESID + BazingaJsTranslation)” (Dysk `23` §2.1) | **OBALONE pomiarem, runda 8.** Strona 404 `dns.pl` linkuje `https://dns.pl/sites/default/files/…` (sygnatura Drupala 8+), a `/api/registrars-list` zwraca węzły Drupala (`nid`, `vid`, `langcode`, `field*`). Ich „korekta” była odwrotna do prawdy: JSON:API testowano pod **właściwym** frameworkiem, tylko pod złymi trasami. → `NASK/WERYFIKACJA-RUNDA8-2026-11-04.md` §3.1. |
+| „`dns.pl` ma **10 realnych tras API**” (7911 fala 10, 5ed7 bieg 6) | **POTWIERDZONE CZĘŚCIOWO: 3 z 10 zmierzone.** Otwarte GET JSON: `/api/registrars-list/{lang}/{size}/{page}` (195 rejestratorów, dane firmowe), `/api/count-deleted-domains`, `/api/zone-stats`. `who-is-xml` i `domain-browser` **istnieją, ale GET = 404** ⇒ wyłącznie POST, niezmierzone. Liczba „10” pochodzi z minera bundli, nie z pomiaru. → RUNDA8 §3.2. |
+| „`116sos.pl/api/centres` → **401**” (7911 fala 13) | **KOREKTA.** `/api/centres` odpowiada **JSON-em `{"error":"Unable to fetch data"}`** (istniejąca trasa, błąd upstreamu — nie brak autoryzacji); `/api/centres/*` (w tym `sos.png` wskazywany przez sam HTML) to **catch-all SPA 404**. Treść błędu pomylono ze statusem. → RUNDA8 §3.3. |
 
 ---
 
@@ -171,3 +174,38 @@ testowo.dyzurnet.pl (poza zakresem), files.badanie.nask.pl (S3, poza zakresem)
 - **Nie przyjąłem** żadnego twierdzenia o podatności bez powtórzenia (stąd sekcja 5).
 - **Nie wysłałem** żadnego żądania zapisującego (`sendForm`) — bez GO użytkownika.
 - **Nie tknąłem** hostów spoza §5, `hack.cert.pl` (inny program), `moje.cert.pl` (zakaz) ani Władysławowa.
+
+---
+
+## 10. Delta 4.11.2026 (popołudnie) — Dysk Google + 6 gałęzi, runda 8
+
+**Nowe źródło, którego wcześniej nie było:** folder Dysku `1tWcRm79xeYQslPACYOagZ0bmhuKnlBMo` (25 plików, 3–4.11.2026). To **ten sam konkurs** prowadzony przez 7 sesji — nie inne projekty. Poniżej proweniencja plik → twierdzenie, żeby dało się to odtworzyć bez dostępu do Dysku.
+
+| plik Dysku (id) | twierdzenie, które przyjąłem lub obaliłem | status |
+|---|---|---|
+| `01-STRATEGIA.md` (`1iBiFcn…`) | regulamin: 3–30.11, pula 100 000 zł, 12 domen, „kto pierwszy” (§7 pkt 8), wypłaty sukcesywne (pkt 5), ta sama przyczyna w 2 serwisach = 1 podatność (pkt 9), 5 req/s (§6 pkt 2), CVSS 4.0 → 20k/10k/9k/4,5k, podatek dopłaca NASK (pkt 10) | **[C] przyjęte**, zgodne z kartą programu |
+| `05-REGULAMIN-wyciag.md` | §5/§6/§8 w skrócie | [C] przyjęte |
+| `14-coordinator-findings-20261103.json` | 208 żądań, 19 „findings”, **wszystkie `accepted:false`** (clickjacking, CORS §8 poz. 5.6, security.txt) | [C] przyjęte jako **negatyw** |
+| `15-PRZEGLAD-GALEZI-2026-11-04.md` | 7 żywych leadów + 7 lekcji metodologicznych + `endminer` wymaga `chmod +x` | [C] przyjęte |
+| `16-MAPA-ENDPOINTOW-2026-11-03.md` | mapa `hack.cert.pl /api/v1` (`/users/{uid}{,/role,/email}`, `/me/reports`, `/me/profile/payout`), trasy n6portal, 8 hostów mSzyfr | [C], ale **inny program** (CERT) |
+| `17-IDEE-ZAROBEK-2026-11-03.md` | ranking pieniędzy (mSzyfr → hack.cert.pl → panele CERT → gov.pl → NASK T2) + kalibracja „1–2 trafienia 4–9k/mies.” dla **człowieka z sesją** | kalibracja przyjęta; plan **nie** (hosty poza programem NASK) |
+| `18-PLAN-NOCNY-2026-11-03.md` | plan nocy | historyczne |
+| `20-DELTA-UPDATE2-2026-11-04-1100.md` | HIVE zablokowany (brak rejestracji), **L3 `sendForm` = top aktywny**, kontrakty `dns.pl` D1–D4, `stats.eadministracja.nask.pl` **poza §5** | **[C] przyjęte w całości** |
+| `22-RAPORT-NOC-20261103.md` | 8 wektorów: `dns.pl` XFH→`<script src>` (bez współdzielonego cache), `sendForm`, `science` WP `author:"126"`, `bezpiecznapoczta` SSRF, Mattermost 11.7.14 (`EnableUserCreation=true`), MAS DCR | **[H] hipotezy** — żadna nie jest PoC; 3 z nich dotyczą hostów **poza programem NASK** |
+| `23-SYNTEZA-ZESPOLEM-20261104.md` | audyt kodu `mwdb-core` 2.20.0: 81 tras, 10 bez strażnika, wszystkie poprawne ⇒ OAuth-ATO (20 000 zł) **zamknięte kodem**; oraz twierdzenie „`dns.pl` = Symfony” | audyt mwdb **[C] przyjęte (host CERT)**; twierdzenie o Symfony **OBALONE** (§5 wyżej, runda 8) |
+| `19`, `21`, `24` (ZIP) | pakiety zespołu | nie rozpakowywane — duplikaty powyższych |
+
+**Nowe commity gałęzi (4.11, po 10:30Z):**
+
+| repo / gałąź | head | co wniosło |
+|---|---|---|
+| `Pokemon` `arena/7911f950-pokemon` | `5dc91df2` | fala 10/10b — `dns.pl` 10 tras API z `reports/analysis-run003.json`; `dyzurnet` = **0** literalów `/api/` (zamyka wątek 26 ścieżek); `/api/centres` na 116sos |
+| `Pokemon` `arena/c87f7a48-pokemon` | `ed39c7c6` | RAWPATH-004 = **plan** miningu 129 bundli (10,92 MB), zero wyników; KOREKTA #33: odciski `sha256[:12]` zamiast fragmentów sekretów |
+| `Smak-Domu-Konkurs` `arena/5ed750ef-…` | `9ff2b91b` | bieg 6 — niezależnie te same 10 tras `dns.pl`; `panel.dns.pl` poza §5 (tylko odnotowany); `dyzurnet` 10/18 chunków bez nowych tras |
+| `Gemma-konkurs` `arena/6d081d52-…` | `e87d25e8` | przegląd Dysku, filtr §8, **szablon zgłoszenia** (przyda się dopiero przy PoC) |
+| `NASK` `arena/a29ca234-nask` | `b2cf80a4` | 6 plików z Dysku + podsumowanie gałęzi (duplikat) |
+| `Pokemon` `arena/a450b00f-pokemon` | `a34d9fd1` | rekonesans CERT (mwdb, n6portal, hack.cert.pl) — inny program |
+
+**Moje własne pomiary w tej rundzie (11 × GET, zero POST):** 3 otwarte trasy JSON `dns.pl` zmierzone z pełnym kontraktem; `who-is-xml`/`domain-browser` = GET 404 (POST-only); `/api/centres` na 116sos = JSON błędu, nie 401; `/api/centres/*` = catch-all 404. Szczegóły i log: `NASK/WERYFIKACJA-RUNDA8-2026-11-04.md`.
+
+**Od tego momentu nie przyjmuję twierdzenia „N tras” bez liczby tras zmierzonych.** Miner JS podaje kandydatów; tylko żądanie podaje trasy.
