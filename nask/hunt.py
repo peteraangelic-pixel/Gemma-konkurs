@@ -113,7 +113,10 @@ def run(out: Path, budget: int, explicit: list[str] | None, rps: float,
             found = probes.run_all(
                 fetcher, url,
                 {"tech": sorted(tech), "build_id": bid, "routes": routes,
-                 "endpoints": endpoints})
+                 "endpoints": endpoints,
+                 # mwdb ma publiczny kod i publiczny /api/server — wersja mówi,
+                 # czy poprawka XSS z 2.20.0 jest wdrożona.
+                 "mwdb": "mwdb" in url})
 
             row = summarise(url, hits)
             row.update({"program": program, "tier": tier,

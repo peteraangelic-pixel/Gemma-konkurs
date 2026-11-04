@@ -296,3 +296,25 @@ def test_api_authz_does_not_iterate_range():
     probes.probe_api_authz(http, "https://hack.cert.pl",
                            ["/users/$userId/email", "/users/$id/view"])
     assert len(http.calls) <= 4, f"zbyt wiele żądań: {http.calls}"
+
+
+# ------------------------ S8: wersja aplikacji ------------------------
+def test_server_version_older_than_fix_points_at_xss():
+    body = json.dumps({"server_version": "2.19.3", "is_authenticated": False})
+    http = Http(lambda url, h: R(ctype="application/json", body=body, url=url))
+    got = probes.probe_server_version(http, "https://mwdb.cert.pl")
+    assert got and got[0].raw["older_than_fix"] is True
+    assert "NIE jest wdrożona" in got[0].detail
+
+
+def test_server_version_after_fix_closes_topic():
+    body = json.dumps({"server_version": "2.20.0"})
+    http = Http(lambda url, h: R(ctype="application/json", body=body, url=url))
+    got = probes.probe_server_version(http, "https://mwdb.cert.pl")
+    assert got and got[0].raw["older_than_fix"] is False
+    assert "zamknięty" in got[0].detail
+
+
+def test_server_version_absent_is_silent():
+    http = Http(lambda url, h: R(status=404, body="nope", url=url))
+    assert probes.probe_server_version(http, "https://nask.pl") == []

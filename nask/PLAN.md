@@ -2,6 +2,17 @@
 
 Zasada: **jeden cel na raz, każdego dnia coś, co da się pokazać w raporcie.**
 
+> **KOREKTA po nocy 03/04.11** (dane w `WYNIKI-NOCY.md`): kolejność się zmienia.
+> 1. `hack.cert.pl` — awans z dalszego miejsca na **pierwsze**: bundel ujawnia trasy
+>    `/users/{id}/view`, `/users/{id}/email`, `/users/me/profile/payout` i `/auth/session/activity`.
+>    To sama platforma, Tier 1, dane wypłat. Konkurencja patrzy na programy, nie na nią.
+> 2. `mwdb.cert.pl` — najpierw **jedno żądanie**: `/api/server`. Wersja < 2.20.0 znaczy,
+>    że poprawka XSS w atrybutach Rich nie jest wdrożona; wersja ≥ 2.20.0 zamyka temat.
+> 3. IDOR w `mwdb` schodzi na dalszy plan — przegląd kodu pokazał poprawną, wspólną
+>    ścieżkę `access_object → Object.access`.
+> 4. `eobieg.wladyslawowo.pl` — **wypada całkowicie** (decyzja użytkownika).
+> Konkret do wykonania rano: `DO-ZROBIENIA-RANO.md` (15 minut, trzy kryteria tak/nie).
+
 ## Tydzień 1 (3–9.11) — dostęp i dwie tanie weryfikacje
 
 | dzień | zadanie | wynik, który ma zostać |

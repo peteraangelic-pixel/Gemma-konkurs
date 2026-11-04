@@ -381,6 +381,8 @@ def run_all(http, base: str, ctx: dict) -> list[ProbeFinding]:
         findings += probe_drupal_jsonapi(http, base)
     if "wordpress" in tech:
         findings += probe_wordpress_private(http, base)
+    if ctx.get("mwdb"):
+        findings += probe_server_version(http, base)
     endpoints = ctx.get("endpoints") or []
     if any(ID_PARAM_RE.search(e) for e in endpoints):
         findings += probe_api_authz(http, base, endpoints)
@@ -453,3 +455,41 @@ def _judge_user_endpoint(http, url: str, path: str, value: str) -> ProbeFinding 
         "cudzych danych. Wymaga potwierdzenia w przeglądarce dwoma własnymi kontami "
         "przed zgłoszeniem.",
         {"path": path, "fields": hits[:6], "value": value})
+
+
+# --------------------------------------------------------------------------
+# S8 — wersja aplikacji znanej z otwartych źródeł
+# --------------------------------------------------------------------------
+# Po co: żeby wiedzieć, czy POPRAWKA, którą widziałem w publicznym repo, jest już
+# wdrożona. To odwrotność typowego „wykrywania wersji" (wykluczonego w §8 poz. 2.1)
+# — tu wersja nie jest znaleziskiem, a narzędziem decyzyjnym: jeśli produkcja stoi
+# na wersji sprzed poprawki XSS w atrybutach Rich (mwdb-core #1272/#1274, wydane
+# w 2.20.0), warto sprawdzać dalej; jeśli nie — temat jest zamknięty i nie tracimy
+# na niego nocy.
+MWDB_FIX_VERSION = (2, 20, 0)
+
+
+def probe_server_version(http, base: str) -> list[ProbeFinding]:
+    r = http.get(base.rstrip("/") + "/api/server", headers={"Accept": "application/json"})
+    if r.error or r.status != 200 or "json" not in _hdr(r, "content-type"):
+        return []
+    try:
+        doc = json.loads(r.text)
+    except ValueError:
+        return []
+    version = doc.get("server_version")
+    if not version:
+        return []
+    nums = re.findall(r"\d+", str(version))[:3]
+    older = len(nums) == 3 and tuple(int(n) for n in nums) < MWDB_FIX_VERSION
+    return [ProbeFinding(
+        "S8", "", r.url, "niski",
+        f"Wersja aplikacji: {version}",
+        f"`/api/server` → {version}"
+        + ("; poprawka 2.20.0 (sanityzacja linków w atrybutach Rich, #1272/#1274) "
+           "NIE jest wdrożona — warto sprawdzić XSS."
+           if older else
+           "; poprawka 2.20.0 jest wdrożona, temat XSS w Rich zamknięty."),
+        "To nie jest znalezisko i nie idzie do zgłoszenia (§8 poz. 2.1). To informacja "
+        "decyzyjna: mówi, czy warto sprawdzać błąd znany z publicznego repo.",
+        {"version": version, "older_than_fix": older})]
