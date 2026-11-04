@@ -326,14 +326,20 @@ BYPASS_HEADERS = ["x-original-url", "x-rewrite-url", "x-forwarded-prefix"]
 def probe_header_bypass(http, base: str, paths: list[str] | None = None) -> list[ProbeFinding]:
     """Gdy ścieżka daje 403/404, sprawdza, czy nagłówek proxy ją odblokuje.
 
-    Kluczowe: porównujemy **ten sam adres** z nagłówkiem i bez niego, a nie
-    „ścieżkę" z „stroną główną". Pierwsza wersja robiła to drugie i wygenerowała
-    36 fałszywych trafień: `GET /admin` → 404 vs `GET /` + nagłówek → 200 to
-    przecież zawsze będzie różnica, bo to dwie różne strony.
+    Dwie poprzednie wersje tej sondy były błędne i obie mają test regresyjny:
 
-    Sygnałem jest wyłącznie to, że **ta sama** odpowiedź na `/` zmienia się pod
-    wpływem nagłówka — czyli serwer go respektuje. To jeszcze nie podatność,
-    ale to jedyne miejsce, gdzie warto patrzeć dalej.
+    1. Pierwsza porównywała `GET /admin` (404) z `GET /` + nagłówek (200) i „wykrywała
+       obejście" 36 razy — a to były po prostu dwie różne strony.
+    2. Druga porównywała ten sam adres, ale każdą różnicę uznawała za sygnał.
+       Przebieg z 04.11 dał 8 „trafień", które w rzeczywistości były **utwardzeniem**:
+       `x-original-url` na `moje.cert.pl` powoduje **403** (Cloudflare blokuje żądanie
+       z tym nagłówkiem), a `x-forwarded-prefix` na `incydent.cert.pl` powoduje **429**
+       (rate-limit). Serwer reaguje na nagłówek, ale odmową — to nie obejście.
+
+    Trzecia wersja rozróżnia kierunek zmiany, bo to jest cała istota:
+      • **dostęp wzrósł** (2xx tam, gdzie kontrolnie było 4xx) → sygnał obejścia,
+      • **dostęp spadł** (403/429 tam, gdzie kontrolnie było 2xx) → utwardzenie,
+        zapisujemy jako `niski`, żeby nie sprawdzać drugi raz, ale nie nazywamy trafieniem.
     """
     out: list[ProbeFinding] = []
     control = http.get(base)
@@ -351,17 +357,32 @@ def probe_header_bypass(http, base: str, paths: list[str] | None = None) -> list
             delta = abs(len(r.body) - len(control.body))
             if same_status and delta <= max(64, len(control.body) * 0.02):
                 continue                  # nagłówek zignorowany — wynik negatywny
-            out.append(ProbeFinding(
-                "S6", "", base, "sredni",
-                f"Nagłówek {header} zmienia odpowiedź tego samego adresu",
-                f"`{path}` → {path_resp.status}. `GET /` bez nagłówka: {control.status}, "
-                f"{len(control.body)} B. `GET /` z {header}: {path} → {r.status}, "
-                f"{len(r.body)} B.",
-                "§8 poz. 9.3 — sygnał obejścia autoryzacji w warstwie proxy. "
-                "Sam wpływ nagłówka to jeszcze nie podatność: trzeba pokazać, że "
-                "zwrócona treść odpowiada zasobowi, do którego nie ma dostępu.",
-                {"header": header, "path_status": path_resp.status,
-                 "control": control.status, "test": r.status}))
+
+            granted = r.status // 100 == 2
+            if granted and r.body != control.body:
+                out.append(ProbeFinding(
+                    "S6", "", base, "wysoki",
+                    f"Nagłówek {header} zwraca 2xx z inną treścią niż kontrolnie",
+                    f"`{path}` → {path_resp.status}. `GET /` bez nagłówka: "
+                    f"{control.status}, {len(control.body)} B. `GET /` z {header}: "
+                    f"{path} → {r.status}, {len(r.body)} B (treść inna).",
+                    "§8 poz. 9.3 — to jest kandydat na obejście autoryzacji w warstwie "
+                    "proxy. Wymaga ręcznego potwierdzenia, że treść odpowiada "
+                    "chronionemu zasobowi, a nie innej wersji strony publicznej.",
+                    {"header": header, "path_status": path_resp.status,
+                     "control": control.status, "test": r.status}))
+            else:
+                out.append(ProbeFinding(
+                    "S6", "", base, "niski",
+                    f"Nagłówek {header} jest blokowany przez serwer (bez obejścia)",
+                    f"`{path}` → {path_resp.status}. `GET /` bez nagłówka: "
+                    f"{control.status}, {len(control.body)} B. `GET /` z {header}: "
+                    f"{path} → {r.status}, {len(r.body)} B — dostęp **spadł**, "
+                    f"czyli WAF/proxy odrzuca żądanie z tym nagłówkiem.",
+                    "Zapisane jako wynik NEGATYWNY: to utwardzenie, nie podatność. "
+                    "Uwzględnione tylko po to, żeby nie sprawdzać tego drugi raz.",
+                    {"header": header, "path_status": path_resp.status,
+                     "control": control.status, "test": r.status}))
             break
     return out
 

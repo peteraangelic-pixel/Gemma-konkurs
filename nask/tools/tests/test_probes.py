@@ -318,3 +318,49 @@ def test_server_version_after_fix_closes_topic():
 def test_server_version_absent_is_silent():
     http = Http(lambda url, h: R(status=404, body="nope", url=url))
     assert probes.probe_server_version(http, "https://nask.pl") == []
+
+
+# ==========================================================================
+# Regresje z przebiegu 3 (2026-11-04) — sonda S6 myliła utwardzenie z obejściem.
+# ==========================================================================
+def test_regression_moje_cert_pl_header_causes_403():
+    """`x-original-url` na moje.cert.pl → 403 (Cloudflare), nie obejście.
+
+    Przebieg 3 zgłosił to 6 razy jako „średnie". 200 → 403 to SPADEK dostępu.
+    """
+    home = "h" * 31158
+
+    def fn(url, h):
+        if h:
+            return R(status=403, body="b" * 4542, url=url)
+        if url.endswith("/"):
+            return R(status=200, body=home, url=url)
+        return R(status=404, body="n" * 1000, url=url)
+
+    got = probes.probe_header_bypass(Http(fn), "https://moje.cert.pl", paths=["/panel"])
+    assert got and all(f.severity == "niski" for f in got), [f.severity for f in got]
+    assert "spadł" in got[0].detail
+
+
+def test_regression_incydent_rate_limit_is_not_bypass():
+    """`x-forwarded-prefix` na incydent.cert.pl → 429. Rate-limit to nie obejście."""
+    def fn(url, h):
+        if h:
+            return R(status=429, body="r" * 5635, url=url)
+        if url.endswith("/"):
+            return R(status=200, body="h" * 2743, url=url)
+        return R(status=404, body="n" * 100, url=url)
+
+    got = probes.probe_header_bypass(Http(fn), "https://incydent.cert.pl", paths=["/moje"])
+    assert got and got[0].severity == "niski"
+
+
+def test_header_real_bypass_is_still_high():
+    """Prawdziwe obejście: kontrolnie 403 na `/`, z nagłówkiem 200 innej treści."""
+    def fn(url, h):
+        if h:
+            return R(status=200, body="<html>panel administratora</html>", url=url)
+        return R(status=403, body="forbidden", url=url)
+
+    got = probes.probe_header_bypass(Http(fn), "https://www.gov.pl", paths=["/admin"])
+    assert got and got[0].severity == "wysoki"

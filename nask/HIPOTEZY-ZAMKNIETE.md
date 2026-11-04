@@ -1,0 +1,38 @@
+# Hipotezy ZAMKNIĘTE — nie testować ponownie
+
+Ten plik istnieje, żeby nikt (ja za tydzień, Ty za rok, ani kolejny agent) nie powtarzał
+pracy, która już została wykonana i **dała wynik negatywny z dowodem**. Każdy wpis ma:
+co sprawdzono, jak szeroko, jaki był wynik i gdzie leży surowy dowód.
+
+Zasada: wpis trafia tutaj **tylko z dowodem**, nie z opinii. „Nie znaleźliśmy" ≠ „nie ma";
+„nie ma czego testować" ≠ „nie umiemy testować".
+
+| # | Hipoteza | Zakres testu | Wynik | Dowód |
+|---|---|---|---|---|
+| 1 | Path traversal w `bezpiecznymiesiac.pl/download-file/?fileUrl=` | 20 wariantów: `/etc/passwd`, `/proc/version`, `../../..`, `%2e%2e%2f`, `..%2f`, `%252e%252e`, `....//`, `..%5c` (Windows), `file://`, ścieżka absolutna, URL-e zewnętrzne i ich kodowania | **ZAMKNIĘTE** — filtr dekoduje wartość **przed** sprawdzeniem, odrzuca schematy i `..` w każdym kodowaniu (400), ścieżki absolutne bez kropek → 404 (wartość doklejana do katalogu mediów) | `Pokemon/7911f950: nask/research/02-SONDY-004-006.md` §1 |
+| 2 | SSRF przez `/_next/image?url=` (optymalizator obrazów Next.js) | 7 hostów: `oad`, `zglos-dezinformacje`, `dyzurnet`, `science`, `bezpiecznymiesiac`, `116sos`, `bezpiecznewybory` + warianty `@`-bypass | **ZAMKNIĘTE** — 403 (brzeg), 404 (brak trasy), 400 (odrzucony), 308→400. Na `bezpiecznymiesiac` optymalizator istnieje i **odrzuca zdalny URL** → `remotePatterns` ograniczone | `Pokemon/7911f950` §3; `Gemma-konkurs/c4eeb067: NASK/HUNT-RAPORT-NOC` |
+| 3 | CORS — odbicie obcego `Origin` | 8 endpointów API + wszystkie moje 15 hostów (`Origin: https://evil.example` i `nask.pl.evil.example`) | **ZAMKNIĘTE** — żadne API nie zwróciło `ACAO` równego wysłanemu Origin. Jedyny `ACAC: true` (HIVE, 404) występuje **bez** `ACAO` = bezużyteczny. Same `ACAO: *` bez credentials są wprost wykluczone (§8 poz. 5.6) | `Pokemon/7911f950` §4; moje `hunt.json` przebieg 3 |
+| 4 | Obejście middleware Next.js (CVE-2025-29927) | 4 hosty (gałąź B) + moje 6 ścieżek na 15 hostach, nagłówek `x-middleware-subrequest: middleware×5` | **ZAMKNIĘTE** — brak przypadku „zablokowane → odblokowane". Zaobserwowane różnice to WAF (403 z innym nonce) i rate-limit (429) | `Gemma-konkurs/c4eeb067`; moje `hunt.json` przebiegi 1–3 |
+| 5 | Nagłówki omijające proxy (`X-Original-URL`, `X-Rewrite-URL`, `X-Forwarded-Prefix`) | 6 ścieżek × 3 nagłówki × 15 hostów | **ZAMKNIĘTE jako obejście** — serwer reaguje, ale **odmową** (`moje.cert.pl` → 403, `incydent.cert.pl` → 429). To utwardzenie, nie luka | moje `hunt.json` przebieg 3 + testy regresyjne |
+| 6 | IDOR na `science.nask.pl /api/downloadFile?fileId=` | Kontrakt ustalony (`fileId` liczbowe, `18864` → 200 `image/png` 2,2 MB), walidacja (`-1`, `18864abc`, `fileId[]` → 400), sweep 25 ID, potem **gęsty sweep 60 ID** w 4 przedziałach | **ZAMKNIĘTE** — wszystkie 200 to **publiczne zdjęcia z aktualności**, dostępne też przez `/api/media/`. Endpoint nadmiarowy wobec publicznego, brak dowodu obejścia | `Gemma-konkurs/c4eeb067: NASK/HUNT-RAPORT-NOC` §„Słabe punkty 1" |
+| 7 | XSS refleksyjny w `nask.pl /api/search` | `?lang=pl`, `perPage`, `page`, `query`; refleksja w HTML | **ZAMKNIĘTE** — brak refleksji parametru. API zwraca obiekty WP (autor, ID mediów) = wyciek metadanych, wykluczony (§8 poz. 2.3) | `Gemma-konkurs/c4eeb067` §„Słabe punkty 3" |
+| 8 | IDOR/BAC w HIVE (`dataannotation.pllum.org.pl`) **bez konta** | `/api/v1/projects/`, `/api/v1/users/`, `/api/v1/users/1`, OpenAPI, rejestracja | **ZAMKNIĘTE bez konta** — 401 na routerze, 405 na `users/1` (trasa istnieje), **rejestracja nie istnieje** (`/register` → 404). Kontrola działa na poziomie routera → IDOR wymaga konta, a konta nie ma jak zdobyć (regulamin: NASK nie daje kont testowych) | `Gemma-konkurs/c4eeb067` §„Słabe punkty 4" |
+| 9 | Wyciek `.git/HEAD` i `.env` przez HTTP | 24 hosty × 2 ścieżki + kontrole, 1 req/s, bez podążania za przekierowaniami | **ZAMKNIĘTE** — 0 kandydatów; 9 odpowiedzi 200 dało wynik negatywny, 11 nierozstrzygający, reszta 403 | `NASK/codex/multi-program-lab: research/night-operation-2026-11-03.md` |
+| 10 | Fuzzing ścieżek paneli administracyjnych słownikiem | Świadomie **nie wykonane** | **WYKLUCZONE PRZEZ REGULAMIN** — raport ze skanera bez ręcznego potwierdzenia = §8 poz. 14.4. Nie robimy tego, nawet gdyby coś „wyszło" | `SCOPE.md` §4 |
+| 11 | SQLi przez GET na hostach NASK | `' OR 1=1`, boolean, czasowe | **NIESKUTECZNE** — WAF ucina payloady (status 0 / reset połączenia). Nie „brak podatności", a **brak możliwości pomiaru tą drogą** | `Gemma-konkurs/c4eeb067` §„Wnioski metodologiczne 3" |
+| 12 | `zglos-dezinformacje.nask.pl /api/sendForm` (SSRF, upload) | Kontrakt ustalony z bundle'a, GET → 405 (POST-only) | **NIEROZSTRZYGNIĘTE — wymaga człowieka.** reCAPTCHA v3 wykonywana w przeglądarce; brak tokenu kończy żądanie **przed** wysłaniem. Automat nie może tego sprawdzić | `Pokemon/7911f950: nask/research/01-RUN-003-WYNIKI.md` §3 |
+
+## Czego ta lista NIE mówi
+
+1. **Nie mówi „nie ma luk".** Mówi: te jedenaście dróg sprawdzono i albo dały wynik
+   negatywny, albo nie da się ich zmierzyć tym klientem, albo wyklucza je regulamin.
+2. **Nie zwalnia z myślenia.** Nowa luka może być w funkcji, której nikt z nas nie
+   zobaczył: eksport CSV z danymi osobowymi, „udostępnij raport linkiem", reset hasła
+   przez token w URL, panel moderatora z IDOR-em. Tego nie ma na żadnej liście powyżej.
+3. **Nie obejmuje żadnej powierzchni zalogowanej** — a tam jest wszystko, co zostało.
+
+## Jak dopisywać nowe wpisy
+
+Wymagane trzy rzeczy: **szerokość testu** (ile wariantów, jakie kodowania), **surowy
+wynik** (statusy, rozmiary, treści) i **ścieżka do dowodu** w repo. Bez tego wpis jest
+opinią i nie ma prawa blokować czyjejś przyszłej pracy.
