@@ -1,16 +1,29 @@
 {
-  "generated_at": "2026-11-03T23:28:41+00:00",
-  "requests_used": 703,
-  "hosts_scanned": 15,
+  "generated_at": "2026-11-04T10:31:34+00:00",
+  "requests_used": 816,
+  "hosts_scanned": 16,
   "probe_findings": [
+    {
+      "code": "S8",
+      "host": "mwdb.cert.pl",
+      "url": "https://mwdb.cert.pl/api/server",
+      "severity": "niski",
+      "title": "Wersja aplikacji: 2.20.0",
+      "detail": "`/api/server` → 2.20.0; poprawka 2.20.0 jest wdrożona, temat XSS w Rich zamknięty.",
+      "why": "To nie jest znalezisko i nie idzie do zgłoszenia (§8 poz. 2.1). To informacja decyzyjna: mówi, czy warto sprawdzać błąd znany z publicznego repo.",
+      "raw": {
+        "version": "2.20.0",
+        "older_than_fix": false
+      }
+    },
     {
       "code": "S6",
       "host": "moje.cert.pl",
       "url": "https://moje.cert.pl",
-      "severity": "sredni",
-      "title": "Nagłówek x-original-url zmienia odpowiedź tego samego adresu",
-      "detail": "`/panel` → 404. `GET /` bez nagłówka: 200, 31158 B. `GET /` z x-original-url: /panel → 403, 4542 B.",
-      "why": "§8 poz. 9.3 — sygnał obejścia autoryzacji w warstwie proxy. Sam wpływ nagłówka to jeszcze nie podatność: trzeba pokazać, że zwrócona treść odpowiada zasobowi, do którego nie ma dostępu.",
+      "severity": "niski",
+      "title": "Nagłówek x-original-url jest blokowany przez serwer (bez obejścia)",
+      "detail": "`/panel` → 404. `GET /` bez nagłówka: 200, 31158 B. `GET /` z x-original-url: /panel → 403, 4542 B — dostęp **spadł**, czyli WAF/proxy odrzuca żądanie z tym nagłówkiem.",
+      "why": "Zapisane jako wynik NEGATYWNY: to utwardzenie, nie podatność. Uwzględnione tylko po to, żeby nie sprawdzać tego drugi raz.",
       "raw": {
         "header": "x-original-url",
         "path_status": 404,
@@ -22,10 +35,10 @@
       "code": "S6",
       "host": "moje.cert.pl",
       "url": "https://moje.cert.pl",
-      "severity": "sredni",
-      "title": "Nagłówek x-original-url zmienia odpowiedź tego samego adresu",
-      "detail": "`/admin` → 403. `GET /` bez nagłówka: 200, 31158 B. `GET /` z x-original-url: /admin → 403, 4542 B.",
-      "why": "§8 poz. 9.3 — sygnał obejścia autoryzacji w warstwie proxy. Sam wpływ nagłówka to jeszcze nie podatność: trzeba pokazać, że zwrócona treść odpowiada zasobowi, do którego nie ma dostępu.",
+      "severity": "niski",
+      "title": "Nagłówek x-original-url jest blokowany przez serwer (bez obejścia)",
+      "detail": "`/admin` → 403. `GET /` bez nagłówka: 200, 31158 B. `GET /` z x-original-url: /admin → 403, 4542 B — dostęp **spadł**, czyli WAF/proxy odrzuca żądanie z tym nagłówkiem.",
+      "why": "Zapisane jako wynik NEGATYWNY: to utwardzenie, nie podatność. Uwzględnione tylko po to, żeby nie sprawdzać tego drugi raz.",
       "raw": {
         "header": "x-original-url",
         "path_status": 403,
@@ -37,10 +50,10 @@
       "code": "S6",
       "host": "moje.cert.pl",
       "url": "https://moje.cert.pl",
-      "severity": "sredni",
-      "title": "Nagłówek x-original-url zmienia odpowiedź tego samego adresu",
-      "detail": "`/dashboard` → 404. `GET /` bez nagłówka: 200, 31158 B. `GET /` z x-original-url: /dashboard → 403, 4542 B.",
-      "why": "§8 poz. 9.3 — sygnał obejścia autoryzacji w warstwie proxy. Sam wpływ nagłówka to jeszcze nie podatność: trzeba pokazać, że zwrócona treść odpowiada zasobowi, do którego nie ma dostępu.",
+      "severity": "niski",
+      "title": "Nagłówek x-original-url jest blokowany przez serwer (bez obejścia)",
+      "detail": "`/dashboard` → 404. `GET /` bez nagłówka: 200, 31158 B. `GET /` z x-original-url: /dashboard → 403, 4542 B — dostęp **spadł**, czyli WAF/proxy odrzuca żądanie z tym nagłówkiem.",
+      "why": "Zapisane jako wynik NEGATYWNY: to utwardzenie, nie podatność. Uwzględnione tylko po to, żeby nie sprawdzać tego drugi raz.",
       "raw": {
         "header": "x-original-url",
         "path_status": 404,
@@ -52,10 +65,10 @@
       "code": "S6",
       "host": "moje.cert.pl",
       "url": "https://moje.cert.pl",
-      "severity": "sredni",
-      "title": "Nagłówek x-original-url zmienia odpowiedź tego samego adresu",
-      "detail": "`/profil` → 404. `GET /` bez nagłówka: 200, 31158 B. `GET /` z x-original-url: /profil → 403, 4542 B.",
-      "why": "§8 poz. 9.3 — sygnał obejścia autoryzacji w warstwie proxy. Sam wpływ nagłówka to jeszcze nie podatność: trzeba pokazać, że zwrócona treść odpowiada zasobowi, do którego nie ma dostępu.",
+      "severity": "niski",
+      "title": "Nagłówek x-original-url jest blokowany przez serwer (bez obejścia)",
+      "detail": "`/profil` → 404. `GET /` bez nagłówka: 200, 31158 B. `GET /` z x-original-url: /profil → 403, 4542 B — dostęp **spadł**, czyli WAF/proxy odrzuca żądanie z tym nagłówkiem.",
+      "why": "Zapisane jako wynik NEGATYWNY: to utwardzenie, nie podatność. Uwzględnione tylko po to, żeby nie sprawdzać tego drugi raz.",
       "raw": {
         "header": "x-original-url",
         "path_status": 404,
@@ -67,10 +80,10 @@
       "code": "S6",
       "host": "moje.cert.pl",
       "url": "https://moje.cert.pl",
-      "severity": "sredni",
-      "title": "Nagłówek x-original-url zmienia odpowiedź tego samego adresu",
-      "detail": "`/konto` → 404. `GET /` bez nagłówka: 200, 31158 B. `GET /` z x-original-url: /konto → 403, 4542 B.",
-      "why": "§8 poz. 9.3 — sygnał obejścia autoryzacji w warstwie proxy. Sam wpływ nagłówka to jeszcze nie podatność: trzeba pokazać, że zwrócona treść odpowiada zasobowi, do którego nie ma dostępu.",
+      "severity": "niski",
+      "title": "Nagłówek x-original-url jest blokowany przez serwer (bez obejścia)",
+      "detail": "`/konto` → 404. `GET /` bez nagłówka: 200, 31158 B. `GET /` z x-original-url: /konto → 403, 4542 B — dostęp **spadł**, czyli WAF/proxy odrzuca żądanie z tym nagłówkiem.",
+      "why": "Zapisane jako wynik NEGATYWNY: to utwardzenie, nie podatność. Uwzględnione tylko po to, żeby nie sprawdzać tego drugi raz.",
       "raw": {
         "header": "x-original-url",
         "path_status": 404,
@@ -82,45 +95,15 @@
       "code": "S6",
       "host": "moje.cert.pl",
       "url": "https://moje.cert.pl",
-      "severity": "sredni",
-      "title": "Nagłówek x-original-url zmienia odpowiedź tego samego adresu",
-      "detail": "`/moje` → 404. `GET /` bez nagłówka: 200, 31158 B. `GET /` z x-original-url: /moje → 403, 4542 B.",
-      "why": "§8 poz. 9.3 — sygnał obejścia autoryzacji w warstwie proxy. Sam wpływ nagłówka to jeszcze nie podatność: trzeba pokazać, że zwrócona treść odpowiada zasobowi, do którego nie ma dostępu.",
+      "severity": "niski",
+      "title": "Nagłówek x-original-url jest blokowany przez serwer (bez obejścia)",
+      "detail": "`/moje` → 404. `GET /` bez nagłówka: 200, 31158 B. `GET /` z x-original-url: /moje → 403, 4542 B — dostęp **spadł**, czyli WAF/proxy odrzuca żądanie z tym nagłówkiem.",
+      "why": "Zapisane jako wynik NEGATYWNY: to utwardzenie, nie podatność. Uwzględnione tylko po to, żeby nie sprawdzać tego drugi raz.",
       "raw": {
         "header": "x-original-url",
         "path_status": 404,
         "control": 200,
         "test": 403
-      }
-    },
-    {
-      "code": "S6",
-      "host": "incydent.cert.pl",
-      "url": "https://incydent.cert.pl",
-      "severity": "sredni",
-      "title": "Nagłówek x-forwarded-prefix zmienia odpowiedź tego samego adresu",
-      "detail": "`/konto` → 404. `GET /` bez nagłówka: 200, 2743 B. `GET /` z x-forwarded-prefix: /konto → 429, 5635 B.",
-      "why": "§8 poz. 9.3 — sygnał obejścia autoryzacji w warstwie proxy. Sam wpływ nagłówka to jeszcze nie podatność: trzeba pokazać, że zwrócona treść odpowiada zasobowi, do którego nie ma dostępu.",
-      "raw": {
-        "header": "x-forwarded-prefix",
-        "path_status": 404,
-        "control": 200,
-        "test": 429
-      }
-    },
-    {
-      "code": "S6",
-      "host": "incydent.cert.pl",
-      "url": "https://incydent.cert.pl",
-      "severity": "sredni",
-      "title": "Nagłówek x-original-url zmienia odpowiedź tego samego adresu",
-      "detail": "`/moje` → 404. `GET /` bez nagłówka: 200, 2743 B. `GET /` z x-original-url: /moje → 429, 5635 B.",
-      "why": "§8 poz. 9.3 — sygnał obejścia autoryzacji w warstwie proxy. Sam wpływ nagłówka to jeszcze nie podatność: trzeba pokazać, że zwrócona treść odpowiada zasobowi, do którego nie ma dostępu.",
-      "raw": {
-        "header": "x-original-url",
-        "path_status": 404,
-        "control": 200,
-        "test": 429
       }
     },
     {
@@ -145,6 +128,36 @@
       "why": "§8 poz. 5.6 — samo `*` bez możliwości kradzieży danych jest wykluczone. Zapisane, żeby nie sprawdzać drugi raz.",
       "raw": {
         "origin": "https://nask.pl.evil.example"
+      }
+    },
+    {
+      "code": "S6",
+      "host": "incydent.cert.pl",
+      "url": "https://incydent.cert.pl",
+      "severity": "niski",
+      "title": "Nagłówek x-original-url jest blokowany przez serwer (bez obejścia)",
+      "detail": "`/konto` → 404. `GET /` bez nagłówka: 200, 2743 B. `GET /` z x-original-url: /konto → 429, 5635 B — dostęp **spadł**, czyli WAF/proxy odrzuca żądanie z tym nagłówkiem.",
+      "why": "Zapisane jako wynik NEGATYWNY: to utwardzenie, nie podatność. Uwzględnione tylko po to, żeby nie sprawdzać tego drugi raz.",
+      "raw": {
+        "header": "x-original-url",
+        "path_status": 404,
+        "control": 200,
+        "test": 429
+      }
+    },
+    {
+      "code": "S6",
+      "host": "incydent.cert.pl",
+      "url": "https://incydent.cert.pl",
+      "severity": "niski",
+      "title": "Nagłówek x-original-url jest blokowany przez serwer (bez obejścia)",
+      "detail": "`/moje` → 404. `GET /` bez nagłówka: 200, 2743 B. `GET /` z x-original-url: /moje → 429, 5635 B — dostęp **spadł**, czyli WAF/proxy odrzuca żądanie z tym nagłówkiem.",
+      "why": "Zapisane jako wynik NEGATYWNY: to utwardzenie, nie podatność. Uwzględnione tylko po to, żeby nie sprawdzać tego drugi raz.",
+      "raw": {
+        "header": "x-original-url",
+        "path_status": 404,
+        "control": 200,
+        "test": 429
       }
     },
     {
@@ -297,11 +310,54 @@
       "baseline": {
         "status": 404,
         "ctype": "text/html",
-        "len": 40934
+        "len": 40930
       },
       "tech": [],
       "build_id": null,
       "next_routes": [],
+      "js_endpoints": [],
+      "probes": []
+    },
+    {
+      "host": "https://nask.pl",
+      "hits": 2,
+      "top": [
+        {
+          "url": "https://nask.pl/robots.txt",
+          "kind": "non-html",
+          "status": 200,
+          "note": "200, ale nie HTML (text/plain, 24 B)",
+          "evidence": "User-Agent: * Allow: / ",
+          "score": 60
+        },
+        {
+          "url": "https://nask.pl/.well-known/security.txt",
+          "kind": "non-html",
+          "status": 200,
+          "note": "200, ale nie HTML (text/plain, 152 B)",
+          "evidence": "Contact: mailto:securitytxt@nask.pl Expires: 2027-05-31T23:59:00.000Z Encryption: https://www.nask.pl/pgp_securitytxt.asc Preferred-Languages: pl, en",
+          "score": 60
+        }
+      ],
+      "program": "nask",
+      "tier": "T1",
+      "root_status": 200,
+      "baseline": {
+        "status": 200,
+        "ctype": "text/html",
+        "len": 489142
+      },
+      "tech": [
+        "next.js",
+        "react"
+      ],
+      "build_id": null,
+      "next_routes": [
+        "/_head",
+        "/_not-found",
+        "/_tree",
+        "/_index"
+      ],
       "js_endpoints": [],
       "probes": []
     },
@@ -348,7 +404,21 @@
       "build_id": null,
       "next_routes": [],
       "js_endpoints": [],
-      "probes": []
+      "probes": [
+        {
+          "code": "S8",
+          "host": "mwdb.cert.pl",
+          "url": "https://mwdb.cert.pl/api/server",
+          "severity": "niski",
+          "title": "Wersja aplikacji: 2.20.0",
+          "detail": "`/api/server` → 2.20.0; poprawka 2.20.0 jest wdrożona, temat XSS w Rich zamknięty.",
+          "why": "To nie jest znalezisko i nie idzie do zgłoszenia (§8 poz. 2.1). To informacja decyzyjna: mówi, czy warto sprawdzać błąd znany z publicznego repo.",
+          "raw": {
+            "version": "2.20.0",
+            "older_than_fix": false
+          }
+        }
+      ]
     },
     {
       "host": "https://n6portal.cert.pl",
@@ -419,7 +489,7 @@
           "kind": "non-html",
           "status": 200,
           "note": "200, ale nie HTML (application/xml, 436 B)",
-          "evidence": "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\"> <url> <loc>https://zglos-dezinformacje.nask.pl/</loc> <lastmod>2026-10-27T14:16:36.222Z</lastmod> <c",
+          "evidence": "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\"> <url> <loc>https://zglos-dezinformacje.nask.pl/</loc> <lastmod>2026-11-03T11:28:27.120Z</lastmod> <c",
           "score": 60
         },
         {
@@ -538,10 +608,10 @@
           "code": "S6",
           "host": "moje.cert.pl",
           "url": "https://moje.cert.pl",
-          "severity": "sredni",
-          "title": "Nagłówek x-original-url zmienia odpowiedź tego samego adresu",
-          "detail": "`/panel` → 404. `GET /` bez nagłówka: 200, 31158 B. `GET /` z x-original-url: /panel → 403, 4542 B.",
-          "why": "§8 poz. 9.3 — sygnał obejścia autoryzacji w warstwie proxy. Sam wpływ nagłówka to jeszcze nie podatność: trzeba pokazać, że zwrócona treść odpowiada zasobowi, do którego nie ma dostępu.",
+          "severity": "niski",
+          "title": "Nagłówek x-original-url jest blokowany przez serwer (bez obejścia)",
+          "detail": "`/panel` → 404. `GET /` bez nagłówka: 200, 31158 B. `GET /` z x-original-url: /panel → 403, 4542 B — dostęp **spadł**, czyli WAF/proxy odrzuca żądanie z tym nagłówkiem.",
+          "why": "Zapisane jako wynik NEGATYWNY: to utwardzenie, nie podatność. Uwzględnione tylko po to, żeby nie sprawdzać tego drugi raz.",
           "raw": {
             "header": "x-original-url",
             "path_status": 404,
@@ -553,10 +623,10 @@
           "code": "S6",
           "host": "moje.cert.pl",
           "url": "https://moje.cert.pl",
-          "severity": "sredni",
-          "title": "Nagłówek x-original-url zmienia odpowiedź tego samego adresu",
-          "detail": "`/admin` → 403. `GET /` bez nagłówka: 200, 31158 B. `GET /` z x-original-url: /admin → 403, 4542 B.",
-          "why": "§8 poz. 9.3 — sygnał obejścia autoryzacji w warstwie proxy. Sam wpływ nagłówka to jeszcze nie podatność: trzeba pokazać, że zwrócona treść odpowiada zasobowi, do którego nie ma dostępu.",
+          "severity": "niski",
+          "title": "Nagłówek x-original-url jest blokowany przez serwer (bez obejścia)",
+          "detail": "`/admin` → 403. `GET /` bez nagłówka: 200, 31158 B. `GET /` z x-original-url: /admin → 403, 4542 B — dostęp **spadł**, czyli WAF/proxy odrzuca żądanie z tym nagłówkiem.",
+          "why": "Zapisane jako wynik NEGATYWNY: to utwardzenie, nie podatność. Uwzględnione tylko po to, żeby nie sprawdzać tego drugi raz.",
           "raw": {
             "header": "x-original-url",
             "path_status": 403,
@@ -568,10 +638,10 @@
           "code": "S6",
           "host": "moje.cert.pl",
           "url": "https://moje.cert.pl",
-          "severity": "sredni",
-          "title": "Nagłówek x-original-url zmienia odpowiedź tego samego adresu",
-          "detail": "`/dashboard` → 404. `GET /` bez nagłówka: 200, 31158 B. `GET /` z x-original-url: /dashboard → 403, 4542 B.",
-          "why": "§8 poz. 9.3 — sygnał obejścia autoryzacji w warstwie proxy. Sam wpływ nagłówka to jeszcze nie podatność: trzeba pokazać, że zwrócona treść odpowiada zasobowi, do którego nie ma dostępu.",
+          "severity": "niski",
+          "title": "Nagłówek x-original-url jest blokowany przez serwer (bez obejścia)",
+          "detail": "`/dashboard` → 404. `GET /` bez nagłówka: 200, 31158 B. `GET /` z x-original-url: /dashboard → 403, 4542 B — dostęp **spadł**, czyli WAF/proxy odrzuca żądanie z tym nagłówkiem.",
+          "why": "Zapisane jako wynik NEGATYWNY: to utwardzenie, nie podatność. Uwzględnione tylko po to, żeby nie sprawdzać tego drugi raz.",
           "raw": {
             "header": "x-original-url",
             "path_status": 404,
@@ -583,10 +653,10 @@
           "code": "S6",
           "host": "moje.cert.pl",
           "url": "https://moje.cert.pl",
-          "severity": "sredni",
-          "title": "Nagłówek x-original-url zmienia odpowiedź tego samego adresu",
-          "detail": "`/profil` → 404. `GET /` bez nagłówka: 200, 31158 B. `GET /` z x-original-url: /profil → 403, 4542 B.",
-          "why": "§8 poz. 9.3 — sygnał obejścia autoryzacji w warstwie proxy. Sam wpływ nagłówka to jeszcze nie podatność: trzeba pokazać, że zwrócona treść odpowiada zasobowi, do którego nie ma dostępu.",
+          "severity": "niski",
+          "title": "Nagłówek x-original-url jest blokowany przez serwer (bez obejścia)",
+          "detail": "`/profil` → 404. `GET /` bez nagłówka: 200, 31158 B. `GET /` z x-original-url: /profil → 403, 4542 B — dostęp **spadł**, czyli WAF/proxy odrzuca żądanie z tym nagłówkiem.",
+          "why": "Zapisane jako wynik NEGATYWNY: to utwardzenie, nie podatność. Uwzględnione tylko po to, żeby nie sprawdzać tego drugi raz.",
           "raw": {
             "header": "x-original-url",
             "path_status": 404,
@@ -598,10 +668,10 @@
           "code": "S6",
           "host": "moje.cert.pl",
           "url": "https://moje.cert.pl",
-          "severity": "sredni",
-          "title": "Nagłówek x-original-url zmienia odpowiedź tego samego adresu",
-          "detail": "`/konto` → 404. `GET /` bez nagłówka: 200, 31158 B. `GET /` z x-original-url: /konto → 403, 4542 B.",
-          "why": "§8 poz. 9.3 — sygnał obejścia autoryzacji w warstwie proxy. Sam wpływ nagłówka to jeszcze nie podatność: trzeba pokazać, że zwrócona treść odpowiada zasobowi, do którego nie ma dostępu.",
+          "severity": "niski",
+          "title": "Nagłówek x-original-url jest blokowany przez serwer (bez obejścia)",
+          "detail": "`/konto` → 404. `GET /` bez nagłówka: 200, 31158 B. `GET /` z x-original-url: /konto → 403, 4542 B — dostęp **spadł**, czyli WAF/proxy odrzuca żądanie z tym nagłówkiem.",
+          "why": "Zapisane jako wynik NEGATYWNY: to utwardzenie, nie podatność. Uwzględnione tylko po to, żeby nie sprawdzać tego drugi raz.",
           "raw": {
             "header": "x-original-url",
             "path_status": 404,
@@ -613,10 +683,10 @@
           "code": "S6",
           "host": "moje.cert.pl",
           "url": "https://moje.cert.pl",
-          "severity": "sredni",
-          "title": "Nagłówek x-original-url zmienia odpowiedź tego samego adresu",
-          "detail": "`/moje` → 404. `GET /` bez nagłówka: 200, 31158 B. `GET /` z x-original-url: /moje → 403, 4542 B.",
-          "why": "§8 poz. 9.3 — sygnał obejścia autoryzacji w warstwie proxy. Sam wpływ nagłówka to jeszcze nie podatność: trzeba pokazać, że zwrócona treść odpowiada zasobowi, do którego nie ma dostępu.",
+          "severity": "niski",
+          "title": "Nagłówek x-original-url jest blokowany przez serwer (bez obejścia)",
+          "detail": "`/moje` → 404. `GET /` bez nagłówka: 200, 31158 B. `GET /` z x-original-url: /moje → 403, 4542 B — dostęp **spadł**, czyli WAF/proxy odrzuca żądanie z tym nagłówkiem.",
+          "why": "Zapisane jako wynik NEGATYWNY: to utwardzenie, nie podatność. Uwzględnione tylko po to, żeby nie sprawdzać tego drugi raz.",
           "raw": {
             "header": "x-original-url",
             "path_status": 404,
@@ -682,12 +752,12 @@
           "code": "S6",
           "host": "incydent.cert.pl",
           "url": "https://incydent.cert.pl",
-          "severity": "sredni",
-          "title": "Nagłówek x-forwarded-prefix zmienia odpowiedź tego samego adresu",
-          "detail": "`/konto` → 404. `GET /` bez nagłówka: 200, 2743 B. `GET /` z x-forwarded-prefix: /konto → 429, 5635 B.",
-          "why": "§8 poz. 9.3 — sygnał obejścia autoryzacji w warstwie proxy. Sam wpływ nagłówka to jeszcze nie podatność: trzeba pokazać, że zwrócona treść odpowiada zasobowi, do którego nie ma dostępu.",
+          "severity": "niski",
+          "title": "Nagłówek x-original-url jest blokowany przez serwer (bez obejścia)",
+          "detail": "`/konto` → 404. `GET /` bez nagłówka: 200, 2743 B. `GET /` z x-original-url: /konto → 429, 5635 B — dostęp **spadł**, czyli WAF/proxy odrzuca żądanie z tym nagłówkiem.",
+          "why": "Zapisane jako wynik NEGATYWNY: to utwardzenie, nie podatność. Uwzględnione tylko po to, żeby nie sprawdzać tego drugi raz.",
           "raw": {
-            "header": "x-forwarded-prefix",
+            "header": "x-original-url",
             "path_status": 404,
             "control": 200,
             "test": 429
@@ -697,10 +767,10 @@
           "code": "S6",
           "host": "incydent.cert.pl",
           "url": "https://incydent.cert.pl",
-          "severity": "sredni",
-          "title": "Nagłówek x-original-url zmienia odpowiedź tego samego adresu",
-          "detail": "`/moje` → 404. `GET /` bez nagłówka: 200, 2743 B. `GET /` z x-original-url: /moje → 429, 5635 B.",
-          "why": "§8 poz. 9.3 — sygnał obejścia autoryzacji w warstwie proxy. Sam wpływ nagłówka to jeszcze nie podatność: trzeba pokazać, że zwrócona treść odpowiada zasobowi, do którego nie ma dostępu.",
+          "severity": "niski",
+          "title": "Nagłówek x-original-url jest blokowany przez serwer (bez obejścia)",
+          "detail": "`/moje` → 404. `GET /` bez nagłówka: 200, 2743 B. `GET /` z x-original-url: /moje → 429, 5635 B — dostęp **spadł**, czyli WAF/proxy odrzuca żądanie z tym nagłówkiem.",
+          "why": "Zapisane jako wynik NEGATYWNY: to utwardzenie, nie podatność. Uwzględnione tylko po to, żeby nie sprawdzać tego drugi raz.",
           "raw": {
             "header": "x-original-url",
             "path_status": 404,
@@ -773,20 +843,46 @@
     },
     {
       "host": "https://116sos.pl",
-      "hits": 0,
-      "top": [],
+      "hits": 2,
+      "top": [
+        {
+          "url": "https://116sos.pl/robots.txt",
+          "kind": "non-html",
+          "status": 200,
+          "note": "200, ale nie HTML (text/plain, 108 B)",
+          "evidence": "User-agent: * Disallow: /404 Disallow: /formularz-helpdesk Allow: / Sitemap: https://116sos.pl/sitemap.xml ",
+          "score": 60
+        },
+        {
+          "url": "https://116sos.pl/sitemap.xml",
+          "kind": "non-html",
+          "status": 200,
+          "note": "200, ale nie HTML (text/xml, 132584 B)",
+          "evidence": "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\"> <url> <loc>https://www.116sos.pl</loc> <lastmod>04.11.2026, 10:20:33</lastmod> </url> <url> <loc>htt",
+          "score": 60
+        }
+      ],
       "program": "nask",
       "tier": "T2",
-      "root_status": 502,
+      "root_status": 200,
       "baseline": {
-        "status": 502,
+        "status": 404,
         "ctype": "text/html",
-        "len": 150
+        "len": 10407
       },
-      "tech": [],
-      "build_id": null,
-      "next_routes": [],
-      "js_endpoints": [],
+      "tech": [
+        "next.js"
+      ],
+      "build_id": "8CjJwbyxpVqpWnorny23T",
+      "next_routes": [
+        "/a/i",
+        "/a/b"
+      ],
+      "js_endpoints": [
+        "/api",
+        "/api/",
+        "/api/fetch-cookie-hash"
+      ],
       "probes": []
     },
     {
@@ -811,11 +907,47 @@
         "len": 17524
       },
       "tech": [
+        "next.js",
         "react"
       ],
       "build_id": "Grl_YQ5SCHd1ahmhesPv6",
-      "next_routes": [],
-      "js_endpoints": [],
+      "next_routes": [
+        "/about",
+        "/about/structure",
+        "/about/science-council",
+        "/news",
+        "/research-areas",
+        "/research-areas/projects",
+        "/research-areas/1418",
+        "/research-areas/1415",
+        "/research-areas/1408",
+        "/doctoral-school",
+        "/doctoral-school/about-tib-pan",
+        "/doctoral-school/courses",
+        "/doctoral-school/recruitment",
+        "/doctoral-school/what-we-offer",
+        "/doctoral-school/our-phd-students",
+        "/career",
+        "/equality",
+        "/contact",
+        "/cookies",
+        "/accessibility-declaration",
+        "/branding",
+        "/_error",
+        "/_app",
+        "/_document",
+        "/500",
+        "/_not-found",
+        "/_global-error",
+        "/api",
+        "/api/",
+        "/index/"
+      ],
+      "js_endpoints": [
+        "/api",
+        "/api/",
+        "https://science.nask.pl/social_share.png"
+      ],
       "probes": []
     },
     {
@@ -915,7 +1047,7 @@
       "baseline": {
         "status": 403,
         "ctype": "text/html",
-        "len": 385
+        "len": 383
       },
       "tech": [],
       "build_id": null,
