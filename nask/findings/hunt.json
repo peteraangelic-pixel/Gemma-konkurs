@@ -1,32 +1,42 @@
 {
-  "generated_at": "2026-11-05T13:47:59+00:00",
-  "requests_used": 880,
-  "hosts_scanned": 17,
+  "generated_at": "2026-11-05T14:31:05+00:00",
+  "requests_used": 982,
+  "hosts_scanned": 18,
   "probe_findings": [
     {
-      "code": "S3",
-      "host": "116sos.pl",
-      "url": "https://116sos.pl/_next/data/irh57X00spepTJQOOO68A/index.json",
-      "severity": "wysoki",
-      "title": "Dane chronionej strony Next.js czytane bez sesji przez /_next/data",
-      "detail": "HTML `/index` → 404 (wymaga logowania), a JSON → 200 (8256 B); pageProps: appPageUrl, articles, chips, consultantQuotes, content, ogDescription, ogImageId, ogTitle, searchRanges, seodescription; podgląd: {\"chips\": [{\"chipContent\": \"Wsparcie dla osób dorosłych\", \"tooltipContent\": \"Wspieramy osoby szukające pomocy dla siebie lub kogoś bliskiego.\", \"order\": 1}, {\"chipContent\": \"24/7\",",
-      "why": "§8 poz. 12.2 / 9.3 — dane niepubliczne przez nieudokumentowany endpoint, z pominięciem sprawdzenia w warstwie HTML. To realne ryzyko tylko wtedy, gdy pageProps nie są publiczne — trzeba przeczytać podgląd.",
+      "code": "S10",
+      "host": "dns.pl",
+      "url": "https://dns.pl/",
+      "severity": "niski",
+      "title": "Odbicie `X-Forwarded-Host` bez propagacji (cache brak)",
+      "detail": "`GET /` z `X-Forwarded-Host: poison-zzqcache9f13.example` zawiera znacznik, ale kolejne żądanie bez nagłówka (200, 51145 B) jest czyste. Cache-Control: `max-age=0, must-revalidate, private, s-maxage=300` → brak cache'u współdzielonego, refleksja bez wpływu.",
+      "why": "Zapisane jako NEGATYW: refleksja bez propagacji jest wykluczona przez §8.",
       "raw": {
-        "route": "/index",
-        "html_status": 404
+        "header": "X-Forwarded-Host",
+        "value": "poison-zzqcache9f13.example",
+        "cache_control": "max-age=0, must-revalidate, private, s-maxage=300",
+        "shared_cacheable": false,
+        "persisted": false,
+        "test_status": 200,
+        "control_status": 200
       }
     },
     {
-      "code": "S3",
-      "host": "116sos.pl",
-      "url": "https://116sos.pl/_next/data/irh57X00spepTJQOOO68A/index.json",
-      "severity": "wysoki",
-      "title": "Dane chronionej strony Next.js czytane bez sesji przez /_next/data",
-      "detail": "HTML `/index/` → 404 (wymaga logowania), a JSON → 200 (8256 B); pageProps: appPageUrl, articles, chips, consultantQuotes, content, ogDescription, ogImageId, ogTitle, searchRanges, seodescription; podgląd: {\"chips\": [{\"chipContent\": \"Wsparcie dla osób dorosłych\", \"tooltipContent\": \"Wspieramy osoby szukające pomocy dla siebie lub kogoś bliskiego.\", \"order\": 1}, {\"chipContent\": \"24/7\",",
-      "why": "§8 poz. 12.2 / 9.3 — dane niepubliczne przez nieudokumentowany endpoint, z pominięciem sprawdzenia w warstwie HTML. To realne ryzyko tylko wtedy, gdy pageProps nie są publiczne — trzeba przeczytać podgląd.",
+      "code": "S10",
+      "host": "dns.pl",
+      "url": "https://dns.pl/",
+      "severity": "niski",
+      "title": "Odbicie `X-Forwarded-Prefix` bez propagacji (cache brak)",
+      "detail": "`GET /` z `X-Forwarded-Prefix: /zzqcache9f13` zawiera znacznik, ale kolejne żądanie bez nagłówka (200, 51138 B) jest czyste. Cache-Control: `max-age=0, must-revalidate, private, s-maxage=300` → brak cache'u współdzielonego, refleksja bez wpływu.",
+      "why": "Zapisane jako NEGATYW: refleksja bez propagacji jest wykluczona przez §8.",
       "raw": {
-        "route": "/index/",
-        "html_status": 404
+        "header": "X-Forwarded-Prefix",
+        "value": "/zzqcache9f13",
+        "cache_control": "max-age=0, must-revalidate, private, s-maxage=300",
+        "shared_cacheable": false,
+        "persisted": false,
+        "test_status": 200,
+        "control_status": 200
       }
     },
     {
@@ -161,11 +171,11 @@
       "host": "incydent.cert.pl",
       "url": "https://incydent.cert.pl",
       "severity": "niski",
-      "title": "Nagłówek x-original-url jest blokowany przez serwer (bez obejścia)",
-      "detail": "`/konto` → 404. `GET /` bez nagłówka: 200, 2743 B. `GET /` z x-original-url: /konto → 429, 5635 B — dostęp **spadł**, czyli WAF/proxy odrzuca żądanie z tym nagłówkiem.",
+      "title": "Nagłówek x-rewrite-url jest blokowany przez serwer (bez obejścia)",
+      "detail": "`/konto` → 404. `GET /` bez nagłówka: 200, 2743 B. `GET /` z x-rewrite-url: /konto → 429, 5635 B — dostęp **spadł**, czyli WAF/proxy odrzuca żądanie z tym nagłówkiem.",
       "why": "Zapisane jako wynik NEGATYWNY: to utwardzenie, nie podatność. Uwzględnione tylko po to, żeby nie sprawdzać tego drugi raz.",
       "raw": {
-        "header": "x-original-url",
+        "header": "x-rewrite-url",
         "path_status": 404,
         "control": 200,
         "test": 429
@@ -357,7 +367,23 @@
         "/users/me/profile/notification-preferences",
         "/users/me/profile/payout"
       ],
-      "js_chunks": {},
+      "js_chunks": {
+        "chunks_total": 92,
+        "chunks_fetched": 20,
+        "skipped": [],
+        "api_paths": [],
+        "params": [
+          "Ce"
+        ],
+        "hot_fields": [
+          "id",
+          "role",
+          "status",
+          "message_id",
+          "email"
+        ],
+        "secrets": []
+      },
       "probes": []
     },
     {
@@ -427,14 +453,59 @@
       "baseline": {
         "status": 404,
         "ctype": "text/html",
-        "len": 40904
+        "len": 40912
       },
       "tech": [],
       "build_id": null,
       "next_routes": [],
       "js_endpoints": [],
-      "js_chunks": {},
-      "probes": []
+      "js_chunks": {
+        "chunks_total": 0,
+        "chunks_fetched": 0,
+        "skipped": [],
+        "api_paths": [],
+        "params": [],
+        "hot_fields": [],
+        "secrets": []
+      },
+      "probes": [
+        {
+          "code": "S10",
+          "host": "dns.pl",
+          "url": "https://dns.pl/",
+          "severity": "niski",
+          "title": "Odbicie `X-Forwarded-Host` bez propagacji (cache brak)",
+          "detail": "`GET /` z `X-Forwarded-Host: poison-zzqcache9f13.example` zawiera znacznik, ale kolejne żądanie bez nagłówka (200, 51145 B) jest czyste. Cache-Control: `max-age=0, must-revalidate, private, s-maxage=300` → brak cache'u współdzielonego, refleksja bez wpływu.",
+          "why": "Zapisane jako NEGATYW: refleksja bez propagacji jest wykluczona przez §8.",
+          "raw": {
+            "header": "X-Forwarded-Host",
+            "value": "poison-zzqcache9f13.example",
+            "cache_control": "max-age=0, must-revalidate, private, s-maxage=300",
+            "shared_cacheable": false,
+            "persisted": false,
+            "test_status": 200,
+            "control_status": 200
+          }
+        },
+        {
+          "code": "S10",
+          "host": "dns.pl",
+          "url": "https://dns.pl/",
+          "severity": "niski",
+          "title": "Odbicie `X-Forwarded-Prefix` bez propagacji (cache brak)",
+          "detail": "`GET /` z `X-Forwarded-Prefix: /zzqcache9f13` zawiera znacznik, ale kolejne żądanie bez nagłówka (200, 51138 B) jest czyste. Cache-Control: `max-age=0, must-revalidate, private, s-maxage=300` → brak cache'u współdzielonego, refleksja bez wpływu.",
+          "why": "Zapisane jako NEGATYW: refleksja bez propagacji jest wykluczona przez §8.",
+          "raw": {
+            "header": "X-Forwarded-Prefix",
+            "value": "/zzqcache9f13",
+            "cache_control": "max-age=0, must-revalidate, private, s-maxage=300",
+            "shared_cacheable": false,
+            "persisted": false,
+            "test_status": 200,
+            "control_status": 200
+          }
+        }
+      ]
     },
     {
       "host": "https://nask.pl",
@@ -477,7 +548,15 @@
         "/_index"
       ],
       "js_endpoints": [],
-      "js_chunks": {},
+      "js_chunks": {
+        "chunks_total": 0,
+        "chunks_fetched": 0,
+        "skipped": [],
+        "api_paths": [],
+        "params": [],
+        "hot_fields": [],
+        "secrets": []
+      },
       "probes": []
     },
     {
@@ -523,7 +602,36 @@
       "build_id": null,
       "next_routes": [],
       "js_endpoints": [],
-      "js_chunks": {},
+      "js_chunks": {
+        "chunks_total": 8,
+        "chunks_fetched": 7,
+        "skipped": [
+          {
+            "url": "https://mwdb.cert.pl/assets/swagger-ui-react-hu_QeVqA.js",
+            "size": 1240648,
+            "why": "too_big"
+          }
+        ],
+        "api_paths": [],
+        "params": [
+          "invariant",
+          "ga",
+          "Ia",
+          "ro",
+          "cl",
+          "ml",
+          "nl",
+          "ee",
+          "Cb"
+        ],
+        "hot_fields": [
+          "status",
+          "uid",
+          "id",
+          "email"
+        ],
+        "secrets": []
+      },
       "probes": [
         {
           "code": "S8",
@@ -572,7 +680,15 @@
         "/user-settings",
         "/user-settings/mfa-configuration"
       ],
-      "js_chunks": {},
+      "js_chunks": {
+        "chunks_total": 0,
+        "chunks_fetched": 0,
+        "skipped": [],
+        "api_paths": [],
+        "params": [],
+        "hot_fields": [],
+        "secrets": []
+      },
       "probes": []
     },
     {
@@ -591,7 +707,15 @@
       "build_id": null,
       "next_routes": [],
       "js_endpoints": [],
-      "js_chunks": {},
+      "js_chunks": {
+        "chunks_total": 0,
+        "chunks_fetched": 0,
+        "skipped": [],
+        "api_paths": [],
+        "params": [],
+        "hot_fields": [],
+        "secrets": []
+      },
       "probes": []
     },
     {
@@ -645,7 +769,15 @@
       "build_id": null,
       "next_routes": [],
       "js_endpoints": [],
-      "js_chunks": {},
+      "js_chunks": {
+        "chunks_total": 0,
+        "chunks_fetched": 0,
+        "skipped": [],
+        "api_paths": [],
+        "params": [],
+        "hot_fields": [],
+        "secrets": []
+      },
       "probes": []
     },
     {
@@ -683,7 +815,15 @@
       "build_id": null,
       "next_routes": [],
       "js_endpoints": [],
-      "js_chunks": {},
+      "js_chunks": {
+        "chunks_total": 0,
+        "chunks_fetched": 0,
+        "skipped": [],
+        "api_paths": [],
+        "params": [],
+        "hot_fields": [],
+        "secrets": []
+      },
       "probes": []
     },
     {
@@ -727,7 +867,15 @@
       "build_id": null,
       "next_routes": [],
       "js_endpoints": [],
-      "js_chunks": {},
+      "js_chunks": {
+        "chunks_total": 0,
+        "chunks_fetched": 0,
+        "skipped": [],
+        "api_paths": [],
+        "params": [],
+        "hot_fields": [],
+        "secrets": []
+      },
       "probes": [
         {
           "code": "S6",
@@ -848,7 +996,15 @@
       "js_endpoints": [
         "https://incydent.cert.pl/"
       ],
-      "js_chunks": {},
+      "js_chunks": {
+        "chunks_total": 0,
+        "chunks_fetched": 0,
+        "skipped": [],
+        "api_paths": [],
+        "params": [],
+        "hot_fields": [],
+        "secrets": []
+      },
       "probes": [
         {
           "code": "S1",
@@ -879,11 +1035,11 @@
           "host": "incydent.cert.pl",
           "url": "https://incydent.cert.pl",
           "severity": "niski",
-          "title": "Nagłówek x-original-url jest blokowany przez serwer (bez obejścia)",
-          "detail": "`/konto` → 404. `GET /` bez nagłówka: 200, 2743 B. `GET /` z x-original-url: /konto → 429, 5635 B — dostęp **spadł**, czyli WAF/proxy odrzuca żądanie z tym nagłówkiem.",
+          "title": "Nagłówek x-rewrite-url jest blokowany przez serwer (bez obejścia)",
+          "detail": "`/konto` → 404. `GET /` bez nagłówka: 200, 2743 B. `GET /` z x-rewrite-url: /konto → 429, 5635 B — dostęp **spadł**, czyli WAF/proxy odrzuca żądanie z tym nagłówkiem.",
           "why": "Zapisane jako wynik NEGATYWNY: to utwardzenie, nie podatność. Uwzględnione tylko po to, żeby nie sprawdzać tego drugi raz.",
           "raw": {
-            "header": "x-original-url",
+            "header": "x-rewrite-url",
             "path_status": 404,
             "control": 200,
             "test": 429
@@ -965,21 +1121,21 @@
       "build_id": null,
       "next_routes": [],
       "js_endpoints": [],
-      "js_chunks": {},
+      "js_chunks": {
+        "chunks_total": 0,
+        "chunks_fetched": 0,
+        "skipped": [],
+        "api_paths": [],
+        "params": [],
+        "hot_fields": [],
+        "secrets": []
+      },
       "probes": []
     },
     {
       "host": "https://116sos.pl",
-      "hits": 3,
+      "hits": 2,
       "top": [
-        {
-          "url": "https://116sos.pl/api/fetch-cookie-hash",
-          "kind": "json",
-          "status": 200,
-          "note": "JSON bez HTML-owego catch-all (30 B)",
-          "evidence": "{\"cookieHash\":\"6a9963b75ab63\"}",
-          "score": 115
-        },
         {
           "url": "https://116sos.pl/robots.txt",
           "kind": "non-html",
@@ -993,7 +1149,7 @@
           "kind": "non-html",
           "status": 200,
           "note": "200, ale nie HTML (text/xml, 132584 B)",
-          "evidence": "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\"> <url> <loc>https://www.116sos.pl</loc> <lastmod>05.11.2026, 13:40:58</lastmod> </url> <url> <loc>htt",
+          "evidence": "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\"> <url> <loc>https://www.116sos.pl</loc> <lastmod>05.11.2026, 14:16:16</lastmod> </url> <url> <loc>htt",
           "score": 60
         }
       ],
@@ -1006,11 +1162,12 @@
         "len": 10407
       },
       "tech": [
-        "next.js",
         "react"
       ],
       "build_id": "irh57X00spepTJQOOO68A",
       "next_routes": [
+        "/a/i",
+        "/a/b",
         "/api",
         "/api/",
         "/_document",
@@ -1024,40 +1181,9 @@
         "/page",
         "/_global-error"
       ],
-      "js_endpoints": [
-        "/api",
-        "/api/",
-        "/api/fetch-cookie-hash"
-      ],
+      "js_endpoints": [],
       "js_chunks": {},
-      "probes": [
-        {
-          "code": "S3",
-          "host": "116sos.pl",
-          "url": "https://116sos.pl/_next/data/irh57X00spepTJQOOO68A/index.json",
-          "severity": "wysoki",
-          "title": "Dane chronionej strony Next.js czytane bez sesji przez /_next/data",
-          "detail": "HTML `/index` → 404 (wymaga logowania), a JSON → 200 (8256 B); pageProps: appPageUrl, articles, chips, consultantQuotes, content, ogDescription, ogImageId, ogTitle, searchRanges, seodescription; podgląd: {\"chips\": [{\"chipContent\": \"Wsparcie dla osób dorosłych\", \"tooltipContent\": \"Wspieramy osoby szukające pomocy dla siebie lub kogoś bliskiego.\", \"order\": 1}, {\"chipContent\": \"24/7\",",
-          "why": "§8 poz. 12.2 / 9.3 — dane niepubliczne przez nieudokumentowany endpoint, z pominięciem sprawdzenia w warstwie HTML. To realne ryzyko tylko wtedy, gdy pageProps nie są publiczne — trzeba przeczytać podgląd.",
-          "raw": {
-            "route": "/index",
-            "html_status": 404
-          }
-        },
-        {
-          "code": "S3",
-          "host": "116sos.pl",
-          "url": "https://116sos.pl/_next/data/irh57X00spepTJQOOO68A/index.json",
-          "severity": "wysoki",
-          "title": "Dane chronionej strony Next.js czytane bez sesji przez /_next/data",
-          "detail": "HTML `/index/` → 404 (wymaga logowania), a JSON → 200 (8256 B); pageProps: appPageUrl, articles, chips, consultantQuotes, content, ogDescription, ogImageId, ogTitle, searchRanges, seodescription; podgląd: {\"chips\": [{\"chipContent\": \"Wsparcie dla osób dorosłych\", \"tooltipContent\": \"Wspieramy osoby szukające pomocy dla siebie lub kogoś bliskiego.\", \"order\": 1}, {\"chipContent\": \"24/7\",",
-          "why": "§8 poz. 12.2 / 9.3 — dane niepubliczne przez nieudokumentowany endpoint, z pominięciem sprawdzenia w warstwie HTML. To realne ryzyko tylko wtedy, gdy pageProps nie są publiczne — trzeba przeczytać podgląd.",
-          "raw": {
-            "route": "/index/",
-            "html_status": 404
-          }
-        }
-      ]
+      "probes": []
     },
     {
       "host": "https://science.nask.pl",
@@ -1085,44 +1211,21 @@
         "react"
       ],
       "build_id": "cx2h7afHZiCXQTnulJSjK",
-      "next_routes": [
-        "/_error",
-        "/about",
-        "/about/science-council",
-        "/about/structure",
-        "/about/structure/researchers",
-        "/accessibility-declaration",
-        "/branding",
-        "/career",
-        "/contact",
-        "/cookies",
-        "/doctoral-school",
-        "/doctoral-school/about-tib-pan",
-        "/doctoral-school/courses",
-        "/doctoral-school/our-phd-students/page/[page]",
-        "/doctoral-school/recruitment",
-        "/doctoral-school/what-we-offer",
-        "/equality",
-        "/news/page/[page]",
-        "/research-areas",
-        "/research-areas/projects/page/[page]",
-        "/search",
-        "/_app",
-        "/api/contact",
-        "/api/search",
-        "/news",
-        "/research-areas/projects",
-        "/research-areas/1418",
-        "/research-areas/1415",
-        "/research-areas/1408",
-        "/doctoral-school/our-phd-students"
-      ],
+      "next_routes": [],
       "js_endpoints": [
         "/api",
         "/api/",
         "https://science.nask.pl/social_share.png"
       ],
-      "js_chunks": {},
+      "js_chunks": {
+        "chunks_total": 0,
+        "chunks_fetched": 0,
+        "skipped": [],
+        "api_paths": [],
+        "params": [],
+        "hot_fields": [],
+        "secrets": []
+      },
       "probes": []
     },
     {
@@ -1150,7 +1253,15 @@
       "build_id": null,
       "next_routes": [],
       "js_endpoints": [],
-      "js_chunks": {},
+      "js_chunks": {
+        "chunks_total": 0,
+        "chunks_fetched": 0,
+        "skipped": [],
+        "api_paths": [],
+        "params": [],
+        "hot_fields": [],
+        "secrets": []
+      },
       "probes": [
         {
           "code": "S1",
@@ -1211,7 +1322,24 @@
       "build_id": null,
       "next_routes": [],
       "js_endpoints": [],
-      "js_chunks": {},
+      "js_chunks": {
+        "chunks_total": 233,
+        "chunks_fetched": 20,
+        "skipped": [],
+        "api_paths": [],
+        "params": [
+          "Mr",
+          "Zt",
+          "et"
+        ],
+        "hot_fields": [
+          "id",
+          "status",
+          "role",
+          "token"
+        ],
+        "secrets": []
+      },
       "probes": []
     },
     {
@@ -1266,7 +1394,15 @@
       "build_id": null,
       "next_routes": [],
       "js_endpoints": [],
-      "js_chunks": {},
+      "js_chunks": {
+        "chunks_total": 0,
+        "chunks_fetched": 0,
+        "skipped": [],
+        "api_paths": [],
+        "params": [],
+        "hot_fields": [],
+        "secrets": []
+      },
       "probes": [
         {
           "code": "S6",
@@ -1359,6 +1495,52 @@
           }
         }
       ]
+    },
+    {
+      "host": "https://pllum.org.pl",
+      "hits": 2,
+      "top": [
+        {
+          "url": "https://pllum.org.pl/.git/config",
+          "kind": "auth-wall",
+          "status": 403,
+          "note": "istnieje i wymaga uwierzytelnienia (nie catch-all)",
+          "evidence": "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'> <html xmlns='http://www.w3.org/1999/xhtml'> <head> <meta content='text/html; charset=utf-8' http-equiv='content-type' /> <style type='text/css'> body { font-family: Arial; margin",
+          "score": 50
+        },
+        {
+          "url": "https://pllum.org.pl/.env",
+          "kind": "auth-wall",
+          "status": 403,
+          "note": "istnieje i wymaga uwierzytelnienia (nie catch-all)",
+          "evidence": "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'> <html xmlns='http://www.w3.org/1999/xhtml'> <head> <meta content='text/html; charset=utf-8' http-equiv='content-type' /> <style type='text/css'> body { font-family: Arial; margin",
+          "score": 50
+        }
+      ],
+      "program": "nask",
+      "tier": "T2",
+      "root_status": 200,
+      "baseline": {
+        "status": 404,
+        "ctype": "text/html",
+        "len": 11961
+      },
+      "tech": [
+        "react"
+      ],
+      "build_id": null,
+      "next_routes": [],
+      "js_endpoints": [],
+      "js_chunks": {
+        "chunks_total": 0,
+        "chunks_fetched": 0,
+        "skipped": [],
+        "api_paths": [],
+        "params": [],
+        "hot_fields": [],
+        "secrets": []
+      },
+      "probes": []
     }
   ]
 }
