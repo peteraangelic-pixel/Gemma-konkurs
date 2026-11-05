@@ -5,3 +5,5 @@ __pycache__/
 # launched a 31-minute LoRA canary that took the GPU slot from a screen already in flight.
 # Triggers are armed deliberately, never in bulk.
 gemma4-agent/kaggle_smoke/v2-benchmark.trigger
+# ciała pobrane przez naskhunt (analiza offline, nie do repo)
+NASK/hunt/bodies/

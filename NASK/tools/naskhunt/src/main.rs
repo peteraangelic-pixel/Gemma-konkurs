@@ -105,6 +105,8 @@ struct Observation {
     /// pierwsze 12 znaków SHA-256. Bez tego dwie identyczne strony różniące się
     /// rotującym `_event_transid` (dns.pl) wyglądają jak dwie różne odpowiedzi.
     sha12: String,
+    /// Wybrane nagłówki odpowiedzi w formie `nazwa=wartość; ...` (cache, CDN, CSP).
+    hdrs: String,
     /// Surowa treść (ucięta do 400 kB) — tylko do zapisu na dysk, nie do JSON-a.
     raw: String,
     error: String,
@@ -198,6 +200,7 @@ impl Runner {
                 hop_ctype: String::new(),
                 snippet: String::new(),
                 sha12: String::new(),
+                hdrs: String::new(),
                 raw: String::new(),
                 error: format!("{method_up} zabroniony dla {host}{path} (tylko odczytowe trasy dns.pl)"),
             });
@@ -243,6 +246,7 @@ impl Runner {
                 hop_ctype: String::new(),
                 snippet: String::new(),
                 sha12: String::new(),
+                hdrs: String::new(),
                 raw: String::new(),
                 error: format!("{e}"),
             },
@@ -296,6 +300,32 @@ fn read(resp: ureq::Response, t0: Instant) -> Observation {
     let acac = hdr("access-control-allow-credentials");
     let cdisp = hdr("content-disposition");
     let clen = hdr("content-length");
+    let hdrs = [
+        "cache-control",
+        "age",
+        "x-cache",
+        "x-cache-status",
+        "cf-cache-status",
+        "cdn-cache",
+        "via",
+        "x-varnish",
+        "x-served-by",
+        "x-powered-by",
+        "content-security-policy",
+        "vary",
+        "x-frame-options",
+    ]
+    .iter()
+    .filter_map(|n| {
+        let v = hdr(n);
+        if v.is_empty() {
+            None
+        } else {
+            Some(format!("{n}={v}"))
+        }
+    })
+    .collect::<Vec<_>>()
+    .join("; ");
     use std::io::Read;
     let mut buf: Vec<u8> = Vec::new();
     let _ = resp.into_reader().take(2_000_000).read_to_end(&mut buf);
@@ -337,6 +367,7 @@ fn read(resp: ureq::Response, t0: Instant) -> Observation {
         hop_ctype: String::new(),
         snippet,
         sha12,
+        hdrs,
         raw: body.chars().take(400_000).collect(),
         error: String::new(),
     }
@@ -631,6 +662,7 @@ fn main() {
             "catchall_status": catchalls.get(&c.host).map(|o| o.status),
             "snippet": t.as_ref().map(|o| o.snippet.clone()),
             "sha12": t.as_ref().map(|o| o.sha12.clone()),
+            "hdrs": t.as_ref().map(|o| o.hdrs.clone()),
             "catchall_sha12": catchalls.get(&c.host).map(|o| o.sha12.clone()),
             "catchall_len": catchalls.get(&c.host).map(|o| o.len),
             "baseline_status": b.as_ref().map(|o| o.status),

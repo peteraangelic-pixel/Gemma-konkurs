@@ -1,104 +1,105 @@
 {
-  "_opis": "Runda 12: refleksja i walidacja na oad.nask.pl (Tier 1). Runda 11 ustaliła, że serwer czyta `search`, `type`, `topic`, `page`, `dateFrom`, `dateTo`; apostrof w search daje stronę 'brak wyników' (81 KB), a pary boolowskie blokuje WAF (403 na literał). Teraz dwie rzeczy, których WAF nie dotyka: (1) znaki, które psują KONTEKST, a nie składnię SQL — cudzysłów i backslash (jeśli `search` trafia do JSON-a RSC albo do atrybutu HTML, to tu widać różnicę), (2) walidacja daty — dateFrom/dateTo są czytane, a daty w filtrach często idą do zapytania bez rzutowania. Ciała trzech sond zapisujemy na dysk (save_body), żeby przeanalizować kontekst refleksji offline, a nie po 90 znakach snippetu.",
-  "_zasady": "GET-only, 2 req/s, bez ciał, bez logowania. Każda sonda ma parę kontrolną z tym samym prefiksem. Nie używamy `<`, `>` ani słów kluczowych SQL w jednym stringu — WAF je blokuje (403), więc mierzyłyby WAF, nie aplikację. Ciała zapisywane wyłącznie dla stron publicznych oznaczonych save_body.",
+  "_opis": "Runda 13: JEDYNA nietknięta hipoteza o realnej wartości bez konta — web cache poisoning na dns.pl. Zespół (Dysk 22 §3.1) twierdzi, że dns.pl odbija X-Forwarded-Host do `<script src>`, ale sami napisali, że 'wymaga cache współdzielonego, u nich nie testowane' i że widzieli Cache-Control: private. Runda 13 weryfikuje to pomiarowo: (1) czy nagłówek w ogóle trafia do treści, (2) jakie nagłówki cache zwraca serwer i czy jest CDN (via/age/x-cache/cf-cache-status), (3) czy odpowiedź z odbiciem jest cache'owalna. Bez trafienia w cache to nie jest podatność — i tak zostanie zapisane. Wartość: 9 000 zł (klasa 7), warunek odrzucenia: brak współdzielonego cache albo Cache-Control: private/no-store na każdej odbitej odpowiedzi.",
+  "_zasady": "GET-only, 2 req/s, bez ciał. Nagłówki XFH/X-Host/Forwarded wysyłamy WYŁĄCZNIE z wartością example.com (domena zarezerwowana, nic nie wykona) — żadnego hosta, który mógłby realnie załadować kod użytkownikom. Ciała czterech sond zapisujemy do analizy refleksji offline.",
   "checks": [
     {
-      "id": "s12-oad-ctl",
-      "host": "oad.nask.pl",
+      "id": "s13-dns-ctl-home",
+      "host": "dns.pl",
       "method": "GET",
-      "path": "/wyniki-wyszukiwania?search=dezinformacja",
+      "path": "/",
       "save_body": true,
-      "why": "Kontrola i materiał do analizy: jak wygląda HTML z wynikami (gdzie trafia zapytanie — JSON RSC, atrybut, tekst).",
+      "why": "Kontrola bazowa strony głównej: rozmiar, sha12, nagłówki cache (Cache-Control/Age/Via) i pełna treść do porównania z sondą XFH.",
       "class": "info"
     },
     {
-      "id": "s12-oad-dquote",
-      "host": "oad.nask.pl",
+      "id": "s13-dns-xfh-home",
+      "host": "dns.pl",
       "method": "GET",
-      "path": "/wyniki-wyszukiwania?search=dezinformacja%22",
+      "path": "/",
+      "headers": {
+        "X-Forwarded-Host": "example.com"
+      },
       "save_body": true,
-      "why": "Cudzysłów: jeśli zapytanie ląduje w JSON-ie RSC albo w atrybucie HTML, ten znak zmienia strukturę odpowiedzi (a nie tylko treść). Porównanie z kontrolą po sha12 i po ciele.",
+      "why": "Główna sonda: czy X-Forwarded-Host trafia do treści. Porównanie z kontrolą po sha12 (po normalizacji transid) i po ciele pokazuje, czy odbicie istnieje w tym miejscu.",
       "class": "7"
     },
     {
-      "id": "s12-oad-backslash",
-      "host": "oad.nask.pl",
+      "id": "s13-dns-xfh-home-2",
+      "host": "dns.pl",
       "method": "GET",
-      "path": "/wyniki-wyszukiwania?search=dezinformacja%5C",
-      "save_body": true,
-      "why": "Backslash przed końcem stringa: klasyczne wyjście z literału (także w JSON). Jeśli odpowiedź się psuje inaczej niż przy cudzysłowie, mamy różne ścieżki kodu.",
+      "path": "/",
+      "headers": {
+        "X-Forwarded-Host": "example.com"
+      },
+      "why": "Powtórka tej samej sondy 2 s później: jeśli nagłówki cache pokażą Age > 0 albo HIT, to odpowiedź z odbiciem jest w cache'u współdzielonym — i wtedy hipoteza zespołu jest realna. Bez tego to tylko refleksja w prywatnej odpowiedzi.",
       "class": "7"
     },
     {
-      "id": "s12-oad-ctl-date",
-      "host": "oad.nask.pl",
+      "id": "s13-dns-xfh-en",
+      "host": "dns.pl",
       "method": "GET",
-      "path": "/wyniki-wyszukiwania?dateFrom=2026-01-01&dateTo=2026-12-31",
-      "why": "Kontrola filtra dat: ta para dała 110 278 B (różnica wobec braku parametrów = filtr działa).",
+      "path": "/en/",
+      "headers": {
+        "X-Forwarded-Host": "example.com"
+      },
+      "save_body": true,
+      "why": "Wersja angielska: inne reguły cache i inne locale w walidacji. To tam najczęściej jeden wariant jest cache'owalny, a drugi nie.",
+      "class": "7"
+    },
+    {
+      "id": "s13-dns-xfh-dnssec",
+      "host": "dns.pl",
+      "method": "GET",
+      "path": "/DNSSEC",
+      "headers": {
+        "X-Forwarded-Host": "example.com"
+      },
+      "save_body": true,
+      "why": "Strona statyczna z linków w stopce — statyczne strony najczęściej mają długi TTL i są cache'owane agresywniej niż strona główna.",
+      "class": "7"
+    },
+    {
+      "id": "s13-dns-xhost-home",
+      "host": "dns.pl",
+      "method": "GET",
+      "path": "/",
+      "headers": {
+        "X-Host": "example.com"
+      },
+      "why": "Alternatywna nazwa nagłówka (niektóre proxy czytają X-Host). Osobne żądanie, bo serwer może ufać tylko jednemu z nich.",
+      "class": "7"
+    },
+    {
+      "id": "s13-dns-forwarded-home",
+      "host": "dns.pl",
+      "method": "GET",
+      "path": "/",
+      "headers": {
+        "Forwarded": "host=example.com"
+      },
+      "why": "Nagłówek RFC 7239. Rzadko obsługiwany, ale jeśli tak — daje drugą drogę do tego samego odbicia.",
+      "class": "7"
+    },
+    {
+      "id": "s13-dns-xfh-static",
+      "host": "dns.pl",
+      "method": "GET",
+      "path": "/sites/default/files/2024-05/zosta%C5%84_rejestratorem_domeny_pl.png",
+      "headers": {
+        "X-Forwarded-Host": "example.com"
+      },
+      "why": "Plik statyczny z CDN: tu oczekujemy realnego cache (HIT/Age), ale bez refleksji. To kontrola rozstrzygająca, czy CDN w ogóle cache'uje — potrzebna, żeby odróżnić 'brak cache' od 'cache tylko dla assetów'.",
       "class": "info"
     },
     {
-      "id": "s12-oad-date-invalid",
-      "host": "oad.nask.pl",
+      "id": "s13-dns-xfh-api",
+      "host": "dns.pl",
       "method": "GET",
-      "path": "/wyniki-wyszukiwania?dateFrom=2026-13-45&dateTo=2026-12-31",
-      "why": "Data nieistniejąca (13. miesiąc). 500 = brak walidacji przed zapytaniem; pusta lista = walidacja albo naturalny brak trafień. Sam 500 to nie podatność (§8: stack trace bez wpływu), ale mówi, gdzie patrzeć.",
-      "class": "4"
-    },
-    {
-      "id": "s12-oad-date-quote",
-      "host": "oad.nask.pl",
-      "method": "GET",
-      "path": "/wyniki-wyszukiwania?dateFrom=2026-01-01%27&dateTo=2026-12-31",
-      "why": "Apostrof w dacie — jeśli data idzie do zapytania bez rzutowania, to jest tu punkt wejścia. Porównanie do s12-oad-ctl-date.",
-      "class": "4"
-    },
-    {
-      "id": "s12-oad-date-dash",
-      "host": "oad.nask.pl",
-      "method": "GET",
-      "path": "/wyniki-wyszukiwania?dateFrom=2026-01-01--&dateTo=2026-12-31",
-      "why": "Dwa minusy: w wielu dialektach SQL `--` to komentarz, a WAF nie traktuje tego jak słowo kluczowe. Jeśli wynik wróci do kontroli (pełny zakres), komentarz zadziałał.",
-      "class": "4"
-    },
-    {
-      "id": "s12-oad-date-inverted",
-      "host": "oad.nask.pl",
-      "method": "GET",
-      "path": "/wyniki-wyszukiwania?dateFrom=2026-12-31&dateTo=2026-01-01",
-      "why": "Zakres odwrócony: poprawna implementacja zwraca pustą listę, wadliwa ignoruje jeden z warunków i zwraca wszystko. Różnica wobec kontroli jest informacją o logice, nie podatnością.",
-      "class": "info"
-    },
-    {
-      "id": "s12-oad-search-pct",
-      "host": "oad.nask.pl",
-      "method": "GET",
-      "path": "/wyniki-wyszukiwania?search=%25",
-      "why": "Znak wieloznaczny LIKE: jeśli zwróci wszystko, to parametr idzie do LIKE bez escapowania — sama w sobie nie podatność, ale potwierdza, że wartość jest składana do zapytania (potrzebne, by interpretować resztę).",
-      "class": "info"
-    },
-    {
-      "id": "s12-oad-page0",
-      "host": "oad.nask.pl",
-      "method": "GET",
-      "path": "/wyniki-wyszukiwania?search=dezinformacja&page=0",
-      "why": "Granica paginacji: 0 vs 1. Off-by-one w OFFSET jest realnym (choć tanim) błędem logiki.",
-      "class": "info"
-    },
-    {
-      "id": "s12-oad-page-neg",
-      "host": "oad.nask.pl",
-      "method": "GET",
-      "path": "/wyniki-wyszukiwania?search=dezinformacja&page=-1",
-      "why": "Strona ujemna: ujemny OFFSET w Postgresie to błąd zapytania. 500 = brak walidacji, pusta lista = walidacja.",
-      "class": "4"
-    },
-    {
-      "id": "s12-oad-page-big",
-      "host": "oad.nask.pl",
-      "method": "GET",
-      "path": "/wyniki-wyszukiwania?search=dezinformacja&page=9999",
-      "why": "Duża strona: dowód, czy serwer liczy offset bezpiecznie (pusta lista) czy przewraca się (500).",
+      "path": "/api/zone-stats",
+      "headers": {
+        "X-Forwarded-Host": "example.com"
+      },
+      "why": "Trasa JSON: sprawdzamy, czy nagłówki cache na API są inne niż na HTML (i czy JSON nie odbija hosta w polach).",
       "class": "info"
     }
   ]
