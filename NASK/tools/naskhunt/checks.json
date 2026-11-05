@@ -1,191 +1,161 @@
 {
-  "_opis": "Runda 9: trzy rzeczy, które wyszły z rundy 8. (A) science.nask.pl /api/search ODRZUCA zapytania krótsze niż 3 znaki — wszystkie wcześniejsze testy SQLi były NIEWAŻNE (mierzyły walidację długości, nie bazę). Teraz para kontrolna: ten sam prefiks z apostrofem, z warunkiem prawdziwym i fałszywym. (B) 116sos.pl /api/og-image przyjmuje numeryczne imageId i dla nieistniejącego zwraca STAŁY obrazek zastępczy 28 862 B — to oracle na istnienie załącznika; sprawdzamy ID z bundla i losowe wysokie. (C) dns.pl POST na who-is-xml zwrócił stronę HTML 200 (nie JSON) — sprawdzamy, czy to kwestia braku nagłówka AJAX / końcowego ukośnika, plus reszta tras GET. (D) centres-search: czy jest paginacja (q jest ignorowane, ale może jest page/limit).",
-  "_zasady": "GET + POST wyłącznie na odczytowych trasach dns.pl (guard w kodzie: post_allowed). Tempo 2 req/s. Bez logowania. Bez podążania za przekierowaniami poza zakres. Każda sonda odejmowana od catch-all hostu, a odpowiedzi porównywane także po sha12 (ciągi cyfr i hex znormalizowane) — dopiero różnica sha12 przy tej samej długości jest sygnałem.",
+  "_opis": "Runda 10: (A) 116sos /api/centres-search MA PAGINACJĘ — page=2 zwraca inny zbiór (Ostroróg/Wroniecka) niż page=1 (Sławno/Gdańska), a limit i skip są ignorowane; sprawdzamy granice strony. (B) science /api/search zwraca page/perPage/lastPage, więc te parametry istnieją — sprawdzamy je (w tym apostrof w perPage, bo to jedyne miejsce, gdzie liczba trafia do zapytania). (C) bezpiecznewybory.pl ma w bundlu /zglos-incydent/formularz, /wyszukiwarka i buildId V7BZQbRTqgFDrmT2Y-Lps, ale WAF dawał 403 na wszystko — sprawdzamy, czy to blokada po User-Agencie (sonda z UA przeglądarki) czy realna odmowa. (D) oad.nask.pl ma /wyniki-wyszukiwania (189 wystąpień w bundlu) — szukamy nazwy parametru zapytania. (E) zglos-dezinformacje ma w bundlu trasę /recaptcha/.",
+  "_zasady": "GET-only (żadnego POST w tej rundzie). Tempo 2 req/s. Nagłówek User-Agent zmieniamy TYLKO w sondach bezpiecznewybory (cel: odróżnić blokadę UA od blokady IP) i zawsze z parą kontrolną. Bez logowania, bez ciał, bez podążania za przekierowaniami poza zakres.",
   "checks": [
     {
-      "id": "s9-sci-ctl-nask",
-      "host": "science.nask.pl",
+      "id": "s10-116-cs-page1",
+      "host": "116sos.pl",
       "method": "GET",
-      "path": "/api/search?query=nask&lang=pl",
-      "why": "Kontrola pozytywna SQLi: zapytanie 4-znakowe, które istnieje w bazie. Bez tego nie wiadomo, jak wygląda 'trafienie'.",
+      "path": "/api/centres-search?q=&page=1",
+      "why": "Kontrola: page=1 musi dać ten sam zbiór co brak parametru (Sławno 18A). Jeśli nie — numeracja jest inna, niż myślimy.",
       "class": "info"
     },
     {
-      "id": "s9-sci-ctl-miss",
-      "host": "science.nask.pl",
+      "id": "s10-116-cs-page0",
+      "host": "116sos.pl",
       "method": "GET",
-      "path": "/api/search?query=zqxzz&lang=pl",
-      "why": "Kontrola negatywna: 5 znaków, brak trafień. Wzorzec pustej odpowiedzi 200.",
+      "path": "/api/centres-search?q=&page=0",
+      "why": "Granica dolna: strona 0. Ujawnia, czy serwer liczy od 0 (wtedy page=0 == page=1 i mamy off-by-one), czy odrzuca.",
       "class": "info"
     },
     {
-      "id": "s9-sci-q-quote",
-      "host": "science.nask.pl",
+      "id": "s10-116-cs-page-neg",
+      "host": "116sos.pl",
       "method": "GET",
-      "path": "/api/search?query=nask%27&lang=pl",
-      "why": "SQLi: apostrof po poprawnym prefiksie. Warunek odrzucenia: identyczny sha12 jak 'ctl-nask' (apostrof zneutralizowany) albo identyczny jak 'ctl-miss' (filtr wycina zapytanie).",
+      "path": "/api/centres-search?q=&page=-1",
+      "why": "Wartość ujemna: jeśli serwer zwraca błąd bazy (LIMIT -1) albo inny zbiór, to parametr nie jest walidowany przed zapytaniem. To sygnał klasy 4, nie dowód.",
       "class": "4"
     },
     {
-      "id": "s9-sci-q-quote2",
+      "id": "s10-116-cs-page-big",
+      "host": "116sos.pl",
+      "method": "GET",
+      "path": "/api/centres-search?q=&page=100000",
+      "why": "Duża strona: pusta lista = paginacja działa poprawnie (koniec zbioru). Błąd 5xx = brak walidacji górnej granicy.",
+      "class": "info"
+    },
+    {
+      "id": "s10-sci-pp-50",
       "host": "science.nask.pl",
       "method": "GET",
-      "path": "/api/search?query=nask%27%27&lang=pl",
-      "why": "Dwa apostrofy: jeśli serwer escapuje pojedynczy, podwójny domyka i zmienia składnię. Różnica wobec poprzedniej sondy = wartość jest wstrzykiwana, nie tylko escapowana.",
+      "path": "/api/search?query=nask&lang=pl&perPage=50",
+      "why": "Kontrola pozytywna parametru perPage: odpowiedź ma pole perPage, więc parametr istnieje. Więcej niż 10 wyników = parametr działa.",
+      "class": "info"
+    },
+    {
+      "id": "s10-sci-pp-quote",
+      "host": "science.nask.pl",
+      "method": "GET",
+      "path": "/api/search?query=nask&lang=pl&perPage=50%27",
+      "why": "Apostrof w liczbie: jeśli perPage trafia do SQL bez rzutowania, to jest tu iniekcja (klasa 4). Warunek odrzucenia: ten sam wynik co s10-sci-pp-50 albo 400 walidacji.",
       "class": "4"
     },
     {
-      "id": "s9-sci-bool-true",
+      "id": "s10-sci-page-2",
       "host": "science.nask.pl",
       "method": "GET",
-      "path": "/api/search?query=nask%27%20AND%20%271%27%3D%271&lang=pl",
-      "why": "Para boolowska, warunek PRAWDZIWY. Musi zwrócić ten sam zbiór co 'ctl-nask', inaczej sam apostrof psuje zapytanie.",
-      "class": "4"
+      "path": "/api/search?query=nask&lang=pl&page=2",
+      "why": "Druga strona wyników: sprawdza, czy page jest respektowany i czy zbiór jest większy niż jedna strona (istotne dla L5 zespołu: totalItems vs UI).",
+      "class": "info"
     },
     {
-      "id": "s9-sci-bool-false",
+      "id": "s10-sci-type",
       "host": "science.nask.pl",
       "method": "GET",
-      "path": "/api/search?query=nask%27%20AND%20%271%27%3D%272&lang=pl",
-      "why": "Para boolowska, warunek FAŁSZYWY. DOWÓD SQLi = true zwraca wyniki, false nie zwraca, przy identycznym prefiksie. To jest jedyny akceptowalny dowód w tej klasie.",
-      "class": "4"
-    },
-    {
-      "id": "s9-sci-comment",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/search?query=nask%27--%20-&lang=pl",
-      "why": "Komentarz SQL po apostrofie: jeśli zadziała, reszta oryginalnego zapytania znika i wynik wraca do zbioru 'nask' — drugi, niezależny sygnał tej samej klasy.",
-      "class": "4"
-    },
-    {
-      "id": "s9-sci-lang-en",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/search?query=nask&lang=en",
-      "why": "Kontrola parametru lang: czy w ogóle zmienia odpowiedź. Bez tego test 'lang=pl\\'' byłby niemiarodajny.",
+      "path": "/api/search?query=nask&lang=pl&type=employee",
+      "why": "Filtr typu (w danych jest typeName=Osoba, type=employee). Jeśli filtr działa, mamy drugi parametr do przeglądu — a filtry typu bywają wstrzykiwane do zapytania.",
       "class": "info"
     },
     {
-      "id": "s9-sci-lang-quote",
-      "host": "science.nask.pl",
+      "id": "s10-bw-ctl-ourua",
+      "host": "bezpiecznewybory.pl",
       "method": "GET",
-      "path": "/api/search?query=nask&lang=pl%27",
-      "why": "Apostrof w lang: drugi parametr tej samej trasy, rzadko walidowany tak samo jak query.",
-      "class": "4"
-    },
-    {
-      "id": "s9-116-cs-base",
-      "host": "116sos.pl",
-      "method": "GET",
-      "path": "/api/centres-search?q=",
-      "why": "Baseline paginacji: ile rekordów i jaki totalItems zwraca trasa bez parametrów strony.",
+      "path": "/",
+      "why": "Kontrola: ta sama ścieżka z domyślnym UA narzędzia. Zespół raportował 403 na wszystko — powtarzamy, żeby mieć parę do porównania.",
       "class": "info"
     },
     {
-      "id": "s9-116-cs-page2",
-      "host": "116sos.pl",
+      "id": "s10-bw-browser-ua",
+      "host": "bezpiecznewybory.pl",
       "method": "GET",
-      "path": "/api/centres-search?q=&page=2",
-      "why": "Czy istnieje paginacja. Jeśli sha12 identyczny jak baseline — parametr ignorowany (tak jak q), wątek zamknięty.",
-      "class": "info"
-    },
-    {
-      "id": "s9-116-cs-limit",
-      "host": "116sos.pl",
-      "method": "GET",
-      "path": "/api/centres-search?q=&limit=500",
-      "why": "Czy limit jest respektowany. Więcej rekordów niż w UI = dostęp do placówek niepublikowanych (klasa 3). Mniej/tyle samo = brak znaczenia.",
-      "class": "3"
-    },
-    {
-      "id": "s9-116-cs-skip",
-      "host": "116sos.pl",
-      "method": "GET",
-      "path": "/api/centres-search?q=&skip=5",
-      "why": "Alternatywna nazwa paginacji (skip/offset). Jeśli page i limit są ignorowane, to jest ostatnia tania próba.",
-      "class": "info"
-    },
-    {
-      "id": "s9-116-og-known-30263",
-      "host": "116sos.pl",
-      "method": "GET",
-      "path": "/api/og-image?imageId=30263",
-      "why": "ID z bundla (lista 18650, 30225, 30263, 30267, 30278) — kontrolka, że oracle rozpoznaje prawdziwe załączniki.",
-      "class": "info"
-    },
-    {
-      "id": "s9-116-og-known-30278",
-      "host": "116sos.pl",
-      "method": "GET",
-      "path": "/api/og-image?imageId=30278",
-      "why": "Druga kontrolka z tej samej listy.",
-      "class": "info"
-    },
-    {
-      "id": "s9-116-og-miss-40000",
-      "host": "116sos.pl",
-      "method": "GET",
-      "path": "/api/og-image?imageId=40000",
-      "why": "Losowe wysokie ID: czy spada na obrazek zastępczy 28 862 B. Jeśli tak, to mamy dyskryminator 'istnieje / nie istnieje'.",
-      "class": "info"
-    },
-    {
-      "id": "s9-116-og-miss-99999",
-      "host": "116sos.pl",
-      "method": "GET",
-      "path": "/api/og-image?imageId=99999",
-      "why": "Druga próbka dyskryminatora — musi dać ten sam sha12 co 40000, inaczej 'fallback' nie jest stały i oracle nie istnieje.",
-      "class": "info"
-    },
-    {
-      "id": "s9-dns-whois-slash",
-      "host": "dns.pl",
-      "method": "POST",
-      "path": "/api/who-is-xml/pl/",
-      "body": "{\"name\":\"nask.pl\"}",
-      "json": true,
+      "path": "/",
       "headers": {
-        "X-Requested-With": "XMLHttpRequest"
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "pl-PL,pl;q=0.9"
       },
-      "why": "ODCZYT whois. W rundzie 8 POST bez ukośnika zwrócił stronę HTML 200 (51 KB) — sprawdzamy wariant z ukośnikiem i nagłówkiem AJAX, bo Drupal po tym nagłówku rozgałęzia odpowiedź.",
+      "why": "Czy 403 wynika z User-Agenta. 200 tutaj NIE jest podatnością — jest informacją, że host da się w ogóle badać (dziś jest dla nas czarną skrzynką).",
       "class": "info"
     },
     {
-      "id": "s9-dns-browser-slash",
-      "host": "dns.pl",
-      "method": "POST",
-      "path": "/api/domain-browser/pl/",
-      "body": "{\"domain\":\"nask.pl\"}",
-      "json": true,
+      "id": "s10-bw-search",
+      "host": "bezpiecznewybory.pl",
+      "method": "GET",
+      "path": "/wyszukiwarka",
       "headers": {
-        "X-Requested-With": "XMLHttpRequest"
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
       },
-      "why": "ODCZYT dostępności domeny, ten sam wariant. 200 + JSON = trasa żyje i captcha nie jest egzekwowana po stronie serwera.",
+      "why": "Wyszukiwarka z bundla — jedyny interaktywny element tego hosta według mapy tras.",
       "class": "info"
     },
     {
-      "id": "s9-dns-funny-slash",
-      "host": "dns.pl",
+      "id": "s10-bw-nextdata",
+      "host": "bezpiecznewybory.pl",
       "method": "GET",
-      "path": "/api/funny-name/pl/",
-      "why": "Trasa z bundla; bez ukośnika dała 404 (40 919 B). Ukośnik to typowa kanonizacja Symfony/Drupala.",
+      "path": "/_next/data/V7BZQbRTqgFDrmT2Y-Lps/wyszukiwarka.json",
+      "headers": {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+      },
+      "why": "Dane strony w JSON (pages router). Jeśli WAF przepuszcza, dostajemy strukturę danych bez renderowania — tanie źródło mapy.",
       "class": "info"
     },
     {
-      "id": "s9-dns-stats-slash",
-      "host": "dns.pl",
+      "id": "s10-oad-wyniki-ctl",
+      "host": "oad.nask.pl",
       "method": "GET",
-      "path": "/api/stats/pl",
-      "why": "Trasa /api/stats/ z bundla: 404 przy pustym sufiksie, sprawdzamy wariant z lokalizacją.",
+      "path": "/wyniki-wyszukiwania",
+      "why": "Kontrola strony wyników bez parametru — jak wygląda 'brak zapytania'.",
       "class": "info"
     },
     {
-      "id": "s9-dns-count-deleted",
-      "host": "dns.pl",
+      "id": "s10-oad-q",
+      "host": "oad.nask.pl",
       "method": "GET",
-      "path": "/api/count-deleted-domains",
-      "why": "Powtórka 1:1 (stabilność): ta sama trasa dała dziś {\"count\":\"+1085\"}. Kontrola, że zmiany w narzędziu nie zmieniły zachowania klienta HTTP.",
+      "path": "/wyniki-wyszukiwania?q=naskhuntmarker",
+      "why": "Nazwa parametru q. Różnica wobec kontroli = parametr istnieje; obecność markera w treści = refleksja (do sprawdzenia, czy escapowana).",
+      "class": "info"
+    },
+    {
+      "id": "s10-oad-query",
+      "host": "oad.nask.pl",
+      "method": "GET",
+      "path": "/wyniki-wyszukiwania?query=naskhuntmarker",
+      "why": "Alternatywna nazwa parametru (query). Jedna z trzech — rozstrzyga się różnicą rozmiaru.",
+      "class": "info"
+    },
+    {
+      "id": "s10-oad-search",
+      "host": "oad.nask.pl",
+      "method": "GET",
+      "path": "/wyniki-wyszukiwania?search=naskhuntmarker",
+      "why": "Trzecia nazwa (search). Ta sama metoda rozstrzygania.",
+      "class": "info"
+    },
+    {
+      "id": "s10-oad-xss",
+      "host": "oad.nask.pl",
+      "method": "GET",
+      "path": "/wyniki-wyszukiwania?q=%3Cb%3Enaskhunt%3C%2Fb%3E",
+      "why": "Refleksja z HTML: jeśli <b> wraca niescapowane w treści (nie w JSON), to jest HTML injection do oceny pod kątem §8. Warunek odrzucenia: &lt;b&gt; albo brak markera — wtedy refleksji brak.",
+      "class": "7"
+    },
+    {
+      "id": "s10-zglos-recaptcha",
+      "host": "zglos-dezinformacje.nask.pl",
+      "method": "GET",
+      "path": "/recaptcha/",
+      "why": "Trasa z bundla obok /api/sendForm. Jeśli odpowiada inaczej niż catch-all SPA, istnieje osobny endpoint weryfikacji tokenu — a to jest miejsce, gdzie warto patrzeć na logikę (nie na captchę).",
       "class": "info"
     }
   ]
