@@ -639,3 +639,51 @@ def test_next_data_dedupes_trailing_slash_routes():
     got = probes.probe_next_data(Http(fn), "https://app.example", "b1",
                                  ["/panel", "/panel/"])
     assert len(got) == 1, len(got)
+
+
+# ---------------- S11: dane osobowe w publicznym JSON-ie ----------------
+def _json_http(payload, ctype="application/json"):
+    return Http(lambda url, h: R(ctype=ctype, body=json.dumps(payload)))
+
+
+def test_pii_three_foreign_emails_is_finding():
+    payload = {"members": [{"email": f"osoba{i}@gmail.com"} for i in range(4)]}
+    got = probes.probe_pii_public(_json_http(payload), "https://hack.cert.pl",
+                                  ["/api/v1/public/institutions/x/members"])
+    assert got and got[0].code == "S11"
+    assert got[0].raw["counts"]["email"] == 4
+    assert "o***@gmail.com" in got[0].detail          # zamaskowane
+    assert "osoba0@gmail.com" not in got[0].detail     # pełna wartość NIE trafia do dowodu
+
+
+def test_pii_own_domain_emails_excluded():
+    """`kontakt@hack.cert.pl` i `biuro@nask.pl` to nie wyciek — to adresy instytucji."""
+    payload = [{"email": f"osoba{i}@hack.cert.pl"} for i in range(5)] + \
+              [{"email": f"x{i}@cert.pl"} for i in range(3)]
+    assert probes.probe_pii_public(_json_http(payload), "https://hack.cert.pl",
+                                   ["/api/v1/public/institutions"]) == []
+
+
+def test_pii_two_emails_below_threshold():
+    payload = {"a": "jan@gmail.com", "b": "anna@gmail.com"}
+    assert probes.probe_pii_public(_json_http(payload), "https://hack.cert.pl",
+                                   ["/api/v1/public/x"]) == []
+
+
+def test_pii_ignores_html():
+    http = Http(lambda url, h: R(ctype="text/html", body="a@b.com c@d.com e@f.com"))
+    assert probes.probe_pii_public(http, "https://hack.cert.pl", ["/public/x"]) == []
+
+
+def test_pii_detects_iban_and_pesel():
+    payload = {"dane": ["PL61109010140000071219812874", "44051401359"]}
+    got = probes.probe_pii_public(_json_http(payload), "https://moje.cert.pl",
+                                  ["/api/public/lista"])
+    assert got and "iban" in got[0].raw["counts"]
+    assert got[0].severity == "sredni"
+
+
+def test_pii_skips_non_200():
+    http = Http(lambda url, h: R(status=403, ctype="application/json",
+                                 body=json.dumps({"e": ["a@b.com"]})))
+    assert probes.probe_pii_public(http, "https://hack.cert.pl", ["/public/x"]) == []

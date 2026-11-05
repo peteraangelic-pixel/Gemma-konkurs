@@ -422,6 +422,8 @@ def run_all(http, base: str, ctx: dict) -> list[ProbeFinding]:
     findings += probe_cors(http, base)
     # Tylko na hostach, które deklarują cache współdzielony albo są kandydatami:
     # 16 żądań na host to za dużo, by robić to wszędzie bez powodu.
+    if ctx.get("pii_paths"):
+        findings += probe_pii_public(http, base, ctx["pii_paths"])
     if ctx.get("cache_check"):
         findings += probe_cache_poisoning(http, base, path=ctx.get("cache_path", "/"))
     findings += probe_middleware_bypass(http, base)
@@ -690,4 +692,108 @@ def probe_cache_poisoning(http, base: str, path: str = "/",
                    "brak cache'u współdzielonego, refleksja bez wpływu."),
                 "Zapisane jako NEGATYW: refleksja bez propagacji jest wykluczona przez §8.",
                 raw))
+    return out
+
+
+# --------------------------------------------------------------------------
+# S11 — dane osobowe w PUBLICZNYM JSON-ie (klasa 03, największa stawka bez konta)
+# --------------------------------------------------------------------------
+# Po co: wszystkie sondy dotąd pytały „czy dostanę się bez sesji w miejsce
+# chronione”. Ta pyta odwrotnie — „czy miejsce publiczne oddaje dane, które
+# publiczne być nie powinny”. Na `hack.cert.pl` jest dużo tras `/public/…`
+# (instytucje, programy, edycje) i **jedna z nich może listować członków
+# z e-mailami**. To klasa 03 (dane wrażliwe) = 4 000–9 000 zł w Tier 1
+# i nie wymaga ani konta, ani Twojej przeglądarki.
+#
+# Reguła przeciw fałszywym trafieniom (bez niej zgłosilibyśmy `kontakt@nask.pl`):
+#   1. tylko `application/json`,
+#   2. e-maile z domeny tego samego hosta są **wykluczone** (adresy instytucji
+#      są publiczne z definicji),
+#   3. próg ilościowy: **≥ 3 różne** adresy z obcych domen — jeden adres
+#      kontaktowy to nie wyciek, lista użytkowników to wyciek,
+#   4. wartości w dowodzie są **maskowane** (`a***@domena`), bo do zgłoszenia
+#      wystarczy „są tam e-maile”, nie „oto one”.
+
+PII_PATTERNS = {
+    "email": re.compile(r"[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}"),
+    "pesel": re.compile(r"\b\d{11}\b"),
+    "iban": re.compile(r"\bPL\d{26}\b"),
+    "jwt": re.compile(r"\beyJ[A-Za-z0-9_\-]{8,}\.[A-Za-z0-9_\-]{8,}\."),
+}
+
+PII_MIN_EMAILS = 3
+
+
+def _uniq(seq) -> list:
+    out, seen = [], set()
+    for x in seq:
+        if x not in seen:
+            seen.add(x)
+            out.append(x)
+    return out
+
+
+def _mask_email(value: str) -> str:
+    local, _, dom = value.partition("@")
+    return f"{local[:1]}***@{dom}"
+
+
+def _same_site(domain: str, host: str) -> bool:
+    """Czy domena e-maila należy do tego samego serwisu (adres instytucjonalny)?"""
+    d = domain.lower().lstrip(".")
+    h = host.lower().split(":")[0]
+    parts = h.split(".")
+    registrable = ".".join(parts[-2:]) if len(parts) >= 2 else h
+    return (d == h or d.endswith("." + h)
+            or d == registrable or d.endswith("." + registrable))
+
+
+def probe_pii_public(http, base: str, paths: list[str],
+                     limit: int = 10) -> list[ProbeFinding]:
+    """GET na publicznych trasach API i szukanie danych osobowych w JSON-ie."""
+    out: list[ProbeFinding] = []
+    host = re.sub(r"^https?://", "", base).split("/")[0]
+    for path in _uniq(paths)[:limit]:
+        if not path.startswith("/"):
+            continue
+        url = base.rstrip("/") + path
+        r = http.get(url)
+        if getattr(r, "error", None) or r.status != 200:
+            continue
+        if "json" not in _hdr(r, "content-type"):
+            continue
+        text = r.text
+        found: dict[str, list[str]] = {}
+        raw_counts: dict[str, int] = {}
+        for name, rx in PII_PATTERNS.items():
+            hits = list(rx.finditer(text))
+            if name == "email":
+                # Liczymy i deduplikujemy **surowe** adresy, maskujemy dopiero
+                # do dowodu. Wcześniej maskowałem przed `set()`, więc
+                # `user0@…`–`user3@…` zlewały się w jeden `u***@…` i próg
+                # „≥3 adresy” nigdy nie był osiągany.
+                foreign = {m.group(0) for m in hits
+                           if not _same_site(m.group(0).split("@")[-1], host)}
+                if len(foreign) >= PII_MIN_EMAILS:
+                    found[name] = sorted({_mask_email(x) for x in foreign})
+                    raw_counts[name] = len(foreign)   # ile naprawdę, nie ile po maskowaniu
+            elif hits:
+                found[name] = sorted({m.group(0)[:6] + "…" for m in hits})[:5]
+                raw_counts[name] = len(hits)
+        if not found:
+            continue
+        counts = ", ".join(f"{k}: {raw_counts.get(k, len(v))}" for k, v in found.items())
+        out.append(ProbeFinding(
+            "S11", "", url, "sredni",
+            f"Dane osobowe w publicznym JSON-ie ({counts})",
+            f"`GET {path}` → 200, {len(r.body)} B, bez sesji. Wzorce: {counts}. "
+            f"Próbki (zamaskowane): "
+            + "; ".join(f"{k}={', '.join(v[:3])}" for k, v in found.items())
+            + ". Wymaga ręcznego potwierdzenia: czy to naprawdę dane osób "
+              "fizycznych, a nie adresy instytucji (te są publiczne).",
+            "§8 nie wyklucza ujawnienia danych osobowych w klasie 03 — o ile to "
+            "dane osób, nie instytucji; dlatego próg ≥3 adresów z obcych domen "
+            "i maskowanie wartości.",
+            {"path": path, "counts": raw_counts,
+             "status": r.status, "len": len(r.body)}))
     return out

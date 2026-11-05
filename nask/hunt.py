@@ -147,6 +147,14 @@ def run(out: Path, budget: int, explicit: list[str] | None, rps: float,
                  # S10 (trucizna cache) tylko tam, gdzie ma to sens: hosty z
                  # deklarowanym cache współdzielonym + dns.pl (tam odbicie XFH
                  # już zmierzono, u nas jest para kontrolna).
+                 # S11: publiczne trasy API (z bundli/chunków) — czy oddają dane
+                 # osobowe. Tylko `/public/` i trasy listujące, żeby nie chodzić
+                 # po całym API bez powodu.
+                 "pii_paths": [e for e in endpoints
+                               if isinstance(e, str) and e.startswith("/")
+                               and ("/public/" in e or e.rstrip("/").endswith(
+                                   ("/institutions", "/programs", "/reports")))]
+                              [:10],
                  "cache_check": any(k in url for k in (
                      "pllum.org.pl", "bezpiecznymiesiac.pl", "science.nask.pl",
                      "116sos.pl", "dns.pl", "oad.nask.pl")),
