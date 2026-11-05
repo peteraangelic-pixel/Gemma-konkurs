@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en"
+    >
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>DNS | Krajowy Rejestr Domen</title>
+
+            <link rel="stylesheet" href="/dist/styles/css/main-3.3.0.0f3f8f3d.css">
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
+
+            <script>
+            var _paq = window._paq = window._paq || [];
+            _paq.push(['trackPageView']);
+            _paq.push(['enableLinkTracking']);
+            (function () {
+                var u = "https://tracker.dns.pl/";
+                _paq.push(['setTrackerUrl', u + 'matomo.php']);
+                _paq.push(['setSiteId', '1']);
+                var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+                g.type = 'text/javascript';
+                g.async = true;
+                g.defer = true;
+                g.src = u + 'matomo.js';
+                s.parentNode.insertBefore(g, s);
+            })();
+        </script>
+    
+</head>
+<body id="page"
+      class="layout__page layout--page-homepage">
+<style>
+    .wcag-panel {
+        font-size: 0;
+    }
+</style>
+<div class="wcag-panel">
+    <div class="wcag-panel-content">
+                <a href="#navigation-menu-top" class="wcag-anchor">Go to main menu</a>
+        <a class="wcag-anchor"
+           href="/">Idź do wersji polskojęzycznej</a>
+                    <a href="#news-header" class="wcag-anchor">Go to news</a>
+                                                                        <a href="#footer-90"
+                           class="wcag-anchor">Go to section .pl Registrars</a>
+                                                                                <a href="#footer-91"
+                           class="wcag-anchor">Go to section .pl Registrants</a>
+                                                                                                                    <a href="#footer-93"
+                           class="wcag-anchor">Go to section Important documents</a>
+                                                                <a href="#branding-and-follow" class="wcag-anchor">Go to footer</a>
+    </div>
+</div>
+<div id="app">
+
+    <app-cookies show="true"></app-cookies>
+<header id="site-header" class="site-header" v-hamburger="">
+    
+    <div class="site-header-top">
+        <div class="site-header-top__lang">
+            <a href="/">Polski</a>
+        </div>
+        <div class="site-header-top__search">
+            <app-site-search action="/en/search-results"
+                             label="Search in site">
+            </app-site-search>
+        </div>
+    </div>
+    <div class="site-header-brand">
+        <app-brand lang="en"></app-brand>
+    </div>
+    <div class="site-header-menu">
+            <ul class="dns-menu">
+                                                                        
+                            <li class="dns-menu__dropdown "
+                    v-menu-item="{level: 0 }">
+                        <a>.pl Domain</a>
+
+    <ul class="dns-menu__dropdown-content">
+                                    <li class="dns-menu__dropdown" v-menu-item="{level: 1 }">
+                        <a>Registrants</a>
+
+    <ul class="dns-menu__dropdown-content">
+                                    <li class="dns-menu__dropdown" v-menu-item="{level: 2 }">
+                        <a href="/en/registration_domain_pl">
+        Registration
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 2 }">
+                        <a href="/en/management_domain_pl">
+        Domain name management
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 2 }">
+                        <a href="/en/transfer_domain_pl">
+        Transfer of domain service
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 2 }">
+                        <a href="/en/security_domain_pl">
+        Domain name security
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 2 }">
+                        <a href="/en/registrant_rights_domain_pl">
+        Rights of a registrant
+    </a>
+
+                </li>
+                        </ul>
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 1 }">
+                        <a href="/en/options">
+        Options
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 1 }">
+                        <a>Registrars</a>
+
+    <ul class="dns-menu__dropdown-content">
+                                    <li class="dns-menu__dropdown" v-menu-item="{level: 2 }">
+                        <a href="/en/become_registrar_domain_pl">
+        Become a registrar
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 2 }">
+                        <a href="/en/advantages_of_the_NASK_partner_programme">
+        Advantages of the NASK Partner Programme
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 2 }">
+                        <a href="/en/price_list_for_registrars">
+        Price list for registrars
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 2 }">
+                        <a href="/en/registry_system_availability">
+        Registry system availability
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 2 }">
+                                <a href="https://panel.dns.pl/en/index">
+            Registrar Panel
+        </a>
+    
+                </li>
+                        </ul>
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 1 }">
+                        <a>Regulations</a>
+
+    <ul class="dns-menu__dropdown-content">
+                                    <li class="dns-menu__dropdown" v-menu-item="{level: 2 }">
+                        <a>.pl Domain Name Regulations</a>
+
+    <ul class="dns-menu__dropdown-content">
+                                    <li class="dns-menu__dropdown" v-menu-item="{level: 3 }">
+                        <a href="/en/pl_domain_name_regulations">
+        Regulation
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 3 }">
+                        <a href="/en/registration_domain_pl/fees_breakdown">
+        Breakdown of the fees collected from the Partners
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 3 }">
+                        <a href="/en/registration_domain_pl/technical_conditions">
+        Technical conditions
+    </a>
+
+                </li>
+                        </ul>
+                </li>
+                                                                                                            <li class="dns-menu__dropdown" v-menu-item="{level: 2 }">
+                        <a href="/en/regulations_of_option_for_registration_a_domain_name">
+        Regulations of option for registration a domain name
+    </a>
+
+                </li>
+                        </ul>
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 1 }">
+                        <a href="/en/list_of_registrars">
+        List of registrars
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 1 }">
+                        <a href="/en/domain_name_life_cycle">
+        Domain name life cycle
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 1 }">
+                        <a href="/en/list_of_functional_domain_names">
+        List of functional domain names
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 1 }">
+                        <a href="/en/list_of_regional_domain_names">
+        List of regional domain names
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 1 }">
+                        <a>Domain name disputes</a>
+
+    <ul class="dns-menu__dropdown-content">
+                                    <li class="dns-menu__dropdown" v-menu-item="{level: 2 }">
+                        <a href="/en/information_on_disputes">
+        Information on disputes
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 2 }">
+                        <a href="/en/domain_name_disputes/procedure_on_post-verdict_proceedings">
+        Procedure on post-verdict proceedings
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 2 }">
+                        <a href="/en/domain_name_disputes/FAQ">
+        Disputes (FAQ)
+    </a>
+
+                </li>
+                        </ul>
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 1 }">
+                        <a href="/en/Stay_safe_on_the_Internet">
+        Stay safe on the Internet
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 1 }">
+                        <a href="/en/anti_abuse_policy">
+        Anti-abuse policy
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 1 }">
+                        <a>Contact Points of the .pl domain name Registry</a>
+
+    <ul class="dns-menu__dropdown-content">
+                                    <li class="dns-menu__dropdown" v-menu-item="{level: 2 }">
+                        <a href="/en/contact_point_for_the_DSA_matters">
+        Contact Point of the .pl domain name Registry for the DSA matters
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 2 }">
+                        <a href="/en/contact_point_for_the_KSC_matters">
+        Contact Point of the .pl domain name Registry for the KSC matters
+    </a>
+
+                </li>
+                                            </ul>
+                </li>
+                        </ul>
+                </li>
+                                                                                    
+                                                                                    
+                            <li class="dns-menu__dropdown "
+                    v-menu-item="{level: 0 }">
+                        <a>Other services</a>
+
+    <ul class="dns-menu__dropdown-content">
+                                    <li class="dns-menu__dropdown" v-menu-item="{level: 1 }">
+                        <a>DNSSEC</a>
+
+    <ul class="dns-menu__dropdown-content">
+                                    <li class="dns-menu__dropdown" v-menu-item="{level: 2 }">
+                        <a href="/en/DNSSEC">
+        Introduction to DNSSEC
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 2 }">
+                        <a href="/en/DNSSEC/policy_and_rules_of_conduct">
+        Policy and rules of conduct
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 2 }">
+                        <a href="/en/DNSSEC/FAQ">
+        DNSSEC in NASK (FAQ)
+    </a>
+
+                </li>
+                        </ul>
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 1 }">
+                        <a>.pl Registry Lock</a>
+
+    <ul class="dns-menu__dropdown-content">
+                                    <li class="dns-menu__dropdown" v-menu-item="{level: 2 }">
+                        <a href="/en/pl_registry_lock">
+        Introduction to .pl Registry Lock
+    </a>
+
+                </li>
+                                                                                                            <li class="dns-menu__dropdown" v-menu-item="{level: 2 }">
+                        <a href="/en/pl_registry_lock/FAQ">
+        .pl Registry Lock (FAQ)
+    </a>
+
+                </li>
+                        </ul>
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 1 }">
+                        <a>IDN</a>
+
+    <ul class="dns-menu__dropdown-content">
+                                    <li class="dns-menu__dropdown" v-menu-item="{level: 2 }">
+                        <a href="/en/IDN">
+        Introduction to IDN
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 2 }">
+                        <a href="/en/IDN/registration_rules">
+        Registration rules of IDNs in NASK
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 2 }">
+                        <a href="/en/IDN/FAQ">
+        IDN (FAQ)
+    </a>
+
+                </li>
+                        </ul>
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 1 }">
+                        <a href="/en/browser">
+        Domain browser
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 1 }">
+                        <a href="/en/list_of_expired_domain_names">
+        List of expired domain names
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 1 }">
+                        <a href="/en/exports_of_pl_zone_file">
+        Exports of .pl zone file
+    </a>
+
+                </li>
+                        </ul>
+                </li>
+                                                                                    
+                            <li class="dns-menu__dropdown "
+                    v-menu-item="{level: 0 }">
+                        <a>News</a>
+
+    <ul class="dns-menu__dropdown-content">
+                                    <li class="dns-menu__dropdown" v-menu-item="{level: 1 }">
+                        <a href="/en/news">
+        Newslog
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 1 }">
+                        <a href="/en/reports">
+        Reports and publications
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 1 }">
+                        <a href="/en/author-instructions">
+        Author instructions
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 1 }">
+                        <a>Statistics</a>
+
+    <ul class="dns-menu__dropdown-content">
+                                    <li class="dns-menu__dropdown" v-menu-item="{level: 2 }">
+                        <a href="/en/statistics/number_of_active_pl_domain_names">
+        Number of active .pl domain names
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 2 }">
+                        <a href="/en/statistics/number_of_active_IDNs">
+        Number of active IDNs
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 2 }">
+                        <a href="/en/statistics/number_of_active_names_in_DNS_zone">
+        Number of active names in DNS zone
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 2 }">
+                        <a href="/en/statistics/number_of_newly_registered_pl_domain_names">
+        Number of newly registered .pl domain names
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 2 }">
+                        <a href="/en/statistics/number_of_transfers_between_registrars">
+        Number of transfers between registrars
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 2 }">
+                        <a href="/en/statistics/number_of_DNSSEC_secured_pl_domain_names">
+        Number of DNSSEC secured .pl domain names
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 2 }">
+                        <a href="/en/statistics/number_of_options">
+        Number of options
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 2 }">
+                        <a href="/en/statistics/number_of_pl_domain_names_released_after_previous_deletion">
+        Number of .pl domain names released after previous deletion
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 2 }">
+                        <a href="/en/statistics/number_of_pl_domain_names_relesed_due_to_non-renewal">
+        Number of .pl domain names released due to non-renewal
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 2 }">
+                        <a href="/en/statistics/number_of_renewed_pl_domain_names">
+        Number of renewed .pl domain names
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 2 }">
+                        <a href="/en/statistics/number_of_pl_domain_name_subscriber_changes">
+        Number of .pl domain name subscriber changes
+    </a>
+
+                </li>
+                        </ul>
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 1 }">
+                        <a href="/en/blog">
+        Blog
+    </a>
+
+                </li>
+                        </ul>
+                </li>
+                                                                                    
+                            <li class="dns-menu__dropdown "
+                    v-menu-item="{level: 0 }">
+                        <a>WHOIS and RDAP</a>
+
+    <ul class="dns-menu__dropdown-content">
+                                    <li class="dns-menu__dropdown" v-menu-item="{level: 1 }">
+                        <a href="/en/whois">
+        WHOIS database
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 1 }">
+                        <a href="/en/whois/FAQ">
+        WHOIS (FAQ)
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 1 }">
+                        <a href="/en/RDAP_in_NASK">
+        General information about RDAP at NASK
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 1 }">
+                        <a href="/en/NASK_extension_of_RDAP_Response">
+        NASK extension of RDAP Response
+    </a>
+
+                </li>
+                        </ul>
+                </li>
+                                                                                    
+                            <li class="dns-menu__dropdown "
+                    v-menu-item="{level: 0 }">
+                        <a>About us</a>
+
+    <ul class="dns-menu__dropdown-content">
+                                    <li class="dns-menu__dropdown" v-menu-item="{level: 1 }">
+                        <a href="/en/contact">
+        Contact
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 1 }">
+                        <a href="/en/history">
+        History
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 1 }">
+                        <a href="/en/privacy_policy">
+        Privacy policy
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 1 }">
+                        <a href="/en/cookie_policy">
+        Cookie policy
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 1 }">
+                        <a href="/en/policy-on-data-in-the-dns-database">
+        .pl Domain Name Registry Policy on Data in the DNS Database
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 1 }">
+                        <a href="/en/procedure-on-verification">
+        .pl Procedure on verification of DNS Database data
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 1 }">
+                        <a href="/en/information_security">
+        Information security
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 1 }">
+                        <a href="/en/quality_at_NASK">
+        Quality at NASK
+    </a>
+
+                </li>
+                                                <li class="dns-menu__dropdown" v-menu-item="{level: 1 }">
+                                <a href="/en/site-map">
+            Service map
+        </a>
+    
+                </li>
+                        </ul>
+                </li>
+                        </ul>
+    </div>
+</header>
+                
+        <div class="dns-homepage__head">
+            
+<div class="dns-domain-browser">
+    <div class="dns-domain-browser__form">
+        <h2>Domain browser</h2>
+        <app-main-page-domain-browser-form action="/en/browser" label="Enter domain name">
+        </app-main-page-domain-browser-form>
+    </div>
+    <div class="dns-domain-browser__banner">
+        <app-main-page-banner image-src="/sites/default/files/mainpage_banners/glob-baner-niebieski-png-png"></app-main-page-banner>
+    </div>
+</div>
+        
+<div class="dns-homepage-news">
+    <h2>News</h2>
+    <div class="dns-homepage-news__items">
+                    <a class="dns-content__news double1" title="Read more"
+               href="/en/news/data-verification">
+                <app-news-item variant="corner-4"
+                               size="long"
+                               color="green"
+
+                                                                                                                                                                >
+
+                    <app-news-item-title title="Data verification">
+                        Data verification
+                    </app-news-item-title>
+                    <app-more-button theme="dark">
+                        Read more
+                    </app-more-button>
+                </app-news-item>
+            </a>
+                                <a class="dns-content__news " title="Read more"
+               href="/en/news/item/996">
+                <app-news-item variant="corner-3"
+                               size="short"
+                               color="blue"
+
+                                                    banner-green-short="/sites/default/files/2026-09/Q1_2026_post_ENG_288x288px_1.png"
+                            banner-green-long="/sites/default/files/2026-09/Q1_2026_post_ENG_624x288px_1.png"
+                                                                            banner-green-long=" /sites/default/files/2026-09/Q1_2026_post_ENG_624x288px_1.png"
+                                                                            banner-blue-short="/sites/default/files/2026-09/Q1_2026_post_ENG_288x288px.png"
+                            banner-blue-long="/sites/default/files/2026-09/Q1_2026_post_ENG_624x288px.png"
+                                                                            banner-blue-long="/sites/default/files/2026-09/Q1_2026_post_ENG_624x288px.png"
+                                                                            banner-yellow-short="/sites/default/files/2026-09/Q1_2026_post_ENG_288x288px_0.png"
+                            banner-yellow-long="/sites/default/files/2026-09/Q1_2026_post_ENG_624x288px_0.png"
+                                                                            banner-yellow-long="/sites/default/files/2026-09/Q1_2026_post_ENG_624x288px_0.png"
+                                        >
+
+                    <app-news-item-title title="Report on the .pl domain name market for Q1 2026">
+                        Report on the .pl domain name market for Q1 2026
+                    </app-news-item-title>
+                    <app-more-button theme="dark">
+                        Read more
+                    </app-more-button>
+                </app-news-item>
+            </a>
+                                <a class="dns-content__news " title="Read more"
+               href="/en/news/item/989">
+                <app-news-item variant="corner-2"
+                               size="short"
+                               color="yellow"
+
+                                                    banner-green-short="/sites/default/files/2026-06/288x288 eng_1.png"
+                            banner-green-long="/sites/default/files/2026-06/624x288 eng_1.png"
+                                                                            banner-green-long=" /sites/default/files/2026-06/624x288 eng_1.png"
+                                                                            banner-blue-short="/sites/default/files/2026-06/288x288 eng.png"
+                            banner-blue-long="/sites/default/files/2026-06/624x288 eng.png"
+                                                                            banner-blue-long="/sites/default/files/2026-06/624x288 eng.png"
+                                                                            banner-yellow-short="/sites/default/files/2026-06/288x288 eng_0.png"
+                            banner-yellow-long="/sites/default/files/2026-06/624x288 eng_0.png"
+                                                                            banner-yellow-long="/sites/default/files/2026-06/624x288 eng_0.png"
+                                        >
+
+                    <app-news-item-title title="Report on the .pl domain name market for Q4 2025">
+                        Report on the .pl domain name market for Q4 2025
+                    </app-news-item-title>
+                    <app-more-button theme="dark">
+                        Read more
+                    </app-more-button>
+                </app-news-item>
+            </a>
+                                <a class="dns-content__news " title="Read more"
+               href="/en/news/changes-to-regulations">
+                <app-news-item variant="corner-2"
+                               size="short"
+                               color="blue"
+
+                                                                                                                                                                >
+
+                    <app-news-item-title title="Changes to Regulations Concerning the National Cybersecurity System - New Obligations Related to .pl Domain Names">
+                        Changes to Regulations Concerning the National Cybersecurity System - New Obligations Related to .pl Domain Names
+                    </app-news-item-title>
+                    <app-more-button theme="dark">
+                        Read more
+                    </app-more-button>
+                </app-news-item>
+            </a>
+                                <a class="dns-content__news double2" title="Read more"
+               href="/en/news/report-Q3-2025">
+                <app-news-item variant="corner-2"
+                               size="long"
+                               color="yellow"
+
+                                                    banner-green-short="/sites/default/files/2026-02/288x288_eng(2)_1.png"
+                            banner-green-long="/sites/default/files/2026-02/624x288 eng(3)_1.png"
+                                                                            banner-green-long=" /sites/default/files/2026-02/624x288 eng(3)_1.png"
+                                                                            banner-blue-short="/sites/default/files/2026-02/288x288_eng(2).png"
+                            banner-blue-long="/sites/default/files/2026-02/624x288 eng(3).png"
+                                                                            banner-blue-long="/sites/default/files/2026-02/624x288 eng(3).png"
+                                                                            banner-yellow-short="/sites/default/files/2026-02/288x288_eng(2)_0.png"
+                            banner-yellow-long="/sites/default/files/2026-02/624x288 eng(3)_0.png"
+                                                                            banner-yellow-long="/sites/default/files/2026-02/624x288 eng(3)_0.png"
+                                        >
+
+                    <app-news-item-title title="Report on the .pl domain name market for Q3 2025">
+                        Report on the .pl domain name market for Q3 2025
+                    </app-news-item-title>
+                    <app-more-button theme="dark">
+                        Read more
+                    </app-more-button>
+                </app-news-item>
+            </a>
+                                <a class="dns-content__news " title="Read more"
+               href="/en/news/report-Q2-2025">
+                <app-news-item variant="corner-3"
+                               size="short"
+                               color="green"
+
+                                                    banner-green-short="/sites/default/files/2025-12/288x288_eng(1)_5.png"
+                            banner-green-long="/sites/default/files/2025-12/624x288 eng(2)_5.png"
+                                                                            banner-green-long=" /sites/default/files/2025-12/624x288 eng(2)_5.png"
+                                                                            banner-blue-short="/sites/default/files/2025-12/288x288_eng(1)_3.png"
+                            banner-blue-long="/sites/default/files/2025-12/624x288 eng(2)_3.png"
+                                                                            banner-blue-long="/sites/default/files/2025-12/624x288 eng(2)_3.png"
+                                                                            banner-yellow-short="/sites/default/files/2025-12/288x288_eng(1)_4.png"
+                            banner-yellow-long="/sites/default/files/2025-12/624x288 eng(2)_4.png"
+                                                                            banner-yellow-long="/sites/default/files/2025-12/624x288 eng(2)_4.png"
+                                        >
+
+                    <app-news-item-title title="Report on the .pl domain name market for Q2 2025">
+                        Report on the .pl domain name market for Q2 2025
+                    </app-news-item-title>
+                    <app-more-button theme="dark">
+                        Read more
+                    </app-more-button>
+                </app-news-item>
+            </a>
+                        </div>
+    <div class="dns-homepage__link-more">
+
+        <a href="/en/news">Check all news</a>
+    </div>
+</div>
+
+    </div>
+    
+
+    <div class="dns-widget">
+    <div class="dns-widget-statistics">
+        <h2>Statistics</h2>
+        <div class="dns-widget-statistics__stats">
+            <div class="dns-widget-statistics__stats--item">
+                <div class="stat_counter">
+                    <div class="stat_counter__number">2757995</div>
+                    <div>domain names in registry</div>
+                </div>
+            </div>
+            <div class="dns-widget-statistics__stats--item">
+                <div class="stat_counter">
+                    <div class="stat_counter__number"> 1467</div>
+                    <div>domain names arrived
+                        during last day</div>
+                </div>
+            </div>
+        </div>
+        <div class="dns-homepage__link-more">
+            <a class="default" href="/en/statistics/number_of_active_names_in_DNS_zone"
+               aria-label="see more statistics">
+                See more
+            </a>
+        </div>
+    </div>
+</div>
+
+    
+
+
+
+<div class="dns-widget">
+    <div class="dns-widget-features">
+        <h2>Learn more</h2>
+        <div class="dns-widget-features__items">
+                                                                                                            <a class="default" href="/en/become_registrar_domain_pl">
+        <app-card image-src="
+                                 /sites/default/files/2024-05/zostań_rejestratorem_domeny_pl.png
+                                      "
+                  image-alt="Become a registrar"
+                  variant="corner-3">
+            <app-card-title>Become a registrar</app-card-title>
+        </app-card>
+    </a>
+
+                        
+                                                                                    <a class="default" href="/en/registration_domain_pl">
+        <app-card image-src="
+                                 /sites/default/files/2026-01/domena_pl_zarejestruj_już_dziś.png
+                                      "
+                  image-alt=".pl domain - register today"
+                  variant="corner-1">
+            <app-card-title>.pl domain - register today</app-card-title>
+        </app-card>
+    </a>
+
+                        
+                                                                                    <a class="default" href="/en/security_domain_pl">
+        <app-card image-src="
+                                 /sites/default/files/2024-05/zadbaj_o_bezpieczeństwo_swojej_domeny.png
+                                      "
+                  image-alt="Domain name security"
+                  variant="corner-3">
+            <app-card-title>Domain name security</app-card-title>
+        </app-card>
+    </a>
+
+                        
+                                                                                    <a class="default" href="/en/DNSSEC">
+        <app-card image-src="
+                                 /sites/default/files/2024-05/DNSSEC_to_bezpieczeństwo_w_internecie.png
+                                      "
+                  image-alt="DNSSEC - internet security"
+                  variant="corner-2">
+            <app-card-title>DNSSEC - internet security</app-card-title>
+        </app-card>
+    </a>
+
+                        
+                                                        </div>
+    </div>
+</div>
+<footer class="dns-footer">
+  
+
+
+<div class="dns-footer__links">
+    <div class="dns-footer__links-items">
+                                                        <div class="dns-footer__links-item">
+                        <h4>.pl Registrars</h4>
+                        <ul>
+                                                                                                <li>
+                                        <a href="/en/price_list_for_registrars">
+                                            Price list for registrars
+                                        </a>
+                                    </li>
+                                                                                                                                <li>
+                                        <a href="/en/become_registrar_domain_pl">
+                                            Become a registrar
+                                        </a>
+                                    </li>
+                                                                                                                                <li>
+                                        <a href="/en/registry_system_availability">
+                                            Registry system availability
+                                        </a>
+                                    </li>
+                                                                                                                                <li>
+                                        <a href="https://panel.dns.pl/pl/index">
+                                            Registrar Panel
+                                        </a>
+                                    </li>
+                                                                                    </ul>
+                    </div>
+                                                                <div class="dns-footer__links-item">
+                        <h4>.pl Registrants</h4>
+                        <ul>
+                                                                                                <li>
+                                        <a href="/en/list_of_registrars">
+                                            List of registrars
+                                        </a>
+                                    </li>
+                                                                                                                                <li>
+                                        <a href="/en/registrant_rights_domain_pl">
+                                            Rights of a registrant
+                                        </a>
+                                    </li>
+                                                                                                                                <li>
+                                        <a href="/en/information_on_disputes">
+                                            Domain disputes
+                                        </a>
+                                    </li>
+                                                                                                                                <li>
+                                        <a href="/en/domain_name_life_cycle">
+                                            Domain name life cycle
+                                        </a>
+                                    </li>
+                                                                                    </ul>
+                    </div>
+                                                                                            <div class="dns-footer__links-item">
+                        <h4>Important documents</h4>
+                        <ul>
+                                                                                                <li>
+                                        <a href="/en/privacy_policy">
+                                            Privacy policy
+                                        </a>
+                                    </li>
+                                                                                                                                                                                            <li>
+                                        <a href="/en/pl_domain_name_regulations">
+                                            .pl domain name regulations
+                                        </a>
+                                    </li>
+                                                                                                                                                </ul>
+                    </div>
+                                        </div>
+</div>
+
+  
+
+
+
+<div class="dns-footer__copyright">
+    <div class="dns-footer__copyright-items">
+        <div class="dns-footer__copyright-item-full-name">
+            <app-footer-company title="Naukowa i Akademicka Sieć Komputerowa">
+
+                <span>
+                    NASK,
+                    ul. Kolska 12, 01-045 Warsaw,
+                    <br class="no-break">
+                    info@dns.pl, tel. +48 22 380 83 00
+                </span>
+            </app-footer-company>
+        </div>
+        <div class="dns-footer__copyright-item-follow">
+            <app-follow></app-follow>
+        </div>
+        <div class="dns-footer__copyright-item-links">
+            <app-footer-links  lang="en"></app-footer-links>
+        </div>
+    </div>
+        <div class="copyright">
+            <span>© Copyright by <abbr title="Naukowa i Akademicka Sieć Komputerowa">NASK</abbr> 2025</span>
+        </div>
+</div>
+</footer>
+
+    <app-scroll-top-button></app-scroll-top-button>
+</div>
+<div id="recaptcha-container" data-sitekey="6LfS1D8pAAAAAHqAEH9owz5fcGu3hhZ2h5hRTMlV" style="display: none"></div>
+<input ng-init="csrfToken = '918188d6f43544b1e07287b7e.WH7NoIQg6kRB0kHxejOQYBnvib8GTEXudFCTaY9Wz98.YB-d68tp3312pzWIHVLPC02W3NpnPTa_RCPjEPkl-LA0GJzK20e_dTKFMg' " type="hidden" name="_csrf_token" ng-model="csrfToken">
+
+<!-- Translation scripts  -->
+<script src="/bundles/bazingajstranslation/js/translator.min.js"></script>
+
+<script src="https://dns.pl/translations/delegation?locales=en"></script>
+<script src="https://dns.pl/translations/deletedDomainCount?locales=en"></script>
+<script src="https://dns.pl/translations/domainBrowser?locales=en"></script>
+<script src="https://dns.pl/translations/domainCount?locales=en"></script>
+<script src="https://dns.pl/translations/enum?locales=en"></script>
+<script src="https://dns.pl/translations/funnyName?locales=en"></script>
+<script src="https://dns.pl/translations/govErrors?locales=en"></script>
+<script src="https://dns.pl/translations/idnTranslator?locales=en"></script>
+<script src="https://dns.pl/translations?locales=en"></script>
+<script src="https://dns.pl/translations/registrarsList?locales=en"></script>
+<script src="https://dns.pl/translations/statCharts?locales=en"></script>
+<script src="https://dns.pl/translations/transfer?locales=en"></script>
+<script src="https://dns.pl/translations/wcag?locales=en"></script>
+<script src="https://dns.pl/translations/whoIs?locales=en"></script>
+<script src="https://dns.pl/translations/zoneStats?locales=en"></script>
+
+<!-- Scripts. -->
+
+    <script src="/dist/scripts/runtime-3.3.0.28f8de37.js" defer></script><script src="/dist/scripts/918-3.3.0.ac20b951.js" defer></script><script src="/dist/scripts/main-3.3.0.02aeae80.js" defer></script>
+
+<script>window.recaptchaKey = '6LdYK7YgAAAAAJUdd8sQOJE6DQT-nJeArvi8Qk9_'</script>
+</body>
+</html>
