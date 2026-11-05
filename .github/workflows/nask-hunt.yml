@@ -80,6 +80,7 @@ jobs:
             echo "z flagi: $LINE"
           fi
           BUDGET="${BUDGET:-900}"; CHUNKS="${CHUNKS:-0}"
+          echo "PARAMETRY: budget=$BUDGET chunks=$CHUNKS hosts=${HOSTS:-wszystkie}" | tee -a "$GITHUB_STEP_SUMMARY"
           if [ -n "$HOSTS" ]; then
             python nask/hunt.py --out nask/findings --budget "$BUDGET" --chunks "$CHUNKS" --hosts $HOSTS 2>&1 | tee /tmp/hunt.log
           else
@@ -100,7 +101,7 @@ jobs:
           git config user.name "nask-hunt-bot"
           git config user.email "nask-hunt@users.noreply.github.com"
           git add -f nask/findings/hunt.json nask/findings/hunt-summary.md \
-                     nask/findings/evidence.jsonl 2>/dev/null || true
+                     nask/findings/RUNS.md nask/findings/evidence.jsonl 2>/dev/null || true
           git diff --cached --quiet && { echo "brak zmian"; exit 0; }
           git commit -q -m "nask-hunt: wynik przebiegu ${GITHUB_RUN_ID} (automat)"
           # Gałąź żyje: przebieg trwa 15 minut, a w tym czasie mogą dojść commity

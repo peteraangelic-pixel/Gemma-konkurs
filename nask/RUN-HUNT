@@ -14,3 +14,8 @@ run 2026-11-04T18:05:00Z chunks=20 budget=1200
 # Przebieg 6: parametry czytane z tego pliku (workflow: budget=/chunks=).
 # Poprawka po przebiegu 5: push flagi nie przekazywał inputs, więc ruszał z chunks=0.
 run 2026-11-04T18:35:00Z chunks=20 budget=1200
+# Przebieg 7 (05.11): S10 (trucizna cache, para kontrolna) + S11 (dane osobowe
+# w publicznym JSON-ie) + chunkowanie; S3 poprawione (404 nie jest "chronione").
+# Parametry przebiegu zapisywane do nask/findings/RUNS.md, bo logi Actions sa
+# z sandboxa nieosiagalne.
+run 2026-11-05T14:15:00Z chunks=20 budget=1200

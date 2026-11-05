@@ -204,9 +204,42 @@ def run(out: Path, budget: int, explicit: list[str] | None, rps: float,
     checkpoint(out, hosts, probes_all, payload["requests_used"])
     (out / "hunt.json").write_text(json.dumps(payload, indent=2, ensure_ascii=False),
                                    encoding="utf-8")
+    # Ślad przebiegu w repo. Powód: logi Actions i artefakty są z sandboxa
+    # nieosiągalne (EOF z blob storage), a bez parametrów nie da się odróżnić
+    # „nie znalazł, bo nie szukał” od „nie znalazł, bo nie ma”.
+    _append_run_log(out, payload, budget, chunks_n)
     (out / "hunt-summary.md").write_text(render(payload, hits_all), encoding="utf-8")
     print(f"\n{payload['requests_used']} żądań, {len(probes_all)} trafień sond")
     return 0
+
+
+def _append_run_log(out: Path, payload: dict, budget: int, chunks_n: int) -> None:
+    totals = {"chunks_total": 0, "chunks_fetched": 0, "api_paths": 0, "params": 0}
+    for h in payload.get("hosts", []):
+        c = h.get("js_chunks") or {}
+        totals["chunks_total"] += c.get("chunks_total") or 0
+        totals["chunks_fetched"] += c.get("chunks_fetched") or 0
+        totals["api_paths"] += len(c.get("api_paths") or [])
+        totals["params"] += len(c.get("params") or [])
+    by_sev: dict[str, int] = {}
+    for f in payload.get("probe_findings", []):
+        by_sev[f["severity"]] = by_sev.get(f["severity"], 0) + 1
+    line = ("| {ts} | {req}/{budget} | {hosts} | {chunks} | {chunks_fetched} | "
+            "{api} | {params} | {find} | {sev} |").format(
+        ts=payload["generated_at"], req=payload["requests_used"], budget=budget,
+        hosts=payload["hosts_scanned"], chunks=chunks_n, chunks_fetched=totals["chunks_fetched"],
+        api=totals["api_paths"], params=totals["params"],
+        find=len(payload.get("probe_findings", [])),
+        sev=", ".join(f"{k}:{v}" for k, v in sorted(by_sev.items())) or "brak")
+    path = out / "RUNS.md"
+    header = ("# Przebiegi nask-hunt\n\n"
+              "| czas (UTC) | żądania/budżet | hosty | chunków na host | chunków pobranych "
+              "| ścieżek API | parametrów | trafień | wg wagi |\n"
+              "|---|---:|---:|---:|---:|---:|---:|---:|---|\n")
+    old = path.read_text(encoding="utf-8") if path.exists() else header
+    if not old.endswith("\n"):
+        old += "\n"
+    path.write_text(old + line + "\n", encoding="utf-8")
 
 
 def checkpoint(out: Path, hosts: list, found: list, used: int) -> None:
