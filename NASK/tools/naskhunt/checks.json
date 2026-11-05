@@ -1,161 +1,141 @@
 {
-  "_opis": "Runda 10: (A) 116sos /api/centres-search MA PAGINACJĘ — page=2 zwraca inny zbiór (Ostroróg/Wroniecka) niż page=1 (Sławno/Gdańska), a limit i skip są ignorowane; sprawdzamy granice strony. (B) science /api/search zwraca page/perPage/lastPage, więc te parametry istnieją — sprawdzamy je (w tym apostrof w perPage, bo to jedyne miejsce, gdzie liczba trafia do zapytania). (C) bezpiecznewybory.pl ma w bundlu /zglos-incydent/formularz, /wyszukiwarka i buildId V7BZQbRTqgFDrmT2Y-Lps, ale WAF dawał 403 na wszystko — sprawdzamy, czy to blokada po User-Agencie (sonda z UA przeglądarki) czy realna odmowa. (D) oad.nask.pl ma /wyniki-wyszukiwania (189 wystąpień w bundlu) — szukamy nazwy parametru zapytania. (E) zglos-dezinformacje ma w bundlu trasę /recaptcha/.",
-  "_zasady": "GET-only (żadnego POST w tej rundzie). Tempo 2 req/s. Nagłówek User-Agent zmieniamy TYLKO w sondach bezpiecznewybory (cel: odróżnić blokadę UA od blokady IP) i zawsze z parą kontrolną. Bez logowania, bez ciał, bez podążania za przekierowaniami poza zakres.",
+  "_opis": "Runda 11: oad.nask.pl /wyniki-wyszukiwania to SERVER-SIDE wyszukiwarka z filtrami. Runda 10 ustaliła: parametr nazywa się `search` (81 KB vs 112 KB kontroli), a linki filtrów w HTML mówią wprost `?type=publication&topic=43`. Czyli mamy trzy parametry wchodzące do zapytania po stronie serwera na hoście Tier 1. Round 11 to para kontrolna na każdym z nich: wartość poprawna, ten sam prefiks z apostrofem, wartość ujemna. Do tego paginacja wyników i dwie nazwy zakresu dat. Wszystko GET, bez ciał.",
+  "_zasady": "GET-only. 2 req/s. Każda sonda ma parę kontrolną o IDENTYCZNYM prefiksie — inaczej różnica długości nic nie znaczy. Warunek odrzucenia dla klasy 4: ten sam sha12 co kontrola (wartość neutralizowana) albo 400/403 walidacji. Literały z `<` są odrzucane przez WAF (403) — nie używamy ich, bo mierzyłyby WAF, nie aplikację.",
   "checks": [
     {
-      "id": "s10-116-cs-page1",
-      "host": "116sos.pl",
+      "id": "s11-oad-ctl-search",
+      "host": "oad.nask.pl",
       "method": "GET",
-      "path": "/api/centres-search?q=&page=1",
-      "why": "Kontrola: page=1 musi dać ten sam zbiór co brak parametru (Sławno 18A). Jeśli nie — numeracja jest inna, niż myślimy.",
+      "path": "/wyniki-wyszukiwania?search=dezinformacja",
+      "why": "Kontrola bazowa: zapytanie trafia w wiele publikacji. Wszystkie sondy z apostrofem są porównywane do TEGO sha12.",
       "class": "info"
     },
     {
-      "id": "s10-116-cs-page0",
-      "host": "116sos.pl",
+      "id": "s11-oad-search-quote",
+      "host": "oad.nask.pl",
       "method": "GET",
-      "path": "/api/centres-search?q=&page=0",
-      "why": "Granica dolna: strona 0. Ujawnia, czy serwer liczy od 0 (wtedy page=0 == page=1 i mamy off-by-one), czy odrzuca.",
-      "class": "info"
-    },
-    {
-      "id": "s10-116-cs-page-neg",
-      "host": "116sos.pl",
-      "method": "GET",
-      "path": "/api/centres-search?q=&page=-1",
-      "why": "Wartość ujemna: jeśli serwer zwraca błąd bazy (LIMIT -1) albo inny zbiór, to parametr nie jest walidowany przed zapytaniem. To sygnał klasy 4, nie dowód.",
+      "path": "/wyniki-wyszukiwania?search=dezinformacja%27",
+      "why": "Apostrof (klasa 4). Odrzucenie: sha12 identyczny z kontrolą (filtr wycina znak) albo strona 'brak wyników' (wartość szukana dosłownie) — oba znaczą 'brak iniekcji'.",
       "class": "4"
     },
     {
-      "id": "s10-116-cs-page-big",
-      "host": "116sos.pl",
+      "id": "s11-oad-search-quote2",
+      "host": "oad.nask.pl",
       "method": "GET",
-      "path": "/api/centres-search?q=&page=100000",
-      "why": "Duża strona: pusta lista = paginacja działa poprawnie (koniec zbioru). Błąd 5xx = brak walidacji górnej granicy.",
-      "class": "info"
-    },
-    {
-      "id": "s10-sci-pp-50",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/search?query=nask&lang=pl&perPage=50",
-      "why": "Kontrola pozytywna parametru perPage: odpowiedź ma pole perPage, więc parametr istnieje. Więcej niż 10 wyników = parametr działa.",
-      "class": "info"
-    },
-    {
-      "id": "s10-sci-pp-quote",
-      "host": "science.nask.pl",
-      "method": "GET",
-      "path": "/api/search?query=nask&lang=pl&perPage=50%27",
-      "why": "Apostrof w liczbie: jeśli perPage trafia do SQL bez rzutowania, to jest tu iniekcja (klasa 4). Warunek odrzucenia: ten sam wynik co s10-sci-pp-50 albo 400 walidacji.",
+      "path": "/wyniki-wyszukiwania?search=dezinformacja%27%27",
+      "why": "Podwójny apostrof: domyka string, jeśli serwer escapuje pojedynczy znak. Inny wynik niż s11-oad-search-quote = wartość jest składana w zapytanie.",
       "class": "4"
     },
     {
-      "id": "s10-sci-page-2",
-      "host": "science.nask.pl",
+      "id": "s11-oad-search-bool-t",
+      "host": "oad.nask.pl",
       "method": "GET",
-      "path": "/api/search?query=nask&lang=pl&page=2",
-      "why": "Druga strona wyników: sprawdza, czy page jest respektowany i czy zbiór jest większy niż jedna strona (istotne dla L5 zespołu: totalItems vs UI).",
+      "path": "/wyniki-wyszukiwania?search=dezinformacja%27%20AND%20%271%27%3D%271",
+      "why": "Para boolowska TRUE. Musi dać to samo co kontrola, inaczej sam apostrof psuje zapytanie i test jest nieważny.",
+      "class": "4"
+    },
+    {
+      "id": "s11-oad-search-bool-f",
+      "host": "oad.nask.pl",
+      "method": "GET",
+      "path": "/wyniki-wyszukiwania?search=dezinformacja%27%20AND%20%271%27%3D%272",
+      "why": "Para boolowska FALSE. Dowód SQLi = TRUE daje wyniki, FALSE nie, przy tym samym prefiksie i bez błędu.",
+      "class": "4"
+    },
+    {
+      "id": "s11-oad-ctl-topic",
+      "host": "oad.nask.pl",
+      "method": "GET",
+      "path": "/wyniki-wyszukiwania?topic=43",
+      "why": "Kontrola filtra tematu: 43 = Dezinformacja (z linków w HTML). Filtr działa, więc parametr jest czytany.",
       "class": "info"
     },
     {
-      "id": "s10-sci-type",
-      "host": "science.nask.pl",
+      "id": "s11-oad-topic-quote",
+      "host": "oad.nask.pl",
       "method": "GET",
-      "path": "/api/search?query=nask&lang=pl&type=employee",
-      "why": "Filtr typu (w danych jest typeName=Osoba, type=employee). Jeśli filtr działa, mamy drugi parametr do przeglądu — a filtry typu bywają wstrzykiwane do zapytania.",
+      "path": "/wyniki-wyszukiwania?topic=43%27",
+      "why": "Apostrof w LICZBOWYM id tematu — najczęstsze miejsce iniekcji w filtrach (klasa 4). Odrzucenie jak wyżej.",
+      "class": "4"
+    },
+    {
+      "id": "s11-oad-topic-neg",
+      "host": "oad.nask.pl",
+      "method": "GET",
+      "path": "/wyniki-wyszukiwania?topic=-1",
+      "why": "Wartość ujemna: brak walidacji przed zapytaniem ujawnia się błędem 5xx albo innym zbiorem niż pusta lista.",
+      "class": "4"
+    },
+    {
+      "id": "s11-oad-topic-array",
+      "host": "oad.nask.pl",
+      "method": "GET",
+      "path": "/wyniki-wyszukiwania?topic[]=43",
+      "why": "Wariant tablicowy (PHP/Laravel: topic[]=...). Jeśli framework przyjmuje tablicę, a kod oczekuje liczby, powstaje inna ścieżka kodu — klasyczny błąd typu.",
+      "class": "4"
+    },
+    {
+      "id": "s11-oad-ctl-type",
+      "host": "oad.nask.pl",
+      "method": "GET",
+      "path": "/wyniki-wyszukiwania?type=publication",
+      "why": "Kontrola filtra typu (wartości z linków: publication, news).",
       "class": "info"
     },
     {
-      "id": "s10-bw-ctl-ourua",
-      "host": "bezpiecznewybory.pl",
+      "id": "s11-oad-type-quote",
+      "host": "oad.nask.pl",
       "method": "GET",
-      "path": "/",
-      "why": "Kontrola: ta sama ścieżka z domyślnym UA narzędzia. Zespół raportował 403 na wszystko — powtarzamy, żeby mieć parę do porównania.",
+      "path": "/wyniki-wyszukiwania?type=publication%27",
+      "why": "Apostrof w typie: jeśli typ jest wstawiany do zapytania jako string, to jest tu iniekcja; jeśli jest mapowany na stałą listę, dostaniemy pusto/404.",
+      "class": "4"
+    },
+    {
+      "id": "s11-oad-type-junk",
+      "host": "oad.nask.pl",
+      "method": "GET",
+      "path": "/wyniki-wyszukiwania?type=naskhunt",
+      "why": "Wartość spoza listy: rozstrzyga, czy nieznany typ daje błąd (brak walidacji) czy pustą listę (walidacja).",
       "class": "info"
     },
     {
-      "id": "s10-bw-browser-ua",
-      "host": "bezpiecznewybory.pl",
+      "id": "s11-oad-page2",
+      "host": "oad.nask.pl",
       "method": "GET",
-      "path": "/",
-      "headers": {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-        "Accept-Language": "pl-PL,pl;q=0.9"
-      },
-      "why": "Czy 403 wynika z User-Agenta. 200 tutaj NIE jest podatnością — jest informacją, że host da się w ogóle badać (dziś jest dla nas czarną skrzynką).",
+      "path": "/wyniki-wyszukiwania?search=dezinformacja&page=2",
+      "why": "Paginacja wyników: jeśli strona 2 różni się od kontroli, to parametr istnieje i jest kolejnym wejściem do zapytania (LIMIT/OFFSET).",
       "class": "info"
     },
     {
-      "id": "s10-bw-search",
-      "host": "bezpiecznewybory.pl",
+      "id": "s11-oad-page-quote",
+      "host": "oad.nask.pl",
       "method": "GET",
-      "path": "/wyszukiwarka",
-      "headers": {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
-      },
-      "why": "Wyszukiwarka z bundla — jedyny interaktywny element tego hosta według mapy tras.",
+      "path": "/wyniki-wyszukiwania?search=dezinformacja&page=2%27",
+      "why": "Apostrof w numerze strony. To ten sam wzorzec, który na science.nask.pl dał 400 'Invalid pagination' — tu sprawdzamy, czy walidacja też jest.",
+      "class": "4"
+    },
+    {
+      "id": "s11-oad-datefrom",
+      "host": "oad.nask.pl",
+      "method": "GET",
+      "path": "/wyniki-wyszukiwania?dateFrom=2026-01-01&dateTo=2026-12-31",
+      "why": "Nazwa parametru zakresu dat (wariant 1). Filtr dat w zapytaniu to typowe miejsce iniekcji, więc warto znać nazwę.",
       "class": "info"
     },
     {
-      "id": "s10-bw-nextdata",
-      "host": "bezpiecznewybory.pl",
+      "id": "s11-oad-date-from",
+      "host": "oad.nask.pl",
       "method": "GET",
-      "path": "/_next/data/V7BZQbRTqgFDrmT2Y-Lps/wyszukiwarka.json",
-      "headers": {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
-      },
-      "why": "Dane strony w JSON (pages router). Jeśli WAF przepuszcza, dostajemy strukturę danych bez renderowania — tanie źródło mapy.",
+      "path": "/wyniki-wyszukiwania?date-from=2026-01-01&date-to=2026-12-31",
+      "why": "Nazwa parametru zakresu dat (wariant 2, kebab-case). Rozstrzyga się różnicą wobec kontroli bez parametrów.",
       "class": "info"
     },
     {
-      "id": "s10-oad-wyniki-ctl",
+      "id": "s11-oad-ctl-noparams",
       "host": "oad.nask.pl",
       "method": "GET",
       "path": "/wyniki-wyszukiwania",
-      "why": "Kontrola strony wyników bez parametru — jak wygląda 'brak zapytania'.",
-      "class": "info"
-    },
-    {
-      "id": "s10-oad-q",
-      "host": "oad.nask.pl",
-      "method": "GET",
-      "path": "/wyniki-wyszukiwania?q=naskhuntmarker",
-      "why": "Nazwa parametru q. Różnica wobec kontroli = parametr istnieje; obecność markera w treści = refleksja (do sprawdzenia, czy escapowana).",
-      "class": "info"
-    },
-    {
-      "id": "s10-oad-query",
-      "host": "oad.nask.pl",
-      "method": "GET",
-      "path": "/wyniki-wyszukiwania?query=naskhuntmarker",
-      "why": "Alternatywna nazwa parametru (query). Jedna z trzech — rozstrzyga się różnicą rozmiaru.",
-      "class": "info"
-    },
-    {
-      "id": "s10-oad-search",
-      "host": "oad.nask.pl",
-      "method": "GET",
-      "path": "/wyniki-wyszukiwania?search=naskhuntmarker",
-      "why": "Trzecia nazwa (search). Ta sama metoda rozstrzygania.",
-      "class": "info"
-    },
-    {
-      "id": "s10-oad-xss",
-      "host": "oad.nask.pl",
-      "method": "GET",
-      "path": "/wyniki-wyszukiwania?q=%3Cb%3Enaskhunt%3C%2Fb%3E",
-      "why": "Refleksja z HTML: jeśli <b> wraca niescapowane w treści (nie w JSON), to jest HTML injection do oceny pod kątem §8. Warunek odrzucenia: &lt;b&gt; albo brak markera — wtedy refleksji brak.",
-      "class": "7"
-    },
-    {
-      "id": "s10-zglos-recaptcha",
-      "host": "zglos-dezinformacje.nask.pl",
-      "method": "GET",
-      "path": "/recaptcha/",
-      "why": "Trasa z bundla obok /api/sendForm. Jeśli odpowiada inaczej niż catch-all SPA, istnieje osobny endpoint weryfikacji tokenu — a to jest miejsce, gdzie warto patrzeć na logikę (nie na captchę).",
+      "why": "Kontrola odniesienia dla sond z datami: strona bez żadnego parametru.",
       "class": "info"
     }
   ]
