@@ -510,3 +510,70 @@ def test_mine_chunks_never_exceeds_max_chunks():
 
     c.mine_chunks(H(), "https://hack.cert.pl", idx, max_chunks=3)
     assert len(calls) == 3, calls
+
+
+# ---------------- S10: trucizna cache współdzielonego ----------------
+# Kontrakt: `wysoki` wymaga DWÓCH rzeczy naraz — odbicia i propagacji na żądanie
+# bez nagłówka. Sama refleksja jest negatywem (§8), bo nie zmienia niczyjego widoku.
+
+def _poison_http(reflect=True, persist=False, cc="public, max-age=3600"):
+    state = {"n": 0}
+
+    def fn(url, h):
+        state["n"] += 1
+        body = "strona"
+        if reflect and "x-forwarded-host" in {k.lower() for k in h} and persist:
+            state["poisoned"] = True
+        if persist and state.get("poisoned"):
+            body = "strona " + probes.CACHE_MARKER
+        elif reflect and any(probes.CACHE_MARKER in v for v in h.values()):
+            body = "strona " + probes.CACHE_MARKER
+        return R(body=body, headers={"cache-control": cc})
+
+    return Http(fn)
+
+
+def test_cache_poisoning_reflection_plus_persistence_is_high():
+    got = [f for f in probes.probe_cache_poisoning(
+        _poison_http(reflect=True, persist=True), "https://pllum.org.pl")
+        if f.severity == "wysoki"]
+    assert got, "brak trafienia przy odbiciu i propagacji"
+    assert got[0].raw["persisted"] is True
+    assert "cache" in got[0].title.lower()
+
+
+def test_cache_poisoning_reflection_only_is_low():
+    got = probes.probe_cache_poisoning(
+        _poison_http(reflect=True, persist=False), "https://pllum.org.pl")
+    assert got and all(f.severity == "niski" for f in got), [f.severity for f in got]
+    assert all(f.raw["persisted"] is False for f in got)
+
+
+def test_cache_poisoning_no_reflection_no_findings():
+    got = probes.probe_cache_poisoning(_poison_http(reflect=False), "https://dns.pl")
+    assert got == []
+
+
+def test_shared_cacheable_flags_private_and_no_store():
+    ok, _ = probes._shared_cacheable({"cache-control": "public, max-age=3600"})
+    assert ok
+    ok, _ = probes._shared_cacheable({"cache-control": "s-maxage=300, private"})
+    assert not ok
+    ok, _ = probes._shared_cacheable({"cache-control": "private, no-store"})
+    assert not ok
+    ok, _ = probes._shared_cacheable({})
+    assert not ok
+
+
+def test_run_all_skips_cache_probe_without_flag():
+    """16 żądań na host nie może odpalać się z przypadku — tylko z jawną flagą."""
+    calls = []
+
+    class H:
+        def get(self, url, headers=None, **kw):
+            calls.append(url)
+            return R()
+
+    probes.run_all(H(), "https://example.gov.pl", {})
+    assert not any("zzqcache" in str(c) for c in calls)
+    assert len(calls) < 200

@@ -49,6 +49,7 @@ TARGETS = [
     "https://dataannotation.pllum.org.pl",
     "https://bezpiecznewybory.pl",
     "https://ctf.hack.cert.pl",      # CERT T2, wyjątek z regulaminu — nigdy nie testowany
+    "https://pllum.org.pl",          # NASK T2; `public, max-age=3600` = cache współdzielony
 ]
 
 SKIP_PROGRAMS = {"wladyslawowo"}          # decyzja użytkownika: szkoda czasu
@@ -143,6 +144,12 @@ def run(out: Path, budget: int, explicit: list[str] | None, rps: float,
                  # mwdb ma publiczny kod i publiczny /api/server — wersja mówi,
                  # czy poprawka XSS z 2.20.0 jest wdrożona.
                  "mwdb": "mwdb" in url,
+                 # S10 (trucizna cache) tylko tam, gdzie ma to sens: hosty z
+                 # deklarowanym cache współdzielonym + dns.pl (tam odbicie XFH
+                 # już zmierzono, u nas jest para kontrolna).
+                 "cache_check": any(k in url for k in (
+                     "pllum.org.pl", "bezpiecznymiesiac.pl", "science.nask.pl",
+                     "116sos.pl", "dns.pl", "oad.nask.pl")),
                  "cms_api": cms_api})
 
             row = summarise(url, hits)

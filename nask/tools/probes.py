@@ -394,6 +394,10 @@ def run_all(http, base: str, ctx: dict) -> list[ProbeFinding]:
     tech = {t.lower() for t in ctx.get("tech", [])}
     findings: list[ProbeFinding] = []
     findings += probe_cors(http, base)
+    # Tylko na hostach, które deklarują cache współdzielony albo są kandydatami:
+    # 16 żądań na host to za dużo, by robić to wszędzie bez powodu.
+    if ctx.get("cache_check"):
+        findings += probe_cache_poisoning(http, base, path=ctx.get("cache_path", "/"))
     findings += probe_middleware_bypass(http, base)
     findings += probe_header_bypass(http, base)
     if "next.js" in tech or ctx.get("build_id"):
@@ -569,4 +573,95 @@ def probe_wagtail(http, base: str) -> list[ProbeFinding]:
             "ten sam plik da się pobrać bez tej trasy.",
             {"path": path, "count": len(items), "titles": titles,
              "looks_private": looks_private}))
+    return out
+
+
+# --------------------------------------------------------------------------
+# S10 — trucizna cache współdzielonego: nagłówek odbity AND odpowiedź zapisana
+# --------------------------------------------------------------------------
+# Skąd ta sonda: sesja `c4eeb067` znalazła, że `dns.pl` odbija `X-Forwarded-Host`
+# do `<script src="https://ATTAKER/…">`. To byłą realna trucizna — gdyby odpowiedź
+# trafiała do cache'u współdzielonego. Sprawdzili i nie trafiała (brak `Age`,
+# `Via`, `X-Cache`, `public`). Ale ich własny pomiar pokazał dwie rzeczy, których
+# nikt nie wykorzystał:
+#   • `pllum.org.pl` i `bezpiecznymiesiac.pl` mają `Cache-Control: public, max-age=3600`
+#     → **są cache'owalne współdzielnie**, więc trucizna miałaby gdzie osiąść;
+#   • odbicie `X-Forwarded-Host` jest, ale nie testowano tam innych nagłówków.
+#
+# Kontrakt tej sondy (bez niego byłby to generator fałszywych trafień):
+#   wynik `wysoki` = odbicie **AND** ta sama odpowiedź bez nagłówka nadal zawiera
+#                    znacznik (czyli cache zapamiętał) — dwa warunki, nie jeden;
+#   wynik `niski`  = odbicie bez propagacji (refleksja w prywatnej odpowiedzi,
+#                    §8 wyklucza) — zapisane jako negatyw, żeby nie sprawdzać drugi raz;
+#   brak wpisu    = znacznik nie odbił się wcale.
+
+CACHE_MARKER = "zzqcache9f13"        # stały, nie występuje w treści tych serwisów
+
+POISON_HEADERS = [
+    ("X-Forwarded-Host", "poison-{m}.example"),
+    ("X-Forwarded-Proto", "https-{m}"),
+    ("X-Forwarded-Scheme", "https-{m}"),
+    ("X-Forwarded-Port", "8{m}"),
+    ("X-Forwarded-Prefix", "/{m}"),
+    ("X-Host", "{m}.example"),
+    ("X-Original-URL", "/{m}"),
+    ("Accept-Language", "zz-{m}"),
+]
+
+
+def _shared_cacheable(headers: dict) -> tuple[bool, str]:
+    """Czy odpowiedź może wylądować w cache'u współdzielonym (CDN/proxy)?"""
+    cc = (headers.get("cache-control") or "").lower()
+    if "no-store" in cc or "private" in cc:
+        return False, cc or "brak cache-control"
+    smax = re.search(r"s-maxage=(\d+)", cc)
+    if smax and int(smax.group(1)) > 0:
+        return True, cc
+    if "public" in cc and re.search(r"max-age=(\d+)", cc):
+        m = re.search(r"max-age=(\d+)", cc)
+        if m and int(m.group(1)) > 0:
+            return True, cc
+    return False, cc or "brak cache-control"
+
+
+def probe_cache_poisoning(http, base: str, path: str = "/",
+                          headers=POISON_HEADERS) -> list[ProbeFinding]:
+    out: list[ProbeFinding] = []
+    url = base.rstrip("/") + path
+    for name, tmpl in headers:
+        value = tmpl.format(m=CACHE_MARKER)
+        test = http.get(url, headers={name: value})
+        if getattr(test, "error", None) or test.status >= 400 or not test.text:
+            continue
+        if CACHE_MARKER not in test.text:
+            continue                       # nagłówek nie trafia do treści — brak tematu
+        shared, cc = _shared_cacheable(test.headers)
+        back = http.get(url)               # ten sam adres BEZ nagłówka
+        persisted = CACHE_MARKER in back.text
+        raw = {"header": name, "value": value, "cache_control": cc,
+               "shared_cacheable": shared, "persisted": persisted,
+               "test_status": test.status, "control_status": back.status}
+        if persisted:
+            out.append(ProbeFinding(
+                "S10", "", url, "wysoki",
+                f"Trucizna cache: `{name}` odbity i zapamiętany",
+                f"`GET {path}` z `{name}: {value}` zawiera znacznik, a **ta sama "
+                f"odpowiedź bez nagłówka nadal go zawiera** ({back.status}, "
+                f"{len(back.body)} B) — cache współdzielony zapamiętał zatrutą treść. "
+                f"Cache-Control: `{cc}`.",
+                "§8 nie wyklucza trucizny cache: to zmiana treści widziana przez "
+                "innych użytkowników, nie refleksja w odpowiedzi dla atakującego.",
+                raw))
+        else:
+            out.append(ProbeFinding(
+                "S10", "", url, "niski",
+                f"Odbicie `{name}` bez propagacji (cache {'współdzielony' if shared else 'brak'})",
+                f"`GET {path}` z `{name}: {value}` zawiera znacznik, ale kolejne "
+                f"żądanie bez nagłówka ({back.status}, {len(back.body)} B) jest czyste. "
+                f"Cache-Control: `{cc}` → "
+                + ("odpowiedź JEST cache'owalna współdzielnie, więc warto wrócić, "
+                   "gdy zmieni się konfiguracja." if shared else
+                   "brak cache'u współdzielonego, refleksja bez wpływu."),
+                "Zapisane jako NEGATYW: refleksja bez propagacji jest wykluczona przez §8.",
+                raw))
     return out
