@@ -88,12 +88,15 @@ def test_middleware_skips_unprotected_paths():
 
 # ------------------------ S3: /_next/data ------------------------
 def test_next_data_with_page_props():
+    """Stara wersja używała 404 jako „chronione” — to był błąd z przebiegu 5.
+    Intencja testu (pageProps trafiają do `detail`) zostaje, ale stan wejściowy
+    musi być prawdziwą odmową dostępu: 401."""
     payload = json.dumps({"pageProps": {"user": {"email": "a@b.c"}, "reports": [1, 2]}})
 
     def fn(url, h):
         if "/_next/data/" in url:
             return R(ctype="application/json", body=payload, url=url)
-        return R(status=404)
+        return R(status=401)
 
     got = probes.probe_next_data(Http(fn), "https://zglos-dezinformacje.nask.pl",
                                  "abc123", ["/panel", "/dashboard"])
@@ -577,3 +580,62 @@ def test_run_all_skips_cache_probe_without_flag():
     probes.run_all(H(), "https://example.gov.pl", {})
     assert not any("zzqcache" in str(c) for c in calls)
     assert len(calls) < 200
+
+
+# ---------------- S3: /_next/data — poprawka z przebiegu 5 ----------------
+# Przebieg 5 dał dwa trafienia `wysoki` na 116sos, bo `/index` → 404 liczyło się
+# jako „strona wymaga logowania”. To był fałszywy alarm na publicznych treściach.
+# Te testy istnieją po to, żeby ten konkretny błąd nie wrócił.
+
+def test_next_data_404_html_is_not_protected():
+    def fn(url, h):
+        if "/_next/data/" in url:
+            return R(ctype="application/json",
+                     body=json.dumps({"pageProps": {"chips": [1], "articles": []}}))
+        return R(status=404, body="nie ma")
+
+    got = probes.probe_next_data(Http(fn), "https://116sos.pl", "build123", ["/index"])
+    assert got == [], [f.severity for f in got]
+
+
+def test_next_data_403_html_is_protected():
+    def fn(url, h):
+        if "/_next/data/" in url:
+            return R(ctype="application/json",
+                     body=json.dumps({"pageProps": {"raport": "prywatny"}}))
+        return R(status=403, body="brak dostępu")
+
+    got = probes.probe_next_data(Http(fn), "https://app.example", "b1", ["/panel"])
+    assert got and got[0].severity == "wysoki"
+
+
+def test_next_data_redirect_to_login_is_protected():
+    def fn(url, h):
+        if "/_next/data/" in url:
+            return R(ctype="application/json",
+                     body=json.dumps({"pageProps": {"x": 1}}))
+        return R(status=302, headers={"location": "/login?next=/panel"})
+
+    got = probes.probe_next_data(Http(fn), "https://app.example", "b1", ["/panel"])
+    assert got and got[0].severity == "wysoki"
+
+
+def test_next_data_redirect_elsewhere_is_not_protected():
+    def fn(url, h):
+        if "/_next/data/" in url:
+            return R(ctype="application/json", body=json.dumps({"pageProps": {"x": 1}}))
+        return R(status=302, headers={"location": "/aktualnosci"})
+
+    assert probes.probe_next_data(Http(fn), "https://app.example", "b1", ["/panel"]) == []
+
+
+def test_next_data_dedupes_trailing_slash_routes():
+    """`/index` i `/index/` to jedna trasa — przebieg 5 zgłosił ją dwa razy."""
+    def fn(url, h):
+        if "/_next/data/" in url:
+            return R(ctype="application/json", body=json.dumps({"pageProps": {"x": 1}}))
+        return R(status=403)
+
+    got = probes.probe_next_data(Http(fn), "https://app.example", "b1",
+                                 ["/panel", "/panel/"])
+    assert len(got) == 1, len(got)

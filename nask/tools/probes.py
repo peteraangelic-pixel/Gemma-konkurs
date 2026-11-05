@@ -203,6 +203,19 @@ def probe_middleware_bypass(http, base: str,
 # --------------------------------------------------------------------------
 # S3 — trasy Next.js przez /_next/data
 # --------------------------------------------------------------------------
+LOGIN_HINTS = ("login", "signin", "sign-in", "zaloguj", "auth", "sso", "oidc")
+
+
+def _looks_protected(resp) -> bool:
+    """Czy odpowiedź naprawdę mówi „brak dostępu”, a nie „nie ma takiej strony”?"""
+    if resp.status in (401, 403):
+        return True
+    if 300 <= resp.status < 400:
+        loc = (_hdr(resp, "location") or "").lower()
+        return any(h in loc for h in LOGIN_HINTS)
+    return False
+
+
 def probe_next_data(http, base: str, build_id: str | None,
                     routes: list[str]) -> list[ProbeFinding]:
     """`/_next/data/<buildId><trasa>.json` a **ten sam adres jako HTML**.
@@ -211,14 +224,27 @@ def probe_next_data(http, base: str, build_id: str | None,
     a JSON wydaje dane bez sesji. Publiczna strona z publicznymi danymi to nie
     podatność — pierwsza wersja tego nie sprawdzała i zgłosiła osiem razy
     `116sos.pl`, gdzie `/_next/data` serwuje zwykłe artykuły i tagi.
+
+    **Poprawka z przebiegu 5 (04.11).** Warunkiem było „HTML nie jest 2xx", więc
+    `/index` → **404** (strona nie istnieje) liczyło się jako „wymaga logowania”
+    i dało dwa trafienia `wysoki` na publicznych treściach 116sos (chips, artykuły).
+    Za „chronione" uznajemy teraz **wyłącznie 401/403** albo przekierowanie na
+    ścieżkę z `login`/`signin`/`zaloguj`. 404 i 5xx to brak strony, nie brak dostępu.
     """
     out: list[ProbeFinding] = []
     if not build_id:
         return out
+    seen_routes: set[str] = set()
     for route in routes[:12]:
+        norm = "/" + route.strip("/")
+        if norm in seen_routes:          # `/index` i `/index/` to jedna trasa
+            continue
+        seen_routes.add(norm)
         html_probe = http.get(base.rstrip("/") + route)
         if html_probe.error or html_probe.status // 100 == 2:
             continue                      # treść i tak publiczna — nie ma czego zgłaszać
+        if not _looks_protected(html_probe):
+            continue                      # 404/5xx = strona nie istnieje, nie „chroniona"
         path = f"/_next/data/{build_id}{route.rstrip('/')}.json"
         r = http.get(base.rstrip("/") + path)
         if r.error or r.status != 200 or "json" not in _hdr(r, "content-type"):
