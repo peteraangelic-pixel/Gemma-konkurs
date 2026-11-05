@@ -1,141 +1,104 @@
 {
-  "_opis": "Runda 11: oad.nask.pl /wyniki-wyszukiwania to SERVER-SIDE wyszukiwarka z filtrami. Runda 10 ustaliła: parametr nazywa się `search` (81 KB vs 112 KB kontroli), a linki filtrów w HTML mówią wprost `?type=publication&topic=43`. Czyli mamy trzy parametry wchodzące do zapytania po stronie serwera na hoście Tier 1. Round 11 to para kontrolna na każdym z nich: wartość poprawna, ten sam prefiks z apostrofem, wartość ujemna. Do tego paginacja wyników i dwie nazwy zakresu dat. Wszystko GET, bez ciał.",
-  "_zasady": "GET-only. 2 req/s. Każda sonda ma parę kontrolną o IDENTYCZNYM prefiksie — inaczej różnica długości nic nie znaczy. Warunek odrzucenia dla klasy 4: ten sam sha12 co kontrola (wartość neutralizowana) albo 400/403 walidacji. Literały z `<` są odrzucane przez WAF (403) — nie używamy ich, bo mierzyłyby WAF, nie aplikację.",
+  "_opis": "Runda 12: refleksja i walidacja na oad.nask.pl (Tier 1). Runda 11 ustaliła, że serwer czyta `search`, `type`, `topic`, `page`, `dateFrom`, `dateTo`; apostrof w search daje stronę 'brak wyników' (81 KB), a pary boolowskie blokuje WAF (403 na literał). Teraz dwie rzeczy, których WAF nie dotyka: (1) znaki, które psują KONTEKST, a nie składnię SQL — cudzysłów i backslash (jeśli `search` trafia do JSON-a RSC albo do atrybutu HTML, to tu widać różnicę), (2) walidacja daty — dateFrom/dateTo są czytane, a daty w filtrach często idą do zapytania bez rzutowania. Ciała trzech sond zapisujemy na dysk (save_body), żeby przeanalizować kontekst refleksji offline, a nie po 90 znakach snippetu.",
+  "_zasady": "GET-only, 2 req/s, bez ciał, bez logowania. Każda sonda ma parę kontrolną z tym samym prefiksem. Nie używamy `<`, `>` ani słów kluczowych SQL w jednym stringu — WAF je blokuje (403), więc mierzyłyby WAF, nie aplikację. Ciała zapisywane wyłącznie dla stron publicznych oznaczonych save_body.",
   "checks": [
     {
-      "id": "s11-oad-ctl-search",
+      "id": "s12-oad-ctl",
       "host": "oad.nask.pl",
       "method": "GET",
       "path": "/wyniki-wyszukiwania?search=dezinformacja",
-      "why": "Kontrola bazowa: zapytanie trafia w wiele publikacji. Wszystkie sondy z apostrofem są porównywane do TEGO sha12.",
+      "save_body": true,
+      "why": "Kontrola i materiał do analizy: jak wygląda HTML z wynikami (gdzie trafia zapytanie — JSON RSC, atrybut, tekst).",
       "class": "info"
     },
     {
-      "id": "s11-oad-search-quote",
+      "id": "s12-oad-dquote",
       "host": "oad.nask.pl",
       "method": "GET",
-      "path": "/wyniki-wyszukiwania?search=dezinformacja%27",
-      "why": "Apostrof (klasa 4). Odrzucenie: sha12 identyczny z kontrolą (filtr wycina znak) albo strona 'brak wyników' (wartość szukana dosłownie) — oba znaczą 'brak iniekcji'.",
-      "class": "4"
+      "path": "/wyniki-wyszukiwania?search=dezinformacja%22",
+      "save_body": true,
+      "why": "Cudzysłów: jeśli zapytanie ląduje w JSON-ie RSC albo w atrybucie HTML, ten znak zmienia strukturę odpowiedzi (a nie tylko treść). Porównanie z kontrolą po sha12 i po ciele.",
+      "class": "7"
     },
     {
-      "id": "s11-oad-search-quote2",
+      "id": "s12-oad-backslash",
       "host": "oad.nask.pl",
       "method": "GET",
-      "path": "/wyniki-wyszukiwania?search=dezinformacja%27%27",
-      "why": "Podwójny apostrof: domyka string, jeśli serwer escapuje pojedynczy znak. Inny wynik niż s11-oad-search-quote = wartość jest składana w zapytanie.",
-      "class": "4"
+      "path": "/wyniki-wyszukiwania?search=dezinformacja%5C",
+      "save_body": true,
+      "why": "Backslash przed końcem stringa: klasyczne wyjście z literału (także w JSON). Jeśli odpowiedź się psuje inaczej niż przy cudzysłowie, mamy różne ścieżki kodu.",
+      "class": "7"
     },
     {
-      "id": "s11-oad-search-bool-t",
-      "host": "oad.nask.pl",
-      "method": "GET",
-      "path": "/wyniki-wyszukiwania?search=dezinformacja%27%20AND%20%271%27%3D%271",
-      "why": "Para boolowska TRUE. Musi dać to samo co kontrola, inaczej sam apostrof psuje zapytanie i test jest nieważny.",
-      "class": "4"
-    },
-    {
-      "id": "s11-oad-search-bool-f",
-      "host": "oad.nask.pl",
-      "method": "GET",
-      "path": "/wyniki-wyszukiwania?search=dezinformacja%27%20AND%20%271%27%3D%272",
-      "why": "Para boolowska FALSE. Dowód SQLi = TRUE daje wyniki, FALSE nie, przy tym samym prefiksie i bez błędu.",
-      "class": "4"
-    },
-    {
-      "id": "s11-oad-ctl-topic",
-      "host": "oad.nask.pl",
-      "method": "GET",
-      "path": "/wyniki-wyszukiwania?topic=43",
-      "why": "Kontrola filtra tematu: 43 = Dezinformacja (z linków w HTML). Filtr działa, więc parametr jest czytany.",
-      "class": "info"
-    },
-    {
-      "id": "s11-oad-topic-quote",
-      "host": "oad.nask.pl",
-      "method": "GET",
-      "path": "/wyniki-wyszukiwania?topic=43%27",
-      "why": "Apostrof w LICZBOWYM id tematu — najczęstsze miejsce iniekcji w filtrach (klasa 4). Odrzucenie jak wyżej.",
-      "class": "4"
-    },
-    {
-      "id": "s11-oad-topic-neg",
-      "host": "oad.nask.pl",
-      "method": "GET",
-      "path": "/wyniki-wyszukiwania?topic=-1",
-      "why": "Wartość ujemna: brak walidacji przed zapytaniem ujawnia się błędem 5xx albo innym zbiorem niż pusta lista.",
-      "class": "4"
-    },
-    {
-      "id": "s11-oad-topic-array",
-      "host": "oad.nask.pl",
-      "method": "GET",
-      "path": "/wyniki-wyszukiwania?topic[]=43",
-      "why": "Wariant tablicowy (PHP/Laravel: topic[]=...). Jeśli framework przyjmuje tablicę, a kod oczekuje liczby, powstaje inna ścieżka kodu — klasyczny błąd typu.",
-      "class": "4"
-    },
-    {
-      "id": "s11-oad-ctl-type",
-      "host": "oad.nask.pl",
-      "method": "GET",
-      "path": "/wyniki-wyszukiwania?type=publication",
-      "why": "Kontrola filtra typu (wartości z linków: publication, news).",
-      "class": "info"
-    },
-    {
-      "id": "s11-oad-type-quote",
-      "host": "oad.nask.pl",
-      "method": "GET",
-      "path": "/wyniki-wyszukiwania?type=publication%27",
-      "why": "Apostrof w typie: jeśli typ jest wstawiany do zapytania jako string, to jest tu iniekcja; jeśli jest mapowany na stałą listę, dostaniemy pusto/404.",
-      "class": "4"
-    },
-    {
-      "id": "s11-oad-type-junk",
-      "host": "oad.nask.pl",
-      "method": "GET",
-      "path": "/wyniki-wyszukiwania?type=naskhunt",
-      "why": "Wartość spoza listy: rozstrzyga, czy nieznany typ daje błąd (brak walidacji) czy pustą listę (walidacja).",
-      "class": "info"
-    },
-    {
-      "id": "s11-oad-page2",
-      "host": "oad.nask.pl",
-      "method": "GET",
-      "path": "/wyniki-wyszukiwania?search=dezinformacja&page=2",
-      "why": "Paginacja wyników: jeśli strona 2 różni się od kontroli, to parametr istnieje i jest kolejnym wejściem do zapytania (LIMIT/OFFSET).",
-      "class": "info"
-    },
-    {
-      "id": "s11-oad-page-quote",
-      "host": "oad.nask.pl",
-      "method": "GET",
-      "path": "/wyniki-wyszukiwania?search=dezinformacja&page=2%27",
-      "why": "Apostrof w numerze strony. To ten sam wzorzec, który na science.nask.pl dał 400 'Invalid pagination' — tu sprawdzamy, czy walidacja też jest.",
-      "class": "4"
-    },
-    {
-      "id": "s11-oad-datefrom",
+      "id": "s12-oad-ctl-date",
       "host": "oad.nask.pl",
       "method": "GET",
       "path": "/wyniki-wyszukiwania?dateFrom=2026-01-01&dateTo=2026-12-31",
-      "why": "Nazwa parametru zakresu dat (wariant 1). Filtr dat w zapytaniu to typowe miejsce iniekcji, więc warto znać nazwę.",
+      "why": "Kontrola filtra dat: ta para dała 110 278 B (różnica wobec braku parametrów = filtr działa).",
       "class": "info"
     },
     {
-      "id": "s11-oad-date-from",
+      "id": "s12-oad-date-invalid",
       "host": "oad.nask.pl",
       "method": "GET",
-      "path": "/wyniki-wyszukiwania?date-from=2026-01-01&date-to=2026-12-31",
-      "why": "Nazwa parametru zakresu dat (wariant 2, kebab-case). Rozstrzyga się różnicą wobec kontroli bez parametrów.",
+      "path": "/wyniki-wyszukiwania?dateFrom=2026-13-45&dateTo=2026-12-31",
+      "why": "Data nieistniejąca (13. miesiąc). 500 = brak walidacji przed zapytaniem; pusta lista = walidacja albo naturalny brak trafień. Sam 500 to nie podatność (§8: stack trace bez wpływu), ale mówi, gdzie patrzeć.",
+      "class": "4"
+    },
+    {
+      "id": "s12-oad-date-quote",
+      "host": "oad.nask.pl",
+      "method": "GET",
+      "path": "/wyniki-wyszukiwania?dateFrom=2026-01-01%27&dateTo=2026-12-31",
+      "why": "Apostrof w dacie — jeśli data idzie do zapytania bez rzutowania, to jest tu punkt wejścia. Porównanie do s12-oad-ctl-date.",
+      "class": "4"
+    },
+    {
+      "id": "s12-oad-date-dash",
+      "host": "oad.nask.pl",
+      "method": "GET",
+      "path": "/wyniki-wyszukiwania?dateFrom=2026-01-01--&dateTo=2026-12-31",
+      "why": "Dwa minusy: w wielu dialektach SQL `--` to komentarz, a WAF nie traktuje tego jak słowo kluczowe. Jeśli wynik wróci do kontroli (pełny zakres), komentarz zadziałał.",
+      "class": "4"
+    },
+    {
+      "id": "s12-oad-date-inverted",
+      "host": "oad.nask.pl",
+      "method": "GET",
+      "path": "/wyniki-wyszukiwania?dateFrom=2026-12-31&dateTo=2026-01-01",
+      "why": "Zakres odwrócony: poprawna implementacja zwraca pustą listę, wadliwa ignoruje jeden z warunków i zwraca wszystko. Różnica wobec kontroli jest informacją o logice, nie podatnością.",
       "class": "info"
     },
     {
-      "id": "s11-oad-ctl-noparams",
+      "id": "s12-oad-search-pct",
       "host": "oad.nask.pl",
       "method": "GET",
-      "path": "/wyniki-wyszukiwania",
-      "why": "Kontrola odniesienia dla sond z datami: strona bez żadnego parametru.",
+      "path": "/wyniki-wyszukiwania?search=%25",
+      "why": "Znak wieloznaczny LIKE: jeśli zwróci wszystko, to parametr idzie do LIKE bez escapowania — sama w sobie nie podatność, ale potwierdza, że wartość jest składana do zapytania (potrzebne, by interpretować resztę).",
+      "class": "info"
+    },
+    {
+      "id": "s12-oad-page0",
+      "host": "oad.nask.pl",
+      "method": "GET",
+      "path": "/wyniki-wyszukiwania?search=dezinformacja&page=0",
+      "why": "Granica paginacji: 0 vs 1. Off-by-one w OFFSET jest realnym (choć tanim) błędem logiki.",
+      "class": "info"
+    },
+    {
+      "id": "s12-oad-page-neg",
+      "host": "oad.nask.pl",
+      "method": "GET",
+      "path": "/wyniki-wyszukiwania?search=dezinformacja&page=-1",
+      "why": "Strona ujemna: ujemny OFFSET w Postgresie to błąd zapytania. 500 = brak walidacji, pusta lista = walidacja.",
+      "class": "4"
+    },
+    {
+      "id": "s12-oad-page-big",
+      "host": "oad.nask.pl",
+      "method": "GET",
+      "path": "/wyniki-wyszukiwania?search=dezinformacja&page=9999",
+      "why": "Duża strona: dowód, czy serwer liczy offset bezpiecznie (pusta lista) czy przewraca się (500).",
       "class": "info"
     }
   ]

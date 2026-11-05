@@ -41,6 +41,10 @@ struct Check {
     /// (whois / dostępność domeny) — patrz `post_allowed`. Puste = brak ciała.
     #[serde(default)]
     body: Option<String>,
+    /// Zapisz surowe ciało do `NASK/hunt/bodies/<id>.<ext>` do analizy offline
+    /// (kontekst refleksji, RSC payload). Ciała są publiczne, żadnych danych sesji.
+    #[serde(default)]
+    save_body: bool,
     /// Ciało jako `application/json` (kontrakt Vue `POST /api/{who-is-xml,domain-browser}`).
     #[serde(default)]
     json: bool,
@@ -101,6 +105,8 @@ struct Observation {
     /// pierwsze 12 znaków SHA-256. Bez tego dwie identyczne strony różniące się
     /// rotującym `_event_transid` (dns.pl) wyglądają jak dwie różne odpowiedzi.
     sha12: String,
+    /// Surowa treść (ucięta do 400 kB) — tylko do zapisu na dysk, nie do JSON-a.
+    raw: String,
     error: String,
 }
 
@@ -192,6 +198,7 @@ impl Runner {
                 hop_ctype: String::new(),
                 snippet: String::new(),
                 sha12: String::new(),
+                raw: String::new(),
                 error: format!("{method_up} zabroniony dla {host}{path} (tylko odczytowe trasy dns.pl)"),
             });
         }
@@ -236,6 +243,7 @@ impl Runner {
                 hop_ctype: String::new(),
                 snippet: String::new(),
                 sha12: String::new(),
+                raw: String::new(),
                 error: format!("{e}"),
             },
         };
@@ -288,9 +296,12 @@ fn read(resp: ureq::Response, t0: Instant) -> Observation {
     let acac = hdr("access-control-allow-credentials");
     let cdisp = hdr("content-disposition");
     let clen = hdr("content-length");
-    let body = resp.into_string().unwrap_or_default();
+    use std::io::Read;
+    let mut buf: Vec<u8> = Vec::new();
+    let _ = resp.into_reader().take(2_000_000).read_to_end(&mut buf);
+    let len = buf.len();
+    let body = String::from_utf8_lossy(&buf).to_string();
     let ms = t0.elapsed().as_millis();
-    let len = body.len();
     let sha12 = body_hash(&body);
     let binary = !(ctype.contains("text")
         || ctype.contains("json")
@@ -326,6 +337,7 @@ fn read(resp: ureq::Response, t0: Instant) -> Observation {
         hop_ctype: String::new(),
         snippet,
         sha12,
+        raw: body.chars().take(400_000).collect(),
         error: String::new(),
     }
 }
@@ -571,6 +583,31 @@ fn main() {
         "\n> Wszystkie sondy to pojedyncze GET-y. Narzędzie nie loguje się, nie wysyła ciał, \
          nie testuje obciążenia i nie podąża za przekierowaniami poza zakres.\n",
     );
+
+    // Ciała tylko dla jawnie oznaczonych sond (analiza refleksji offline).
+    let body_dir = std::path::Path::new(&out_json)
+        .parent()
+        .map(|p| p.join("bodies"))
+        .unwrap_or_else(|| std::path::PathBuf::from("bodies"));
+    for (c, t, _, _) in &results {
+        let obs = match t {
+            Some(o) => o,
+            None => continue,
+        };
+        if !c.save_body || obs.raw.is_empty() {
+            continue;
+        }
+        if std::fs::create_dir_all(&body_dir).is_ok() {
+            let ext = if obs.ctype.contains("json") {
+                "json"
+            } else if obs.ctype.contains("html") {
+                "html"
+            } else {
+                "txt"
+            };
+            let _ = std::fs::write(body_dir.join(format!("{}.{ext}", c.id)), &obs.raw);
+        }
+    }
 
     std::fs::write(&out_md, &md).expect("zapis report.md");
     let json = serde_json::json!({
