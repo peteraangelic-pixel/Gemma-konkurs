@@ -11,3 +11,6 @@ run 2026-11-04T10:15:33Z
 # ścieżki API z parametrami siedzą w chunkach funkcjonalnych (payout, users,
 # view, ranking, members). Bez parametrów nie da się napisać runbooka.
 run 2026-11-04T18:05:00Z chunks=20 budget=1200
+# Przebieg 6: parametry czytane z tego pliku (workflow: budget=/chunks=).
+# Poprawka po przebiegu 5: push flagi nie przekazywał inputs, więc ruszał z chunks=0.
+run 2026-11-04T18:35:00Z chunks=20 budget=1200

@@ -67,9 +67,19 @@ jobs:
       - name: polowanie
         run: |
           set +e
-          BUDGET="${{ inputs.budget }}"; BUDGET="${BUDGET:-900}"
+          # Parametry: albo z workflow_dispatch, albo z pliku flagi.
+          # Push na nask/RUN-HUNT nie przekazuje `inputs`, więc bez tego
+          # przebieg startował z domyślnymi (chunks=0) i marnował okno joba.
+          BUDGET="${{ inputs.budget }}"
           HOSTS="${{ inputs.hosts }}"
-          CHUNKS="${{ inputs.chunks }}"; CHUNKS="${CHUNKS:-0}"
+          CHUNKS="${{ inputs.chunks }}"
+          if [ -z "$BUDGET$CHUNKS" ]; then
+            LINE="$(grep -E '^run ' nask/RUN-HUNT | tail -1)"
+            [ -z "$CHUNKS" ] && CHUNKS="$(printf '%s' "$LINE" | sed -n 's/.*chunks=\([0-9][0-9]*\).*/\1/p')"
+            [ -z "$BUDGET" ] && BUDGET="$(printf '%s' "$LINE" | sed -n 's/.*budget=\([0-9][0-9]*\).*/\1/p')"
+            echo "z flagi: $LINE"
+          fi
+          BUDGET="${BUDGET:-900}"; CHUNKS="${CHUNKS:-0}"
           if [ -n "$HOSTS" ]; then
             python nask/hunt.py --out nask/findings --budget "$BUDGET" --chunks "$CHUNKS" --hosts $HOSTS 2>&1 | tee /tmp/hunt.log
           else
