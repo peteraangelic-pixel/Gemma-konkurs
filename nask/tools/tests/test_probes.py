@@ -402,3 +402,111 @@ def test_wagtail_html_response_is_ignored():
     """Strona HTML na /api/v2/pages/ to nie API, tylko catch-all — nie zgłaszamy."""
     http = Http(lambda url, h: R(ctype="text/html", body="<html>index</html>", url=url))
     assert probes.probe_wagtail(http, "https://nask.pl") == []
+
+
+# ---------------- S10 (recon): chunki leniwie ładowane ----------------
+# Po co te testy: pierwsza wersja składała URL jako `…js.js`, bo doklejałem
+# rozszerzenie do dopasowania, które już je zawierało. Test na dokładny URL
+# łapie to od razu, a przebieg sieciowy już nie — on by po prostu dostał 404
+# i „nie znalazł nic", co wygląda identycznie jak „nic nie ma".
+
+def _chunks():
+    from nask.tools import chunks
+    return chunks
+
+
+def test_chunk_extraction_builds_exact_url():
+    c = _chunks()
+    hint = 'm.f=["assets/payout-KEUQA3LX.js","assets/users-B4gUxef1.js"]'
+    got = c.extract_chunks(hint, "https://hack.cert.pl")
+    assert got == ["https://hack.cert.pl/assets/payout-KEUQA3LX.js",
+                   "https://hack.cert.pl/assets/users-B4gUxef1.js"], got
+
+
+def test_chunk_extraction_dedupes_and_caps_by_caller():
+    c = _chunks()
+    hint = '"assets/a-12345678.js" "assets/a-12345678.js" "assets/b-87654321.js"'
+    assert c.extract_chunks(hint, "https://x.example") == [
+        "https://x.example/assets/a-12345678.js",
+        "https://x.example/assets/b-87654321.js"]
+
+
+def test_chunk_extraction_ignores_other_hosts():
+    """/assets/… z obcej domeny nie może wejść: to już nie jest nasz zakres."""
+    c = _chunks()
+    assert c.extract_chunks('"https://cdn.evil.example/assets/x-12345678.js"',
+                            "https://hack.cert.pl") == []
+
+
+def test_api_paths_catch_template_concatenation():
+    c = _chunks()
+    src = 'const u=`${e}/api/v1/users/${t}/role`;fetch(`/api/v1/reports/${a}/internal-notes`)'
+    got = c.api_paths(src)
+    assert "/api/v1/users/${t}/role" in got, got
+    assert any(p.startswith("/api/v1/reports/") for p in got), got
+
+
+def test_mine_chunks_collects_and_marks_skipped():
+    c = _chunks()
+    idx = 'm.f=["assets/payout-AAAABBBB.js","assets/big-CCCCDDDD.js"]'
+    js = 'fetch("/api/v1/payout/export?editionId=1&userId=2")'
+
+    class HR:
+        def __init__(self, body=b"", err=None):
+            self.body, self.error, self.text = body, err, body.decode() if body else ""
+
+    class H:
+        def __init__(self, big):
+            self.big = big
+
+        def get(self, url):
+            return HR(body=b"x" * (2_000_000 if self.big else 1)) if not self.big else HR(b"x" * 2_000_000)
+
+    # normalny chunk: dostaje kod, reszta duża → skipped=too_big
+    class H2:
+        def get(self, url):
+            if "payout" in url:
+                return HR(body=js.encode())
+            return HR(body=b"y" * 1_000_000)
+
+    got = c.mine_chunks(H2(), "https://hack.cert.pl", idx)
+    # Jeden plik realnie przeczytany, drugi za duży — i to MUSI być w wyniku,
+    # bo brak wpisu nie może znaczyć „sprawdzone i czyste”.
+    assert got["chunks_total"] == 2 and got["chunks_fetched"] == 1
+    assert [s["why"] for s in got["skipped"]] == ["too_big"], got["skipped"]
+    assert "/api/v1/payout/export" in got["api_paths"], got["api_paths"]
+    assert "editionId" in got["params"] and "userId" in got["params"]
+
+
+def test_mine_chunks_prioritises_interesting_names():
+    """"Przy 24 żądaniach lepiej przeczytać payout niż animacje."""
+    c = _chunks()
+    idx = ('m.f=["assets/animations-AAAA1111.js","assets/payout-BBBB2222.js"]')
+    order = []
+
+    class H:
+        def get(self, url):
+            order.append(url)
+            class R:
+                body, error, text = b"x", None, "x"
+            return R()
+
+    c.mine_chunks(H(), "https://hack.cert.pl", idx, max_chunks=1,
+                  interesting=("payout",))
+    assert order and "payout" in order[0]
+
+
+def test_mine_chunks_never_exceeds_max_chunks():
+    c = _chunks()
+    idx = " ".join(f'"assets/c{i}-1234567{i}.js"' for i in range(9))
+    calls = []
+
+    class H:
+        def get(self, url):
+            calls.append(url)
+            class R:
+                body, error, text = b"x", None, "x"
+            return R()
+
+    c.mine_chunks(H(), "https://hack.cert.pl", idx, max_chunks=3)
+    assert len(calls) == 3, calls

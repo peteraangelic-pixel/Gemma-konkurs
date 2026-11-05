@@ -21,11 +21,12 @@ import json
 import re
 import sys
 from datetime import datetime, timezone
+from urllib.parse import urljoin
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from nask.tools import probes  # noqa: E402
+from nask.tools import chunks, probes  # noqa: E402
 from nask.tools.crawl import LEAK_PATHS, STANDARD_PATHS, Crawler, summarise  # noqa: E402
 from nask.tools.fetch import GuardedFetcher, ScopeViolation  # noqa: E402
 from nask.tools.scope import check_url  # noqa: E402
@@ -47,6 +48,7 @@ TARGETS = [
     "https://www.gov.pl",
     "https://dataannotation.pllum.org.pl",
     "https://bezpiecznewybory.pl",
+    "https://ctf.hack.cert.pl",      # CERT T2, wyjątek z regulaminu — nigdy nie testowany
 ]
 
 SKIP_PROGRAMS = {"wladyslawowo"}          # decyzja użytkownika: szkoda czasu
@@ -76,7 +78,7 @@ def plan_targets(explicit: list[str] | None) -> list[tuple[str, str, str]]:
 
 
 def run(out: Path, budget: int, explicit: list[str] | None, rps: float,
-        timeout: float = 10.0) -> int:
+        timeout: float = 10.0, chunks_n: int = 0) -> int:
     out.mkdir(parents=True, exist_ok=True)
     fetcher = GuardedFetcher(rps=rps, max_requests=budget,
                              evidence_path=out / "evidence.jsonl", timeout=timeout)
@@ -108,6 +110,23 @@ def run(out: Path, budget: int, explicit: list[str] | None, rps: float,
             js_findings, js_tech = crawler.analyse_bundles(html, url)
             tech |= set(js_tech)
 
+            # Chunki leniwie ładowane: index.js wymienia 92 pliki, ale prawdziwe
+            # wywołania API (ścieżki + parametry) są w chunkach funkcjonalnych.
+            chunk_info: dict = {}
+            endpoints_c: list[str] = []
+            if chunks_n and html:
+                srcs = re.findall(r'src="([^"]+\.js[^"]*)"', html)
+                index_src = next((x for x in srcs if "index-" in x), srcs[0] if srcs else "")
+                if index_src:
+                    idx = fetcher.get(urljoin(url + "/", index_src.lstrip("/")))
+                    if not idx.error and idx.body:
+                        chunk_info = chunks.mine_chunks(
+                            fetcher, url, idx.text, max_chunks=chunks_n,
+                            interesting=("payout", "users", "view", "ranking", "report",
+                                         "account", "integrations", "create", "edit",
+                                         "details", "members", "reward"))
+                        endpoints_c = chunk_info.get("endpoints") or []
+
             bid = build_id_of(html)
             routes: list[str] = []
             if bid or tech & {"next.js"}:
@@ -116,6 +135,7 @@ def run(out: Path, budget: int, explicit: list[str] | None, rps: float,
                     url, base, [f.value for f in js_findings if f.kind == "endpoint"])
 
             endpoints = [f.value for f in js_findings if f.kind == "endpoint"]
+            endpoints += endpoints_c
             found = probes.run_all(
                 fetcher, url,
                 {"tech": sorted(tech), "build_id": bid, "routes": routes,
@@ -134,6 +154,10 @@ def run(out: Path, budget: int, explicit: list[str] | None, rps: float,
                         "next_routes": routes[:30],
                         "js_endpoints": sorted({f.value for f in js_findings
                                                 if f.kind == "endpoint"})[:60],
+                        "js_chunks": {k: v for k, v in chunk_info.items()
+                                      if k in ("chunks_total", "chunks_fetched",
+                                               "api_paths", "params", "hot_fields",
+                                               "secrets", "skipped")},
                         "probes": [p.as_dict() for p in found]})
             hosts.append(row)
             hits_all.extend(hits)
@@ -145,6 +169,14 @@ def run(out: Path, budget: int, explicit: list[str] | None, rps: float,
                 print(f"    !! {p.code} [{p.severity}] {p.title} → {p.url}", flush=True)
         except ScopeViolation as exc:
             print(f"    ODMOWA: {exc}", file=sys.stderr)
+        except RuntimeError as exc:
+            # `Budget.spend()` rzuca RuntimeError po wyczerpaniu. Wcześniej ten
+            # wyjątek wychodził z pętli i **zabijał cały przebieg** — udało się
+            # tylko dlatego, że budżet 900 wystarczył na 16 hostów. Przy
+            # wąskim budżecie traciliśmy wszystkie pozostałe hosty i plik wyniku.
+            print(f"    PRZERWANO (budżet): {exc}", file=sys.stderr)
+            checkpoint(out, hosts, probes_all, budget - fetcher.budget.left)
+            break
 
     probes_all.sort(key=lambda p: SEVERITY_ORDER.get(p.severity, 9))
     payload = {
@@ -231,11 +263,14 @@ def main(argv=None) -> int:
     ap.add_argument("--budget", type=int, default=900)
     ap.add_argument("--hosts", nargs="*", default=None)
     ap.add_argument("--rps", type=float, default=4.5)
+    ap.add_argument("--chunks", type=int, default=0, dest="chunks_n",
+                    help="ile leniwie ładowanych chunków JS pobrać na host (0 = nie)")
     ap.add_argument("--timeout", type=float, default=10.0,
                     help="timeout pojedynczego żądania; martwe hosty nie mogą "
                          "zjeść całego okna joba")
     args = ap.parse_args(argv)
-    return run(Path(args.out), args.budget, args.hosts, args.rps, args.timeout)
+    return run(Path(args.out), args.budget, args.hosts, args.rps, args.timeout,
+               args.chunks_n)
 
 
 if __name__ == "__main__":

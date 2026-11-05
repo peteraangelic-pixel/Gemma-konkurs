@@ -4,3 +4,10 @@
 #  - nask.pl w celach (w scope jako literał),
 #  - S6 rozróżnia utwardzenie (403/429) od obejścia (2xx).
 run 2026-11-04T10:15:33Z
+
+# Przebieg 5 (04.11, wieczór): pierwsze wejście na ctf.hack.cert.pl (CERT T2,
+# nigdy nie testowany przez żadną sesję) + wydobywanie leniwie ładowanych
+# chunków JS (--chunks). Powód: index.js hack.cert.pl to tylko mapa 92 plików;
+# ścieżki API z parametrami siedzą w chunkach funkcjonalnych (payout, users,
+# view, ranking, members). Bez parametrów nie da się napisać runbooka.
+run 2026-11-04T18:05:00Z chunks=20 budget=1200

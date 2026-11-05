@@ -21,6 +21,9 @@ on:
       hosts:
         description: "Konkretne hosty po spacji (puste = wszystkie w scope)"
         default: ""
+      chunks:
+        description: "Ile leniwie ładowanych chunków JS pobrać na host (0 = nie)"
+        default: "0"
 
 permissions:
   contents: write
@@ -66,10 +69,11 @@ jobs:
           set +e
           BUDGET="${{ inputs.budget }}"; BUDGET="${BUDGET:-900}"
           HOSTS="${{ inputs.hosts }}"
+          CHUNKS="${{ inputs.chunks }}"; CHUNKS="${CHUNKS:-0}"
           if [ -n "$HOSTS" ]; then
-            python nask/hunt.py --out nask/findings --budget "$BUDGET" --hosts $HOSTS 2>&1 | tee /tmp/hunt.log
+            python nask/hunt.py --out nask/findings --budget "$BUDGET" --chunks "$CHUNKS" --hosts $HOSTS 2>&1 | tee /tmp/hunt.log
           else
-            python nask/hunt.py --out nask/findings --budget "$BUDGET" 2>&1 | tee /tmp/hunt.log
+            python nask/hunt.py --out nask/findings --budget "$BUDGET" --chunks "$CHUNKS" 2>&1 | tee /tmp/hunt.log
           fi
           CODE=${PIPESTATUS[0]}
           echo "kod wyjścia: $CODE"
