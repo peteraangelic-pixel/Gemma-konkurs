@@ -109,3 +109,27 @@ najlepszą otwartą drogą.**
 | 2 | `zglos-dezinformacje` — upload (SVG z JS → stored XSS w panelu moderatora) | reCAPTCHA v3 = tylko przeglądarka | 4 000–9 000 zł |
 
 Obie wymagają Ciebie, nie narzędzia. Szczegóły i kryteria „tak/nie": `DO-ZROBIENIA-RANO.md`.
+
+---
+
+# Dopisek 3 (05.11) — cztery przebiegi, dwie nowe klasy, zero podatności
+
+Szczegóły: [`WYNIKI-PRZEBIEGOW-5-8.md`](WYNIKI-PRZEBIEGOW-5-8.md).
+
+- **Przebiegi 5–8: 1 921 żądań, 18 hostów, 0 potwierdzonych podatności.**
+- **Zabity własny fałszywy alarm:** S3 zgłosiła 2× `wysoki` na `116sos.pl`, bo `404`
+  liczyło się jako „strona wymaga logowania”. Poprawione w kodzie + 5 testów regresyjnych,
+  w tym jeden stary **poprawiony**, bo utrwalał błąd.
+- **Nowa sonda S10 (trucizna cache):** 8 nagłówków × para kontrolna. `pllum` i
+  `bezpiecznymiesiac` (jedyne z `public, max-age=3600`) **nie odbijają żadnego**;
+  `dns.pl` odbija, ale bez propagacji. Temat zamknięty z dowodem.
+- **Nowa sonda S11 (dane osobowe w publicznym JSON):** publiczne trasy `hack.cert.pl`
+  → 404 + powłoka SPA. Trzecia droga do portalu bez konta, domknięta.
+- **`ctf.hack.cert.pl`:** w scope, ale 404 / brak vhosta — nie ma czego testować.
+- **Chunki JS:** 47 pobranych; ścieżek API nie oddają (klient skleja prefiks szablonem),
+  ale oddają **pola przyjmowane od klienta**: `role`, `email`, `status`, `message_id` —
+  to lista do mass assignment z sesją.
+- **133 testy offline**, wszystkie zielone.
+
+**Następny krok nie jest mój:** [`RUNBOOK-HACKCERT.md`](RUNBOOK-HACKCERT.md) — 45 minut,
+7 hipotez, tabela statusów do odesłania. To jedyny host, gdzie sesja jest darmowa i legalna.

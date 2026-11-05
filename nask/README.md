@@ -22,9 +22,12 @@ w `../archive/arc-agi-3/` — zamknięty, zostawiony dla historii.
 | [`PRZEGLAD-DYSCU-2026-11-04.md`](PRZEGLAD-DYSCU-2026-11-04.md) | przegląd folderu zespołu na Dysku: co przyjęte, co duplikat |
 | [`SZABLON-ZGLOSZENIA.md`](SZABLON-ZGLOSZENIA.md) | filtr „czy to płaci” (§8) + szablon zgłoszenia |
 | [`DO-ZROBIENIA-RANO.md`](DO-ZROBIENIA-RANO.md) | Twoja lista na 15 minut, z kryteriami tak/nie |
-| [`WYNIKI-NOCY.md`](WYNIKI-NOCY.md) | podsumowanie nocy + wynik przebiegu 4 |
+| [`WYNIKI-NOCY.md`](WYNIKI-NOCY.md) | podsumowanie nocy + przebiegi 4–8 |
+| [`WYNIKI-PRZEBIEGOW-5-8.md`](WYNIKI-PRZEBIEGOW-5-8.md) | cztery przebiegi 05.11: S10, S11, chunki JS, zabity fałszywy alarm |
+| [`RUNBOOK-HACKCERT.md`](RUNBOOK-HACKCERT.md) | **Twoje 45 minut na `hack.cert.pl`** — 7 hipotez, gotowe snippety |
+| [`findings/RUNS.md`](findings/RUNS.md) | rejestr przebiegów: budżet, chunki, trafienia |
 
-## Narzędzia (Python, zero zależności, 110 testów offline)
+## Narzędzia (Python, zero zależności, 133 testy offline)
 
 ```bash
 python3 nask/nask.py scope --list          # cały zakres
@@ -54,7 +57,7 @@ i zasady dotyczące sekretów: [`JAK-DZIALA-ACTIONS.md`](JAK-DZIALA-ACTIONS.md).
 Testy:
 
 ```bash
-python3 -m pytest nask/tools/tests -q      # 110/110, bez sieci
+python3 -m pytest nask/tools/tests -q      # 133/133, bez sieci
 ```
 
 ## Twarde reguły (z regulaminu, nie z dobrych chęci)
