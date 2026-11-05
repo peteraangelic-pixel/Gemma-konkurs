@@ -19,3 +19,6 @@ run 2026-11-04T18:35:00Z chunks=20 budget=1200
 # Parametry przebiegu zapisywane do nask/findings/RUNS.md, bo logi Actions sa
 # z sandboxa nieosiagalne.
 run 2026-11-05T14:15:00Z chunks=20 budget=1200
+# Przebieg 8 (05.11): celowany, tani - tylko hack.cert.pl z jawnymi publicznymi
+# trasami API dla S11 (dane osobowe w publicznym JSON-ie). 4 zadania + sondy.
+run 2026-11-05T14:55:00Z chunks=0 budget=120 hosts=hack.cert.pl

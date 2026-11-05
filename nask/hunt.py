@@ -52,6 +52,17 @@ TARGETS = [
     "https://pllum.org.pl",          # NASK T2; `public, max-age=3600` = cache współdzielony
 ]
 
+# Publiczne trasy API `hack.cert.pl` znane z bundla SPA (mapa z Dysku, sekcja
+# `/api/v1/public/...`). Sonda S11 nie mogła ich wziąć z chunków, bo klient
+# skleja ścieżki szablonem (`${e}/api/v1/...`) i sam prefiks w chunkach nie
+# występuje. Cztery żądania; 404 jest równie dobrym wynikiem jak 200.
+HACKCERT_PUBLIC = [
+    "/api/v1/public/institutions",
+    "/api/v1/public/programs",
+    "/api/v1/public/reports",
+    "/api/v1/public/institutions/nask",
+]
+
 SKIP_PROGRAMS = {"wladyslawowo"}          # decyzja użytkownika: szkoda czasu
 SEVERITY_ORDER = {"krytyczny": 0, "wysoki": 1, "sredni": 2, "niski": 3}
 
@@ -150,7 +161,9 @@ def run(out: Path, budget: int, explicit: list[str] | None, rps: float,
                  # S11: publiczne trasy API (z bundli/chunków) — czy oddają dane
                  # osobowe. Tylko `/public/` i trasy listujące, żeby nie chodzić
                  # po całym API bez powodu.
-                 "pii_paths": [e for e in endpoints
+                 "pii_paths": (HACKCERT_PUBLIC if "hack.cert.pl" in url and
+                               "ctf." not in url else [])
+                              + [e for e in endpoints
                                if isinstance(e, str) and e.startswith("/")
                                and ("/public/" in e or e.rstrip("/").endswith(
                                    ("/institutions", "/programs", "/reports")))]

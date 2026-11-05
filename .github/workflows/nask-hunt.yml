@@ -77,6 +77,7 @@ jobs:
             LINE="$(grep -E '^run ' nask/RUN-HUNT | tail -1)"
             [ -z "$CHUNKS" ] && CHUNKS="$(printf '%s' "$LINE" | sed -n 's/.*chunks=\([0-9][0-9]*\).*/\1/p')"
             [ -z "$BUDGET" ] && BUDGET="$(printf '%s' "$LINE" | sed -n 's/.*budget=\([0-9][0-9]*\).*/\1/p')"
+            [ -z "$HOSTS" ] && HOSTS="$(printf '%s' "$LINE" | sed -n 's/.*hosts=\([^ ]*\).*/\1/p')"
             echo "z flagi: $LINE"
           fi
           BUDGET="${BUDGET:-900}"; CHUNKS="${CHUNKS:-0}"
