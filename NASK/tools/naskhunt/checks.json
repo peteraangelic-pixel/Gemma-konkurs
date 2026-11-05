@@ -1,106 +1,141 @@
 {
-  "_opis": "Runda 13: JEDYNA nietknięta hipoteza o realnej wartości bez konta — web cache poisoning na dns.pl. Zespół (Dysk 22 §3.1) twierdzi, że dns.pl odbija X-Forwarded-Host do `<script src>`, ale sami napisali, że 'wymaga cache współdzielonego, u nich nie testowane' i że widzieli Cache-Control: private. Runda 13 weryfikuje to pomiarowo: (1) czy nagłówek w ogóle trafia do treści, (2) jakie nagłówki cache zwraca serwer i czy jest CDN (via/age/x-cache/cf-cache-status), (3) czy odpowiedź z odbiciem jest cache'owalna. Bez trafienia w cache to nie jest podatność — i tak zostanie zapisane. Wartość: 9 000 zł (klasa 7), warunek odrzucenia: brak współdzielonego cache albo Cache-Control: private/no-store na każdej odbitej odpowiedzi.",
-  "_zasady": "GET-only, 2 req/s, bez ciał. Nagłówki XFH/X-Host/Forwarded wysyłamy WYŁĄCZNIE z wartością example.com (domena zarezerwowana, nic nie wykona) — żadnego hosta, który mógłby realnie załadować kod użytkownikom. Ciała czterech sond zapisujemy do analizy refleksji offline.",
+  "_opis": "Runda 14: rozstrzygnięcie hipotezy web cache poisoning. Runda 13 POTWIERDZIŁA odbicie: dns.pl zwraca w treści 15x <script src=\"https://example.com/translations/...\">, gdy wyślemy X-Forwarded-Host. To jeszcze NIE podatność — bez współdzielonego cache jest to refleksja w prywatnej odpowiedzi (Cache-Control: private). Ta runda robi jedyny sensowny test: zatruj, potem poproś BEZ nagłówka i sprawdź, czy wraca zatruta treść. Do tego sprawdzamy odbicie XFH na pozostałych hostach z §5 (1 żądanie każdy) — bo jeśli któryś odbija host do <script src> i ma inny cache, to jest tam ta sama klasa.",
+  "_zasady": "GET-only, 2 req/s, bez ciał. XFH zawsze = example.com (domena zarezerwowana, nie wykona żadnego kodu u użytkowników). Test nie niszczy danych: najgorszy scenariusz to wpis w cache'u z adresem example.com, który wygasa po s-maxage=300 s.",
   "checks": [
     {
-      "id": "s13-dns-ctl-home",
+      "id": "s14-dns-poison-home",
       "host": "dns.pl",
       "method": "GET",
       "path": "/",
-      "save_body": true,
-      "why": "Kontrola bazowa strony głównej: rozmiar, sha12, nagłówki cache (Cache-Control/Age/Via) i pełna treść do porównania z sondą XFH.",
-      "class": "info"
-    },
-    {
-      "id": "s13-dns-xfh-home",
-      "host": "dns.pl",
-      "method": "GET",
-      "path": "/",
+      "why": "Zatrucie: żądanie z X-Forwarded-Host=example.com na stronę główną. Poprzednia runda potwierdziła odbicie do 15x <script src>. Teraz testujemy, czy ta odpowiedź trafia do cache współdzielonego.",
+      "class": "info",
       "headers": {
         "X-Forwarded-Host": "example.com"
-      },
-      "save_body": true,
-      "why": "Główna sonda: czy X-Forwarded-Host trafia do treści. Porównanie z kontrolą po sha12 (po normalizacji transid) i po ciele pokazuje, czy odbicie istnieje w tym miejscu.",
-      "class": "7"
+      }
     },
     {
-      "id": "s13-dns-xfh-home-2",
+      "id": "s14-dns-check-home",
       "host": "dns.pl",
       "method": "GET",
       "path": "/",
-      "headers": {
-        "X-Forwarded-Host": "example.com"
-      },
-      "why": "Powtórka tej samej sondy 2 s później: jeśli nagłówki cache pokażą Age > 0 albo HIT, to odpowiedź z odbiciem jest w cache'u współdzielonym — i wtedy hipoteza zespołu jest realna. Bez tego to tylko refleksja w prywatnej odpowiedzi.",
-      "class": "7"
+      "why": "KONTROLA PROPAGACJI: żądanie BEZ nagłówka, chwilę po zatruciu. Jeśli w treści nadal jest example.com, cache współdzielony istnieje i hipoteza jest realna. Jeśli wraca dns.pl — odpowiedź nie jest cache'owana współdzielnie.",
+      "class": "info",
+      "save_body": true
     },
     {
-      "id": "s13-dns-xfh-en",
+      "id": "s14-dns-poison-en",
       "host": "dns.pl",
       "method": "GET",
       "path": "/en/",
+      "why": "Zatrucie wersji angielskiej (inne reguły locale i cache).",
+      "class": "info",
       "headers": {
         "X-Forwarded-Host": "example.com"
-      },
-      "save_body": true,
-      "why": "Wersja angielska: inne reguły cache i inne locale w walidacji. To tam najczęściej jeden wariant jest cache'owalny, a drugi nie.",
-      "class": "7"
+      }
     },
     {
-      "id": "s13-dns-xfh-dnssec",
+      "id": "s14-dns-check-en",
       "host": "dns.pl",
       "method": "GET",
-      "path": "/DNSSEC",
-      "headers": {
-        "X-Forwarded-Host": "example.com"
-      },
-      "save_body": true,
-      "why": "Strona statyczna z linków w stopce — statyczne strony najczęściej mają długi TTL i są cache'owane agresywniej niż strona główna.",
-      "class": "7"
+      "path": "/en/",
+      "why": "Kontrola propagacji dla /en/.",
+      "class": "info",
+      "save_body": true
     },
     {
-      "id": "s13-dns-xhost-home",
-      "host": "dns.pl",
+      "id": "s14-zglos-xfh",
+      "host": "zglos-dezinformacje.nask.pl",
       "method": "GET",
       "path": "/",
+      "why": "Czy X-Forwarded-Host jest odbijany na zglos (Tier 1, Next.js + Azure). Odbicie tutaj = ta sama klasa co dns.pl, ale na hoście, gdzie cache nagłówków bywa inny.",
+      "class": "info",
       "headers": {
-        "X-Host": "example.com"
+        "X-Forwarded-Host": "example.com"
       },
-      "why": "Alternatywna nazwa nagłówka (niektóre proxy czytają X-Host). Osobne żądanie, bo serwer może ufać tylko jednemu z nich.",
-      "class": "7"
+      "save_body": true
     },
     {
-      "id": "s13-dns-forwarded-home",
-      "host": "dns.pl",
+      "id": "s14-oad-xfh",
+      "host": "oad.nask.pl",
       "method": "GET",
       "path": "/",
-      "headers": {
-        "Forwarded": "host=example.com"
-      },
-      "why": "Nagłówek RFC 7239. Rzadko obsługiwany, ale jeśli tak — daje drugą drogę do tego samego odbicia.",
-      "class": "7"
-    },
-    {
-      "id": "s13-dns-xfh-static",
-      "host": "dns.pl",
-      "method": "GET",
-      "path": "/sites/default/files/2024-05/zosta%C5%84_rejestratorem_domeny_pl.png",
+      "why": "Odbicie XFH na oad (Tier 1). Next.js z turbopackiem — typowo brak odbicia, ale koszt 1 żądania.",
+      "class": "info",
       "headers": {
         "X-Forwarded-Host": "example.com"
       },
-      "why": "Plik statyczny z CDN: tu oczekujemy realnego cache (HIT/Age), ale bez refleksji. To kontrola rozstrzygająca, czy CDN w ogóle cache'uje — potrzebna, żeby odróżnić 'brak cache' od 'cache tylko dla assetów'.",
-      "class": "info"
+      "save_body": true
     },
     {
-      "id": "s13-dns-xfh-api",
-      "host": "dns.pl",
+      "id": "s14-science-xfh",
+      "host": "science.nask.pl",
       "method": "GET",
-      "path": "/api/zone-stats",
+      "path": "/",
+      "why": "Odbicie XFH na science (Tier 2, WordPress+Next).",
+      "class": "info",
       "headers": {
         "X-Forwarded-Host": "example.com"
       },
-      "why": "Trasa JSON: sprawdzamy, czy nagłówki cache na API są inne niż na HTML (i czy JSON nie odbija hosta w polach).",
-      "class": "info"
+      "save_body": true
+    },
+    {
+      "id": "s14-116-xfh",
+      "host": "116sos.pl",
+      "method": "GET",
+      "path": "/",
+      "why": "Odbicie XFH na 116sos (Tier 2).",
+      "class": "info",
+      "headers": {
+        "X-Forwarded-Host": "example.com"
+      },
+      "save_body": true
+    },
+    {
+      "id": "s14-pllum-xfh",
+      "host": "pllum.org.pl",
+      "method": "GET",
+      "path": "/",
+      "why": "Odbicie XFH na pllum (Tier 2, Nuxt).",
+      "class": "info",
+      "headers": {
+        "X-Forwarded-Host": "example.com"
+      },
+      "save_body": true
+    },
+    {
+      "id": "s14-dyzurnet-xfh",
+      "host": "dyzurnet.pl",
+      "method": "GET",
+      "path": "/",
+      "why": "Odbicie XFH na dyzurnet (Tier 1, Next.js + Cloudflare). Cloudflare normalnie nie przekazuje XFH do aplikacji.",
+      "class": "info",
+      "headers": {
+        "X-Forwarded-Host": "example.com"
+      },
+      "save_body": true
+    },
+    {
+      "id": "s14-bm-xfh",
+      "host": "bezpiecznymiesiac.pl",
+      "method": "GET",
+      "path": "/",
+      "why": "Odbicie XFH na bezpiecznymiesiac (Tier 2).",
+      "class": "info",
+      "headers": {
+        "X-Forwarded-Host": "example.com"
+      },
+      "save_body": true
+    },
+    {
+      "id": "s14-dns-api-xfh",
+      "host": "dns.pl",
+      "method": "GET",
+      "path": "/api/registrars-list/pl/20/1",
+      "why": "Czy JSON API dns.pl odbija host w polach odpowiedzi (np. w linkach do logo: uri). Refleksja w JSON to inny wektor niż w HTML.",
+      "class": "info",
+      "headers": {
+        "X-Forwarded-Host": "example.com"
+      }
     }
   ]
 }

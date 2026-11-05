@@ -313,6 +313,9 @@ fn read(resp: ureq::Response, t0: Instant) -> Observation {
         "x-powered-by",
         "content-security-policy",
         "vary",
+        "set-cookie",
+        "pragma",
+        "expires",
         "x-frame-options",
     ]
     .iter()
