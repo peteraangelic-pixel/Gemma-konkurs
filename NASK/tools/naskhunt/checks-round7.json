@@ -1,0 +1,153 @@
+{
+  "_opis": "Runda 7: sondy wynikajace z przegladu 6 galezi zespolu (Pokemon c87/7911/a450, Gemma 6d08, Smak 5ed7). Nowe: /download-file na bezpiecznymiesiac (endpoint spoza naszej mapy), weryfikacja twierdzenia o /admin/logs w HIVE, stabilnosc cookieHash na 116sos (host wrocil), drafty Nuxt Content. Kazda sonda jest teraz odejmowana od catch-all hostu, a 308 jest rozstrzygane jednym skokiem same-origin.",
+  "_zasady": "GET-only, 2 req/s, bez cial i bez logowania. Skok przekierowania tylko na ten sam host i tylko https.",
+  "checks": [
+    {
+      "id": "s7-bm-dl-control",
+      "host": "bezpiecznymiesiac.pl",
+      "method": "GET",
+      "path": "/download-file/?fileUrl=/media/2026/09/Facebook-ecsm-1.png",
+      "why": "Kontrola: istniejacy plik z /media/. Czy endpoint serwuje cokolwiek (200) czy tylko PDF-y (500)?",
+      "class": "info"
+    },
+    {
+      "id": "s7-bm-dl-encslashes",
+      "host": "bezpiecznymiesiac.pl",
+      "method": "GET",
+      "path": "/download-file/?fileUrl=%2Fmedia%2F2026%2F09%2FFacebook-ecsm-1.png",
+      "why": "Ten sam plik, ale ze zakodowanymi ukosnikami — czy filtr dekoduje przed walidacja (rozna odpowiedz = inna sciezka kodu).",
+      "class": "15"
+    },
+    {
+      "id": "s7-bm-dl-dot",
+      "host": "bezpiecznymiesiac.pl",
+      "method": "GET",
+      "path": "/download-file/?fileUrl=/media/./2026/09/Facebook-ecsm-1.png",
+      "why": "Segment '.' w srodku: normalizacja po walidacji to klasyczny bypass prefiksu /media/ (poz. 15).",
+      "class": "15"
+    },
+    {
+      "id": "s7-bm-dl-case",
+      "host": "bezpiecznymiesiac.pl",
+      "method": "GET",
+      "path": "/download-file/?fileUrl=/MEDIA/2026/09/Facebook-ecsm-1.png",
+      "why": "Wielkosc liter w prefiksie: czy walidacja prefiksu jest case-sensitive, a system plikow nie.",
+      "class": "15"
+    },
+    {
+      "id": "s7-bm-dl-noslash",
+      "host": "bezpiecznymiesiac.pl",
+      "method": "GET",
+      "path": "/download-file/?fileUrl=media/2026/09/Facebook-ecsm-1.png",
+      "why": "Prefiks bez wiodacego ukosnika — ujawnia, czy sciezka jest doklejana do katalogu bazowego.",
+      "class": "info"
+    },
+    {
+      "id": "s7-bm-dl-dir",
+      "host": "bezpiecznymiesiac.pl",
+      "method": "GET",
+      "path": "/download-file/?fileUrl=/media/2026/09/",
+      "why": "Katalog zamiast pliku: 500 vs 404 rozroznia 'nie ma pliku' od 'blad obslugi' (sygnal o implementacji).",
+      "class": "info"
+    },
+    {
+      "id": "s7-116-hash-a",
+      "host": "116sos.pl",
+      "method": "GET",
+      "path": "/api/fetch-cookie-hash",
+      "why": "Stabilnosc cookieHash: pierwszy odczyt w przebiegu.",
+      "class": "11.1"
+    },
+    {
+      "id": "s7-116-hash-b",
+      "host": "116sos.pl",
+      "method": "GET",
+      "path": "/api/fetch-cookie-hash",
+      "why": "Drugi odczyt: identyczna wartosc = stala (cache-buster), inna = pochodna sesji (do analizy).",
+      "class": "11.1"
+    },
+    {
+      "id": "s7-116-hash-xfh",
+      "host": "116sos.pl",
+      "method": "GET",
+      "path": "/api/fetch-cookie-hash",
+      "why": "X-Forwarded-Host: czy odpowiedz zalezy od naglowka hosta (cache poisoning / host header injection, poz. 18).",
+      "class": "18",
+      "headers": {
+        "X-Forwarded-Host": "arena-probe.example"
+      }
+    },
+    {
+      "id": "s7-116-centres-all",
+      "host": "116sos.pl",
+      "method": "GET",
+      "path": "/api/centres-search?q=zzzzqqqxxx",
+      "why": "Kontrola: q ignorowane -> API zwraca cala baze osrodkow niezaleznie od frazy. Publiczne, ale mierzy over-read.",
+      "class": "12.2"
+    },
+    {
+      "id": "s7-116-centres-id",
+      "host": "116sos.pl",
+      "method": "GET",
+      "path": "/api/centres-search?q=a&id=1",
+      "why": "Czy istnieje filtr po id (ujawni endpoint szczegolowy do dalszej analizy).",
+      "class": "info"
+    },
+    {
+      "id": "s7-hive-admin-logs",
+      "host": "dataannotation.pllum.org.pl",
+      "method": "GET",
+      "path": "/admin/logs",
+      "why": "Cudza galaz twierdzi, ze /admin/logs ma 'guardy tylko klienta'. Mierze: redirect na /login = guard serwerowy, 200 z HTML = guard kliencki.",
+      "class": "9.1"
+    },
+    {
+      "id": "s7-hive-api-admin-logs",
+      "host": "dataannotation.pllum.org.pl",
+      "method": "GET",
+      "path": "/api/v1/admin/logs",
+      "why": "Ten sam zasob po API: 401 = autoryzacja po stronie serwera.",
+      "class": "9.1"
+    },
+    {
+      "id": "s7-hive-api-users-slash",
+      "host": "dataannotation.pllum.org.pl",
+      "method": "GET",
+      "path": "/api/v1/users/",
+      "why": "Trailing slash: 307 -> 401 potwierdza zywa trase (kontrakt FastAPI).",
+      "class": "12.1"
+    },
+    {
+      "id": "s7-pllum-drafts",
+      "host": "pllum.org.pl",
+      "method": "GET",
+      "path": "/api/_content/query?_params=%7B%22where%22%3A%5B%5B%22_draft%22%2C%22%3D%22%2Ctrue%5D%5D%7D",
+      "why": "Nuxt Content z filtrem po _draft=true: pusty wynik = brak wycieku wersji roboczych; niepusty = dane niepubliczne (poz. 3).",
+      "class": "3"
+    },
+    {
+      "id": "s7-naskpl-search-literal",
+      "host": "nask.pl",
+      "method": "GET",
+      "path": "/api/search?query=raport&lang=pl",
+      "why": "API wyszukiwarki na literalnym hoscie z §5 (bez podazania na www — inny host, poza zakresem).",
+      "class": "info"
+    },
+    {
+      "id": "s7-naskpl-root",
+      "host": "nask.pl",
+      "method": "GET",
+      "path": "/",
+      "why": "Zapis Location dla nask.pl: dokumentuje, ze kanoniczny host to www (poza zakresem) i ze skoku NIE wykonujemy.",
+      "class": "info"
+    },
+    {
+      "id": "s7-dyzurnet-api",
+      "host": "dyzurnet.pl",
+      "method": "GET",
+      "path": "/api",
+      "why": "Cudza galaz: /api zwraca 404 app-routera. Potwierdzam jednym zadaniem z catch-allem.",
+      "class": "info"
+    }
+  ]
+}

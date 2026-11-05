@@ -36,6 +36,21 @@ struct Check {
     why: String,
     #[serde(default)]
     class: String,
+    /// Ciało żądania. Dozwolone wyłącznie dla odczytowych wyszukiwarek `dns.pl`
+    /// (whois / dostępność domeny) — patrz `post_allowed`. Puste = brak ciała.
+    #[serde(default)]
+    body: Option<String>,
+    /// Ciało jako `application/json` (kontrakt Vue `POST /api/{who-is-xml,domain-browser}`).
+    #[serde(default)]
+    json: bool,
+}
+
+/// POST wolno wysłać **tylko** na odczytowe endpointy wyszukiwania `dns.pl`.
+/// To nie jest lista „na później”: host i prefiks ścieżki są sprawdzane w kodzie,
+/// więc literówka w checkach nie wyśle żądania zapisującego.
+fn post_allowed(host: &str, path: &str) -> bool {
+    host.eq_ignore_ascii_case("dns.pl")
+        && (path.starts_with("/api/who-is-xml/") || path.starts_with("/api/domain-browser/"))
 }
 
 fn get() -> String {
@@ -135,9 +150,44 @@ impl Runner {
     }
 
     fn fetch_once(&mut self, host: &str, path: &str, headers: &BTreeMap<String, String>) -> Option<Observation> {
+        self.fetch_full(host, path, headers, "GET", None, false)
+    }
+
+    /// Pełny wariant: metoda + opcjonalne ciało. `POST` przechodzi wyłącznie przez
+    /// `post_allowed` (odczytowe wyszukiwarki `dns.pl`); wszystko inne jest odrzucane
+    /// **przed** wysłaniem, z jawnym błędem w rekordzie.
+    fn fetch_full(
+        &mut self,
+        host: &str,
+        path: &str,
+        headers: &BTreeMap<String, String>,
+        method: &str,
+        body: Option<&str>,
+        json: bool,
+    ) -> Option<Observation> {
         let url = format!("https://{host}{path}");
         if self.scope.check_url(&url).is_err() {
             return None;
+        }
+        let method_up = method.to_ascii_uppercase();
+        if method_up != "GET" && !post_allowed(host, path) {
+            return Some(Observation {
+                status: 0,
+                len: 0,
+                ctype: String::new(),
+                location: String::new(),
+                server: String::new(),
+                acao: String::new(),
+                acac: String::new(),
+                cdisp: String::new(),
+                clen: String::new(),
+                ms: 0,
+                hop_status: 0,
+                hop_len: 0,
+                hop_ctype: String::new(),
+                snippet: String::new(),
+                error: format!("{method_up} zabroniony dla {host}{path} (tylko odczytowe trasy dns.pl)"),
+            });
         }
         if let Some(prev) = self.last {
             let elapsed = prev.elapsed();
@@ -149,11 +199,19 @@ impl Runner {
         self.sent += 1;
 
         let t0 = Instant::now();
-        let mut req = self.agent.request(&"GET", &url);
+        let mut req = self.agent.request(&method_up, &url);
         for (k, v) in headers {
             req = req.set(k, v);
         }
-        let obs = match req.call() {
+        if json {
+            req = req.set("Content-Type", "application/json");
+        }
+        let result = match (method_up.as_str(), body) {
+            ("GET", _) => req.call(),
+            (_, Some(b)) => req.send_string(b),
+            (_, None) => req.send_string(""),
+        };
+        let obs = match result {
             Ok(resp) => read(resp, t0),
             Err(ureq::Error::Status(_, resp)) => read(resp, t0),
             Err(e) => Observation {
@@ -337,7 +395,19 @@ fn main() {
             .as_ref()
             .and_then(|p| runner.get(&check.host, p, &BTreeMap::new()));
         let catchall = runner.catchall_for(&check.host);
-        let test = runner.get(&check.host, &check.path, &check.headers);
+        let test = if check.method.eq_ignore_ascii_case("GET") {
+            runner.get(&check.host, &check.path, &check.headers)
+        } else {
+            // POST tylko na odczytowe trasy dns.pl — guard jest w `fetch_full`.
+            runner.fetch_full(
+                &check.host,
+                &check.path,
+                &check.headers,
+                &check.method,
+                check.body.as_deref(),
+                check.json,
+            )
+        };
         let verdict = match &test {
             None => {
                 eprintln!("POMINIĘTE (poza zakresem): {} {}", check.host, check.path);
